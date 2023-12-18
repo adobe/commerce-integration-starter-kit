@@ -1,0 +1,6 @@
+application:
+  runtimeManifest:
+    packages:
+      onboarding:
+        license: Apache-2.0
+        actions:
