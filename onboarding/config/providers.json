@@ -1,0 +1,14 @@
+[
+  {
+    "key": "commerce",
+    "label": "Commerce Provider",
+    "description": "Commerce Provider that will receive events from commerce",
+    "docs_url": null
+  },
+  {
+    "key": "backoffice",
+    "label": "Backoffice Provider",
+    "description": "Backoffice Provider that will receive events from commerce",
+    "docs_url": null
+  }
+]
