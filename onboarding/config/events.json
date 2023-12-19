@@ -1,0 +1,49 @@
+{
+  "product": {
+    "commerce": [
+      "com.adobe.commerce.observer.catalog_product_delete_commit_after",
+      "com.adobe.commerce.observer.catalog_product_save_commit_after"
+    ],
+    "backoffice": [
+      "be-observer.catalog_product_create",
+      "be-observer.catalog_product_update",
+      "be-observer.catalog_product_delete"
+    ]
+  },
+  "customer": {
+    "commerce": [
+      "com.adobe.commerce.observer.customer_save_commit_after",
+      "com.adobe.commerce.observer.customer_delete_commit_after"
+    ],
+    "backoffice": [
+      "customer.updated",
+      "customer.deleted"
+    ]
+  },
+  "order": {
+    "commerce": [
+      "com.adobe.commerce.observer.sales_order_save_commit_after",
+      "com.adobe.commerce.observer.sales_order_status_history_save_commit_after"
+    ],
+    "backoffice": [
+      "order.updated",
+      "order.status.updated"
+    ]
+  },
+  "stock": {
+    "commerce": [
+      "com.adobe.commerce.plugin.magento.catalog_inventory.model.resource_model.stock.save",
+      "com.adobe.commerce.plugin.magento.catalog_inventory.model.resource_model.stock.status.save"
+    ],
+    "backoffice": [
+      "stock.updated",
+      "stock.status.updated"
+    ]
+  },
+  "shipment": {
+    "backoffice": [
+      "shipment.created",
+      "shipments.updated"
+    ]
+  }
+}
