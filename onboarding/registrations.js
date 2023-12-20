@@ -102,4 +102,3 @@ async function CreateRequestRegistration(accessToken, entityName, providerKey, e
 }
 
 exports.main = main
-//exports.test = test
