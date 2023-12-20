@@ -1,6 +1,6 @@
 # Commerce Extensibility Starter Kit
 
-Welcome to my Adobe Commerce Partners Lifejacket 
+Welcome to Adobe Commerce Extensibility Starter Kit 
 
 ![Alt text](architecture.png "Title")
 
@@ -11,7 +11,7 @@ Go to developer portal
   - Adobe I/0 events
   - Adobe I/O management
 
-- Git clone the project from the following repo https://git.corp.adobe.com/enterprise-integration/lifejacket
+- Git clone the project from the following repo https://git.corp.adobe.com/enterprise-integration/starter-kit
 - Configure the env file `cp env.dist .env`
 
 ## Setup

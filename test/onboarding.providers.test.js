@@ -6,17 +6,12 @@ jest.mock('node-fetch')
 const fetch = require('node-fetch')
 const action = require('./../onboarding/providers.js')
 
-beforeEach(() => {
-  process.env.OAUTH_SCOPES = 'scopes';
-  process.env.OAUTH_BASE_URL = 'baseUrl'
-})
-
 afterEach(() => {
   jest.clearAllMocks()
   jest.resetModules()
 })
 
-describe('providers', () => {
+describe('On-boarding providers', () => {
   test('main should be defined', () => {
     expect(action.main).toBeInstanceOf(Function)
   })

@@ -1,8 +1,6 @@
 require('dotenv').config();
 const {checkMissingRequestInputs, errorResponse, objectContainsValue} = require("../actions/utils");
-const envConfigs = require("./custom/registrations.json");
 const fetch = require('node-fetch')
-const clientRegistrations = require("./custom/registrations.json");
 
 
 async function getAccessToken(envConfigs) {
