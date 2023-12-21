@@ -5,7 +5,7 @@
 jest.mock('node-fetch')
 const fetch = require('node-fetch')
 const action = require('./../onboarding/registrations.js')
-const clientRegistrations = require("./data/onboarding/registrations/create_commerce_and_backoffice_registrations.json");
+const clientRegistrations = require('./data/onboarding/registrations/create_commerce_and_backoffice_registrations.json');
 
 afterEach(() => {
     jest.clearAllMocks()
@@ -104,7 +104,7 @@ describe('On-boarding registrations', () => {
         fetch.mockResolvedValueOnce(mockFetchCreateProductCommerceRegistrationResponse)
             .mockResolvedValueOnce(mockFetchCreateProductBackofficeRegistrationResponse);
 
-        const clientRegistrations = require("./data/onboarding/registrations/create_commerce_and_backoffice_registrations.json");
+        const clientRegistrations = require('./data/onboarding/registrations/create_commerce_and_backoffice_registrations.json');
 
         const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, 'token')
 
@@ -162,7 +162,7 @@ describe('On-boarding registrations', () => {
         }
         fetch.mockResolvedValueOnce(mockFetchCreateProductCommerceRegistrationResponse);
 
-        const clientRegistrations = require("./data/onboarding/registrations/create_only_commerce_registrations.json");
+        const clientRegistrations = require('./data/onboarding/registrations/create_only_commerce_registrations.json');
 
         const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, 'token')
 
@@ -215,7 +215,7 @@ describe('On-boarding registrations', () => {
         }
         fetch.mockResolvedValueOnce(mockFetchCreateProductBackofficeRegistrationResponse);
 
-        const clientRegistrations = require("./data/onboarding/registrations/create_only_backoffice_registrations.json");
+        const clientRegistrations = require('./data/onboarding/registrations/create_only_backoffice_registrations.json');
 
         const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, 'token')
 
@@ -250,7 +250,7 @@ describe('On-boarding registrations', () => {
         }
         fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
-        let clientRegistrations = require("./data/onboarding/registrations/create_commerce_and_backoffice_registrations.json");
+        let clientRegistrations = require('./data/onboarding/registrations/create_commerce_and_backoffice_registrations.json');
 
         const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, 'token')
 

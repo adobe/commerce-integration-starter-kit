@@ -21,7 +21,7 @@ async function main(clientRegistrations, providers, accessToken) {
                         event_code: event
                     });
                 }
-                const createEventRegistrationResult = await CreateRequestRegistration(accessToken, entityName, provider.key, events);
+                const createEventRegistrationResult = await createRequestRegistration(accessToken, entityName, provider.key, events);
                 if (!createEventRegistrationResult.success) {
                     const errorMessage = `Unable to create registration for ${entityName} with provider ${provider.key} - ${provider.id}`;
                     console.log(errorMessage)
@@ -51,7 +51,7 @@ async function main(clientRegistrations, providers, accessToken) {
     }
 }
 
-async function CreateRequestRegistration(accessToken, entityName, providerKey, events) {
+async function createRequestRegistration(accessToken, entityName, providerKey, events) {
 
     let body = JSON.stringify(
         {
