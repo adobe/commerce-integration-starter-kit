@@ -55,7 +55,7 @@ describe('On-boarding metadata', () => {
         fetch.mockResolvedValueOnce(mockFetchGetAdobeTokenResponse)
             .mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
-        const clientRegistrations = require("./data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json");
+        const clientRegistrations = require('./data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json');
 
         const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS)
 
@@ -99,7 +99,7 @@ describe('On-boarding metadata', () => {
         fetch.mockResolvedValueOnce(mockFetchGetAdobeTokenResponse)
             .mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
-        let clientRegistrations = require("./data/onboarding/metadata/create_only_commerce_providers_metadata.json");
+        let clientRegistrations = require('./data/onboarding/metadata/create_only_commerce_providers_metadata.json');
 
         const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS)
 
@@ -140,7 +140,7 @@ describe('On-boarding metadata', () => {
         fetch.mockResolvedValueOnce(mockFetchGetAdobeTokenResponse)
             .mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
-        let clientRegistrations = require("./data/onboarding/metadata/create_only_backoffice_providers_metadata.json");
+        let clientRegistrations = require('./data/onboarding/metadata/create_only_backoffice_providers_metadata.json');
 
         const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS)
 
@@ -200,7 +200,7 @@ describe('On-boarding metadata', () => {
         fetch.mockResolvedValueOnce(mockFetchGetAdobeTokenResponse)
             .mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
-        let clientRegistrations = require("./data/onboarding/providers/create_commerce_and_backoffice_providers.json");
+        let clientRegistrations = require('./data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json');
 
         const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS)
 
