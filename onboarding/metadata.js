@@ -55,38 +55,6 @@ async function addEventCodeToProvider(metadata, providerId, envConfigs, accessTo
     };
 }
 
-async function getAccessToken(envConfigs) {
-    const scopes = envConfigs.OAUTH_SCOPES;
-    const baseUrl = envConfigs.OAUTH_BASE_URL;
-    const clientId = envConfigs.OAUTH_CLIENT_ID;
-    const clientSecret = envConfigs.OAUTH_CLIENT_SECRET;
-    const generateAccessTokenReq = await fetch(
-        `${baseUrl}v3?client_id=${clientId}`,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `client_secret=${clientSecret}&grant_type=client_credentials&scope=${scopes}`
-        }
-    )
-
-
-    const result = await generateAccessTokenReq.json();
-
-    if (!result?.access_token) {
-        console.log(`Unable to generate oauth token: ${result.error}`);
-        return {
-            success: false,
-            error: result.error
-        }
-    }
-    return {
-        success: true,
-        token: result?.access_token
-    }
-}
-
 async function addMetadataToProvider(providerEvents, providerId, envConfigs, accessToken) {
     const commerceProviderMetadata = buildProviderData(providerEvents);
     for (const metadata of commerceProviderMetadata) {
@@ -108,32 +76,56 @@ async function addMetadataToProvider(providerEvents, providerId, envConfigs, acc
     }
 }
 
-async function main(clientRegistrations, providers) {
-    const envConfigs = process.env;
+async function getExistingMetadata(providerId, envConfigs, accessToken, next = null) {
+    const url = `${envConfigs.IO_MANAGEMENT_BASE_URL}providers/${providerId}/eventmetadata`;
 
-    const providersEventsConfig = require("./config/events.json");
+    const getExistingMetadataReq = await fetch(
+        next ? next: url,
+        {
+            method: 'GET',
+            headers: {
+                'x-api-key': `${envConfigs.OAUTH_CLIENT_ID}`,
+                'Authorization': `Bearer ${accessToken}`,
+                'content-type': 'application/json',
+                'Accept': 'application/hal+json'
+            }
+        }
+    )
+    const getExistingMetadataResult = await getExistingMetadataReq.json()
+    const existingMetadata = [];
+    if (getExistingMetadataResult?._embedded?.eventmetadata) {
+        getExistingMetadataResult._embedded.eventmetadata.forEach(event => {
+            existingMetadata[event.event_code] = event
+        })
+    }
+    if (getExistingMetadataResult?._links?.next) {
+        const data = await getExistingMetadata(providerId, envConfigs, accessToken, getExistingMetadataResult._links.next);
+        existingMetadata.push(...data);
+    }
+    return existingMetadata;
+}
 
-
-    const providersEvents = [];
+async function main(clientRegistrations, providers, accessToken) {
 
     try {
-        const generateAccessTokenResult = await getAccessToken(envConfigs);
+        const envConfigs = process.env;
+        const providersEventsConfig = require("./config/events.json");
+        const providersEvents = [];
 
-        if (!generateAccessTokenResult?.success) {
-            return {
-                code: 500,
-                error: `Unable to generate oauth token: ${generateAccessTokenResult.error}`
-            };
-        }
-
-        const accessToken = generateAccessTokenResult.token;
         const result = [];
-
         for (const provider of providers) {
+            const existingMetadata = await getExistingMetadata(provider.id, envConfigs, accessToken);
+
             for (const [entityName, options] of Object.entries(clientRegistrations)) {
                 if (options !== undefined && options.includes(provider.key)) {
                     if (providersEventsConfig[entityName]) {
-                        providersEvents.push(...providersEventsConfig[entityName][provider.key]);
+                        for (const event of providersEventsConfig[entityName][provider.key]) {
+                            if (existingMetadata[event]) {
+                                console.log(`Skipping, Metadata event code ${event} already exists!`)
+                                continue;
+                            }
+                            providersEvents.push(event);
+                        }
                         result.push({
                             entity: entityName,
                             label: provider.label
@@ -146,6 +138,7 @@ async function main(clientRegistrations, providers) {
             if (!addMetadataResult.success) {
                 return {
                     code: 500,
+                    success: false,
                     error: addMetadataResult.error
                 };
             }
@@ -153,6 +146,7 @@ async function main(clientRegistrations, providers) {
 
         const response = {
             code: 200,
+            success: true,
             result
         }
 
@@ -163,6 +157,7 @@ async function main(clientRegistrations, providers) {
         console.log(errorMessage)
         return {
             code: 500,
+            success: false,
             error: errorMessage
         }
     }

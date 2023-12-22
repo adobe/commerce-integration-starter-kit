@@ -2,39 +2,6 @@ require('dotenv').config();
 const {checkMissingRequestInputs, errorResponse, objectContainsValue} = require("../actions/utils");
 const fetch = require('node-fetch')
 
-
-async function getAccessToken(envConfigs) {
-    const scopes = envConfigs.OAUTH_SCOPES;
-    const baseUrl = envConfigs.OAUTH_BASE_URL;
-    const clientId = envConfigs.OAUTH_CLIENT_ID;
-    const clientSecret = envConfigs.OAUTH_CLIENT_SECRET;
-    const generateAccessTokenReq = await fetch(
-        `${baseUrl}v3?client_id=${clientId}`,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `client_secret=${clientSecret}&grant_type=client_credentials&scope=${scopes}`
-        }
-    )
-
-
-    const result = await generateAccessTokenReq.json();
-
-    if (!result?.access_token) {
-        console.log(`Unable to generate oauth token: ${result.error}`);
-        return {
-            success: false,
-            error: result.error
-        }
-    }
-    return {
-        success: true,
-        token: result?.access_token
-    }
-}
-
 async function getExistingProviders(envConfigs, accessToken) {
     const getCreatedProvidersReq = await fetch(
         `${envConfigs.IO_MANAGEMENT_BASE_URL}${envConfigs.IO_CONSUMER_ID}/providers`,
@@ -103,16 +70,11 @@ function hasSelection(selection, clientRegistrations) {
     return false;
 }
 
-async function main(registrations = null) {
+async function main(clientRegistrations, accessToken) {
     // Load predefined provider, providerEvents and clientRegistrations
     const providersList = require("./config/providers.json");
     const providersEventsConfig = require("./config/events.json");
-    let clientRegistrations = require("./custom/registrations.json");
     const envConfigs = process.env;
-
-    if (registrations) {
-        clientRegistrations = registrations;
-    }
 
     try {
         // 'info' is the default level if not set
@@ -125,22 +87,10 @@ async function main(registrations = null) {
             // return and log client errors
             return {
                 code: 400,
+                success: false,
                 error: errorMessage
             }
         }
-
-        // Generate Adobe OAuth access token
-        const generateAccessTokenResult = await getAccessToken(envConfigs);
-
-        if (!generateAccessTokenResult?.success) {
-            return {
-                code: 500,
-                error: `Unable to generate oauth token: ${generateAccessTokenResult.error}`
-            };
-        }
-
-        const accessToken = generateAccessTokenResult.token;
-        console.log('Even access token generated correctly.')
 
         // Load the existing providers in org
         const existingProviders = await getExistingProviders(envConfigs, accessToken);
@@ -155,7 +105,6 @@ async function main(registrations = null) {
                 const persistedProvider = existingProviders[provider.label];
                 // persistedProvider = { value, expiration }
                 if (persistedProvider) {
-                    console.log(`persisted provider: ${JSON.stringify(persistedProvider)}`)
                     console.log(`Skipping creation of "${provider.label}" creation`)
 
                     result.push({
@@ -175,6 +124,7 @@ async function main(registrations = null) {
                     console.log(errorMessage)
                     return {
                         code: 500,
+                        success: false,
                         error: errorMessage
                     };
                 }
@@ -191,6 +141,7 @@ async function main(registrations = null) {
 
         const response = {
             code: 200,
+            success: true,
             result
         }
 
@@ -202,6 +153,7 @@ async function main(registrations = null) {
         console.log(errorMessage)
         return {
             code: 500,
+            success: false,
             error: errorMessage
         }
     }

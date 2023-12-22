@@ -36,7 +36,8 @@
   },
   "scripts": {
     "test": "jest --passWithNoTests ./test",
-    "e2e": "jest --collectCoverage=false --testRegex ./e2e"
+    "e2e": "jest --collectCoverage=false --testRegex ./e2e",
+    "onboard": "node -e 'require(\"./onboarding/index.js\").main()'"
   },
   "engines": {
     "node": "^14.18 || ^16.13 || >=18"
