@@ -1,6 +1,5 @@
 require('dotenv').config();
 const fetch = require("node-fetch");
-const providersEventsConfig = require("./config/events.json");
 
 function buildProviderData(providerEvents) {
     const events = [];
@@ -99,7 +98,7 @@ async function getExistingMetadata(providerId, envConfigs, accessToken, next = n
             existingMetadata[event.event_code] = event
         })
     }
-    if (getExistingMetadataResult._links?.next) {
+    if (getExistingMetadataResult?._links?.next) {
         const data = await getExistingMetadata(providerId, envConfigs, accessToken, getExistingMetadataResult._links.next);
         existingMetadata.push(...data);
     }
