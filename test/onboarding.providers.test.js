@@ -5,6 +5,7 @@
 jest.mock('node-fetch')
 const fetch = require('node-fetch')
 const action = require('./../onboarding/providers.js')
+const ACCESS_TOKEN = 'token';
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -19,12 +20,6 @@ describe('On-boarding providers', () => {
     const commerceProviderId = 'COMMERCE_PROVIDER_ID';
     const backofficeProviderId = 'BACKOFFICE_PROVIDER_ID';
 
-    const mockFetchGetAdobeTokenResponse = {
-      ok: true,
-      json: () => Promise.resolve({
-          "access_token": "token"
-      })
-    }
     const mockFetchGetExistingProvidersResponse = {
       ok: true,
       json: () => Promise.resolve({
@@ -335,17 +330,18 @@ describe('On-boarding providers', () => {
           }
       })
     }
-    fetch.mockResolvedValueOnce(mockFetchGetAdobeTokenResponse)
-        .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
+
+    fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse);
 
     let clientRegistrations = require('./data/onboarding/providers/create_commerce_and_backoffice_providers.json');
 
-    const response = await action.main(clientRegistrations)
+    const response = await action.main(clientRegistrations, ACCESS_TOKEN)
 
     expect(response).toEqual({
       code: 200,
+      success: true,
       result: [
         {
           key: 'commerce',
@@ -363,12 +359,6 @@ describe('On-boarding providers', () => {
   test('should create commerce provider only', async () => {
     const commerceProviderId = 'COMMERCE_PROVIDER_ID';
 
-    const mockFetchGetAdobeTokenResponse = {
-      ok: true,
-      json: () => Promise.resolve({
-        "access_token": "token"
-      })
-    }
     const mockFetchGetExistingProvidersResponse = {
       ok: true,
       json: () => Promise.resolve({
@@ -582,16 +572,16 @@ describe('On-boarding providers', () => {
         }
       })
     }
-    fetch.mockResolvedValueOnce(mockFetchGetAdobeTokenResponse)
-        .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
+    fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse);
 
     let clientRegistrations = require('./data/onboarding/providers/create_commerce_provider_only.json');
 
-    const response = await action.main(clientRegistrations)
+    const response = await action.main(clientRegistrations, ACCESS_TOKEN)
 
     expect(response).toEqual({
       code: 200,
+      success: true,
       result: [
         {
           key: 'commerce',
@@ -604,12 +594,6 @@ describe('On-boarding providers', () => {
   test('should create backoffice provider only', async () => {
     const backofficeProviderId = 'BACKOFFICE_PROVIDER_ID';
 
-    const mockFetchGetAdobeTokenResponse = {
-      ok: true,
-      json: () => Promise.resolve({
-        "access_token": "token"
-      })
-    }
     const mockFetchGetExistingProvidersResponse = {
       ok: true,
       json: () => Promise.resolve({
@@ -823,16 +807,16 @@ describe('On-boarding providers', () => {
         }
       })
     }
-    fetch.mockResolvedValueOnce(mockFetchGetAdobeTokenResponse)
-        .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
+    fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse);
 
     let clientRegistrations = require('./data/onboarding/providers/create_backoffice_provider_only.json');
 
-    const response = await action.main(clientRegistrations)
+    const response = await action.main(clientRegistrations, ACCESS_TOKEN)
 
     expect(response).toEqual({
       code: 200,
+      success: true,
       result: [
         {
           key: 'backoffice',
@@ -846,12 +830,6 @@ describe('On-boarding providers', () => {
     const commerceProviderId = 'EXISTING_COMMERCE_PROVIDER_ID';
     const backofficeProviderId = 'BACKOFFICE_PROVIDER_ID';
 
-    const mockFetchGetAdobeTokenResponse = {
-      ok: true,
-      json: () => Promise.resolve({
-        "access_token": "token"
-      })
-    }
     const mockFetchGetExistingProvidersResponse = {
       ok: true,
       json: () => Promise.resolve({
@@ -1065,16 +1043,16 @@ describe('On-boarding providers', () => {
         }
       })
     }
-    fetch.mockResolvedValueOnce(mockFetchGetAdobeTokenResponse)
-        .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
+    fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse);
 
     let clientRegistrations = require('./data/onboarding/providers/create_commerce_and_backoffice_providers.json');
 
-    const response = await action.main(clientRegistrations)
+    const response = await action.main(clientRegistrations, ACCESS_TOKEN)
 
     expect(response).toEqual({
       code: 200,
+      success: true,
       result: [
         {
           key: 'commerce',
@@ -1092,9 +1070,11 @@ describe('On-boarding providers', () => {
   test('should return a 500 and message error when process fail', async () => {
     const fakeError = new Error('fake')
     fetch.mockRejectedValue(fakeError)
-    const response = await action.main()
+    let clientRegistrations = require('./data/onboarding/providers/create_commerce_and_backoffice_providers.json');
+    const response = await action.main(clientRegistrations, ACCESS_TOKEN)
     expect(response).toEqual({
         code: 500,
+      success: false,
         error: 'Unable to complete the process of creating providers: fake'
 
     })
@@ -1102,41 +1082,17 @@ describe('On-boarding providers', () => {
   test('should return a 400 and message error when process client registrations missing required params', async () => {
     let invalidClientRegistrations = require('./data/onboarding/providers/missing_entities_client_registration.json');
 
-    const response = await action.main(invalidClientRegistrations)
+    const response = await action.main(invalidClientRegistrations, ACCESS_TOKEN)
     expect(response).toEqual({
       code: 400,
+      success: false,
       error: "missing parameter(s) 'customer,shipment'"
 
-    })
-  })
-  test('should return 500 and message error when generate oauth token fails', async () => {
-
-    let errorMessage = "Invalid credentials";
-    const mockFetchGetAdobeTokenResponse = {
-      ok: true,
-      json: () => Promise.resolve({
-        "error": errorMessage
-      })
-    }
-
-    fetch.mockResolvedValueOnce(mockFetchGetAdobeTokenResponse);
-
-    const response = await action.main()
-
-    expect(response).toEqual({
-      code: 500,
-      error: `Unable to generate oauth token: ${errorMessage}`
     })
   })
   test('should 500 and message error when create provider fails', async () => {
     const commerceProviderId = 'COMMERCE_PROVIDER_ID';
 
-    const mockFetchGetAdobeTokenResponse = {
-      ok: true,
-      json: () => Promise.resolve({
-        "access_token": "token"
-      })
-    }
     const mockFetchGetExistingProvidersResponse = {
       ok: true,
       json: () => Promise.resolve({
@@ -1260,16 +1216,16 @@ describe('On-boarding providers', () => {
         "message": "Please provide valid data"
       })
     }
-    fetch.mockResolvedValueOnce(mockFetchGetAdobeTokenResponse)
-        .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
+    fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse);
 
     let clientRegistrations = require('./data/onboarding/providers/create_commerce_and_backoffice_providers.json');
 
-    const response = await action.main(clientRegistrations)
+    const response = await action.main(clientRegistrations, ACCESS_TOKEN)
 
     expect(response).toEqual({
       code: 500,
+      success: false,
       error: "Unable to create provider: reason = 'Invalid data', message = 'Please provide valid data'"
     })
   })
