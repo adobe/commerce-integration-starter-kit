@@ -69,7 +69,7 @@ In case you want to receive events from commerce add 'commerce' to the entity va
 
 To start the process of creating the events providers and registrations run the command:
 ```
-npm run onboarding
+npm run onboard
 ```
 
 the console will return the providers IDs, use this values to configure your commerce and application to send events to IO events.
