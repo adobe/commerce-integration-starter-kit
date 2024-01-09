@@ -26,17 +26,17 @@ Ensure to select the proper Organization > Project > Workspace with the followin
 `aio console workspace select`
 
 After that initiate the Application with the following command:
-```
+```bash
 aio app use
 ```
 Install dependencies using the command 
-```
+```bash
 npm install
 ```
 Define all the required parameters inside your `.env` file, in the `.env` file is auto explained from where to retrieve that information.
 
 Edit the file app.config.yaml in case you want to deploy specific entities by des-commenting the entities you want to use:
-```
+```yaml
 application:
   runtimeManifest:
     packages:
@@ -51,13 +51,13 @@ application:
 ```
 ### Deploy 
 Deploy the runtimes using command:
-```
+```bash
 aio app deploy
 ```
 ### Setup eventing
 Edit the onboading file in ./onboarding/custom/registrations.json to create the needed events information, the entities that you don't des-comment previously should stay empty.
 In case you want to receive events from commerce add 'commerce' to the entity value, for backoffice updates add 'backoffice' as showing:
-```
+```json
 {
   "product": ["commerce", "backoffice"],
   "customer": [],
@@ -68,7 +68,7 @@ In case you want to receive events from commerce add 'commerce' to the entity va
 ```
 
 To start the process of creating the events providers and registrations run the command:
-```
+```bash
 npm run onboard
 ```
 
