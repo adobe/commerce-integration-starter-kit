@@ -60,7 +60,7 @@ function getMissingKeys (obj, required) {
  *
  */
 function checkMissingRequestInputs (params, requiredParams = [], requiredHeaders = []) {
-  let errorMessage = ''
+  let errorMessage = null
 
   // input headers are always lowercase
   requiredHeaders = requiredHeaders.map(h => h.toLowerCase())
