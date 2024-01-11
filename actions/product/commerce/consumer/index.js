@@ -48,7 +48,7 @@ async function main (params) {
         statusCode = 200;
         break;
       default:
-        logger.error('[Product][Commerce] type not found');
+        logger.error(`[Product][Commerce] type not found: ${params.type}`);
         response = `This case type is not supported: ${params.type}`;
         statusCode = 400;
         break;
