@@ -1,0 +1,137 @@
+/* 
+* <license header>
+*/
+
+const action = require('../../../actions/product/commerce/consumer/index.js');
+
+describe('Product commerce consumer', () => {
+  test('main should be defined', () => {
+    expect(action.main).toBeInstanceOf(Function)
+  })
+  test('Given product created in commerce, when event is received then product created request is processed', async () => {
+    const params = {
+      type: 'com.adobe.commerce.observer.catalog_product_save_commit_after',
+      data: {
+        sku: 'SKU',
+        name: 'PRODUCT',
+        description: 'Product description',
+        created_at: '2000-01-01',
+        updated_at: '2000-01-01'
+      }
+    };
+    const response = await action.main(params);
+
+    expect(response).toEqual({
+      statusCode: 200,
+      body: {
+        request: {
+          sku: 'SKU',
+          name: 'PRODUCT',
+          description: 'Product description',
+          created_at: '2000-01-01',
+          updated_at: '2000-01-01'
+        },
+        response: "create product",
+        type: "com.adobe.commerce.observer.catalog_product_save_commit_after",
+      }
+    })
+  })
+  test('Given product updated in commerce, when event is received then product updated request is processed', async () => {
+    const params = {
+      type: 'com.adobe.commerce.observer.catalog_product_save_commit_after',
+      data: {
+        sku: 'SKU',
+        name: 'PRODUCT',
+        description: 'Product description',
+        created_at: '2000-01-01',
+        updated_at: '2000-01-02'
+      }
+    };
+    const response = await action.main(params);
+
+    expect(response).toEqual({
+      statusCode: 200,
+      body: {
+        request: {
+          sku: 'SKU',
+          name: 'PRODUCT',
+          description: 'Product description',
+          created_at: '2000-01-01',
+          updated_at: '2000-01-02'
+        },
+        response: "update product",
+        type: "com.adobe.commerce.observer.catalog_product_save_commit_after",
+      }
+    })
+  })
+  test('Given product deleted in commerce, when event is received then product deleted request is processed', async () => {
+    const params = {
+      type: 'com.adobe.commerce.observer.catalog_product_delete_commit_after',
+      data: {
+        sku: 'SKU',
+        name: 'PRODUCT',
+        description: 'Product description',
+        created_at: '2000-01-01',
+        updated_at: '2000-01-02'
+      }
+    };
+    const response = await action.main(params);
+
+    expect(response).toEqual({
+      statusCode: 200,
+      body: {
+        request: {
+          sku: 'SKU',
+          name: 'PRODUCT',
+          description: 'Product description',
+          created_at: '2000-01-01',
+          updated_at: '2000-01-02'
+        },
+        response: "delete product",
+        type: "com.adobe.commerce.observer.catalog_product_delete_commit_after",
+      }
+    })
+  })
+  test('Should return a 400 and message error when process product commerce request missing required params', async () => {
+
+    const params = {};
+    const response = await action.main(params);
+
+    expect(response).toEqual({
+      error: {
+        statusCode: 400,
+        body: {
+          error: "missing parameter(s) 'type,data.name,data.sku,data.description,data.created_at,data.updated_at'"
+        }
+      }
+    })
+  })
+  test('should 400 and message error when product commerce event type is not supported', async () => {
+    const params = {
+      type: 'NOT_SUPPORTED_TYPE',
+      data: {
+        sku: 'SKU',
+        name: 'PRODUCT',
+        description: 'Product description',
+        created_at: '2000-01-01',
+        updated_at: '2000-01-02'
+      }
+    };
+    const response = await action.main(params);
+
+    expect(response).toEqual({
+      statusCode: 400,
+      body: {
+        request: {
+          sku: 'SKU',
+          name: 'PRODUCT',
+          description: 'Product description',
+          created_at: '2000-01-01',
+          updated_at: '2000-01-02'
+        },
+        response: "This case type is not supported: NOT_SUPPORTED_TYPE",
+        type: "NOT_SUPPORTED_TYPE",
+      }
+    })
+  })
+})

@@ -4,7 +4,7 @@
 
 jest.mock('node-fetch')
 const fetch = require('node-fetch')
-const action = require('./../onboarding/providers.js')
+const action = require('../../onboarding/providers.js')
 const ACCESS_TOKEN = 'token';
 
 afterEach(() => {
@@ -335,7 +335,7 @@ describe('On-boarding providers', () => {
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse);
 
-    let clientRegistrations = require('./data/onboarding/providers/create_commerce_and_backoffice_providers.json');
+    let clientRegistrations = require('../data/onboarding/providers/create_commerce_and_backoffice_providers.json');
 
     const response = await action.main(clientRegistrations, ACCESS_TOKEN)
 
@@ -575,7 +575,7 @@ describe('On-boarding providers', () => {
     fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse);
 
-    let clientRegistrations = require('./data/onboarding/providers/create_commerce_provider_only.json');
+    let clientRegistrations = require('../data/onboarding/providers/create_commerce_provider_only.json');
 
     const response = await action.main(clientRegistrations, ACCESS_TOKEN)
 
@@ -810,7 +810,7 @@ describe('On-boarding providers', () => {
     fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse);
 
-    let clientRegistrations = require('./data/onboarding/providers/create_backoffice_provider_only.json');
+    let clientRegistrations = require('../data/onboarding/providers/create_backoffice_provider_only.json');
 
     const response = await action.main(clientRegistrations, ACCESS_TOKEN)
 
@@ -1046,7 +1046,7 @@ describe('On-boarding providers', () => {
     fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse);
 
-    let clientRegistrations = require('./data/onboarding/providers/create_commerce_and_backoffice_providers.json');
+    let clientRegistrations = require('../data/onboarding/providers/create_commerce_and_backoffice_providers.json');
 
     const response = await action.main(clientRegistrations, ACCESS_TOKEN)
 
@@ -1070,7 +1070,7 @@ describe('On-boarding providers', () => {
   test('should return a 500 and message error when process fail', async () => {
     const fakeError = new Error('fake')
     fetch.mockRejectedValue(fakeError)
-    let clientRegistrations = require('./data/onboarding/providers/create_commerce_and_backoffice_providers.json');
+    let clientRegistrations = require('../data/onboarding/providers/create_commerce_and_backoffice_providers.json');
     const response = await action.main(clientRegistrations, ACCESS_TOKEN)
     expect(response).toEqual({
         code: 500,
@@ -1080,7 +1080,7 @@ describe('On-boarding providers', () => {
     })
   })
   test('should return a 400 and message error when process client registrations missing required params', async () => {
-    let invalidClientRegistrations = require('./data/onboarding/providers/missing_entities_client_registration.json');
+    let invalidClientRegistrations = require('../data/onboarding/providers/missing_entities_client_registration.json');
 
     const response = await action.main(invalidClientRegistrations, ACCESS_TOKEN)
     expect(response).toEqual({
@@ -1219,7 +1219,7 @@ describe('On-boarding providers', () => {
     fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse);
 
-    let clientRegistrations = require('./data/onboarding/providers/create_commerce_and_backoffice_providers.json');
+    let clientRegistrations = require('../data/onboarding/providers/create_commerce_and_backoffice_providers.json');
 
     const response = await action.main(clientRegistrations, ACCESS_TOKEN)
 
