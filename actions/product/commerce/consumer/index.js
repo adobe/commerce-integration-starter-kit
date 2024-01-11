@@ -65,8 +65,6 @@ async function main (params) {
       }
     }
   } catch (error) {
-    // log any server errors
-    logger.error(error)
     // return with 500
     return errorResponse(500, `[Product][Commerce] Server error: ${error.message}`, logger)
   }
