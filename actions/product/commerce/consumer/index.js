@@ -43,7 +43,7 @@ async function main (params) {
     logger.debug(`[Product][Commerce][Consumer] Consumer main params: ${stringParameters(params)}`);
 
     // check for missing request input parameters and headers
-    const requiredParams = ['type', 'data.name', 'data.sku', 'data.created_at', 'data.updated_at']
+    const requiredParams = ['type', 'data.value.created_at', 'data.value.updated_at']
     const errorMessage = checkMissingRequestInputs(params, requiredParams, []);
 
     if (errorMessage) {
@@ -58,7 +58,7 @@ async function main (params) {
         if (params.data.created_at === params.data.updated_at) {
           logger.info('[Product][Commerce][Consumer] Invoking created product');
 
-          const res = await createProduct(ow, params.data);
+          const res = await createProduct(ow, params.data.value);
           // This logic will change after adding the rest of actions
           response = res?.response?.result?.body;
           statusCode = res?.response?.result?.statusCode;
