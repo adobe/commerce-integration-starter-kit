@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@adobe/aio-lib-ims": "^6.5.0",
     "@adobe/aio-lib-state": "^2.1.2",
     "@adobe/aio-sdk": "^4.1.0",
     "@adobe/exc-app": "^0.2.21",
