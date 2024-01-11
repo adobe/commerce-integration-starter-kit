@@ -101,7 +101,7 @@ describe('Product commerce consumer', () => {
       error: {
         statusCode: 400,
         body: {
-          error: "missing parameter(s) 'type,data.name,data.sku,data.description,data.created_at,data.updated_at'"
+          error: "missing parameter(s) 'type,data.name,data.sku,data.created_at,data.updated_at'"
         }
       }
     })
