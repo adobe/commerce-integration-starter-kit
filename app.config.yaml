@@ -1,6 +1,7 @@
 application:
   runtimeManifest:
     packages:
-      onboarding:
+      product:
         license: Apache-2.0
         actions:
+          $include: ./actions/product/product.actions.config.yaml
