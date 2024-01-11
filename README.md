@@ -115,3 +115,9 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 - Give the integration a name. The rest of the fields can be left blank.
 - Grant access to all the resources.
 - Click Save.
+
+
+## Development
+### Product entity
+#### Commerce to third party
+- [Product created in commerce](actions/product/commerce/created/README.md)
