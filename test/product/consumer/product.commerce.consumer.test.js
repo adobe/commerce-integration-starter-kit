@@ -3,6 +3,13 @@
 */
 
 const action = require('../../../actions/product/commerce/consumer/index.js');
+jest.mock('openwhisk')
+const openwhisk = require('openwhisk');
+
+afterEach(() => {
+  jest.clearAllMocks()
+  jest.resetModules()
+})
 
 describe('Product commerce consumer', () => {
   test('main should be defined', () => {
@@ -10,6 +17,8 @@ describe('Product commerce consumer', () => {
   })
   test('Given product created in commerce, when event is received then product created request is processed', async () => {
     const params = {
+      API_HOST: 'API_HOST',
+      API_AUTH: 'API_AUTH',
       type: 'com.adobe.commerce.observer.catalog_product_save_commit_after',
       data: {
         sku: 'SKU',
@@ -19,6 +28,22 @@ describe('Product commerce consumer', () => {
         updated_at: '2000-01-01'
       }
     };
+
+    openwhisk.mockReturnValue({
+      actions: {
+        invoke: jest.fn().mockResolvedValue({
+          response: {
+            result: {
+              statusCode: 200,
+              body: {
+                success: true
+              }
+            }
+          }
+        })
+      }
+    });
+
     const response = await action.main(params);
 
     expect(response).toEqual({
@@ -31,7 +56,9 @@ describe('Product commerce consumer', () => {
           created_at: '2000-01-01',
           updated_at: '2000-01-01'
         },
-        response: "create product",
+        response: {
+          success: true
+        },
         type: "com.adobe.commerce.observer.catalog_product_save_commit_after",
       }
     })

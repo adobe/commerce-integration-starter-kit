@@ -2,6 +2,7 @@ const { Core } = require('@adobe/aio-sdk')
 const {stringParameters} = require('../../../utils');
 const {transformData} = require('./transformers')
 const {sendData} = require("./sender");
+const {HTTP_OK, HTTP_INTERNAL_ERROR} = require("../../../constants");
 
 async function main(params) {
     // create a Logger
@@ -23,7 +24,7 @@ async function main(params) {
 
         logger.debug('[Product][Commerce][Created] Process finished successfully');
         return {
-            statusCode: 200,
+            statusCode: HTTP_OK,
             body: {
                 success: true
             }
@@ -31,7 +32,7 @@ async function main(params) {
     } catch (error) {
         logger.error(`[Product][Commerce][Created] Error processing the request: ${error.message}`)
         return {
-            statusCode: 500,
+            statusCode: HTTP_INTERNAL_ERROR,
             body: {
                 success: false,
                 error: [error.message]
