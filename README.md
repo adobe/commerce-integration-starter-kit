@@ -90,6 +90,8 @@ Process of On-Boarding done successfully: [
 ```
 
 ### Configure commerce
+
+#### Configure Adobe I/O Events
 To configure the provider in commerce do the following:
 - In the Commerce Admin, navigate to Stores > Settings > Configuration > Adobe Services > Adobe I/O Events > General configuration. The following screen displays.
 ![Alt text](commerce-events-configuration.webp "Commerce eventing configuration")
@@ -105,4 +107,11 @@ To configure the provider in commerce do the following:
 - (Optional) By default, Adobe Commerce runs a cron job (clean_event_data) every 24 hours that deletes event data that is three days old. To change the number of days to retain event data, uncheck the Use system value checkbox and set a new value in the Event retention time (in days) field.
 - Click Save Config.
 
-
+#### Configure an Integration
+Configure a new Integration to secure the calls to Commerce from App Builder using OAuth by following these steps:
+- In the Commerce Admin, navigate to System > Extension > Integrations.
+- Click the `Add New Integration` button. The following screen displays
+  ![Alt text](new-integration.png "New Integration")
+- Give the integration a name. The rest of the fields can be left blank.
+- Grant access to all the resources.
+- Click Save.
