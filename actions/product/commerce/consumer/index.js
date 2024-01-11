@@ -43,7 +43,7 @@ async function main (params) {
         }
         break;
       case "com.adobe.commerce.observer.catalog_product_delete_commit_after":
-        logger.info('[Product][Commerce] Invoking delete Product');
+        logger.info('[Product][Commerce] Invoking delete product');
         response = 'delete product';
         statusCode = 200;
         break;
