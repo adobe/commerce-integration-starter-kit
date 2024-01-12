@@ -60,7 +60,7 @@ const deleteProduct = async (client, data) => {
 
   try {
     return await client.actions.invoke({
-      name: "product/commerceupdated",
+      name: "product/commercedeleted",
       blocking: true,
       params: {
         data
