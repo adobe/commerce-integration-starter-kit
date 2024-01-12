@@ -12,12 +12,13 @@
  * from Adobe.
  */
 
-function sendData(params, data) {
-    // Here add the logic to send the information to 3rd party
-    // Use params to retrieve need parameters from the environment
-    // throw exception in case of error
+function transformData(data) {
+    // Here transform the data as needed for 3rd party API
+    const transformedData = data;
+
+    return transformedData;
 }
 
 module.exports = {
-    sendData
+    transformData
 }

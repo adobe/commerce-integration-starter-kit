@@ -17,6 +17,7 @@ const {stringParameters} = require('../../../utils');
 const {transformData} = require('./transformers')
 const {sendData} = require("./sender");
 const {HTTP_OK, HTTP_INTERNAL_ERROR} = require("../../../constants");
+const {validateData} = require("./validator");
 
 async function main(params) {
     // create a Logger
@@ -28,8 +29,11 @@ async function main(params) {
 
     try {
         // transform received data from commerce
-        logger.debug(`[Product][Commerce][Created] Transform data: ${JSON.stringify(params.data)}`)
+        logger.debug(`[Product][Commerce][Created] Validate data: ${JSON.stringify(params.data)}`)
+        validateData(params.data);
 
+        // transform received data from commerce
+        logger.debug(`[Product][Commerce][Created] Transform data: ${JSON.stringify(params.data)}`)
         const data = transformData(params.data);
 
         // Send data to 3rd party

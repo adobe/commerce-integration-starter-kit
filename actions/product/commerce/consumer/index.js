@@ -1,6 +1,16 @@
 /*
-* <license header>
-*/
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ */
 
 /**
  * This is the consumer of the events coming from Adobe Commerce related to product entity.
@@ -10,10 +20,10 @@ const { errorResponse, stringParameters, checkMissingRequestInputs } = require('
 const openwhisk = require('openwhisk');
 const {HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR} = require("../../../constants");
 
-const createProduct = async (ow, data) => {
+const createProduct = async (client, data) => {
 
   try {
-    return await ow.actions.invoke({
+    return await client.actions.invoke({
       name: "product/commercecreated",
       blocking: true,
       params: {
@@ -32,7 +42,7 @@ const createProduct = async (ow, data) => {
 async function main (params) {
 
   try {
-    const ow = openwhisk({apihost: params.API_HOST, api_key: params.API_AUTH});
+    const openwhiskClient = openwhisk({apihost: params.API_HOST, api_key: params.API_AUTH});
     const logger = Core.Logger('main', { level: params.LOG_LEVEL || 'info' })
 
     let response = {};
@@ -58,7 +68,7 @@ async function main (params) {
         if (params.data.created_at === params.data.updated_at) {
           logger.info('[Product][Commerce][Consumer] Invoking created product');
 
-          const res = await createProduct(ow, params.data.value);
+          const res = await createProduct(openwhiskClient, params.data.value);
           // This logic will change after adding the rest of actions
           response = res?.response?.result?.body;
           statusCode = res?.response?.result?.statusCode;
