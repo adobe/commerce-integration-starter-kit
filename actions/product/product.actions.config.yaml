@@ -1,6 +1,6 @@
 commercececonsumer:
   function: commerce/consumer/index.js
-  web: 'no'
+  web: 'yes'
   runtime: nodejs:16
   inputs:
     LOG_LEVEL: debug

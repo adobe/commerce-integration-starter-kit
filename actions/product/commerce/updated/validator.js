@@ -12,12 +12,11 @@
  * from Adobe.
  */
 
-function sendData(params, data) {
-    // Here add the logic to send the information to 3rd party
-    // Use params to retrieve need parameters from the environment
-    // throw exception in case of error
+function validateData(data) {
+    // Here add the logic to validate the received data
+    // Throw exception in case data is invalid
 }
 
 module.exports = {
-    sendData
+    validateData
 }

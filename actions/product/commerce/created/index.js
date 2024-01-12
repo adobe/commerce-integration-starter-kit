@@ -14,7 +14,7 @@
  
 const { Core } = require('@adobe/aio-sdk')
 const {stringParameters} = require('../../../utils');
-const {transformData} = require('./transformers')
+const {transformData} = require('./transformer')
 const {sendData} = require("./sender");
 const {HTTP_OK, HTTP_INTERNAL_ERROR} = require("../../../constants");
 const {validateData} = require("./validator");
@@ -28,7 +28,7 @@ async function main(params) {
     logger.debug(`[Product][Commerce][Created] Consumer main params: ${stringParameters(params)}`);
 
     try {
-        // transform received data from commerce
+        // validate received data from commerce
         logger.debug(`[Product][Commerce][Created] Validate data: ${JSON.stringify(params.data)}`)
         validateData(params.data);
 

@@ -38,10 +38,10 @@ const createProduct = async (client, data) => {
   }
 }
 
-const updateProduct = async (ow, data) => {
+const updateProduct = async (client, data) => {
 
   try {
-    return await ow.actions.invoke({
+    return await client.actions.invoke({
       name: "product/commerceupdated",
       blocking: true,
       params: {
@@ -91,7 +91,7 @@ async function main (params) {
           statusCode = res?.response?.result?.statusCode;
         } else {
           logger.info('[Product][Commerce][Consumer] Invoking update product');
-          const res = await updateProduct(ow, params.data.value);
+          const res = await updateProduct(openwhiskClient, params.data.value);
           // This logic will change after adding the rest of actions
           response = res?.response?.result?.body;
           statusCode = res?.response?.result?.statusCode;
