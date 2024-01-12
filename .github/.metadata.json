@@ -1,0 +1,24 @@
+{
+  "product": {
+    "name": "Commerce Extensibility Starter Kit",
+    "description": "Starter Kit for Commerce extensions built on App Builder"
+  },
+  "contacts": {
+    "team": {
+      "name": "Decepticons",
+      "DL": "Grp-Decepticons",
+      "slackChannel": "#commerce-enterprise-integrations"
+    }
+  },
+  "ticketTracker": {
+    "functionalJiraQueue": {
+      "projectKey": "ACSP",
+      "component": ""
+    },
+    "securityJiraQueue": {
+      "projectKey": "MAGREQ",
+      "component": "Magento Extensibility"
+    }
+  },
+  "productionCodeBranches": ["main"]
+}
