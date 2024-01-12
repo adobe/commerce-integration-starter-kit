@@ -7,3 +7,12 @@ commercececonsumer:
   annotations:
     require-adobe-auth: true
     final: true
+commercecreated:
+  function: commerce/created/index.js
+  web: 'no'
+  runtime: nodejs:16
+  inputs:
+    LOG_LEVEL: debug
+  annotations:
+    require-adobe-auth: true
+    final: true
