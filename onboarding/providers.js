@@ -110,6 +110,7 @@ async function main(clientRegistrations, accessToken) {
                     result.push({
                         key: provider.key,
                         id: persistedProvider.id,
+                        instanceId: persistedProvider.instance_id,
                         label: provider.label
                     })
                     continue
@@ -132,6 +133,7 @@ async function main(clientRegistrations, accessToken) {
                 result.push({
                     key: provider.key,
                     id: createProviderResult.provider?.id,
+                    instanceId: createProviderResult.provider?.instance_id,
                     label: provider.label
                 });
             }
