@@ -17,7 +17,7 @@ const {stringParameters} = require('../../../utils');
 const {transformData} = require('./transformer')
 const {sendData} = require("./sender");
 const {HTTP_OK, HTTP_INTERNAL_ERROR} = require("../../../constants");
-const {validateData} = require("../created/validator");
+const {validateData} = require("./validator");
 
 async function main(params) {
     // create a Logger
