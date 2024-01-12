@@ -144,6 +144,7 @@ describe('On-boarding providers', () => {
           "description": "string",
           "source": "string",
           "docs_url": "string",
+          "instance_id": "AC_INSTANCE_ID",
           "publisher": "string",
           "_embedded": {
             "eventmetadata": [
@@ -241,6 +242,7 @@ describe('On-boarding providers', () => {
           "description": "string",
           "source": "string",
           "docs_url": "string",
+          "instance_id": "BO_INSTANCE_ID",
           "publisher": "string",
           "_embedded": {
             "eventmetadata": [
@@ -346,11 +348,13 @@ describe('On-boarding providers', () => {
         {
           key: 'commerce',
           id: commerceProviderId,
+          instanceId: "AC_INSTANCE_ID",
           label: 'Commerce Provider'
         },
         {
           key: 'backoffice',
           id: backofficeProviderId,
+          instanceId: "BO_INSTANCE_ID",
           label: 'Backoffice Provider'
         }
       ]
@@ -483,6 +487,7 @@ describe('On-boarding providers', () => {
         "description": "string",
         "source": "string",
         "docs_url": "string",
+        "instance_id": "AC_INSTANCE_ID",
         "publisher": "string",
         "_embedded": {
           "eventmetadata": [
@@ -586,6 +591,7 @@ describe('On-boarding providers', () => {
         {
           key: 'commerce',
           id: commerceProviderId,
+          instanceId: "AC_INSTANCE_ID",
           label: 'Commerce Provider'
         }
       ]
@@ -718,6 +724,7 @@ describe('On-boarding providers', () => {
         "description": "string",
         "source": "string",
         "docs_url": "string",
+        "instance_id": "BO_INSTANCE_ID",
         "publisher": "string",
         "_embedded": {
           "eventmetadata": [
@@ -821,6 +828,7 @@ describe('On-boarding providers', () => {
         {
           key: 'backoffice',
           id: backofficeProviderId,
+          instanceId: "BO_INSTANCE_ID",
           label: 'Backoffice Provider'
         }
       ]
@@ -841,6 +849,7 @@ describe('On-boarding providers', () => {
               "description": "string",
               "source": "string",
               "docs_url": "string",
+              "instance_id": "AC_INSTANCE_ID",
               "publisher": "string",
               "_embedded": {
                 "eventmetadata": [
@@ -954,6 +963,7 @@ describe('On-boarding providers', () => {
         "description": "string",
         "source": "string",
         "docs_url": "string",
+        "instance_id": "BO_INSTANCE_ID",
         "publisher": "string",
         "_embedded": {
           "eventmetadata": [
@@ -1057,11 +1067,13 @@ describe('On-boarding providers', () => {
         {
           key: 'commerce',
           id: commerceProviderId,
+          instanceId: "AC_INSTANCE_ID",
           label: 'Commerce Provider'
         },
         {
           key: 'backoffice',
           id: backofficeProviderId,
+          instanceId: "BO_INSTANCE_ID",
           label: 'Backoffice Provider'
         }
       ]

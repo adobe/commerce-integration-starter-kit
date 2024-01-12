@@ -97,7 +97,7 @@ To configure the provider in commerce do the following:
 ![Alt text](commerce-events-configuration.webp "Commerce eventing configuration")
 - Select the server-to-server authorization method you implemented from the Adobe I/O Authorization Type menu. Adobe recommends using OAuth. JWT has been deprecated.
 - Copy the contents of the <workspace-name>.json (Workspace configuration json) file into the Adobe I/O Workspace Configuration field.
-- Enter a unique identifier in the Adobe Commerce Instance ID field. This value must contain English alphanumeric characters, underscores (_), and hyphens (-) only.
+- Copy the commerce provider instance ID returned in the command output of onboard into the Adobe Commerce Instance ID field.
 - Copy the commerce provider ID returned in the command output of onboard into the Adobe I/O Event Provider ID field in the Admin.
 - Click Save Config.
 - Enable Commerce Eventing by setting Enabled to Yes. (Note: You must enable cron so that Commerce can send events to the endpoint.)
