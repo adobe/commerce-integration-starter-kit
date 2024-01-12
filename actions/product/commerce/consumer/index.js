@@ -38,6 +38,23 @@ const createProduct = async (client, data) => {
   }
 }
 
+const updateProduct = async (client, data) => {
+
+  try {
+    return await client.actions.invoke({
+      name: "product/commerceupdated",
+      blocking: true,
+      params: {
+        data
+      }
+    });
+  } catch (e) {
+    return {
+      success: false,
+      error: e.message
+    }
+  }
+}
 
 async function main (params) {
 
@@ -74,8 +91,10 @@ async function main (params) {
           statusCode = res?.response?.result?.statusCode;
         } else {
           logger.info('[Product][Commerce][Consumer] Invoking update product');
-          response = 'update product';
-          statusCode = HTTP_OK;
+          const res = await updateProduct(openwhiskClient, params.data.value);
+          // This logic will change after adding the rest of actions
+          response = res?.response?.result?.body;
+          statusCode = res?.response?.result?.statusCode;
         }
         break;
       case "com.adobe.commerce.observer.catalog_product_delete_commit_after":
