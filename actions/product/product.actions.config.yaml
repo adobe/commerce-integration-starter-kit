@@ -17,7 +17,7 @@ commercecreated:
     require-adobe-auth: true
     final: true
 commerceupdated:
-  function: commerce/created/index.js
+  function: commerce/updated/index.js
   web: 'no'
   runtime: nodejs:16
   inputs:
