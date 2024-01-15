@@ -92,6 +92,7 @@ async function main (params) {
     const errorMessage = checkMissingRequestInputs(params, requiredParams, []);
 
     if (errorMessage) {
+      logger.error(`[Product][Commerce][Consumer] Invalid request parameters: ${stringParameters(params)}`);
       // return and log client errors
       return errorResponse(HTTP_BAD_REQUEST, errorMessage, logger);
     }
