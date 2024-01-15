@@ -133,7 +133,7 @@ async function main (params) {
       statusCode: statusCode,
       body: {
         type: params.type,
-        request: params.data,
+        request: params.data.value,
         response
       }
     }

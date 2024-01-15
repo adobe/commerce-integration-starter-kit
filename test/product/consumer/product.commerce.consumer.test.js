@@ -31,11 +31,13 @@ describe('Product commerce consumer', () => {
       API_AUTH: 'API_AUTH',
       type: 'com.adobe.commerce.observer.catalog_product_save_commit_after',
       data: {
-        sku: 'SKU',
-        name: 'PRODUCT',
-        description: 'Product description',
-        created_at: '2000-01-01',
-        updated_at: '2000-01-01'
+        value: {
+          sku: 'SKU',
+          name: 'PRODUCT',
+          description: 'Product description',
+          created_at: '2000-01-01',
+          updated_at: '2000-01-01'
+        }
       }
     };
 
@@ -77,13 +79,31 @@ describe('Product commerce consumer', () => {
     const params = {
       type: 'com.adobe.commerce.observer.catalog_product_save_commit_after',
       data: {
-        sku: 'SKU',
-        name: 'PRODUCT',
-        description: 'Product description',
-        created_at: '2000-01-01',
-        updated_at: '2000-01-02'
+        value: {
+          sku: 'SKU',
+          name: 'PRODUCT',
+          description: 'Product description',
+          created_at: '2000-01-01',
+          updated_at: '2000-01-02'
+        }
       }
     };
+
+    openwhisk.mockReturnValue({
+      actions: {
+        invoke: jest.fn().mockResolvedValue({
+          response: {
+            result: {
+              statusCode: 200,
+              body: {
+                success: true
+              }
+            }
+          }
+        })
+      }
+    });
+
     const response = await action.main(params);
 
     expect(response).toEqual({
@@ -96,7 +116,9 @@ describe('Product commerce consumer', () => {
           created_at: '2000-01-01',
           updated_at: '2000-01-02'
         },
-        response: "update product",
+        response: {
+          success: true
+        },
         type: "com.adobe.commerce.observer.catalog_product_save_commit_after",
       }
     })
@@ -105,13 +127,31 @@ describe('Product commerce consumer', () => {
     const params = {
       type: 'com.adobe.commerce.observer.catalog_product_delete_commit_after',
       data: {
-        sku: 'SKU',
-        name: 'PRODUCT',
-        description: 'Product description',
-        created_at: '2000-01-01',
-        updated_at: '2000-01-02'
+        value: {
+          sku: 'SKU',
+          name: 'PRODUCT',
+          description: 'Product description',
+          created_at: '2000-01-01',
+          updated_at: '2000-01-02'
+        }
       }
     };
+
+    openwhisk.mockReturnValue({
+      actions: {
+        invoke: jest.fn().mockResolvedValue({
+          response: {
+            result: {
+              statusCode: 200,
+              body: {
+                success: true
+              }
+            }
+          }
+        })
+      }
+    });
+
     const response = await action.main(params);
 
     expect(response).toEqual({
@@ -124,7 +164,9 @@ describe('Product commerce consumer', () => {
           created_at: '2000-01-01',
           updated_at: '2000-01-02'
         },
-        response: "delete product",
+        response: {
+          success: true
+        },
         type: "com.adobe.commerce.observer.catalog_product_delete_commit_after",
       }
     })
@@ -138,7 +180,7 @@ describe('Product commerce consumer', () => {
       error: {
         statusCode: 400,
         body: {
-          error: "missing parameter(s) 'type,data.name,data.sku,data.created_at,data.updated_at'"
+          error: "missing parameter(s) 'type,data.value.created_at,data.value.updated_at'"
         }
       }
     })
@@ -147,11 +189,13 @@ describe('Product commerce consumer', () => {
     const params = {
       type: 'NOT_SUPPORTED_TYPE',
       data: {
-        sku: 'SKU',
-        name: 'PRODUCT',
-        description: 'Product description',
-        created_at: '2000-01-01',
-        updated_at: '2000-01-02'
+        value: {
+          sku: 'SKU',
+          name: 'PRODUCT',
+          description: 'Product description',
+          created_at: '2000-01-01',
+          updated_at: '2000-01-02'
+        }
       }
     };
     const response = await action.main(params);
