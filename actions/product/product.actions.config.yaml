@@ -25,3 +25,12 @@ commerceupdated:
   annotations:
     require-adobe-auth: true
     final: true
+commercedeleted:
+  function: commerce/deleted/index.js
+  web: 'no'
+  runtime: nodejs:16
+  inputs:
+    LOG_LEVEL: debug
+  annotations:
+    require-adobe-auth: true
+    final: true

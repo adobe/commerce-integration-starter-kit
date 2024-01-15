@@ -56,6 +56,24 @@ const updateProduct = async (client, data) => {
   }
 }
 
+const deleteProduct = async (client, data) => {
+
+  try {
+    return await client.actions.invoke({
+      name: "product/commercedeleted",
+      blocking: true,
+      params: {
+        data
+      }
+    });
+  } catch (e) {
+    return {
+      success: false,
+      error: e.message
+    }
+  }
+}
+
 async function main (params) {
 
   try {
@@ -74,6 +92,7 @@ async function main (params) {
     const errorMessage = checkMissingRequestInputs(params, requiredParams, []);
 
     if (errorMessage) {
+      logger.error(`[Product][Commerce][Consumer] Invalid request parameters: ${stringParameters(params)}`);
       // return and log client errors
       return errorResponse(HTTP_BAD_REQUEST, errorMessage, logger);
     }
@@ -86,21 +105,20 @@ async function main (params) {
           logger.info('[Product][Commerce][Consumer] Invoking created product');
 
           const res = await createProduct(openwhiskClient, params.data.value);
-          // This logic will change after adding the rest of actions
           response = res?.response?.result?.body;
           statusCode = res?.response?.result?.statusCode;
         } else {
           logger.info('[Product][Commerce][Consumer] Invoking update product');
           const res = await updateProduct(openwhiskClient, params.data.value);
-          // This logic will change after adding the rest of actions
           response = res?.response?.result?.body;
           statusCode = res?.response?.result?.statusCode;
         }
         break;
       case "com.adobe.commerce.observer.catalog_product_delete_commit_after":
         logger.info('[Product][Commerce][Consumer] Invoking delete product');
-        response = 'delete product';
-        statusCode = HTTP_OK;
+        const res = await deleteProduct(openwhiskClient, params.data.value);
+        response = res?.response?.result?.body;
+        statusCode = res?.response?.result?.statusCode;
         break;
       default:
         logger.error(`[Product][Commerce][Consumer] type not found: ${params.type}`);
