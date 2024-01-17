@@ -1,4 +1,4 @@
-commercececonsumer:
+commerceconsumer:
   function: commerce/consumer/index.js
   web: 'no'
   runtime: nodejs:16

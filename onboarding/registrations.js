@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 const envConfigs = process.env;
 
 async function getExistingRegistrationsData(envConfigs, accessToken, next = null) {
-    const url = `${envConfigs.IO_MANAGEMENT_BASE_URL}${envConfigs.IO_CONSUMER_ID}/registrations`;
+    const url = `${envConfigs.IO_MANAGEMENT_BASE_URL}${envConfigs.IO_CONSUMER_ID}/${envConfigs.IO_PROJECT_ID}/${envConfigs.IO_WORKSPACE_ID}/registrations`;
 
     const getRegistrationsReq = await fetch(
         next ? next : url,

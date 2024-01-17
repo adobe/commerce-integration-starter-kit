@@ -1,6 +1,7 @@
 require('dotenv').config();
 const {checkMissingRequestInputs, errorResponse, objectContainsValue} = require("../actions/utils");
 const fetch = require('node-fetch')
+const uuid = require('uuid');
 
 async function getExistingProviders(envConfigs, accessToken) {
     const getCreatedProvidersReq = await fetch(
@@ -39,6 +40,7 @@ async function createProvider(envConfigs, accessToken, provider) {
             body: JSON.stringify(
                 {
                     // read here about the use of the spread operator to merge objects: https://dev.to/sagar/three-dots---in-javascript-26ci
+                    ...(provider?.key === 'commerce' ? {provider_metadata: 'dx_commerce_events', instance_id: `${uuid.v4()}`} : null),
                     ...(provider?.label ? {label: `${provider?.label}`} : null),
                     ...(provider?.description ? {description: `${provider?.description}`} : null),
                     ...(provider?.docs_url ? {docs_url: `${provider?.docs_url}`} : null)
