@@ -43,7 +43,7 @@ application:
       product:
         license: Apache-2.0
         actions:
-          $include: ./actions/product/product.actions.config.yaml
+          $include: ./actions/product/actions.config.yaml
           #$include: ./actions/customer/customer.actions.config.yaml
           #$include: ./actions/stock/stock.actions.config.yaml
           #$include: ./actions/order/order.actions.config.yaml

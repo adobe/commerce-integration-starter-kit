@@ -1,5 +1,5 @@
-commerceconsumer:
-  function: commerce/consumer/index.js
+commerce-consumer:
+  function: consumer/index.js
   web: 'no'
   runtime: nodejs:16
   inputs:
@@ -7,8 +7,8 @@ commerceconsumer:
   annotations:
     require-adobe-auth: true
     final: true
-commercecreated:
-  function: commerce/created/index.js
+commerce-created:
+  function: created/index.js
   web: 'no'
   runtime: nodejs:16
   inputs:
@@ -16,8 +16,8 @@ commercecreated:
   annotations:
     require-adobe-auth: true
     final: true
-commerceupdated:
-  function: commerce/updated/index.js
+commerce-updated:
+  function: updated/index.js
   web: 'no'
   runtime: nodejs:16
   inputs:
@@ -25,8 +25,8 @@ commerceupdated:
   annotations:
     require-adobe-auth: true
     final: true
-commercedeleted:
-  function: commerce/deleted/index.js
+commerce-deleted:
+  function: deleted/index.js
   web: 'no'
   runtime: nodejs:16
   inputs:

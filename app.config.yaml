@@ -4,4 +4,4 @@ application:
       product:
         license: Apache-2.0
         actions:
-          $include: ./actions/product/product.actions.config.yaml
+          $include: ./actions/product/commerce/actions.config.yaml

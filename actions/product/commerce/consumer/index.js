@@ -24,7 +24,7 @@ const createProduct = async (client, data) => {
 
   try {
     return await client.actions.invoke({
-      name: "product/commercecreated",
+      name: "product/commerce-created",
       blocking: true,
       params: {
         data
@@ -42,7 +42,7 @@ const updateProduct = async (client, data) => {
 
   try {
     return await client.actions.invoke({
-      name: "product/commerceupdated",
+      name: "product/commerce-updated",
       blocking: true,
       params: {
         data
@@ -60,7 +60,7 @@ const deleteProduct = async (client, data) => {
 
   try {
     return await client.actions.invoke({
-      name: "product/commercedeleted",
+      name: "product/commerce-deleted",
       blocking: true,
       params: {
         data

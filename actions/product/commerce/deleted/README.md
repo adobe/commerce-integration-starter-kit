@@ -23,9 +23,9 @@ That transformation is defined in the `transformData` function in the `transform
 ## Connect with the 3rd party
 The connection with the third party is defined in the `sendData` function in the `sender.js` file.
 Please include all the authentication and connection login on that `sender.js` file or an extracted file outside index.js.
-Any need for parameters from environment could be access from `params`. Add the needed parameter in the `actions/product/product.actions.config.yaml` under `commercedeleted -> inputs` as follows:
+Any need for parameters from environment could be access from `params`. Add the needed parameter in the `actions/product/commerce/actions.config.yaml` under `commerce-deleted -> inputs` as follows:
 ```yaml
-commercedeleted:
+commerce-deleted:
   function: commerce/deleted/index.js
   web: 'no'
   runtime: nodejs:16
