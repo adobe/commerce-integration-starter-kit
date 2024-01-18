@@ -16,13 +16,25 @@ jest.mock('node-fetch')
 const fetch = require('node-fetch')
 const action = require('../../onboarding/providers.js')
 const ACCESS_TOKEN = 'token';
-
-afterEach(() => {
-  jest.clearAllMocks()
-  jest.resetModules()
-})
+const RUNTIME_NAMESPACE = '1340225-testOrg-testWorkspace'
+const PROVIDER_SUFFIX = 'testOrg-testWorkspace'
 
 describe('On-boarding providers', () => {
+
+  const OLD_ENV = process.env;
+  beforeEach(() => {
+    jest.resetModules() // Most important - it clears the cache
+    process.env.AIO_runtime_namespace = RUNTIME_NAMESPACE
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  afterAll(() => {
+    process.env = OLD_ENV; // Restore old environment
+  });
+
   test('main should be defined', () => {
     expect(action.main).toBeInstanceOf(Function)
   })
@@ -150,7 +162,7 @@ describe('On-boarding providers', () => {
       ok: true,
       json: () => Promise.resolve({
           "id": commerceProviderId,
-          "label": "Commerce Provider",
+          "label": `Commerce Provider - ${PROVIDER_SUFFIX}`,
           "description": "string",
           "source": "string",
           "docs_url": "string",
@@ -248,7 +260,7 @@ describe('On-boarding providers', () => {
       ok: true,
       json: () => Promise.resolve({
           "id": backofficeProviderId,
-          "label": "Backoffice Provider",
+          "label": `Backoffice Provider - ${PROVIDER_SUFFIX}`,
           "description": "string",
           "source": "string",
           "docs_url": "string",
@@ -359,13 +371,13 @@ describe('On-boarding providers', () => {
           key: 'commerce',
           id: commerceProviderId,
           instanceId: "AC_INSTANCE_ID",
-          label: 'Commerce Provider'
+          label: `Commerce Provider - ${PROVIDER_SUFFIX}`
         },
         {
           key: 'backoffice',
           id: backofficeProviderId,
           instanceId: "BO_INSTANCE_ID",
-          label: 'Backoffice Provider'
+          label: `Backoffice Provider - ${PROVIDER_SUFFIX}`
         }
       ]
     })
@@ -493,7 +505,7 @@ describe('On-boarding providers', () => {
       ok: true,
       json: () => Promise.resolve({
         "id": commerceProviderId,
-        "label": "Commerce Provider",
+        "label": `Commerce Provider - ${PROVIDER_SUFFIX}`,
         "description": "string",
         "source": "string",
         "docs_url": "string",
@@ -602,7 +614,7 @@ describe('On-boarding providers', () => {
           key: 'commerce',
           id: commerceProviderId,
           instanceId: "AC_INSTANCE_ID",
-          label: 'Commerce Provider'
+          label: `Commerce Provider - ${PROVIDER_SUFFIX}`
         }
       ]
     })
@@ -730,7 +742,7 @@ describe('On-boarding providers', () => {
       ok: true,
       json: () => Promise.resolve({
         "id": backofficeProviderId,
-        "label": "Backoffice Provider",
+        "label": `Backoffice Provider - ${PROVIDER_SUFFIX}`,
         "description": "string",
         "source": "string",
         "docs_url": "string",
@@ -839,7 +851,7 @@ describe('On-boarding providers', () => {
           key: 'backoffice',
           id: backofficeProviderId,
           instanceId: "BO_INSTANCE_ID",
-          label: 'Backoffice Provider'
+          label: `Backoffice Provider - ${PROVIDER_SUFFIX}`
         }
       ]
     })
@@ -855,7 +867,7 @@ describe('On-boarding providers', () => {
           "providers": [
             {
               "id": commerceProviderId,
-              "label": "Commerce Provider",
+              "label": `Commerce Provider - ${PROVIDER_SUFFIX}`,
               "description": "string",
               "source": "string",
               "docs_url": "string",
@@ -969,7 +981,7 @@ describe('On-boarding providers', () => {
       ok: true,
       json: () => Promise.resolve({
         "id": backofficeProviderId,
-        "label": "Backoffice Provider",
+        "label": `Backoffice Provider - ${PROVIDER_SUFFIX}`,
         "description": "string",
         "source": "string",
         "docs_url": "string",
@@ -1078,13 +1090,13 @@ describe('On-boarding providers', () => {
           key: 'commerce',
           id: commerceProviderId,
           instanceId: "AC_INSTANCE_ID",
-          label: 'Commerce Provider'
+          label: `Commerce Provider - ${PROVIDER_SUFFIX}`
         },
         {
           key: 'backoffice',
           id: backofficeProviderId,
           instanceId: "BO_INSTANCE_ID",
-          label: 'Backoffice Provider'
+          label: `Backoffice Provider - ${PROVIDER_SUFFIX}`
         }
       ]
     })

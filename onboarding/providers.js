@@ -14,6 +14,7 @@
 
 require('dotenv').config();
 const {checkMissingRequestInputs} = require("../actions/utils");
+const {addSuffix} = require("./utils/naming");
 const fetch = require('node-fetch')
 const uuid = require('uuid');
 
@@ -115,6 +116,8 @@ async function main(clientRegistrations, accessToken) {
 
         // Loop over the predefined providers and create the provider in the System
         for (const provider of providersList) {
+            // Calculate provider label
+            provider.label = addSuffix(provider.label, envConfigs)
             const isProviderSelectedByClient = hasSelection(provider.key, clientRegistrations);
             if (isProviderSelectedByClient) {
                 // Check if provider is already created
