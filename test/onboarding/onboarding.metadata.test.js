@@ -16,6 +16,7 @@ jest.mock('node-fetch')
 const fetch = require('node-fetch')
 const action = require('../../onboarding/metadata.js')
 const ACCESS_TOKEN = 'token';
+const EMPTY_ENVIRONMENT = {}
 
 afterEach(() => {
     jest.clearAllMocks()
@@ -60,7 +61,7 @@ describe('On-boarding metadata', () => {
 
         const clientRegistrations = require('../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json');
 
-        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ACCESS_TOKEN)
+        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
         expect(response).toEqual({
             code: 200,
@@ -97,7 +98,7 @@ describe('On-boarding metadata', () => {
 
         let clientRegistrations = require('../data/onboarding/metadata/create_only_commerce_providers_metadata.json');
 
-        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ACCESS_TOKEN)
+        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
         expect(response).toEqual({
             code: 200,
@@ -131,7 +132,7 @@ describe('On-boarding metadata', () => {
 
         let clientRegistrations = require('../data/onboarding/metadata/create_only_backoffice_providers_metadata.json');
 
-        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ACCESS_TOKEN)
+        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
         expect(response).toEqual({
             code: 200,
@@ -148,7 +149,7 @@ describe('On-boarding metadata', () => {
         const fakeError = new Error('fake')
         fetch.mockRejectedValue(fakeError)
         let clientRegistrations = require('../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json');
-        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ACCESS_TOKEN)
+        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
         expect(response).toEqual({
             code: 500,
             success: false,
@@ -168,7 +169,7 @@ describe('On-boarding metadata', () => {
 
         let clientRegistrations = require('../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json');
 
-        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS)
+        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT)
 
         expect(response).toEqual({
             code: 500,

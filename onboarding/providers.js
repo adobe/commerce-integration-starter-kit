@@ -18,13 +18,13 @@ const {addSuffix} = require("./utils/naming");
 const fetch = require('node-fetch')
 const uuid = require('uuid');
 
-async function getExistingProviders(envConfigs, accessToken) {
+async function getExistingProviders(environment, accessToken) {
     const getCreatedProvidersReq = await fetch(
-        `${envConfigs.IO_MANAGEMENT_BASE_URL}${envConfigs.IO_CONSUMER_ID}/providers`,
+        `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/providers`,
         {
             method: 'GET',
             headers: {
-                'x-api-key': `${envConfigs.OAUTH_CLIENT_ID}`,
+                'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
                 'Authorization': `Bearer ${accessToken}`,
                 'content-type': 'application/json',
                 'Accept': 'application/hal+json'
@@ -41,13 +41,13 @@ async function getExistingProviders(envConfigs, accessToken) {
     return existingProviders;
 }
 
-async function createProvider(envConfigs, accessToken, provider) {
+async function createProvider(environment, accessToken, provider) {
     const createCustomEventProviderReq = await fetch(
-        `${envConfigs.IO_MANAGEMENT_BASE_URL}${envConfigs.IO_CONSUMER_ID}/${envConfigs.IO_PROJECT_ID}/${envConfigs.IO_WORKSPACE_ID}/providers`,
+        `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers`,
         {
             method: 'POST',
             headers: {
-                'x-api-key': `${envConfigs.OAUTH_CLIENT_ID}`,
+                'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
                 'Authorization': `Bearer ${accessToken}`,
                 'content-type': 'application/json',
                 'Accept': 'application/hal+json'
@@ -87,11 +87,10 @@ function hasSelection(selection, clientRegistrations) {
     return false;
 }
 
-async function main(clientRegistrations, accessToken) {
+async function main(clientRegistrations, environment, accessToken) {
     // Load predefined provider, providerEvents and clientRegistrations
     const providersList = require("./config/providers.json");
     const providersEventsConfig = require("./config/events.json");
-    const envConfigs = process.env;
 
     try {
         // 'info' is the default level if not set
@@ -110,14 +109,14 @@ async function main(clientRegistrations, accessToken) {
         }
 
         // Load the existing providers in org
-        const existingProviders = await getExistingProviders(envConfigs, accessToken);
+        const existingProviders = await getExistingProviders(environment, accessToken);
 
         const result = [];
 
         // Loop over the predefined providers and create the provider in the System
         for (const provider of providersList) {
             // Calculate provider label
-            provider.label = addSuffix(provider.label, envConfigs)
+            provider.label = addSuffix(provider.label, environment)
             const isProviderSelectedByClient = hasSelection(provider.key, clientRegistrations);
             if (isProviderSelectedByClient) {
                 // Check if provider is already created
@@ -138,7 +137,7 @@ async function main(clientRegistrations, accessToken) {
                 console.log(`Creating provider with: ` + provider.label)
                 console.log(`provider information: ${JSON.stringify(provider)}`)
 
-                const createProviderResult = await createProvider(envConfigs, accessToken, provider);
+                const createProviderResult = await createProvider(environment, accessToken, provider);
                 if (!createProviderResult?.success) {
                     let errorMessage = `Unable to create provider: reason = '${createProviderResult.error?.reason}', message = '${createProviderResult.error?.message}'`;
                     console.log(errorMessage)

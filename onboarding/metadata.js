@@ -12,7 +12,6 @@
  * from Adobe.
  */
 
-require('dotenv').config();
 const fetch = require("node-fetch");
 
 function buildProviderData(providerEvents) {
@@ -32,14 +31,14 @@ function buildProviderData(providerEvents) {
 }
 
 
-async function addEventCodeToProvider(metadata, providerId, envConfigs, accessToken) {
+async function addEventCodeToProvider(metadata, providerId, environment, accessToken) {
     console.log(`Trying to create metadata for ${metadata?.event_code} to provider ${providerId}`)
     const addEventMetadataReq = await fetch(
-        `${envConfigs.IO_MANAGEMENT_BASE_URL}${envConfigs.IO_CONSUMER_ID}/${envConfigs.IO_PROJECT_ID}/${envConfigs.IO_WORKSPACE_ID}/providers/${providerId}/eventmetadata`,
+        `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers/${providerId}/eventmetadata`,
         {
             method: 'POST',
             headers: {
-                'x-api-key': `${envConfigs.OAUTH_CLIENT_ID}`,
+                'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
                 'Authorization': `Bearer ${accessToken}`,
                 'content-type': 'application/json',
                 'Accept': 'application/hal+json'
@@ -69,10 +68,10 @@ async function addEventCodeToProvider(metadata, providerId, envConfigs, accessTo
     };
 }
 
-async function addMetadataToProvider(providerEvents, providerId, envConfigs, accessToken) {
+async function addMetadataToProvider(providerEvents, providerId, environment, accessToken) {
     const commerceProviderMetadata = buildProviderData(providerEvents);
     for (const metadata of commerceProviderMetadata) {
-        const result = await addEventCodeToProvider(metadata, providerId, envConfigs, accessToken);
+        const result = await addEventCodeToProvider(metadata, providerId, environment, accessToken);
         if (!result.success) {
             const errorMessage = `Unable to add event metadata: reason = '${result.error?.reason}', message = '${result.error?.message}'`;
 
@@ -90,15 +89,15 @@ async function addMetadataToProvider(providerEvents, providerId, envConfigs, acc
     }
 }
 
-async function getExistingMetadata(providerId, envConfigs, accessToken, next = null) {
-    const url = `${envConfigs.IO_MANAGEMENT_BASE_URL}providers/${providerId}/eventmetadata`;
+async function getExistingMetadata(providerId, environment, accessToken, next = null) {
+    const url = `${environment.IO_MANAGEMENT_BASE_URL}providers/${providerId}/eventmetadata`;
 
     const getExistingMetadataReq = await fetch(
         next ? next: url,
         {
             method: 'GET',
             headers: {
-                'x-api-key': `${envConfigs.OAUTH_CLIENT_ID}`,
+                'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
                 'Authorization': `Bearer ${accessToken}`,
                 'content-type': 'application/json',
                 'Accept': 'application/hal+json'
@@ -113,22 +112,21 @@ async function getExistingMetadata(providerId, envConfigs, accessToken, next = n
         })
     }
     if (getExistingMetadataResult?._links?.next) {
-        const data = await getExistingMetadata(providerId, envConfigs, accessToken, getExistingMetadataResult._links.next);
+        const data = await getExistingMetadata(providerId, environment, accessToken, getExistingMetadataResult._links.next);
         existingMetadata.push(...data);
     }
     return existingMetadata;
 }
 
-async function main(clientRegistrations, providers, accessToken) {
+async function main(clientRegistrations, providers, environment, accessToken) {
 
     try {
-        const envConfigs = process.env;
         const providersEventsConfig = require("./config/events.json");
         const providersEvents = [];
 
         const result = [];
         for (const provider of providers) {
-            const existingMetadata = await getExistingMetadata(provider.id, envConfigs, accessToken);
+            const existingMetadata = await getExistingMetadata(provider.id, environment, accessToken);
 
             for (const [entityName, options] of Object.entries(clientRegistrations)) {
                 if (options !== undefined && options.includes(provider.key)) {
@@ -148,7 +146,7 @@ async function main(clientRegistrations, providers, accessToken) {
                 }
             }
 
-            const addMetadataResult = await addMetadataToProvider(providersEvents, provider.id, envConfigs, accessToken);
+            const addMetadataResult = await addMetadataToProvider(providersEvents, provider.id, environment, accessToken);
             if (!addMetadataResult.success) {
                 return {
                     code: 500,

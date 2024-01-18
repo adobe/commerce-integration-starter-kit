@@ -18,22 +18,17 @@ const action = require('../../onboarding/providers.js')
 const ACCESS_TOKEN = 'token';
 const RUNTIME_NAMESPACE = '1340225-testOrg-testWorkspace'
 const PROVIDER_SUFFIX = 'testOrg-testWorkspace'
+const ENVIRONMENT = {AIO_runtime_namespace: RUNTIME_NAMESPACE}
 
 describe('On-boarding providers', () => {
 
-  const OLD_ENV = process.env;
   beforeEach(() => {
     jest.resetModules() // Most important - it clears the cache
-    process.env.AIO_runtime_namespace = RUNTIME_NAMESPACE
   });
 
   afterEach(() => {
     jest.clearAllMocks()
   })
-
-  afterAll(() => {
-    process.env = OLD_ENV; // Restore old environment
-  });
 
   test('main should be defined', () => {
     expect(action.main).toBeInstanceOf(Function)
@@ -361,7 +356,7 @@ describe('On-boarding providers', () => {
 
     let clientRegistrations = require('../data/onboarding/providers/create_commerce_and_backoffice_providers.json');
 
-    const response = await action.main(clientRegistrations, ACCESS_TOKEN)
+    const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 
     expect(response).toEqual({
       code: 200,
@@ -604,7 +599,7 @@ describe('On-boarding providers', () => {
 
     let clientRegistrations = require('../data/onboarding/providers/create_commerce_provider_only.json');
 
-    const response = await action.main(clientRegistrations, ACCESS_TOKEN)
+    const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 
     expect(response).toEqual({
       code: 200,
@@ -841,7 +836,7 @@ describe('On-boarding providers', () => {
 
     let clientRegistrations = require('../data/onboarding/providers/create_backoffice_provider_only.json');
 
-    const response = await action.main(clientRegistrations, ACCESS_TOKEN)
+    const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 
     expect(response).toEqual({
       code: 200,
@@ -1080,7 +1075,7 @@ describe('On-boarding providers', () => {
 
     let clientRegistrations = require('../data/onboarding/providers/create_commerce_and_backoffice_providers.json');
 
-    const response = await action.main(clientRegistrations, ACCESS_TOKEN)
+    const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 
     expect(response).toEqual({
       code: 200,
@@ -1254,7 +1249,7 @@ describe('On-boarding providers', () => {
 
     let clientRegistrations = require('../data/onboarding/providers/create_commerce_and_backoffice_providers.json');
 
-    const response = await action.main(clientRegistrations, ACCESS_TOKEN)
+    const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 
     expect(response).toEqual({
       code: 500,

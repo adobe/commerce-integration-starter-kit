@@ -12,19 +12,17 @@
  * from Adobe.
  */
 
-require('dotenv').config();
 const fetch = require("node-fetch");
-const envConfigs = process.env;
 
-async function getExistingRegistrationsData(envConfigs, accessToken, next = null) {
-    const url = `${envConfigs.IO_MANAGEMENT_BASE_URL}${envConfigs.IO_CONSUMER_ID}/${envConfigs.IO_PROJECT_ID}/${envConfigs.IO_WORKSPACE_ID}/registrations`;
+async function getExistingRegistrationsData(environment, accessToken, next = null) {
+    const url = `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/registrations`;
 
     const getRegistrationsReq = await fetch(
         next ? next : url,
         {
             method: 'GET',
             headers: {
-                'x-api-key': `${envConfigs.OAUTH_CLIENT_ID}`,
+                'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
                 'Authorization': `Bearer ${accessToken}`,
                 'content-type': 'application/json',
                 'Accept': 'application/hal+json'
@@ -46,14 +44,14 @@ async function getExistingRegistrationsData(envConfigs, accessToken, next = null
     }
 
     if (getRegistrationsResult?._links?.next) {
-        existingRegistrations.push(...await getExistingRegistrationsData(envConfigs, accessToken, getRegistrationsResult._links.next.href));
+        existingRegistrations.push(...await getExistingRegistrationsData(environment, accessToken, getRegistrationsResult._links.next.href));
     }
 
     return existingRegistrations;
 }
 
-async function getExistingRegistrations(accessToken) {
-    const existingRegistrationsResult = await getExistingRegistrationsData(envConfigs, accessToken);
+async function getExistingRegistrations(environment, accessToken) {
+    const existingRegistrationsResult = await getExistingRegistrationsData(environment, accessToken);
     const existingRegistrations = [];
     existingRegistrationsResult.forEach(item => existingRegistrations[item.name] = item);
     return existingRegistrations;
@@ -67,12 +65,12 @@ function getRegistrationName(providerKey, entityName) {
     return stringToUppercaseFirstChar(providerKey) + ' ' + stringToUppercaseFirstChar(entityName) + ' Synchronization';
 }
 
-async function main(clientRegistrations, providers, accessToken) {
+async function main(clientRegistrations, providers, environment, accessToken) {
     const eventsConfig = require('./config/events.json')
     const result = [];
 
     try {
-        const existingRegistrations = await getExistingRegistrations(accessToken);
+        const existingRegistrations = await getExistingRegistrations(environment, accessToken);
         for (const provider of providers) {
             console.log(`Start creating registrations for the provider: ${provider.label}`)
 
@@ -95,7 +93,7 @@ async function main(clientRegistrations, providers, accessToken) {
                         event_code: event
                     });
                 }
-                const createEventRegistrationResult = await createRequestRegistration(accessToken, entityName, provider.key, events);
+                const createEventRegistrationResult = await createRequestRegistration(accessToken, entityName, provider.key, events, environment);
                 if (!createEventRegistrationResult.success) {
                     const errorMessage = `Unable to create registration for ${entityName} with provider ${provider.key} - ${provider.id}`;
                     console.log(errorMessage)
@@ -128,11 +126,11 @@ async function main(clientRegistrations, providers, accessToken) {
     }
 }
 
-async function createRequestRegistration(accessToken, entityName, providerKey, events) {
+async function createRequestRegistration(accessToken, entityName, providerKey, events, environment) {
 
     let body = JSON.stringify(
         {
-            client_id: `${envConfigs.OAUTH_CLIENT_ID}`,
+            client_id: `${environment.OAUTH_CLIENT_ID}`,
             runtime_action: `${entityName}/${providerKey}consumer`,
             name: getRegistrationName(providerKey, entityName),
             description: getRegistrationName(providerKey, entityName),
@@ -142,11 +140,11 @@ async function createRequestRegistration(accessToken, entityName, providerKey, e
     )
 
     const createEventRegistrationReq = await fetch(
-        `${envConfigs.IO_MANAGEMENT_BASE_URL}${envConfigs.IO_CONSUMER_ID}/${envConfigs.IO_PROJECT_ID}/${envConfigs.IO_WORKSPACE_ID}/registrations`,
+        `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/registrations`,
         {
             method: 'POST',
             headers: {
-                'x-api-key': `${envConfigs.OAUTH_CLIENT_ID}`,
+                'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
                 'Authorization': `Bearer ${accessToken}`,
                 'content-type': 'application/json',
                 'Accept': 'application/hal+json'

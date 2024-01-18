@@ -36,6 +36,7 @@ const DEFAULT_PROVIDERS = [
 ];
 
 const ACCESS_TOKEN = 'token';
+const EMPTY_ENVIRONMENT = {}
 
 describe('On-boarding registrations', () => {
     test('main should be defined', () => {
@@ -248,7 +249,7 @@ describe('On-boarding registrations', () => {
 
         const clientRegistrations = require('../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json');
 
-        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ACCESS_TOKEN)
+        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
         expect(response).toEqual({
             code: 200,
@@ -439,7 +440,7 @@ describe('On-boarding registrations', () => {
 
         const clientRegistrations = require('../data/onboarding/registrations/create_only_commerce_registrations.json');
 
-        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ACCESS_TOKEN)
+        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
         expect(response).toEqual({
             code: 200,
@@ -624,7 +625,7 @@ describe('On-boarding registrations', () => {
 
         const clientRegistrations = require('../data/onboarding/registrations/create_only_backoffice_registrations.json');
 
-        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ACCESS_TOKEN)
+        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
         expect(response).toEqual({
             code: 200,
@@ -809,7 +810,7 @@ describe('On-boarding registrations', () => {
 
         const clientRegistrations = require('../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json');
 
-        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ACCESS_TOKEN)
+        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
         expect(response).toEqual({
             code: 200,
@@ -833,7 +834,7 @@ describe('On-boarding registrations', () => {
     test('should return a 500 and message error when process fail', async () => {
         const fakeError = new Error('fake')
         fetch.mockRejectedValue(fakeError)
-        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ACCESS_TOKEN)
+        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
         expect(response).toEqual({
             code: 500,
             success: false,
@@ -853,7 +854,7 @@ describe('On-boarding registrations', () => {
 
         let clientRegistrations = require('../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json');
 
-        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ACCESS_TOKEN)
+        const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
         expect(response).toEqual({
             code: 500,

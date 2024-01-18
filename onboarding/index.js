@@ -19,7 +19,6 @@ async function main() {
     console.log('Starting the process of on-boarding based on you registration choice');
 
     const environment = process.env;
-    const registrations = require('./custom/registrations.json');
     const ioManagementAPIScopes = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets'];
     const config = {
         client_id: environment.OAUTH_CLIENT_ID,
@@ -34,7 +33,7 @@ async function main() {
     await context.set('onboarding-config', config)
 
     const accessToken = await getToken()
-    const createProvidersResult = await require('./providers').main(registrations, accessToken);
+    const createProvidersResult = await require('./providers').main(registrations, environment, accessToken);
 
     if (!createProvidersResult.success) {
         const errorMessage = `Process of on-boarding (providers) failed with error: ${createProvidersResult.error}`;
@@ -47,7 +46,7 @@ async function main() {
     }
 
     const providers = createProvidersResult.result;
-    const createProvidersMetadataResult = await require('./metadata').main(registrations, providers, accessToken);
+    const createProvidersMetadataResult = await require('./metadata').main(registrations, providers, environment, accessToken);
 
     if (!createProvidersMetadataResult.success) {
         const errorMessage = `Process of on-boarding (metadata) failed with error: ${createProvidersResult.error}`;
@@ -59,7 +58,7 @@ async function main() {
         }
     }
 
-    const registerEntityEventsResult = await require('./registrations').main(registrations, providers, accessToken);
+    const registerEntityEventsResult = await require('./registrations').main(registrations, providers, environment, accessToken);
     if (!registerEntityEventsResult.success) {
         const errorMessage = `Process of on-boarding (registrations) failed with error: ${createProvidersResult.error}`;
         console.log(errorMessage);
