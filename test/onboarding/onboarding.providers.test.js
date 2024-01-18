@@ -1113,7 +1113,6 @@ describe('On-boarding providers', () => {
     })
   })
   test('should 500 and message error when create provider fails', async () => {
-    const commerceProviderId = 'COMMERCE_PROVIDER_ID';
 
     const mockFetchGetExistingProvidersResponse = {
       ok: true,
