@@ -9,7 +9,7 @@ application:
         license: Apache-2.0
         actions:
           $include: ./actions/product/external/actions.config.yaml
-      customer:
+      customer-commerce:
         license: Apache-2.0
         actions:
           $include: ./actions/customer/commerce/actions.config.yaml
