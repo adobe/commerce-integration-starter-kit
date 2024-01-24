@@ -131,7 +131,7 @@ async function createRequestRegistration(accessToken, entityName, providerKey, e
     let body = JSON.stringify(
         {
             client_id: `${environment.OAUTH_CLIENT_ID}`,
-            runtime_action: `${entityName}/${providerKey}-consumer`,
+            runtime_action: `${entityName}-${providerKey}/consumer`,
             name: getRegistrationName(providerKey, entityName),
             description: getRegistrationName(providerKey, entityName),
             events_of_interest: events,
