@@ -28,6 +28,15 @@ function addSuffix(labelPrefix, environment) {
     return `${labelPrefix} - ${labelSuffix(environment.AIO_runtime_namespace)}`
 }
 
+function stringToUppercaseFirstChar(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function getRegistrationName(providerKey, entityName) {
+    return stringToUppercaseFirstChar(providerKey) + ' ' + stringToUppercaseFirstChar(entityName) + ' Synchronization';
+}
+
 module.exports = {
-    addSuffix
+    addSuffix,
+    getRegistrationName
 }

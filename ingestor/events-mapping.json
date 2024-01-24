@@ -1,0 +1,15 @@
+{
+  "product-created": "be-observer.catalog_product_create",
+  "product-updated": "be-observer.catalog_product_update",
+  "product-deleted": "be-observer.catalog_product_delete",
+  "customer-created": "be-observer.catalog_customer_create",
+  "customer-updated": "be-observer.catalog_customer_update",
+  "customer-deleted": "be-observer.catalog_customer_delete",
+  "customer-group-created": "be-observer.customer_group_create",
+  "customer-group-updated": "be-observer.customer_group_update",
+  "customer-group-deleted": "be-observer.customer_group_delete",
+  "order-status-updated": "be-observer.order_status_change",
+  "stock-updated": "be-observer.catalog_stock_update",
+  "shipment-created": "be-observer.order_shipment_create",
+  "shipment-updated": "be-observer.order_shipment_update"
+}

@@ -14,7 +14,7 @@
 
 require('dotenv').config();
 const {checkMissingRequestInputs} = require("../actions/utils");
-const {addSuffix} = require("./utils/naming");
+const {addSuffix} = require("../utils/naming");
 const fetch = require('node-fetch')
 const uuid = require('uuid');
 
