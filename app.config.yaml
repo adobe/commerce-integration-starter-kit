@@ -5,3 +5,7 @@ application:
         license: Apache-2.0
         actions:
           $include: ./actions/product/commerce/actions.config.yaml
+      customer:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/customer/commerce/actions.config.yaml
