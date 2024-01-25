@@ -22,20 +22,20 @@ const {validateData} = require("./validator");
 async function main(params) {
     const logger = Core.Logger('main', { level: params.LOG_LEVEL || 'info' })
 
-    logger.info('[Consumer][Commerce][Created] Start processing request');
-    logger.debug(`[Consumer][Commerce][Created] Consumer main params: ${stringParameters(params)}`);
+    logger.info('[Customer][Commerce][Created] Start processing request');
+    logger.debug(`[Customer][Commerce][Created] Consumer main params: ${stringParameters(params)}`);
 
     try {
-        logger.debug(`[Consumer][Commerce][Created] Validate data: ${JSON.stringify(params.data)}`)
+        logger.debug(`[Customer][Commerce][Created] Validate data: ${JSON.stringify(params.data)}`)
         validateData(params.data);
 
-        logger.debug(`[Consumer][Commerce][Created] Transform data: ${JSON.stringify(params.data)}`)
+        logger.debug(`[Customer][Commerce][Created] Transform data: ${JSON.stringify(params.data)}`)
         const data = transformData(params.data);
 
-        logger.debug(`[Consumer][Commerce][Created] Start sending data: ${JSON.stringify(data)}`)
+        logger.debug(`[Customer][Commerce][Created] Start sending data: ${JSON.stringify(data)}`)
         await sendData(params, data);
 
-        logger.debug('[Consumer][Commerce][Created] Process finished successfully');
+        logger.debug('[Customer][Commerce][Created] Process finished successfully');
         return {
             statusCode: HTTP_OK,
             body: {
@@ -44,7 +44,7 @@ async function main(params) {
             }
         }
     } catch (error) {
-        logger.error(`[Consumer][Commerce][Created] Error processing the request: ${error.message}`)
+        logger.error(`[Customer][Commerce][Created] Error processing the request: ${error.message}`)
         return {
             statusCode: HTTP_INTERNAL_ERROR,
             body: {
