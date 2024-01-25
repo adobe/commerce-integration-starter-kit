@@ -15,132 +15,129 @@
 /**
  * This is the consumer of the events coming from Adobe Commerce related to product entity.
  */
-const { Core } = require('@adobe/aio-sdk')
-const { errorResponse, stringParameters, checkMissingRequestInputs } = require('../../../utils')
+const {Core} = require('@adobe/aio-sdk')
+const {errorResponse, stringParameters, checkMissingRequestInputs} = require('../../../utils')
 const openwhisk = require('openwhisk');
 const {HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR} = require("../../../constants");
+const Openwhisk = require("../../../openwhisk");
 
 const createProduct = async (client, data) => {
 
-  try {
-    return await client.actions.invoke({
-      name: "product-commerce/created",
-      blocking: true,
-      params: {
-        data
-      }
-    });
-  } catch (e) {
-    return {
-      success: false,
-      error: e.message
+    try {
+        return await client.actions.invoke({
+            name: "product-commerce/created",
+            blocking: true,
+            params: {
+                data
+            }
+        });
+    } catch (e) {
+        return {
+            success: false,
+            error: e.message
+        }
     }
-  }
 }
 
 const updateProduct = async (client, data) => {
 
-  try {
-    return await client.actions.invoke({
-      name: "product-commerce/updated",
-      blocking: true,
-      params: {
-        data
-      }
-    });
-  } catch (e) {
-    return {
-      success: false,
-      error: e.message
+    try {
+        return await client.actions.invoke({
+            name: "product-commerce/updated",
+            blocking: true,
+            params: {
+                data
+            }
+        });
+    } catch (e) {
+        return {
+            success: false,
+            error: e.message
+        }
     }
-  }
 }
 
 const deleteProduct = async (client, data) => {
 
-  try {
-    return await client.actions.invoke({
-      name: "product-commerce/deleted",
-      blocking: true,
-      params: {
-        data
-      }
-    });
-  } catch (e) {
-    return {
-      success: false,
-      error: e.message
+    try {
+        return await client.actions.invoke({
+            name: "product-commerce/deleted",
+            blocking: true,
+            params: {
+                data
+            }
+        });
+    } catch (e) {
+        return {
+            success: false,
+            error: e.message
+        }
     }
-  }
 }
 
-async function main (params) {
+async function main(params) {
+    try {
+        const openwhiskClient = new Openwhisk(params.API_HOST, params.API_AUTH);
+        const logger = Core.Logger('main', {level: params.LOG_LEVEL || 'info'});
 
-  try {
-    const openwhiskClient = openwhisk({apihost: params.API_HOST, api_key: params.API_AUTH});
-    const logger = Core.Logger('main', { level: params.LOG_LEVEL || 'info' })
+        let response = {};
+        let statusCode = HTTP_OK;
 
-    let response = {};
-    let statusCode = HTTP_OK;
+        logger.info('[Product][Commerce][Consumer] Start processing request');
+        logger.debug(`[Product][Commerce][Consumer] Consumer main params: ${stringParameters(params)}`);
 
-    logger.info('[Product][Commerce][Consumer] Start processing request');
-    // log parameters, only if params.LOG_LEVEL === 'debug'
-    logger.debug(`[Product][Commerce][Consumer] Consumer main params: ${stringParameters(params)}`);
+        const requiredParams = ['type', 'data.value.created_at', 'data.value.updated_at']
+        const errorMessage = checkMissingRequestInputs(params, requiredParams, []);
 
-    // check for missing request input parameters and headers
-    const requiredParams = ['type', 'data.value.created_at', 'data.value.updated_at']
-    const errorMessage = checkMissingRequestInputs(params, requiredParams, []);
-
-    if (errorMessage) {
-      logger.error(`[Product][Commerce][Consumer] Invalid request parameters: ${stringParameters(params)}`);
-      // return and log client errors
-      return errorResponse(HTTP_BAD_REQUEST, errorMessage, logger);
-    }
-
-    logger.info('[Product][Commerce][Consumer] Params type: ' + params.type);
-
-    switch (params.type) {
-      case "com.adobe.commerce.observer.catalog_product_save_commit_after":
-        if (params.data.created_at === params.data.updated_at) {
-          logger.info('[Product][Commerce][Consumer] Invoking created product');
-
-          const res = await createProduct(openwhiskClient, params.data.value);
-          response = res?.response?.result?.body;
-          statusCode = res?.response?.result?.statusCode;
-        } else {
-          logger.info('[Product][Commerce][Consumer] Invoking update product');
-          const res = await updateProduct(openwhiskClient, params.data.value);
-          response = res?.response?.result?.body;
-          statusCode = res?.response?.result?.statusCode;
+        if (errorMessage) {
+            logger.error(`[Product][Commerce][Consumer] Invalid request parameters: ${stringParameters(params)}`);
+            return errorResponse(HTTP_BAD_REQUEST, errorMessage, logger);
         }
-        break;
-      case "com.adobe.commerce.observer.catalog_product_delete_commit_after":
-        logger.info('[Product][Commerce][Consumer] Invoking delete product');
-        const res = await deleteProduct(openwhiskClient, params.data.value);
-        response = res?.response?.result?.body;
-        statusCode = res?.response?.result?.statusCode;
-        break;
-      default:
-        logger.error(`[Product][Commerce][Consumer] type not found: ${params.type}`);
-        response = `This case type is not supported: ${params.type}`;
-        statusCode = HTTP_BAD_REQUEST;
-        break;
-    }
 
-    // log the response status code
-    logger.info(`[Product][Commerce][Consumer] ${statusCode}: successful request`)
-    return {
-      statusCode: statusCode,
-      body: {
-        type: params.type,
-        request: params.data.value,
-        response
-      }
+        logger.info('[Product][Commerce][Consumer] Params type: ' + params.type);
+
+        switch (params.type) {
+            case "com.adobe.commerce.observer.catalog_product_save_commit_after":
+                const createdAt = Date.parse(params.data.value.created_at);
+                const updatedAt = Date.parse(params.data.value.updated_at);
+                if (createdAt === updatedAt) {
+                    logger.info('[Product][Commerce][Consumer] Invoking created product');
+
+                    const res = await openwhiskClient.invokeAction("product-commerce/created", params.data.value);
+                    response = res?.response?.result?.body;
+                    statusCode = res?.response?.result?.statusCode;
+                } else {
+                    logger.info('[Product][Commerce][Consumer] Invoking update product');
+                    const res = await openwhiskClient.invokeAction("product-commerce/updated", params.data.value);
+                    response = res?.response?.result?.body;
+                    statusCode = res?.response?.result?.statusCode;
+                }
+                break;
+            case "com.adobe.commerce.observer.catalog_product_delete_commit_after":
+                logger.info('[Product][Commerce][Consumer] Invoking delete product');
+                const res = await openwhiskClient.invokeAction("product-commerce/deleted", params.data.value);
+                response = res?.response?.result?.body;
+                statusCode = res?.response?.result?.statusCode;
+                break;
+            default:
+                logger.error(`[Product][Commerce][Consumer] type not found: ${params.type}`);
+                response = `This case type is not supported: ${params.type}`;
+                statusCode = HTTP_BAD_REQUEST;
+                break;
+        }
+
+        logger.info(`[Product][Commerce][Consumer] ${statusCode}: successful request`)
+        return {
+            statusCode: statusCode,
+            body: {
+                type: params.type,
+                request: params.data.value,
+                response
+            }
+        }
+    } catch (error) {
+        return errorResponse(HTTP_INTERNAL_ERROR, `[Product][Commerce][Consumer] Server error: ${error.message}`, logger)
     }
-  } catch (error) {
-    // return with HTTP_INTERNAL_ERROR
-    return errorResponse(HTTP_INTERNAL_ERROR, `[Product][Commerce][Consumer] Server error: ${error.message}`, logger)
-  }
 }
 
 exports.main = main

@@ -12,68 +12,17 @@
  * from Adobe.
  */
 
-const { Core } = require('@adobe/aio-sdk')
-const { errorResponse, stringParameters, checkMissingRequestInputs } = require('../../../utils')
+const {Core} = require('@adobe/aio-sdk')
+const {errorResponse, stringParameters, checkMissingRequestInputs} = require('../../../utils')
 const {HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST, HTTP_OK} = require("../../../constants");
-const openwhisk = require("openwhisk");
+const Openwhisk = require("../../../openwhisk");
 
-async function createProductInAdobeCommerce(client, data) {
-    try {
-        return await client.actions.invoke({
-            name: "product-backoffice/created",
-            blocking: true,
-            params: {
-                data
-            }
-        })
-    } catch (e) {
-        return {
-            success: false,
-            error: e.message
-        };
-    }
-}
+async function main(params) {
 
-async function updateProductInAdobeCommerce(client, data) {
-    try {
-        return await client.actions.invoke({
-            name: "product-backoffice/updated",
-            blocking: true,
-            params: {
-                data
-            }
-        })
-    } catch (e) {
-        return {
-            success: false,
-            error: e.message
-        };
-    }
-}
-
-async function deleteProductInCommerce(client, data) {
-    try {
-        return await client.actions.invoke({
-            name: "product-backoffice/deleted",
-            blocking: true,
-            params: {
-                data
-            }
-        })
-    } catch (e) {
-        return {
-            success: false,
-            error: e.message
-        };
-    }
-}
-
-async function main (params) {
-
-    const logger = Core.Logger('main', { level: params.LOG_LEVEL || 'info' })
+    const logger = Core.Logger('main', {level: params.LOG_LEVEL || 'info'})
 
     try {
-        const openwhiskClient = openwhisk({apihost: params.API_HOST, api_key: params.API_AUTH});
+        const openwhiskClient = new Openwhisk(params.API_HOST, params.API_AUTH);
 
         let response = {};
         let statusCode = HTTP_OK;
@@ -91,22 +40,22 @@ async function main (params) {
 
         logger.info(`[Product][External][Consumer] Params type: ${params.type}`)
         switch (params.type) {
-            case "be-observer.catalog_product_create": {}
-                logger.info('[Product][External][Consumer] Invoking product create');
-                const createRes = await createProductInAdobeCommerce(openwhiskClient, params.data)
+            case "be-observer.catalog_product_create":
+                logger.info('[Product][External][Consumer] Invoking product create')
+                const createRes = await openwhiskClient.invokeAction("product-backoffice/created", params.data)
                 response = createRes?.response?.result?.body
                 statusCode = createRes?.response?.result?.statusCode
                 break
             case "be-observer.catalog_product_update":
                 logger.info('[Product][External][Consumer] Invoking product update')
-                const updateRes = await updateProductInAdobeCommerce(openwhiskClient, params.data)
-                response = updateRes?.response?.result?.body;
-                statusCode = updateRes?.response?.result?.statusCode;
+                const updateRes = await openwhiskClient.invokeAction("product-backoffice/updated", params.data)
+                response = updateRes?.response?.result?.body
+                statusCode = updateRes?.response?.result?.statusCode
                 break
             case "be-observer.catalog_product_delete":
                 logger.info('[Product][External][Consumer] Invoking product delete')
-                const deleteRes = await deleteProductInCommerce(openwhiskClient, params.data)
-                response = deleteRes?.response?.result?.body;
+                const deleteRes = await openwhiskClient.invokeAction("product-backoffice/deleted", params.data)
+                response = deleteRes?.response?.result?.body
                 statusCode = deleteRes?.response?.result?.statusCode
                 break
             default:

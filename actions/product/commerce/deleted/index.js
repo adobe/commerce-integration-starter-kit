@@ -45,7 +45,7 @@ async function main(params) {
         return {
             statusCode: HTTP_OK,
             body: {
-                action: 'updated',
+                action: 'deleted',
                 success: true
             }
         }
