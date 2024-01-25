@@ -123,3 +123,9 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 - [Product created in commerce](actions/product/commerce/created/README.md)
 - [Product updated in commerce](actions/product/commerce/updated/README.md)
 - [Product deleted in commerce](actions/product/commerce/deleted/README.md)
+
+### Customer entity
+#### Commerce to third party
+- [Customer created in commerce](actions/customer/commerce/created/README.md)
+- [Customer updated in commerce](actions/customer/commerce/updated/README.md)
+- [Customer deleted in commerce](actions/customer/commerce/deleted/README.md)

@@ -20,37 +20,31 @@ const {HTTP_OK, HTTP_INTERNAL_ERROR} = require("../../../constants");
 const {validateData} = require("./validator");
 
 async function main(params) {
-    // create a Logger
     const logger = Core.Logger('main', { level: params.LOG_LEVEL || 'info' })
 
-    logger.info('[Product][Commerce][Updated] Start processing request');
-    // log parameters, only if params.LOG_LEVEL === 'debug'
-    logger.debug(`[Product][Commerce][Updated] Consumer main params: ${stringParameters(params)}`);
+    logger.info('[Customer][Commerce][Deleted] Start processing request');
+    logger.debug(`[Customer][Commerce][Deleted] Consumer main params: ${stringParameters(params)}`);
 
     try {
-        // validate received data from commerce
-        logger.debug(`[Product][Commerce][Updated] Validate data: ${JSON.stringify(params.data)}`)
+        logger.debug(`[Customer][Commerce][Deleted] Validate data: ${JSON.stringify(params.data)}`)
         validateData(params.data);
 
-        // transform received data from commerce
-        logger.debug(`[Product][Commerce][Updated] Transform data: ${JSON.stringify(params.data)}`)
-
+        logger.debug(`[Customer][Commerce][Deleted] Transform data: ${JSON.stringify(params.data)}`)
         const data = transformData(params.data);
 
-        // Send data to 3rd party
-        logger.debug(`[Product][Commerce][Updated] Start sending data: ${JSON.stringify(data)}`)
-        sendData(params, data);
+        logger.debug(`[Customer][Commerce][Deleted] Start sending data: ${JSON.stringify(data)}`)
+        await sendData(params, data);
 
-        logger.debug('[Product][Commerce][Updated] Process finished successfully');
+        logger.debug('[Customer][Commerce][Deleted] Process finished successfully');
         return {
             statusCode: HTTP_OK,
             body: {
-                action: 'updated',
+                action: 'deleted',
                 success: true
             }
         }
     } catch (error) {
-        logger.error(`[Product][Commerce][Updated] Error processing the request: ${error.message}`)
+        logger.error(`[Customer][Commerce][Deleted] Error processing the request: ${error.message}`)
         return {
             statusCode: HTTP_INTERNAL_ERROR,
             body: {

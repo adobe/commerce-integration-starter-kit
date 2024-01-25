@@ -12,10 +12,11 @@
  * from Adobe.
  */
 
-const action = require('../../../actions/product/commerce/deleted/index.js');
+const action = require('../../../../../actions/customer/commerce/deleted');
 
-describe('Product commerce deleted', () => {
+describe('Customer commerce deleted', () => {
   test('main should be defined', () => {
     expect(action.main).toBeInstanceOf(Function)
   })
+  // @TODO Here you can add unit tests to cover the cases implemented in the customer deleted runtime action
 })

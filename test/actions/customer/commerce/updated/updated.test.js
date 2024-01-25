@@ -12,10 +12,11 @@
  * from Adobe.
  */
 
-const action = require('../../../actions/product/commerce/created/index.js');
+const action = require('../../../../../actions/customer/commerce/updated');
 
-describe('Product commerce created', () => {
+describe('Customer commerce updated', () => {
   test('main should be defined', () => {
     expect(action.main).toBeInstanceOf(Function)
   })
+  // @TODO Here you can add unit tests to cover the cases implemented in the customer updated runtime action
 })

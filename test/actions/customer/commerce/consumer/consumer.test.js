@@ -12,7 +12,7 @@
  * from Adobe.
  */
 
-const action = require('../../../actions/product/commerce/consumer/index.js');
+const action = require('../../../../../actions/customer/commerce/consumer');
 jest.mock('openwhisk')
 const openwhisk = require('openwhisk');
 
@@ -21,20 +21,20 @@ afterEach(() => {
   jest.resetModules()
 })
 
-describe('Product commerce consumer', () => {
-  test('main should be defined', () => {
+describe('Customer commerce consumer', () => {
+  test('main function should be defined', () => {
     expect(action.main).toBeInstanceOf(Function)
   })
-  test('Given product created in commerce, when event is received then product created request is processed', async () => {
+  test('Given customer created in commerce, when event is received then customer created request is processed', async () => {
     const params = {
       API_HOST: 'API_HOST',
       API_AUTH: 'API_AUTH',
-      type: 'com.adobe.commerce.observer.catalog_product_save_commit_after',
+      type: 'com.adobe.commerce.observer.customer_save_commit_after',
       data: {
         value: {
           sku: 'SKU',
-          name: 'PRODUCT',
-          description: 'Product description',
+          name: 'CUSTOMER',
+          description: 'Customer description',
           created_at: '2000-01-01',
           updated_at: '2000-01-01'
         }
@@ -48,6 +48,7 @@ describe('Product commerce consumer', () => {
             result: {
               statusCode: 200,
               body: {
+                action: 'created',
                 success: true
               }
             }
@@ -63,26 +64,27 @@ describe('Product commerce consumer', () => {
       body: {
         request: {
           sku: 'SKU',
-          name: 'PRODUCT',
-          description: 'Product description',
+          name: 'CUSTOMER',
+          description: 'Customer description',
           created_at: '2000-01-01',
           updated_at: '2000-01-01'
         },
         response: {
+          action: 'created',
           success: true
         },
-        type: "com.adobe.commerce.observer.catalog_product_save_commit_after",
+        type: "com.adobe.commerce.observer.customer_save_commit_after",
       }
     })
   })
-  test('Given product updated in commerce, when event is received then product updated request is processed', async () => {
+  test('Given customer updated in commerce, when event is received then customer updated request is processed', async () => {
     const params = {
-      type: 'com.adobe.commerce.observer.catalog_product_save_commit_after',
+      type: 'com.adobe.commerce.observer.customer_save_commit_after',
       data: {
         value: {
           sku: 'SKU',
-          name: 'PRODUCT',
-          description: 'Product description',
+          name: 'CUSTOMER',
+          description: 'Customer description',
           created_at: '2000-01-01',
           updated_at: '2000-01-02'
         }
@@ -96,6 +98,7 @@ describe('Product commerce consumer', () => {
             result: {
               statusCode: 200,
               body: {
+                action: 'updated',
                 success: true
               }
             }
@@ -111,26 +114,27 @@ describe('Product commerce consumer', () => {
       body: {
         request: {
           sku: 'SKU',
-          name: 'PRODUCT',
-          description: 'Product description',
+          name: 'CUSTOMER',
+          description: 'Customer description',
           created_at: '2000-01-01',
           updated_at: '2000-01-02'
         },
         response: {
+          action: 'updated',
           success: true
         },
-        type: "com.adobe.commerce.observer.catalog_product_save_commit_after",
+        type: "com.adobe.commerce.observer.customer_save_commit_after",
       }
     })
   })
-  test('Given product deleted in commerce, when event is received then product deleted request is processed', async () => {
+  test('Given customer deleted in commerce, when event is received then customer deleted request is processed', async () => {
     const params = {
-      type: 'com.adobe.commerce.observer.catalog_product_delete_commit_after',
+      type: 'com.adobe.commerce.observer.customer_delete_commit_after',
       data: {
         value: {
           sku: 'SKU',
-          name: 'PRODUCT',
-          description: 'Product description',
+          name: 'CUSTOMER',
+          description: 'Customer description',
           created_at: '2000-01-01',
           updated_at: '2000-01-02'
         }
@@ -144,6 +148,7 @@ describe('Product commerce consumer', () => {
             result: {
               statusCode: 200,
               body: {
+                action: 'deleted',
                 success: true
               }
             }
@@ -159,19 +164,20 @@ describe('Product commerce consumer', () => {
       body: {
         request: {
           sku: 'SKU',
-          name: 'PRODUCT',
-          description: 'Product description',
+          name: 'CUSTOMER',
+          description: 'Customer description',
           created_at: '2000-01-01',
           updated_at: '2000-01-02'
         },
         response: {
+          action: 'deleted',
           success: true
         },
-        type: "com.adobe.commerce.observer.catalog_product_delete_commit_after",
+        type: "com.adobe.commerce.observer.customer_delete_commit_after",
       }
     })
   })
-  test('Should return a 400 and message error when process product commerce request missing required params', async () => {
+  test('Given params when process customer commerce request missing required params then an error 400 is returned', async () => {
 
     const params = {};
     const response = await action.main(params);
@@ -185,14 +191,14 @@ describe('Product commerce consumer', () => {
       }
     })
   })
-  test('should 400 and message error when product commerce event type is not supported', async () => {
+  test('Given params when customer event type received is not supported then an error 400 is returned', async () => {
     const params = {
       type: 'NOT_SUPPORTED_TYPE',
       data: {
         value: {
           sku: 'SKU',
-          name: 'PRODUCT',
-          description: 'Product description',
+          name: 'CUSTOMER',
+          description: 'Customer description',
           created_at: '2000-01-01',
           updated_at: '2000-01-02'
         }
@@ -205,8 +211,8 @@ describe('Product commerce consumer', () => {
       body: {
         request: {
           sku: 'SKU',
-          name: 'PRODUCT',
-          description: 'Product description',
+          name: 'CUSTOMER',
+          description: 'Customer description',
           created_at: '2000-01-01',
           updated_at: '2000-01-02'
         },
