@@ -29,13 +29,13 @@ async function main (params) {
 
     try {
         logger.debug(`[Product][External][Created] Validate data: ${JSON.stringify(params.data)}`)
-        const errorMessage = validateData(params);
-        if (errorMessage) {
+        const validation = validateData(params);
+        if (!validation.success) {
             return {
                 statusCode: HTTP_BAD_REQUEST,
                 body: {
                     success: false,
-                    error: errorMessage
+                    error: validation.message
                 }
             }
         }
@@ -62,7 +62,7 @@ async function main (params) {
     } catch (error) {
         logger.error(`[Product][External][Created] Error processing the request: ${error}`)
         return {
-            statusCode: HTTP_INTERNAL_ERROR,
+            statusCode: error.response?.statusCode || HTTP_INTERNAL_ERROR,
             body: {
                 success: false,
                 error: error

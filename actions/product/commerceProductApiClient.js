@@ -34,6 +34,21 @@ async function createProduct(baseUrl, consumerKey, consumerSecret, accessToken, 
     )
 }
 
+async function deleteProduct(baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, sku, logger) {
+    const client = getCommerceOauthClient(
+        {
+            url: baseUrl,
+            consumerKey: consumerKey,
+            consumerSecret: consumerSecret,
+            accessToken: accessToken,
+            accessTokenSecret: accessTokenSecret
+        },
+        logger
+    )
+    return await client.delete(`products/${sku}`)
+}
+
 module.exports = {
-    createProduct
+    createProduct,
+    deleteProduct
 }
