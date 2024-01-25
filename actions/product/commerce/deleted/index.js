@@ -45,6 +45,7 @@ async function main(params) {
         return {
             statusCode: HTTP_OK,
             body: {
+                action: 'updated',
                 success: true
             }
         }

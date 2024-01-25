@@ -44,6 +44,7 @@ async function main(params) {
         return {
             statusCode: HTTP_OK,
             body: {
+                action: 'created',
                 success: true
             }
         }

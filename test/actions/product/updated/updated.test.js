@@ -12,9 +12,9 @@
  * from Adobe.
  */
 
-const action = require('../../../actions/product/commerce/created/index.js');
+const action = require('../../../../actions/product/commerce/updated');
 
-describe('Product commerce created', () => {
+describe('Product commerce updated', () => {
   test('main should be defined', () => {
     expect(action.main).toBeInstanceOf(Function)
   })
