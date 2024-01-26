@@ -1,7 +1,7 @@
-## Integrate Adobe Commerce customer-deleted event with a third party
-This runtime action is responsible for notifying the integration with the 3rd party after a customer is deleted in Adobe Commerce.
+## Integrate Adobe Commerce customer group deleted event with a third party
+This runtime action is responsible for notifying the integration with the 3rd party after a customer group is deleted in Adobe Commerce.
 
-![Alt text](CommerceCustomerDeleteSync.png "Title")
+![Alt text](CommerceCustomerGroupDeleteSync.png "Title")
 
 # Incoming information
 The incoming depends on the fields specified during the event registration in Adobe Commerce. For more information, please check it here: https://developer.adobe.com/commerce/extensibility/events/configure-commerce/#subscribe-and-register-events
@@ -22,7 +22,7 @@ That transformation is defined in the `transformData` function in the `transform
 ## Connect with the 3rd party
 The connection with the third party is defined in the `sendData` function in the `sender.js` file.
 Please include all the authentication and connection login on that `sender.js` file or an extracted file outside index.js.
-Any need for parameters from environment could be access from `params`. Add the needed parameter in the `actions/customer/commerce/actions.config.yaml` under `commerce-deleted -> inputs` as follows:
+Any need for parameters from environment could be access from `params`. Add the needed parameter in the `actions/customer-group/commerce/actions.config.yaml` under `commerce-deleted -> inputs` as follows:
 ```yaml
 deleted:
   function: commerce/deleted/index.js

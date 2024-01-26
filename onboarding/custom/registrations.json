@@ -1,6 +1,7 @@
 {
   "product": ["commerce"],
   "customer": ["commerce"],
+  "customer-group": ["commerce"],
   "order": [],
   "stock": [],
   "shipment": []

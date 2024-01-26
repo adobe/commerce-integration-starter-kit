@@ -20,6 +20,16 @@
       "customer.deleted"
     ]
   },
+  "customer-group": {
+    "commerce": [
+      "com.adobe.commerce.observer.customer_group_save_commit_after",
+      "com.adobe.commerce.observer.customer_group_delete_commit_after"
+    ],
+    "backoffice": [
+      "customer.updated",
+      "customer.deleted"
+    ]
+  },
   "order": {
     "commerce": [
       "com.adobe.commerce.observer.sales_order_save_commit_after",
