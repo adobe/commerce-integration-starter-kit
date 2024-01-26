@@ -13,7 +13,6 @@
  */
  
 const openwhisk = require('openwhisk');
-const {HTTP_INTERNAL_ERROR} = require("./constants");
 
 class Openwhisk {
     #openwhiskClient;
