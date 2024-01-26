@@ -19,8 +19,8 @@
  * @param {object} data - Received data from adobe commerce
  */
 function validateData (data) {
-  // Here add the logic to validate the received data
-  // Throw exception in case data is invalid
+  // @TODO Here add the logic to validate the received data
+  // @TODO Throw exception in case data is invalid
 }
 
 module.exports = {
