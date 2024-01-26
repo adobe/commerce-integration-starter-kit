@@ -6,6 +6,6 @@
     "price": {"type":  "number"},
     "description": {"type":  "string"}
   },
-  "required": ["sku", "name", "description"],
+  "required": ["sku", "name", "price", "description"],
   "additionalProperties": true
 }

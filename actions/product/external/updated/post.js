@@ -12,25 +12,10 @@
  * from Adobe.
  */
 
-function transformData(params) {
-    // This is a sample implementation. Please adapt based on your needs
-    // Notice that the attribute_set_id may need to be changed
-    return {
-        product: {
-            sku: params.data.sku,
-            name: params.data.name,
-            price: params.data.price,
-            attribute_set_id: 4,
-            custom_attributes: [
-                {
-                    attribute_code: 'description',
-                    value: params.data.description
-                }
-            ]
-        }
-    }
+function postProcess(data, transformed, preProcessed, result) {
+    // Here implement any preprocessing needed
 }
 
 module.exports = {
-    transformData
+    postProcess
 }

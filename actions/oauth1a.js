@@ -52,13 +52,12 @@ function getOauthClient(options, logger) {
             return await got(requestData.url, {
                 http2: true,
                 method: requestData.method,
-                headers,
+                headers: headers,
                 body: requestData.body,
                 responseType: 'json'
             }).json()
         } catch (error) {
-            logger.error(error)
-
+            logger.error(`Error fetching URL ${requestData.url}: ${error}`)
             throw error
         }
     }
@@ -92,13 +91,13 @@ function getOauthClient(options, logger) {
         return apiCall(requestData, requestToken, customHeaders)
     }
 
-    instance.put = async function (resourceUrl, data, requestToken = '') {
+    instance.put = async function (resourceUrl, data, requestToken = '', customHeaders = {}) {
         const requestData = {
             url: createUrl(resourceUrl),
             method: 'PUT',
             body: data
         }
-        return apiCall(requestData, requestToken)
+        return apiCall(requestData, requestToken, customHeaders)
     }
 
     instance.delete = async function (resourceUrl, requestToken = '') {

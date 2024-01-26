@@ -12,25 +12,22 @@
  * from Adobe.
  */
 
-function transformData(params) {
-    // This is a sample implementation. Please adapt based on your needs
-    // Notice that the attribute_set_id may need to be changed
-    return {
-        product: {
-            sku: params.data.sku,
-            name: params.data.name,
-            price: params.data.price,
-            attribute_set_id: 4,
-            custom_attributes: [
-                {
-                    attribute_code: 'description',
-                    value: params.data.description
-                }
-            ]
-        }
-    }
+const {Core} = require("@adobe/aio-sdk");
+const {updateProduct} = require("../../commerceProductApiClient");
+
+async function sendData(params, transformed, preProcessed) {
+    const logger = Core.Logger('sendData', {level: params.LOG_LEVEL || 'info'})
+
+    return await updateProduct(
+        params.COMMERCE_BASE_URL,
+        params.COMMERCE_CONSUMER_KEY,
+        params.COMMERCE_CONSUMER_SECRET,
+        params.COMMERCE_ACCESS_TOKEN,
+        params.COMMERCE_ACCESS_TOKEN_SECRET,
+        transformed,
+        logger)
 }
 
 module.exports = {
-    transformData
+    sendData
 }

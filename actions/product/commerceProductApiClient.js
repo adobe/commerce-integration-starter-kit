@@ -34,6 +34,25 @@ async function createProduct(baseUrl, consumerKey, consumerSecret, accessToken, 
     )
 }
 
+async function updateProduct(baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data, logger) {
+    const client = getCommerceOauthClient(
+        {
+            url: baseUrl,
+            consumerKey: consumerKey,
+            consumerSecret: consumerSecret,
+            accessToken: accessToken,
+            accessTokenSecret: accessTokenSecret
+        },
+        logger
+    )
+    return await client.put(
+        `products/${data.product.sku}`,
+        JSON.stringify(data),
+        '',
+        {'Content-Type': 'application/json'}
+    )
+}
+
 async function deleteProduct(baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, sku, logger) {
     const client = getCommerceOauthClient(
         {
@@ -50,5 +69,6 @@ async function deleteProduct(baseUrl, consumerKey, consumerSecret, accessToken, 
 
 module.exports = {
     createProduct,
+    updateProduct,
     deleteProduct
 }
