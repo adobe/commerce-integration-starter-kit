@@ -17,7 +17,6 @@
  */
 const {Core} = require('@adobe/aio-sdk')
 const {errorResponse, stringParameters, checkMissingRequestInputs} = require('../../../utils')
-const openwhisk = require('openwhisk');
 const {HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR} = require("../../../constants");
 const Openwhisk = require("../../../openwhisk");
 
