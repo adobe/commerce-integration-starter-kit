@@ -21,10 +21,9 @@ const {HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR} = require("../../../const
 const Openwhisk = require("../../../openwhisk");
 
 async function main(params) {
-
+    const logger = Core.Logger('main', {level: params.LOG_LEVEL || 'info'})
     try {
         const openwhiskClient = new Openwhisk(params.API_HOST, params.API_AUTH);
-        const logger = Core.Logger('main', {level: params.LOG_LEVEL || 'info'})
 
         let response = {};
         let statusCode = HTTP_OK;
