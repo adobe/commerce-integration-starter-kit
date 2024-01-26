@@ -20,64 +20,11 @@ const {errorResponse, stringParameters, checkMissingRequestInputs} = require('..
 const {HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR} = require("../../../constants");
 const Openwhisk = require("../../../openwhisk");
 
-const createProduct = async (client, data) => {
-
-    try {
-        return await client.actions.invoke({
-            name: "product-commerce/created",
-            blocking: true,
-            params: {
-                data
-            }
-        });
-    } catch (e) {
-        return {
-            success: false,
-            error: e.message
-        }
-    }
-}
-
-const updateProduct = async (client, data) => {
-
-    try {
-        return await client.actions.invoke({
-            name: "product-commerce/updated",
-            blocking: true,
-            params: {
-                data
-            }
-        });
-    } catch (e) {
-        return {
-            success: false,
-            error: e.message
-        }
-    }
-}
-
-const deleteProduct = async (client, data) => {
-
-    try {
-        return await client.actions.invoke({
-            name: "product-commerce/deleted",
-            blocking: true,
-            params: {
-                data
-            }
-        });
-    } catch (e) {
-        return {
-            success: false,
-            error: e.message
-        }
-    }
-}
-
 async function main(params) {
+    const logger = Core.Logger('main', {level: params.LOG_LEVEL || 'info'});
+
     try {
         const openwhiskClient = new Openwhisk(params.API_HOST, params.API_AUTH);
-        const logger = Core.Logger('main', {level: params.LOG_LEVEL || 'info'});
 
         let response = {};
         let statusCode = HTTP_OK;
