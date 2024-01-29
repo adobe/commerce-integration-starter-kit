@@ -20,9 +20,7 @@
  * The `Authorization` header content will be replaced by '<hidden>'.
  *
  * @param {object} params action input parameters.
- *
- * @returns {string}
- *
+ * @returns {string} - returns a json string
  */
 function stringParameters (params) {
   // hide authorization token without overriding params
@@ -62,12 +60,10 @@ function getMissingKeys (obj, required) {
  * A value of 0 or null is not considered as missing.
  *
  * @param {object} params action input parameters.
- * @param {array} requiredHeaders list of required input headers.
- * @param {array} requiredParams list of required input parameters.
- *        Each element can be multi level deep using a '.' separator e.g. 'myRequiredObj.myRequiredKey'.
- *
+ * @param {Array} requiredParams list of required input parameters.
+ * @param {Array} requiredHeaders list of required input headers.
+ * Each element can be multi level deep using a '.' separator e.g. 'myRequiredObj.myRequiredKey'.
  * @returns {string} if the return value is not null, then it holds an error message describing the missing inputs.
- *
  */
 function checkMissingRequestInputs (params, requiredParams = [], requiredHeaders = []) {
   let errorMessage = null
@@ -99,9 +95,7 @@ function checkMissingRequestInputs (params, requiredParams = [], requiredHeaders
  * Extracts the bearer token string from the Authorization header in the request parameters.
  *
  * @param {object} params action input parameters.
- *
  * @returns {string|undefined} the token string or undefined if not set in request headers.
- *
  */
 function getBearerToken (params) {
   if (params.__ow_headers &&
@@ -121,9 +115,7 @@ function getBearerToken (params) {
  *        e.g. 'missing xyz parameter'
  * @param {*} [logger] an optional logger instance object with an `info` method
  *        e.g. `new require('@adobe/aio-sdk').Core.Logger('name')`
- *
  * @returns {object} the error object, ready to be returned from the action main's function.
- *
  */
 function errorResponse (statusCode, message, logger) {
   if (logger && typeof logger.info === 'function') {
@@ -147,16 +139,14 @@ function errorResponse (statusCode, message, logger) {
  *        e.g. 200
  * @param {string} message a descriptive message of the result
  *        e.g. 'missing xyz parameter'
- *
  * @returns {object} the response object, ready to be returned from the action main's function.
- *
  */
 function actionSuccessResponse (statusCode, message) {
   return {
-    statusCode: statusCode,
+    statusCode,
     success: true,
     body: {
-      message: message,
+      message
     }
   }
 }
@@ -169,29 +159,34 @@ function actionSuccessResponse (statusCode, message) {
  *        e.g. 400
  * @param {string} error a descriptive message of the result
  *        e.g. 'missing xyz parameter'
- *
  * @returns {object} the response object, ready to be returned from the action main's function.
- *
  */
 function actionErrorResponse (statusCode, error) {
   return {
-    statusCode: statusCode,
+    statusCode,
     success: false,
     body: {
-      error: error,
+      error
     }
   }
 }
 
-// Function to check if an object contains a specific value
-function objectContainsValue(obj, value) {
+/**
+ * Function to check if an object contains a specific value
+ *
+ * @returns {boolean} - returns true if value found
+ * @param {object} obj - object to search in
+ * @param {string} value - value to search
+ */
+function objectContainsValue (obj, value) {
   for (const key in obj) {
     if (obj[key] === value) {
-      return true; // Value found in the object
+      return true
     }
   }
-  return false; // Value not found in the object
+  return false
 }
+
 module.exports = {
   errorResponse,
   actionErrorResponse,

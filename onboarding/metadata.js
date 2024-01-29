@@ -12,167 +12,207 @@
  * from Adobe.
  */
 
-const fetch = require("node-fetch");
+const fetch = require('node-fetch')
 
-function buildProviderData(providerEvents) {
-    const events = [];
+/**
+ * This method build an array of provider events
+ *
+ * @param {Array} providerEvents - provider events
+ * @returns {Array} - returns the list of events
+ */
+function buildProviderData (providerEvents) {
+  const events = []
 
-    if (providerEvents.length > 0) {
-        for (const event of providerEvents) {
-            events.push({
-                event_code: event,
-                label: event,
-                description: event
-            })
-        }
+  if (providerEvents.length > 0) {
+    for (const event of providerEvents) {
+      events.push({
+        event_code: event,
+        label: event,
+        description: event
+      })
     }
+  }
 
-    return events;
+  return events
 }
 
-
-async function addEventCodeToProvider(metadata, providerId, environment, accessToken) {
-    console.log(`Trying to create metadata for ${metadata?.event_code} to provider ${providerId}`)
-    const addEventMetadataReq = await fetch(
+/**
+ * This method add the events codes to the provider
+ *
+ * @param {object} metadata - metadata data
+ * @param {string} providerId - provider id
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
+ * @returns {object} - returns response with success true or false
+ */
+async function addEventCodeToProvider (metadata, providerId, environment, accessToken) {
+  console.log(`Trying to create metadata for ${metadata?.event_code} to provider ${providerId}`)
+  const addEventMetadataReq = await fetch(
         `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers/${providerId}/eventmetadata`,
         {
-            method: 'POST',
-            headers: {
-                'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
-                'Authorization': `Bearer ${accessToken}`,
-                'content-type': 'application/json',
-                'Accept': 'application/hal+json'
-            },
-            body: JSON.stringify(
-                {
-                    ...(metadata?.event_code ? {event_code: `${metadata?.event_code}`} : null),
-                    ...(metadata?.label ? {label: `${metadata?.label}`} : null),
-                    ...(metadata?.description ? {description: `${metadata?.description}`} : null),
-                }
-            )
-        }
-    )
-
-    const result = await addEventMetadataReq.json();
-    if (result?.reason) {
-        return {
-            success: false,
-            error: {
-                reason: result?.reason,
-                message: result?.message
+          method: 'POST',
+          headers: {
+            'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
+            Authorization: `Bearer ${accessToken}`,
+            'content-type': 'application/json',
+            Accept: 'application/hal+json'
+          },
+          body: JSON.stringify(
+            {
+              ...(metadata?.event_code ? { event_code: `${metadata?.event_code}` } : null),
+              ...(metadata?.label ? { label: `${metadata?.label}` } : null),
+              ...(metadata?.description ? { description: `${metadata?.description}` } : null)
             }
+          )
         }
-    }
+  )
+
+  const result = await addEventMetadataReq.json()
+  if (result?.reason) {
     return {
-        success: true
-    };
+      success: false,
+      error: {
+        reason: result?.reason,
+        message: result?.message
+      }
+    }
+  }
+  return {
+    success: true
+  }
 }
 
-async function addMetadataToProvider(providerEvents, providerId, environment, accessToken) {
-    const commerceProviderMetadata = buildProviderData(providerEvents);
-    for (const metadata of commerceProviderMetadata) {
-        const result = await addEventCodeToProvider(metadata, providerId, environment, accessToken);
-        if (!result.success) {
-            const errorMessage = `Unable to add event metadata: reason = '${result.error?.reason}', message = '${result.error?.message}'`;
+/**
+ * This method add metadata to the provider
+ *
+ * @param {object} providerEvents - provider events
+ * @param {string} providerId - provider id
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
+ * @returns {object} - returns response with success true or false
+ */
+async function addMetadataToProvider (providerEvents, providerId, environment, accessToken) {
+  const commerceProviderMetadata = buildProviderData(providerEvents)
+  for (const metadata of commerceProviderMetadata) {
+    const result = await addEventCodeToProvider(metadata, providerId, environment, accessToken)
+    if (!result.success) {
+      const errorMessage = `Unable to add event metadata: reason = '${result.error?.reason}', message = '${result.error?.message}'`
 
-            console.log(errorMessage)
+      console.log(errorMessage)
 
-            return {
-                success: false,
-                error: errorMessage
-            };
-        }
+      return {
+        success: false,
+        error: errorMessage
+      }
     }
+  }
 
-    return {
-        success: true
-    }
+  return {
+    success: true
+  }
 }
 
-async function getExistingMetadata(providerId, environment, accessToken, next = null) {
-    const url = `${environment.IO_MANAGEMENT_BASE_URL}providers/${providerId}/eventmetadata`;
+/**
+ * Get existing provider metadata
+ *
+ * @param {string} providerId - provider id
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
+ * @param {string} next - next url
+ * @returns {Array} - returns the provider metadata
+ */
+async function getExistingMetadata (providerId, environment, accessToken, next = null) {
+  const url = `${environment.IO_MANAGEMENT_BASE_URL}providers/${providerId}/eventmetadata`
 
-    const getExistingMetadataReq = await fetch(
-        next ? next: url,
-        {
-            method: 'GET',
-            headers: {
-                'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
-                'Authorization': `Bearer ${accessToken}`,
-                'content-type': 'application/json',
-                'Accept': 'application/hal+json'
-            }
-        }
-    )
-    const getExistingMetadataResult = await getExistingMetadataReq.json()
-    const existingMetadata = [];
-    if (getExistingMetadataResult?._embedded?.eventmetadata) {
-        getExistingMetadataResult._embedded.eventmetadata.forEach(event => {
-            existingMetadata[event.event_code] = event
-        })
+  const getExistingMetadataReq = await fetch(
+    next || url,
+    {
+      method: 'GET',
+      headers: {
+        'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json',
+        Accept: 'application/hal+json'
+      }
     }
-    if (getExistingMetadataResult?._links?.next) {
-        const data = await getExistingMetadata(providerId, environment, accessToken, getExistingMetadataResult._links.next);
-        existingMetadata.push(...data);
-    }
-    return existingMetadata;
+  )
+  const getExistingMetadataResult = await getExistingMetadataReq.json()
+  const existingMetadata = []
+  if (getExistingMetadataResult?._embedded?.eventmetadata) {
+    getExistingMetadataResult._embedded.eventmetadata.forEach(event => {
+      existingMetadata[event.event_code] = event
+    })
+  }
+  if (getExistingMetadataResult?._links?.next) {
+    const data = await getExistingMetadata(providerId, environment, accessToken, getExistingMetadataResult._links.next)
+    existingMetadata.push(...data)
+  }
+  return existingMetadata
 }
 
-async function main(clientRegistrations, providers, environment, accessToken) {
+/**
+ * Add metadata events codes from file config/events.json to corresponding provider
+ *
+ * @param {object} clientRegistrations - client registrations
+ * @param {Array} providers - list of providers
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
+ * @returns {object} - return response with the created metadata
+ */
+async function main (clientRegistrations, providers, environment, accessToken) {
+  try {
+    const providersEventsConfig = require('./config/events.json')
+    const providersEvents = []
 
-    try {
-        const providersEventsConfig = require("./config/events.json");
-        const providersEvents = [];
+    const result = []
+    for (const provider of providers) {
+      const existingMetadata = await getExistingMetadata(provider.id, environment, accessToken)
 
-        const result = [];
-        for (const provider of providers) {
-            const existingMetadata = await getExistingMetadata(provider.id, environment, accessToken);
-
-            for (const [entityName, options] of Object.entries(clientRegistrations)) {
-                if (options !== undefined && options.includes(provider.key)) {
-                    if (providersEventsConfig[entityName]) {
-                        for (const event of providersEventsConfig[entityName][provider.key]) {
-                            if (existingMetadata[event]) {
-                                console.log(`Skipping, Metadata event code ${event} already exists!`)
-                                continue;
-                            }
-                            providersEvents.push(event);
-                        }
-                        result.push({
-                            entity: entityName,
-                            label: provider.label
-                        })
-                    }
-                }
+      for (const [entityName, options] of Object.entries(clientRegistrations)) {
+        if (options !== undefined && options.includes(provider.key)) {
+          if (providersEventsConfig[entityName]) {
+            for (const event of providersEventsConfig[entityName][provider.key]) {
+              if (existingMetadata[event]) {
+                console.log(`Skipping, Metadata event code ${event} already exists!`)
+                continue
+              }
+              providersEvents.push(event)
             }
-
-            const addMetadataResult = await addMetadataToProvider(providersEvents, provider.id, environment, accessToken);
-            if (!addMetadataResult.success) {
-                return {
-                    code: 500,
-                    success: false,
-                    error: addMetadataResult.error
-                };
-            }
+            result.push({
+              entity: entityName,
+              label: provider.label
+            })
+          }
         }
+      }
 
-        const response = {
-            code: 200,
-            success: true,
-            result
-        }
-
-        console.log(`${response.code}: Process of adding metadata to provider done successfully`)
-        return response
-    } catch (error) {
-        let errorMessage = `Unable to complete the process of adding metadata to provider: ${error.message}`;
-        console.log(errorMessage)
+      const addMetadataResult = await addMetadataToProvider(providersEvents, provider.id, environment, accessToken)
+      if (!addMetadataResult.success) {
         return {
-            code: 500,
-            success: false,
-            error: errorMessage
+          code: 500,
+          success: false,
+          error: addMetadataResult.error
         }
+      }
     }
+
+    const response = {
+      code: 200,
+      success: true,
+      result
+    }
+
+    console.log(`${response.code}: Process of adding metadata to provider done successfully`)
+    return response
+  } catch (error) {
+    const errorMessage = `Unable to complete the process of adding metadata to provider: ${error.message}`
+    console.log(errorMessage)
+    return {
+      code: 500,
+      success: false,
+      error: errorMessage
+    }
+  }
 }
 
 exports.main = main
