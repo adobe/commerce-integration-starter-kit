@@ -28,7 +28,7 @@ The connection with the third party is defined in the `sendData` function in the
 Please include all the authentication and connection login on that `sender.js` file or an extracted file outside index.js.
 Any need for parameters from environment could be access from `params`. Add the needed parameter in the `actions/customer-group/commerce/actions.config.yaml` under `commerce-updated -> inputs` as follows:
 ```yaml
-cupdated:
+updated:
   function: commerce/updated/index.js
   web: 'no'
   runtime: nodejs:16
