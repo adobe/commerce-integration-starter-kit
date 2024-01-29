@@ -8,9 +8,13 @@ The incoming depends on the fields specified during the event registration in Ad
 Here is JSON sample information:
 ```json
 {
-   "id": 1,
-   "created_at":"2023-11-24 16:52:40",
-   "updated_at":"2023-11-29 16:48:55"
+  "customer_group_id": 6,
+  "customer_group_code": "Group name code",
+  "tax_class_id": 4,
+  "tax_class_name": "Tax class name",
+  "extension_attributes": {
+    "exclude_website_ids":[]
+  }
 }
 ```
 There is other interesting information that you can access in params like the event Code trigger by Commerce, event id.

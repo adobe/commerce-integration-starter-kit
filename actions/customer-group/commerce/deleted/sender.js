@@ -11,13 +11,19 @@
  * is strictly forbidden unless prior written permission is obtained
  * from Adobe.
  */
-
-async function sendData(params, data) {
-    // @TODO Here add the logic to send the information to 3rd party
-    // @TODO Use params to retrieve need parameters from the environment
-    // @TODO throw exception in case of error
+/**
+ * This function send the customer group deleted dara to the external back-office application
+ *
+ * @param {object} params - include the env params
+ * @param {object} data - Product data
+ * @throws {Error} - throws exception in case the process fail.
+ */
+async function sendData (params, data) {
+  // @TODO Here add the logic to send the information to 3rd party
+  // @TODO Use params to retrieve need parameters from the environment
+  // @TODO throw exception in case of error
 }
 
 module.exports = {
-    sendData
+  sendData
 }
