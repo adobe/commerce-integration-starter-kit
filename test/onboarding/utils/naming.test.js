@@ -15,38 +15,35 @@
 const naming = require('../../../utils/naming.js')
 
 describe('Throws error', () => {
+  test('when label is undefined', () => {
+    const label = null
+    const environment = { AIO_runtime_namespace: '1340225-testProject-testWorkspace' }
+    expect(() => {
+      naming.addSuffix(label, environment)
+    }).toThrow(Error)
+  })
 
-    test('when label is undefined', () => {
-        const label = null
-        const environment = {AIO_runtime_namespace: '1340225-testProject-testWorkspace'}
-        expect(() => {
-            naming.addSuffix(label, environment)
-        }).toThrow(Error)
+  test('when environment is undefined', () => {
+    const label = 'Label'
+    const environment = null
+    expect(() => {
+      naming.addSuffix(label, environment)
+    }).toThrow(Error)
+  })
 
-    })
-
-    test('when environment is undefined', () => {
-        const label = 'Label'
-        const environment = null
-        expect(() => {
-            naming.addSuffix(label, environment)
-        }).toThrow(Error)
-    })
-
-    test('when runtime namespace is undefined in the environment', () => {
-        const label = 'Label'
-        const environment = {}
-        expect(() => {
-            naming.addSuffix(label, environment)
-        }).toThrow(Error)
-    })
+  test('when runtime namespace is undefined in the environment', () => {
+    const label = 'Label'
+    const environment = {}
+    expect(() => {
+      naming.addSuffix(label, environment)
+    }).toThrow(Error)
+  })
 })
 
 describe('Adds suffix', () => {
-
-    test('when runtime namespace is defined in the environment', () => {
-        const label = 'Label'
-        const environment = {AIO_runtime_namespace: '1340225-testProject-testWorkspace'}
-        expect(naming.addSuffix(label, environment)).toEqual('Label - testProject-testWorkspace')
-    })
+  test('when runtime namespace is defined in the environment', () => {
+    const label = 'Label'
+    const environment = { AIO_runtime_namespace: '1340225-testProject-testWorkspace' }
+    expect(naming.addSuffix(label, environment)).toEqual('Label - testProject-testWorkspace')
+  })
 })

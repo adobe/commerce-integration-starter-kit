@@ -12,167 +12,212 @@
  * from Adobe.
  */
 
-const fetch = require("node-fetch");
+const fetch = require('node-fetch')
 
-async function getExistingRegistrationsData(environment, accessToken, next = null) {
-    const url = `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/registrations`;
+/**
+ * Call adobe events to get existing registrations
+ *
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
+ * @param {string} next - next url
+ */
+async function getExistingRegistrationsData (environment, accessToken, next = null) {
+  const url = `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/registrations`
 
-    const getRegistrationsReq = await fetch(
-        next ? next : url,
-        {
-            method: 'GET',
-            headers: {
-                'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
-                'Authorization': `Bearer ${accessToken}`,
-                'content-type': 'application/json',
-                'Accept': 'application/hal+json'
-            }
-        }
-    )
-    const getRegistrationsResult = await getRegistrationsReq.json()
-
-    let existingRegistrations = [];
-    if (getRegistrationsResult?._embedded?.registrations) {
-        getRegistrationsResult._embedded.registrations.forEach(registration => {
-            existingRegistrations.push({
-                id: registration.id,
-                registration_id: registration.registration_id,
-                name: registration.name,
-                enabled: registration.enabled
-            });
-        })
+  const getRegistrationsReq = await fetch(
+    next || url,
+    {
+      method: 'GET',
+      headers: {
+        'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json',
+        Accept: 'application/hal+json'
+      }
     }
+  )
+  const getRegistrationsResult = await getRegistrationsReq.json()
 
-    if (getRegistrationsResult?._links?.next) {
-        existingRegistrations.push(...await getExistingRegistrationsData(environment, accessToken, getRegistrationsResult._links.next.href));
-    }
+  const existingRegistrations = []
+  if (getRegistrationsResult?._embedded?.registrations) {
+    getRegistrationsResult._embedded.registrations.forEach(registration => {
+      existingRegistrations.push({
+        id: registration.id,
+        registration_id: registration.registration_id,
+        name: registration.name,
+        enabled: registration.enabled
+      })
+    })
+  }
 
-    return existingRegistrations;
+  if (getRegistrationsResult?._links?.next) {
+    existingRegistrations.push(...await getExistingRegistrationsData(environment, accessToken, getRegistrationsResult._links.next.href))
+  }
+
+  return existingRegistrations
 }
 
-async function getExistingRegistrations(environment, accessToken) {
-    const existingRegistrationsResult = await getExistingRegistrationsData(environment, accessToken);
-    const existingRegistrations = [];
-    existingRegistrationsResult.forEach(item => existingRegistrations[item.name] = item);
-    return existingRegistrations;
+/**
+ * Get existing registrations from IO events
+ *
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
+ * @returns {Array} - returns array of registrations
+ */
+async function getExistingRegistrations (environment, accessToken) {
+  const existingRegistrationsResult = await getExistingRegistrationsData(environment, accessToken)
+  const existingRegistrations = []
+  existingRegistrationsResult.forEach(item => existingRegistrations[item.name] = item)
+  return existingRegistrations
 }
 
-function stringToUppercaseFirstChar(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+/**
+ * Make uppercase the first char of a string
+ *
+ * @param {string} string - string to change
+ * @returns {string} - return changed string
+ */
+function stringToUppercaseFirstChar (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
-function getRegistrationName(providerKey, entityName) {
-    return stringToUppercaseFirstChar(providerKey) + ' ' + stringToUppercaseFirstChar(entityName) + ' Synchronization';
+/**
+ * Build the registration name
+ *
+ * @param {string} providerKey - provider key
+ * @param {string} entityName - entity name
+ * @returns {string} - returns the name of registration
+ */
+function getRegistrationName (providerKey, entityName) {
+  return stringToUppercaseFirstChar(providerKey) + ' ' + stringToUppercaseFirstChar(entityName) + ' Synchronization'
 }
 
-async function main(clientRegistrations, providers, environment, accessToken) {
-    const eventsConfig = require('./config/events.json')
-    const result = [];
+/**
+ * Create the registrations based on the selection of the client from the file custom/registrations.json
+ *
+ * @param {object} clientRegistrations - client registrations
+ * @param {Array} providers - list of providers
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
+ * @returns {object} - returns response with success status and registrations information
+ */
+async function main (clientRegistrations, providers, environment, accessToken) {
+  const eventsConfig = require('./config/events.json')
+  const result = []
 
-    try {
-        const existingRegistrations = await getExistingRegistrations(environment, accessToken);
-        for (const provider of providers) {
-            console.log(`Start creating registrations for the provider: ${provider.label}`)
+  try {
+    const existingRegistrations = await getExistingRegistrations(environment, accessToken)
+    for (const provider of providers) {
+      console.log(`Start creating registrations for the provider: ${provider.label}`)
 
-            for (const [entityName, options] of Object.entries(clientRegistrations)) {
-                if (!options.includes(provider.key)) {
-                    continue;
-                }
-
-                const registrationName = getRegistrationName(provider.key, entityName);
-                if (existingRegistrations[registrationName]) {
-                    console.log(`Registration ${registrationName} already exists for entity ${entityName} - ${provider.key}`)
-                    result.push(existingRegistrations[registrationName]);
-                    continue;
-                }
-
-                let events = [];
-                for (const event of eventsConfig[entityName][provider.key]) {
-                    events.push({
-                        provider_id: provider.id,
-                        event_code: event
-                    });
-                }
-                const createEventRegistrationResult = await createRequestRegistration(accessToken, entityName, provider.key, events, environment);
-                if (!createEventRegistrationResult.success) {
-                    const errorMessage = `Unable to create registration for ${entityName} with provider ${provider.key} - ${provider.id}`;
-                    console.log(errorMessage)
-                    console.log(`Reason: ${createEventRegistrationResult.error.reason}, message: ${createEventRegistrationResult.error.message}`)
-                    return {
-                        code: 500,
-                        success: false,
-                        error: errorMessage
-                    }
-                }
-                console.log(`Registration created for entity ${entityName} - ${provider.key}`)
-                result.push(createEventRegistrationResult.result);
-            }
+      for (const [entityName, options] of Object.entries(clientRegistrations)) {
+        if (!options.includes(provider.key)) {
+          continue
         }
-        console.log('Create registrations process done correctly!')
-        console.log('Created registrations: ', result);
-        return {
-            code: 200,
-            success: true,
-            registrations: result
+
+        const registrationName = getRegistrationName(provider.key, entityName)
+        if (existingRegistrations[registrationName]) {
+          console.log(`Registration ${registrationName} already exists for entity ${entityName} - ${provider.key}`)
+          result.push(existingRegistrations[registrationName])
+          continue
         }
-    } catch (error) {
-        let errorMessage = `Unable to complete the process of creating events registrations: ${error.message}`;
-        console.log(errorMessage)
-        return {
+
+        const events = []
+        for (const event of eventsConfig[entityName][provider.key]) {
+          events.push({
+            provider_id: provider.id,
+            event_code: event
+          })
+        }
+        const createEventRegistrationResult = await createRequestRegistration(accessToken, entityName, provider.key, events, environment)
+        if (!createEventRegistrationResult.success) {
+          const errorMessage = `Unable to create registration for ${entityName} with provider ${provider.key} - ${provider.id}`
+          console.log(errorMessage)
+          console.log(`Reason: ${createEventRegistrationResult.error.reason}, message: ${createEventRegistrationResult.error.message}`)
+          return {
             code: 500,
             success: false,
             error: errorMessage
+          }
         }
+        console.log(`Registration created for entity ${entityName} - ${provider.key}`)
+        result.push(createEventRegistrationResult.result)
+      }
     }
+    console.log('Create registrations process done correctly!')
+    console.log('Created registrations: ', result)
+    return {
+      code: 200,
+      success: true,
+      registrations: result
+    }
+  } catch (error) {
+    const errorMessage = `Unable to complete the process of creating events registrations: ${error.message}`
+    console.log(errorMessage)
+    return {
+      code: 500,
+      success: false,
+      error: errorMessage
+    }
+  }
 }
 
-async function createRequestRegistration(accessToken, entityName, providerKey, events, environment) {
+/**
+ * Create the registration in Adobe event
+ *
+ * @param {string} accessToken - access token
+ * @param {string} entityName - entity name
+ * @param {string} providerKey - provider key
+ * @param {Array} events - provider events
+ * @param {object} environment - environment params
+ * @returns {object} - returns success status and registration info
+ */
+async function createRequestRegistration (accessToken, entityName, providerKey, events, environment) {
+  const body = JSON.stringify(
+    {
+      client_id: `${environment.OAUTH_CLIENT_ID}`,
+      runtime_action: `${entityName}-${providerKey}/consumer`,
+      name: getRegistrationName(providerKey, entityName),
+      description: getRegistrationName(providerKey, entityName),
+      events_of_interest: events,
+      delivery_type: 'webhook'
+    }
+  )
 
-    let body = JSON.stringify(
-        {
-            client_id: `${environment.OAUTH_CLIENT_ID}`,
-            runtime_action: `${entityName}/${providerKey}-consumer`,
-            name: getRegistrationName(providerKey, entityName),
-            description: getRegistrationName(providerKey, entityName),
-            events_of_interest: events,
-            delivery_type: 'webhook'
-        }
-    )
-
-    const createEventRegistrationReq = await fetch(
+  const createEventRegistrationReq = await fetch(
         `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/registrations`,
         {
-            method: 'POST',
-            headers: {
-                'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
-                'Authorization': `Bearer ${accessToken}`,
-                'content-type': 'application/json',
-                'Accept': 'application/hal+json'
-            },
-            body: body
+          method: 'POST',
+          headers: {
+            'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
+            Authorization: `Bearer ${accessToken}`,
+            'content-type': 'application/json',
+            Accept: 'application/hal+json'
+          },
+          body
         }
-    )
+  )
 
-    const result = await createEventRegistrationReq.json();
+  const result = await createEventRegistrationReq.json()
 
-    if (!result?.client_id) {
-        return {
-            success: false,
-            error: {
-                reason: result?.reason,
-                message: result?.message
-            }
-        }
-    }
+  if (!result?.client_id) {
     return {
-        success: true,
-        result: {
-            id: result?.id,
-            registration_id: result?.registration_id,
-            name: result?.name,
-            enabled: result?.enabled
-        }
-    };
+      success: false,
+      error: {
+        reason: result?.reason,
+        message: result?.message
+      }
+    }
+  }
+  return {
+    success: true,
+    result: {
+      id: result?.id,
+      registration_id: result?.registration_id,
+      name: result?.name,
+      enabled: result?.enabled
+    }
+  }
 }
 
 exports.main = main

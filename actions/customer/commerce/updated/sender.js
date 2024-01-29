@@ -12,10 +12,19 @@
  * from Adobe.
  */
 
-const action = require('../../../actions/product/commerce/deleted/index.js');
+/**
+ * This function send the customer updated dara to the external back-office application
+ *
+ * @param {object} params - include the env params
+ * @param {object} data - Product data
+ * @throws {Error} - throws exception in case the process fail.
+ */
+function sendData (params, data) {
+  // @TODO Here add the logic to send the information to 3rd party
+  // @TODO Use params to retrieve need parameters from the environment
+  // @TODO throw exception in case of error
+}
 
-describe('Product commerce deleted', () => {
-  test('main should be defined', () => {
-    expect(action.main).toBeInstanceOf(Function)
-  })
-})
+module.exports = {
+  sendData
+}
