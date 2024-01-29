@@ -12,9 +12,9 @@
  * from Adobe.
  */
 
-const action = require('../../../../actions/product/commerce/deleted')
+const action = require('../../../../../actions/product/commerce/updated')
 
-describe('Product commerce deleted', () => {
+describe('Product commerce updated', () => {
   test('main should be defined', () => {
     expect(action.main).toBeInstanceOf(Function)
   })
