@@ -12,43 +12,100 @@
  * from Adobe.
  */
 
-const {getCommerceOauthClient} = require("../oauth1a");
+const { getCommerceOauthClient } = require('../oauth1a')
 
-async function createProduct(baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data, logger) {
-    const client = getCommerceOauthClient(
-        {
-            url: baseUrl,
-            consumerKey: consumerKey,
-            consumerSecret: consumerSecret,
-            accessToken: accessToken,
-            accessTokenSecret: accessTokenSecret
-        },
-        logger
-    )
+/**
+ * This function call Adobe commerce rest API to create a product
+ *
+ * @returns {object} - API response object
+ * @param {string} baseUrl - Adobe commerce rest api base url
+ * @param {string} consumerKey - Adobe commerce integration consumer key
+ * @param {string} consumerSecret - Adobe commerce integration consumer secret
+ * @param {string} accessToken - Adobe commerce integration access token
+ * @param {string} accessTokenSecret - Adobe commerce integration access token secret
+ * @param {object} data - Adobe commerce api payload
+ * @param {object} logger - Logger
+ */
+async function createProduct (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data, logger) {
+  const client = getCommerceOauthClient(
+    {
+      url: baseUrl,
+      consumerKey,
+      consumerSecret,
+      accessToken,
+      accessTokenSecret
+    },
+    logger
+  )
 
-    return await client.post(
-        'products',
-        JSON.stringify(data),
-        '',
-        {'Content-Type': 'application/json'}
-    )
+  return await client.post(
+    'products',
+    JSON.stringify(data),
+    '',
+    { 'Content-Type': 'application/json' }
+  )
 }
 
-async function deleteProduct(baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, sku, logger) {
-    const client = getCommerceOauthClient(
-        {
-            url: baseUrl,
-            consumerKey: consumerKey,
-            consumerSecret: consumerSecret,
-            accessToken: accessToken,
-            accessTokenSecret: accessTokenSecret
-        },
-        logger
-    )
-    return await client.delete(`products/${sku}`)
+/**
+ * This function call Adobe commerce rest API to update a product
+ *
+ * @returns {object} - API response object
+ * @param {string} baseUrl - Adobe commerce rest api base url
+ * @param {string} consumerKey - Adobe commerce integration consumer key
+ * @param {string} consumerSecret - Adobe commerce integration consumer secret
+ * @param {string} accessToken - Adobe commerce integration access token
+ * @param {string} accessTokenSecret - Adobe commerce integration access token secret
+ * @param {object} data - Adobe commerce api payload
+ * @param {object} logger - Logger
+ */
+async function updateProduct (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data, logger) {
+  const client = getCommerceOauthClient(
+    {
+      url: baseUrl,
+      consumerKey,
+      consumerSecret,
+      accessToken,
+      accessTokenSecret
+    },
+    logger
+  )
+  return await client.put(
+        `products/${data.product.sku}`,
+        JSON.stringify(data),
+        '',
+        { 'Content-Type': 'application/json' }
+  )
+}
+
+/**
+ * This function call Adobe commerce rest API to delete a product
+ *
+ * @returns {object} - API response object
+ * @param {string} baseUrl - Adobe commerce rest api base url
+ * @param {string} consumerKey - Adobe commerce integration consumer key
+ * @param {string} consumerSecret - Adobe commerce integration consumer secret
+ * @param {string} accessToken - Adobe commerce integration access token
+ * @param {string} accessTokenSecret - Adobe commerce integration access token secret
+ * @param {object} data - Adobe commerce api payload
+ * @param sku
+ * @param {object} logger - Logger
+ */
+async function deleteProduct (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, sku, logger) {
+  const client = getCommerceOauthClient(
+    {
+      url: baseUrl,
+      consumerKey,
+      consumerSecret,
+      accessToken,
+      accessTokenSecret
+    },
+    logger
+  )
+  return await client.delete(`products/${sku}`)
 }
 
 module.exports = {
-    createProduct,
-    deleteProduct
+  createProduct,
+  updateProduct,
+  deleteProduct
 }

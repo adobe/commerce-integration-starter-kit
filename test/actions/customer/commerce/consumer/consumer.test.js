@@ -12,9 +12,9 @@
  * from Adobe.
  */
 
-const action = require('../../../../../actions/customer/commerce/consumer');
+const action = require('../../../../../actions/customer/commerce/consumer')
 jest.mock('openwhisk')
-const openwhisk = require('openwhisk');
+const openwhisk = require('openwhisk')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -39,7 +39,7 @@ describe('Customer commerce consumer', () => {
           updated_at: '2000-01-01'
         }
       }
-    };
+    }
 
     openwhisk.mockReturnValue({
       actions: {
@@ -55,9 +55,9 @@ describe('Customer commerce consumer', () => {
           }
         })
       }
-    });
+    })
 
-    const response = await action.main(params);
+    const response = await action.main(params)
 
     expect(response).toEqual({
       statusCode: 200,
@@ -73,7 +73,7 @@ describe('Customer commerce consumer', () => {
           action: 'created',
           success: true
         },
-        type: "com.adobe.commerce.observer.customer_save_commit_after",
+        type: 'com.adobe.commerce.observer.customer_save_commit_after'
       }
     })
   })
@@ -89,7 +89,7 @@ describe('Customer commerce consumer', () => {
           updated_at: '2000-01-02'
         }
       }
-    };
+    }
 
     openwhisk.mockReturnValue({
       actions: {
@@ -105,9 +105,9 @@ describe('Customer commerce consumer', () => {
           }
         })
       }
-    });
+    })
 
-    const response = await action.main(params);
+    const response = await action.main(params)
 
     expect(response).toEqual({
       statusCode: 200,
@@ -123,7 +123,7 @@ describe('Customer commerce consumer', () => {
           action: 'updated',
           success: true
         },
-        type: "com.adobe.commerce.observer.customer_save_commit_after",
+        type: 'com.adobe.commerce.observer.customer_save_commit_after'
       }
     })
   })
@@ -139,7 +139,7 @@ describe('Customer commerce consumer', () => {
           updated_at: '2000-01-02'
         }
       }
-    };
+    }
 
     openwhisk.mockReturnValue({
       actions: {
@@ -155,9 +155,9 @@ describe('Customer commerce consumer', () => {
           }
         })
       }
-    });
+    })
 
-    const response = await action.main(params);
+    const response = await action.main(params)
 
     expect(response).toEqual({
       statusCode: 200,
@@ -173,14 +173,13 @@ describe('Customer commerce consumer', () => {
           action: 'deleted',
           success: true
         },
-        type: "com.adobe.commerce.observer.customer_delete_commit_after",
+        type: 'com.adobe.commerce.observer.customer_delete_commit_after'
       }
     })
   })
   test('Given params when process customer commerce request missing required params then an error 400 is returned', async () => {
-
-    const params = {};
-    const response = await action.main(params);
+    const params = {}
+    const response = await action.main(params)
 
     expect(response).toEqual({
       error: {
@@ -203,8 +202,8 @@ describe('Customer commerce consumer', () => {
           updated_at: '2000-01-02'
         }
       }
-    };
-    const response = await action.main(params);
+    }
+    const response = await action.main(params)
 
     expect(response).toEqual({
       statusCode: 400,
@@ -216,8 +215,8 @@ describe('Customer commerce consumer', () => {
           created_at: '2000-01-01',
           updated_at: '2000-01-02'
         },
-        response: "This case type is not supported: NOT_SUPPORTED_TYPE",
-        type: "NOT_SUPPORTED_TYPE",
+        response: 'This case type is not supported: NOT_SUPPORTED_TYPE',
+        type: 'NOT_SUPPORTED_TYPE'
       }
     })
   })

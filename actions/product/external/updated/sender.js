@@ -13,10 +13,10 @@
  */
 
 const { Core } = require('@adobe/aio-sdk')
-const { deleteProduct } = require('../../commerceProductApiClient')
+const { updateProduct } = require('../../commerceProductApiClient')
 
 /**
- * This function send the product deleted data to the Adobe commerce REST API
+ * This function send the product updated data to the Adobe commerce REST API
  *
  * @returns {object} - returns the result data of sending information to Adobe commerce
  * @param {object} params - include the env params
@@ -27,7 +27,7 @@ const { deleteProduct } = require('../../commerceProductApiClient')
 async function sendData (params, transformed, preProcessed) {
   const logger = Core.Logger('sendData', { level: params.LOG_LEVEL || 'info' })
 
-  return await deleteProduct(
+  return await updateProduct(
     params.COMMERCE_BASE_URL,
     params.COMMERCE_CONSUMER_KEY,
     params.COMMERCE_CONSUMER_SECRET,

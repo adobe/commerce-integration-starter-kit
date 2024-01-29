@@ -12,7 +12,7 @@
  * from Adobe.
  */
 
-const action = require('../../../../actions/product/commerce/updated');
+const action = require('../../../../actions/product/commerce/updated')
 
 describe('Product commerce updated', () => {
   test('main should be defined', () => {

@@ -12,9 +12,9 @@
  * from Adobe.
  */
 
-const action = require('../../../../actions/product/commerce/consumer');
+const action = require('../../../../actions/product/commerce/consumer')
 jest.mock('openwhisk')
-const openwhisk = require('openwhisk');
+const openwhisk = require('openwhisk')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -39,7 +39,7 @@ describe('Product commerce consumer', () => {
           updated_at: '2000-01-01'
         }
       }
-    };
+    }
 
     openwhisk.mockReturnValue({
       actions: {
@@ -54,9 +54,9 @@ describe('Product commerce consumer', () => {
           }
         })
       }
-    });
+    })
 
-    const response = await action.main(params);
+    const response = await action.main(params)
 
     expect(response).toEqual({
       statusCode: 200,
@@ -71,7 +71,7 @@ describe('Product commerce consumer', () => {
         response: {
           success: true
         },
-        type: "com.adobe.commerce.observer.catalog_product_save_commit_after",
+        type: 'com.adobe.commerce.observer.catalog_product_save_commit_after'
       }
     })
   })
@@ -87,7 +87,7 @@ describe('Product commerce consumer', () => {
           updated_at: '2000-01-02'
         }
       }
-    };
+    }
 
     openwhisk.mockReturnValue({
       actions: {
@@ -102,9 +102,9 @@ describe('Product commerce consumer', () => {
           }
         })
       }
-    });
+    })
 
-    const response = await action.main(params);
+    const response = await action.main(params)
 
     expect(response).toEqual({
       statusCode: 200,
@@ -119,7 +119,7 @@ describe('Product commerce consumer', () => {
         response: {
           success: true
         },
-        type: "com.adobe.commerce.observer.catalog_product_save_commit_after",
+        type: 'com.adobe.commerce.observer.catalog_product_save_commit_after'
       }
     })
   })
@@ -135,7 +135,7 @@ describe('Product commerce consumer', () => {
           updated_at: '2000-01-02'
         }
       }
-    };
+    }
 
     openwhisk.mockReturnValue({
       actions: {
@@ -150,9 +150,9 @@ describe('Product commerce consumer', () => {
           }
         })
       }
-    });
+    })
 
-    const response = await action.main(params);
+    const response = await action.main(params)
 
     expect(response).toEqual({
       statusCode: 200,
@@ -167,14 +167,13 @@ describe('Product commerce consumer', () => {
         response: {
           success: true
         },
-        type: "com.adobe.commerce.observer.catalog_product_delete_commit_after",
+        type: 'com.adobe.commerce.observer.catalog_product_delete_commit_after'
       }
     })
   })
   test('Should return a 400 and message error when process product commerce request missing required params', async () => {
-
-    const params = {};
-    const response = await action.main(params);
+    const params = {}
+    const response = await action.main(params)
 
     expect(response).toEqual({
       error: {
@@ -197,8 +196,8 @@ describe('Product commerce consumer', () => {
           updated_at: '2000-01-02'
         }
       }
-    };
-    const response = await action.main(params);
+    }
+    const response = await action.main(params)
 
     expect(response).toEqual({
       statusCode: 400,
@@ -210,8 +209,8 @@ describe('Product commerce consumer', () => {
           created_at: '2000-01-01',
           updated_at: '2000-01-02'
         },
-        response: "This case type is not supported: NOT_SUPPORTED_TYPE",
-        type: "NOT_SUPPORTED_TYPE",
+        response: 'This case type is not supported: NOT_SUPPORTED_TYPE',
+        type: 'NOT_SUPPORTED_TYPE'
       }
     })
   })

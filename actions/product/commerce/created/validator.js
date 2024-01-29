@@ -12,11 +12,17 @@
  * from Adobe.
  */
 
-function validateData(data) {
-    // Here add the logic to validate the received data
-    // Throw exception in case data is invalid
+/**
+ * This function validate the customer data received
+ *
+ * @throws {Error} - Throw Error if data is invalid
+ * @param {object} data - Received data from adobe commerce
+ */
+function validateData (data) {
+  // @TODO Here add the logic to validate the received data
+  // @TODO Throw exception in case data is invalid
 }
 
 module.exports = {
-    validateData
+  validateData
 }
