@@ -11,17 +11,19 @@
  * is strictly forbidden unless prior written permission is obtained
  * from Adobe.
  */
+/**
+ * This function transform the received customer group data from Adobe commerce to external back-office application
+ *
+ * @param {object} data - Data received from Adobe commerce
+ * @returns {object} - Returns transformed data object
+ */
+function transformData (data) {
+  // @TODO Here transform the data as needed for 3rd party API
+  const transformedData = data
 
-const HTTP_OK = 200
-const HTTP_BAD_REQUEST = 400
-const HTTP_UNAUTHORIZED = 401
-const HTTP_NOT_FOUND = 404
-const HTTP_INTERNAL_ERROR = 500
+  return transformedData
+}
 
 module.exports = {
-  HTTP_OK,
-  HTTP_BAD_REQUEST,
-  HTTP_UNAUTHORIZED,
-  HTTP_NOT_FOUND,
-  HTTP_INTERNAL_ERROR
+  transformData
 }

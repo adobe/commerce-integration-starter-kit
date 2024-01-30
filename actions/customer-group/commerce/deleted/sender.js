@@ -11,17 +11,19 @@
  * is strictly forbidden unless prior written permission is obtained
  * from Adobe.
  */
-
-const HTTP_OK = 200
-const HTTP_BAD_REQUEST = 400
-const HTTP_UNAUTHORIZED = 401
-const HTTP_NOT_FOUND = 404
-const HTTP_INTERNAL_ERROR = 500
+/**
+ * This function send the customer group deleted dara to the external back-office application
+ *
+ * @param {object} params - include the env params
+ * @param {object} data - Product data
+ * @throws {Error} - throws exception in case the process fail.
+ */
+async function sendData (params, data) {
+  // @TODO Here add the logic to send the information to 3rd party
+  // @TODO Use params to retrieve need parameters from the environment
+  // @TODO throw exception in case of error
+}
 
 module.exports = {
-  HTTP_OK,
-  HTTP_BAD_REQUEST,
-  HTTP_UNAUTHORIZED,
-  HTTP_NOT_FOUND,
-  HTTP_INTERNAL_ERROR
+  sendData
 }

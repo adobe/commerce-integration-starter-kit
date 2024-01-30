@@ -71,7 +71,7 @@ async function main (params) {
       statusCode: error.response?.statusCode || HTTP_INTERNAL_ERROR,
       body: {
         success: false,
-        error: error.message
+        error
       }
     }
   }

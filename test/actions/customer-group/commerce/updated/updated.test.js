@@ -12,16 +12,11 @@
  * from Adobe.
  */
 
-const HTTP_OK = 200
-const HTTP_BAD_REQUEST = 400
-const HTTP_UNAUTHORIZED = 401
-const HTTP_NOT_FOUND = 404
-const HTTP_INTERNAL_ERROR = 500
+const action = require('../../../../../actions/customer-group/commerce/updated')
 
-module.exports = {
-  HTTP_OK,
-  HTTP_BAD_REQUEST,
-  HTTP_UNAUTHORIZED,
-  HTTP_NOT_FOUND,
-  HTTP_INTERNAL_ERROR
-}
+describe('Customer group commerce updated', () => {
+  test('main should be defined', () => {
+    expect(action.main).toBeInstanceOf(Function)
+  })
+  // @TODO Here you can add unit tests to cover the cases implemented in the customer updated runtime action
+})

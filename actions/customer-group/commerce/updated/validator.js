@@ -11,11 +11,17 @@
  * is strictly forbidden unless prior written permission is obtained
  * from Adobe.
  */
+/**
+ * This function validate the customer group data received
+ *
+ * @throws {Error} - Throw Error if data is invalid
+ * @param {object} data - Received data from adobe commerce
+ */
+function validateData (data) {
+  // @TODO Here add the logic to validate the received data
+  // @TODO Throw exception in case data is invalid
+}
 
-const action = require('../../../../actions/product/commerce/updated')
-
-describe('Product commerce updated', () => {
-  test('main should be defined', () => {
-    expect(action.main).toBeInstanceOf(Function)
-  })
-})
+module.exports = {
+  validateData
+}

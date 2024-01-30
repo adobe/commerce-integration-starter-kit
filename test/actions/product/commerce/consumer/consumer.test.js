@@ -12,7 +12,7 @@
  * from Adobe.
  */
 
-const action = require('../../../../actions/product/commerce/consumer')
+const action = require('../../../../../actions/product/commerce/consumer')
 jest.mock('openwhisk')
 const openwhisk = require('openwhisk')
 
