@@ -21,7 +21,6 @@ describe('Product external updated validator', () => {
   it.each([
     [{ data: { sku: 'SKU', name: 'NAME', price: 99.99, description: 'DESC' } }], // required properties
     [{ data: { sku: 'SKU', name: 'NAME', price: 99.99, description: 'DESC', extra: 'EXTRA' } }] // additional properties
-
   ])('When data is valid e.g. %o, Then returns successful response', (params) => {
     const SUCCESSFUL_RESPONSE = { success: true }
     expect(validator.validateData(params)).toMatchObject(SUCCESSFUL_RESPONSE)

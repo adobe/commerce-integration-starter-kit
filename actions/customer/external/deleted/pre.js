@@ -13,16 +13,15 @@
  */
 
 /**
- * This function transform the received product data from external back-office application to Adobe commerce
+ * This function hold any logic needed pre sending information to Adobe commerce
  *
- * @param {object} params - Data received from Adobe commerce
- * @returns {number} - Returns transformed data object
+ * @param {object} data - Data received before transformation
+ * @param {object} transformed - Transformed received data
  */
-function transformData (params) {
-  // @TODO This is a sample implementation. Please adapt based on your needs
-  return params.data.sku
+function preProcess (data, transformed) {
+  // @TODO Here implement any preprocessing needed
 }
 
 module.exports = {
-  transformData
+  preProcess
 }

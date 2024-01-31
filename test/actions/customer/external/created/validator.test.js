@@ -12,23 +12,22 @@
  * from Adobe.
  */
 
-const validator = require('../../../../../actions/product/external/created/validator')
+const validator = require('../../../../../actions/customer/external/created/validator')
 
-describe('Product external created validator', () => {
+describe('Customer external created validator', () => {
   test('validateData should be defined', () => {
     expect(validator.validateData).toBeInstanceOf(Function)
   })
   it.each([
-    [{ data: { sku: 'SKU', name: 'NAME', description: 'DESC' } }], // required properties
-    [{ data: { sku: 'SKU', name: 'NAME', price: 99.99, description: 'DESC' } }], // all properties
-    [{ data: { sku: 'SKU', name: 'NAME', description: 'DESC', extra: 'EXTRA' } }] // additional properties
+    [{ data: { name: 'John', lastname: 'Doe', email: 'john@doe.com' } }], // required properties
+    [{ data: { name: 'John', lastname: 'Doe', email: 'john@doe.com', extra: 'EXTRA' } }] // additional properties
   ])('When data is valid e.g. %o, Then returns successful response', (params) => {
     const SUCCESSFUL_RESPONSE = { success: true }
     expect(validator.validateData(params)).toMatchObject(SUCCESSFUL_RESPONSE)
   })
   it.each([
-    [{ data: { sku: 'SKU', name: 'NAME' } }], // missing required properties
-    [{ data: { sku: 'SKU', name: 'NAME', price: '99.99' } }] // wrong type property
+    [{ data: { name: 'John', lastname: 'Doe' } }], // missing required properties
+    [{ data: { name: 'John', lastname: 'Doe', email: { username: 'john', domain: 'doe.com' } } }] // wrong type property
   ])('When data is invalid e.g. %o, Then returns not successful response', (params) => {
     const UNSUCCESSFUL_RESPONSE = { success: false }
     expect(validator.validateData(params)).toMatchObject(UNSUCCESSFUL_RESPONSE)
