@@ -14,39 +14,10 @@
 
 require('dotenv').config()
 const { checkMissingRequestInputs } = require('../actions/utils')
-const { addSuffix } = require('../utils/naming')
 const fetch = require('node-fetch')
 const uuid = require('uuid')
-
-/**
- * Get the list of existing providers
- *
- * @param {object} environment - environment params
- * @param {string} accessToken - access token
- * @returns {Array} - returns the list of providers
- */
-async function getExistingProviders (environment, accessToken) {
-  const getCreatedProvidersReq = await fetch(
-        `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/providers`,
-        {
-          method: 'GET',
-          headers: {
-            'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
-            Authorization: `Bearer ${accessToken}`,
-            'content-type': 'application/json',
-            Accept: 'application/hal+json'
-          }
-        }
-  )
-  const getCreatedProvidersResult = await getCreatedProvidersReq.json()
-  const existingProviders = []
-  if (getCreatedProvidersResult?._embedded?.providers) {
-    getCreatedProvidersResult._embedded.providers.forEach(provider => {
-      existingProviders[provider.label] = provider
-    })
-  }
-  return existingProviders
-}
+const { getExistingProviders } = require('../utils/adobe-events-api')
+const { addSuffix } = require('../utils/naming')
 
 /**
  * Create the events provider

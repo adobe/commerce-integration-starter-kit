@@ -12,6 +12,7 @@
  * from Adobe.
  */
 
+const { BACKOFFICE_PROVIDER_KEY } = require('../actions/constants')
 const SEPARATOR = '-'
 
 /**
@@ -41,15 +42,42 @@ function addSuffix (labelPrefix, environment) {
   return `${labelPrefix} - ${labelSuffix(environment.AIO_runtime_namespace)}`
 }
 
-function stringToUppercaseFirstChar(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+/**
+ * Capitalize the first char of a given string
+ *
+ * @param {string} string the text to modify
+ * @returns {string} string
+ */
+function stringToUppercaseFirstChar (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
-function getRegistrationName(providerKey, entityName) {
-    return stringToUppercaseFirstChar(providerKey) + ' ' + stringToUppercaseFirstChar(entityName) + ' Synchronization';
+/**
+ * Generate the registration name based on the provider key and entity name
+ *
+ * @param {string} providerKey provider key
+ * @param {string} entityName entity name
+ * @returns {string} the generated registration name
+ */
+function getRegistrationName (providerKey, entityName) {
+  return `${stringToUppercaseFirstChar(providerKey)} ${stringToUppercaseFirstChar(entityName)} Synchronization`
+}
+
+/**
+ * Generate the external backoffice provider name
+ *
+ * @param {object} params action parameters
+ * @returns {string} returns the provider name
+ */
+function getBackofficeProviderName (params) {
+  const providersList = require('../onboarding/config/providers.json')
+  const backofficeProvider = providersList.find(provider => provider.key === BACKOFFICE_PROVIDER_KEY)
+
+  return addSuffix(backofficeProvider.label, params)
 }
 
 module.exports = {
-    addSuffix,
-    getRegistrationName
+  addSuffix,
+  getRegistrationName,
+  getBackofficeProviderName
 }

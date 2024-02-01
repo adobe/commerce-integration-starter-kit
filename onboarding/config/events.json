@@ -16,8 +16,9 @@
       "com.adobe.commerce.observer.customer_delete_commit_after"
     ],
     "backoffice": [
-      "customer.updated",
-      "customer.deleted"
+      "be-observer.customer_create",
+      "be-observer.customer_update",
+      "be-observer.customer_delete"
     ]
   },
   "customer-group": {
@@ -26,8 +27,9 @@
       "com.adobe.commerce.observer.customer_group_delete_commit_after"
     ],
     "backoffice": [
-      "customer.updated",
-      "customer.deleted"
+      "be-observer.customer_group_create",
+      "be-observer.customer_group_update",
+      "be-observer.customer_group_delete"
     ]
   },
   "order": {
@@ -36,8 +38,7 @@
       "com.adobe.commerce.observer.sales_order_status_history_save_commit_after"
     ],
     "backoffice": [
-      "order.updated",
-      "order.status.updated"
+      "be-observer.order_status_change"
     ]
   },
   "stock": {
@@ -46,14 +47,13 @@
       "com.adobe.commerce.plugin.magento.catalog_inventory.model.resource_model.stock.status.save"
     ],
     "backoffice": [
-      "stock.updated",
-      "stock.status.updated"
+      "be-observer.catalog_stock_update"
     ]
   },
   "shipment": {
     "backoffice": [
-      "shipment.created",
-      "shipments.updated"
+      "be-observer.order_shipment_create",
+      "be-observer.order_shipment_update"
     ]
   }
 }
