@@ -16,11 +16,19 @@
  * This function transform the received product data from external back-office application to Adobe commerce
  *
  * @param {object} params - Data received from Adobe commerce
- * @returns {number} - Returns transformed data object
+ * @returns {object} - Returns transformed data object
  */
 function transformData (params) {
-  // @TODO This is a sample implementation. Please adapt based on your needs
-  return params.data.sku
+  // This is a sample implementation. Please adapt based on your needs
+  // Notice that the attribute_set_id may need to be changed
+  return {
+    customer: {
+      id: params.data.id,
+      firstname: params.data.name,
+      lastname: params.data.lastname,
+      email: params.data.email
+    }
+  }
 }
 
 module.exports = {
