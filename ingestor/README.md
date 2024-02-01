@@ -1,15 +1,15 @@
 # Integrate Adobe Commerce product-created event with a third party.
-This runtime action is responsible for exposing a web entry point to external backoffice application for publishing inforamtion to IO events.
+This runtime action is responsible for exposing a web entry point to external backoffice application for publishing information to IO events.
 
 
-**To activate this feature**, remove the comment '#' from the line `#$include: ./ingestor/actions.config.yaml` in the file app.config.yaml.
+**To activate this feature**, remove the comment '#' from the line `#$include: ./ingestor/actions.config.yaml` in the file `app.config.yaml`.
 
 ![Alt text](BackofficeEventsIngestionWebhook.png "Title")
 
 # Incoming information
 The ingestion webhook supports bulk operations. data parameters hold the array of events to publish, each event must include entity, event, and value. value parameter holds the data to send through the event.
-the entities available are: [product, customer, customer-group, order, shipment, stock]
-the list of available events by entity are:
+- The entities available are: [product, customer, customer-group, order, shipment, stock]
+- The list of available events by entity are:
 ```json
 {
   "product": [
@@ -70,10 +70,10 @@ Here is webhook JSON sample information:
 ```
 
 ## Authentication
-The webhook is not authenticated by default, you must implement your authentication check on the file ingestor/auth.js method checkAuthentication(params).
+The webhook is not authenticated by default, you must implement your authentication check on the file `ingestor/auth.js` method checkAuthentication(params).
 
 ## Use extra env parameters
-Any need for parameters from environment could be access from `params`. Add the needed parameter in the `actions/ingestor/consumer/actions.config.yaml` under `consumer -> inputs` as follows:
+Any need for parameters from environment could be accessed from `params`. Add the needed parameter in the `actions/ingestor/consumer/actions.config.yaml` under `consumer -> inputs` as follows:
 ```yaml
 consumer:
   function: ./consumer/index.js
