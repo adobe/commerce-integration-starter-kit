@@ -21,3 +21,7 @@ application:
         license: Apache-2.0
         actions:
           $include: ./actions/customer-group/commerce/actions.config.yaml
+      customer-group-backoffice:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/customer-group/external/actions.config.yaml

@@ -27,8 +27,9 @@
       "com.adobe.commerce.observer.customer_group_delete_commit_after"
     ],
     "backoffice": [
-      "customer.updated",
-      "customer.deleted"
+      "be-observer.customer_group_create",
+      "be-observer.customer_group_update",
+      "be-observer.customer_group_delete"
     ]
   },
   "order": {
