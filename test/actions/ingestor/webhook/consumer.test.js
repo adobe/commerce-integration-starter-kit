@@ -12,7 +12,7 @@
  * from Adobe.
  */
 
-const action = require('../../../ingestor/consumer')
+const action = require('../../../../actions/ingestion/webhook')
 
 jest.mock('@adobe/aio-sdk', () => ({
   Core: {
@@ -69,7 +69,7 @@ describe('External backoffice events ingestion webhook', () => {
             AIO_runtime_namespace: 'eistarterkitv1',
             data: [
               {
-                entity: 'product',
+                uid: 'product-123',
                 event: 'be-observer.catalog_product_create',
                 value: {
                   sku: 'TEST_WEBHOOK_2',
@@ -108,36 +108,22 @@ describe('External backoffice events ingestion webhook', () => {
           expect(response).toEqual({
             statusCode: 200,
             body: {
-              request: [
+              success: true,
+              events: [
                 {
-                  entity: 'product',
-                  event: 'be-observer.catalog_product_create',
-                  value: {
+                  data: {
                     sku: 'TEST_WEBHOOK_2',
                     name: 'Test webhook 1 testu',
                     price: 52,
                     description: 'Test webhook 1 description'
-                  }
+                  },
+                  uid: 'product-123',
+                  providerId: 'PROVIDER_ID',
+                  providerName: 'Backoffice Provider - eistarterkitv1',
+                  success: 'OK',
+                  type: 'be-observer.catalog_product_create'
                 }
-              ],
-              response: {
-                success: true,
-                events: [
-                  {
-                    data: {
-                      sku: 'TEST_WEBHOOK_2',
-                      name: 'Test webhook 1 testu',
-                      price: 52,
-                      description: 'Test webhook 1 description'
-                    },
-                    entity: 'product',
-                    providerId: 'PROVIDER_ID',
-                    providerName: 'Backoffice Provider - eistarterkitv1',
-                    success: 'OK',
-                    type: 'be-observer.catalog_product_create'
-                  }
-                ]
-              }
+              ]
             }
           })
         })
@@ -172,7 +158,7 @@ describe('External backoffice events ingestion webhook', () => {
             AIO_runtime_namespace: 'eistarterkitv1',
             data: [
               {
-                entity: 'product',
+                uid: 'product-123',
                 event: 'be-observer.catalog_product_create',
                 value: {
                   sku: 'TEST_WEBHOOK_2',
@@ -192,7 +178,7 @@ describe('External backoffice events ingestion webhook', () => {
             error: {
               statusCode: 500,
               body: {
-                error: '[Ingestor] Server error: fake error'
+                error: '[IngestionWebhook] Server error: fake error'
               }
             }
           })
@@ -207,7 +193,7 @@ describe('External backoffice events ingestion webhook', () => {
             AIO_runtime_namespace: 'eistarterkitv1',
             data: [
               {
-                entity: 'product',
+                uid: 'product-123',
                 event: 'be-observer.catalog_product_create',
                 value: {
                   sku: 'TEST_WEBHOOK_2',
@@ -229,7 +215,7 @@ describe('External backoffice events ingestion webhook', () => {
             error: {
               statusCode: 500,
               body: {
-                error: '[Ingestor] Server error: fake error'
+                error: '[IngestionWebhook] Server error: fake error'
               }
             }
           })
@@ -244,7 +230,7 @@ describe('External backoffice events ingestion webhook', () => {
             AIO_runtime_namespace: 'eistarterkitv1',
             data: [
               {
-                entity: 'product',
+                uid: 'product-123',
                 event: 'be-observer.catalog_product_create',
                 value: {
                   sku: 'TEST_WEBHOOK_2',
@@ -269,7 +255,7 @@ describe('External backoffice events ingestion webhook', () => {
             error: {
               statusCode: 500,
               body: {
-                error: '[Ingestor] Could not found any external backoffice provider'
+                error: '[IngestionWebhook] Could not found any external backoffice provider'
               }
             }
           })
@@ -284,7 +270,7 @@ describe('External backoffice events ingestion webhook', () => {
             AIO_runtime_namespace: 'eistarterkitv1',
             data: [
               {
-                entity: 'product',
+                uid: 'product-123',
                 event: 'be-observer.catalog_product_create',
                 value: {
                   sku: 'TEST_WEBHOOK_2',
@@ -323,7 +309,7 @@ describe('External backoffice events ingestion webhook', () => {
             error: {
               statusCode: 500,
               body: {
-                error: '[Ingestor] Server error: fake error'
+                error: '[IngestionWebhook] Server error: fake error'
               }
             }
           })
@@ -340,26 +326,11 @@ describe('External backoffice events ingestion webhook', () => {
             AIO_runtime_namespace: 'eistarterkitv1',
             data: [
               {
-                event: 'be-observer.catalog_product_create',
-                value: {
-                  sku: 'TEST_WEBHOOK_2',
-                  name: 'Test webhook 1 testu',
-                  price: 52,
-                  description: 'Test webhook 1 description'
-                }
-              },
-              {
-                entity: 'product',
-                value: {
-                  sku: 'TEST_WEBHOOK_2',
-                  name: 'Test webhook 1 testu',
-                  price: 52,
-                  description: 'Test webhook 1 description'
-                }
-              },
-              {
-                entity: 'product',
-                event: 'be-observer.catalog_product_create'
+                sku: 'TEST_WEBHOOK_2',
+                name: 'Test webhook 1 testu',
+                price: 52,
+                description: 'Test webhook 1 description'
+
               }
             ]
           }
@@ -391,11 +362,7 @@ describe('External backoffice events ingestion webhook', () => {
             error: {
               statusCode: 400,
               body: {
-                error: [
-                  "missing parameter(s) 'entity'",
-                  "missing parameter(s) 'event'",
-                  "missing parameter(s) 'value'"
-                ]
+                error: "Invalid event value: missing parameter(s) 'uid,event,value'"
               }
             }
           })
@@ -410,7 +377,7 @@ describe('External backoffice events ingestion webhook', () => {
             AIO_runtime_namespace: 'eistarterkitv1',
             data: [
               {
-                entity: 'product',
+                uid: 'product-123',
                 event: 'be-observer.catalog_product_create',
                 value: {
                   sku: 'TEST_WEBHOOK_2',

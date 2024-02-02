@@ -67,11 +67,12 @@ function getRegistrationName (providerKey, entityName) {
  * Generate the external backoffice provider name
  *
  * @param {object} params action parameters
+ * @param {string} providerKey the provider key (could be found in onboarding/config/providers.js)
  * @returns {string} returns the provider name
  */
-function getBackofficeProviderName (params) {
+function getProviderName (params, providerKey) {
   const providersList = require('../onboarding/config/providers.json')
-  const backofficeProvider = providersList.find(provider => provider.key === BACKOFFICE_PROVIDER_KEY)
+  const backofficeProvider = providersList.find(provider => provider.key === providerKey)
 
   return addSuffix(backofficeProvider.label, params)
 }
@@ -79,5 +80,5 @@ function getBackofficeProviderName (params) {
 module.exports = {
   addSuffix,
   getRegistrationName,
-  getBackofficeProviderName
+  getProviderName
 }

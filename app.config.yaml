@@ -1,10 +1,10 @@
 application:
   runtimeManifest:
     packages:
-      ingestor-webhook:
+      ingestion:
         license: Apache-2.0
         actions:
-      #    $include: ./ingestor/actions.config.yaml
+          $include: ./actions/ingestion/actions.config.yaml
       product-commerce:
         license: Apache-2.0
         actions:

@@ -119,7 +119,7 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 
 ## Development
 ### External back-office ingestion webhook
-- [Ingestion webhook consumer](ingestor/README.md)
+- [Ingestion webhook consumer](ingestion/README.md)
 
 ### Product entity
 #### Commerce to third party

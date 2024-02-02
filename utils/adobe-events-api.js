@@ -12,6 +12,7 @@
  * from Adobe.
  */
 const fetch = require('node-fetch')
+const { getProviderName } = require('./naming')
 
 /**
  * Make the API call to IO Events to get the existing registrations
@@ -103,7 +104,22 @@ async function getExistingProviders (environment, accessToken) {
   return existingProviders
 }
 
+/**
+ * This method get the existing provider by its key, the key could be found on the file (onboarding/config/providers.json)
+ *
+ * @param {object} params includes parameters needed to make the call to Adobe IO Events
+ * @param {string} accessToken Adobe OAuth access token
+ * @param {string} providerKey Provider key used to find the provider
+ * @returns {Promise<*>} return IO Event provider
+ */
+async function getProviderByKey (params, accessToken, providerKey) {
+  const providers = await getExistingProviders(params, accessToken)
+  const providerName = getProviderName(params, providerKey)
+  return providers[providerName]
+}
+
 module.exports = {
   getExistingProviders,
-  getExistingRegistrations
+  getExistingRegistrations,
+  getProviderByKey
 }

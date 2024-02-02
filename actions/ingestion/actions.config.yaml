@@ -1,5 +1,5 @@
-consumer:
-  function: ./consumer/index.js
+webhook:
+  function: ./webhook/index.js
   web: 'yes'
   runtime: nodejs:16
   inputs:

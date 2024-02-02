@@ -1,4 +1,4 @@
-const { checkMissingRequestInputs } = require('../../actions/utils')
+const { checkMissingRequestInputs } = require('../../../actions/utils')
 
 /**
  * Validate the event information
@@ -7,7 +7,7 @@ const { checkMissingRequestInputs } = require('../../actions/utils')
  * @returns {object} returns the success status and error message
  */
 function validateData (data) {
-  const requiredParams = ['entity', 'event', 'value']
+  const requiredParams = ['uid', 'event', 'value']
   const errorMessage = checkMissingRequestInputs(data, requiredParams, [])
 
   if (errorMessage) {
