@@ -12,7 +12,7 @@
  * from Adobe.
  */
 /**
- * This method handle the authentication with external backoffice application
+ * This method handles the authentication with an external backoffice application
  * @param {object} params include the parameters received in the runtime action
  * @returns {object} success status and error message
  */
