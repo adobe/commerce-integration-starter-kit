@@ -25,3 +25,7 @@ application:
         license: Apache-2.0
         actions:
           $include: ./actions/customer-group/external/actions.config.yaml
+      order-commerce:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/order/commerce/actions.config.yaml
