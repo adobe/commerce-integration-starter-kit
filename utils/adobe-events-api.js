@@ -18,7 +18,7 @@ const fetch = require('node-fetch')
  *
  * @param {object} environment includes the needed parameters to call IO Event
  * @param {string} accessToken Adobe OAuth access token
- * @param {string} next registrations url to get more data
+ * @param {?string} next registrations url to get more data
  * @returns {Array} returns array of registrations
  * @throws {Error} Throw exception in case the API call fails
  */
