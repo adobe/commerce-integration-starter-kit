@@ -26,44 +26,7 @@ const { validateData } = require('./validator')
 const { checkAuthentication } = require('../auth')
 
 /**
- * Build the events object
- *
- * @param {object} provider provider information
- * @param {object} data events data received
- * @returns {object} Array of events with provider information
- */
-function buildEvents (provider, data) {
-  const events = []
-  let success = true
-  let errorMessage
-
-  for (const eventInformation of data) {
-    const result = validateData(eventInformation)
-
-    if (!result.success) {
-      errorMessage = `Invalid event value: ${result.message}`
-      success = false
-      break
-    }
-
-    events.push({
-      providerId: provider.id,
-      providerName: provider.label,
-      type: eventInformation.event,
-      data: eventInformation.value,
-      uid: eventInformation.uid
-    })
-  }
-
-  return {
-    success,
-    errorMessage,
-    events
-  }
-}
-
-/**
- * This web action allow external back-office application publish events to IO events using custom authentication mechanism.
+ * This web action allow external back-office application publish event to IO event using custom authentication mechanism.
  *
  * @param {object} params - method params includes environment and request data
  * @returns {object} - response with success status and result
@@ -74,18 +37,16 @@ async function main (params) {
     logger.info('[IngestionWebhook] Start processing request')
     logger.debug(`[IngestionWebhook] Webhook main params: ${stringParameters(params)}`)
 
-    const requiredParams = ['data']
-    const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
+    const validationResult = validateData(params)
 
-    if (errorMessage) {
-      return errorResponse(HTTP_BAD_REQUEST, errorMessage, logger)
+    if (!validationResult.success) {
+      return errorResponse(HTTP_BAD_REQUEST, `[IngestionWebhook] ${validationResult.message}`, logger)
     }
 
     const authentication = await checkAuthentication(params)
 
     if (!authentication.success) {
-      logger.error(`[IngestionWebhook] ${authentication.message}`)
-      return errorResponse(HTTP_UNAUTHORIZED, authentication.message, logger)
+      return errorResponse(HTTP_UNAUTHORIZED, `[IngestionWebhook] ${authentication.message}`, logger)
     }
 
     logger.debug('[IngestionWebhook] Generate Adobe access token')
@@ -100,10 +61,12 @@ async function main (params) {
       return errorResponse(HTTP_INTERNAL_ERROR, errorMessage, logger)
     }
 
-    const eventsResult = buildEvents(provider, params.data)
-
-    if (!eventsResult.success) {
-      return errorResponse(HTTP_BAD_REQUEST, eventsResult.errorMessage, logger)
+    const event = {
+      providerId: provider.id,
+      providerName: provider.label,
+      type: params.data.event,
+      data: params.data.value,
+      uid: params.data.uid
     }
 
     logger.debug('[IngestionWebhook] Initiate events client')
@@ -112,22 +75,20 @@ async function main (params) {
       params.OAUTH_CLIENT_ID,
       accessToken)
 
-    logger.debug('[IngestionWebhook] Process events data')
-    for (const event of eventsResult?.events) {
-      logger.debug(
+    logger.info('[IngestionWebhook] Process event data')
+    logger.debug(
           `[IngestionWebhook] Process event ${event.type} for entity ${event.entity}`)
 
-      const cloudEvent = new CloudEvent({
-        source: 'urn:uuid:' + event.providerId,
-        type: event.type,
-        datacontenttype: 'application/json',
-        data: event.data,
-        id: uuid.v4()
-      })
+    const cloudEvent = new CloudEvent({
+      source: 'urn:uuid:' + event.providerId,
+      type: event.type,
+      datacontenttype: 'application/json',
+      data: event.data,
+      id: uuid.v4()
+    })
 
-      logger.debug(`[IngestionWebhook] Publish event ${event.type} to provider ${event.providerName}`)
-      event.success = await eventsClient.publishEvent(cloudEvent)
-    }
+    logger.debug(`[IngestionWebhook] Publish event ${event.type} to provider ${event.providerName}`)
+    event.success = await eventsClient.publishEvent(cloudEvent)
 
     logger.info(`[IngestionWebhook] ${HTTP_OK}: successful request`)
 
@@ -135,7 +96,7 @@ async function main (params) {
       statusCode: HTTP_OK,
       body: {
         success: true,
-        events: eventsResult.events
+        event
       }
     }
   } catch (error) {

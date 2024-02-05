@@ -67,7 +67,7 @@ describe('External backoffice events ingestion webhook', () => {
             OAUTH_ORG_ID: 'OAUTH_ORG_ID',
             OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
             AIO_runtime_namespace: 'eistarterkitv1',
-            data: [
+            data:
               {
                 uid: 'product-123',
                 event: 'be-observer.catalog_product_create',
@@ -78,7 +78,6 @@ describe('External backoffice events ingestion webhook', () => {
                   description: 'Test webhook 1 description'
                 }
               }
-            ]
           }
 
           getToken.mockResolvedValueOnce(Promise.resolve('access token'))
@@ -109,7 +108,7 @@ describe('External backoffice events ingestion webhook', () => {
             statusCode: 200,
             body: {
               success: true,
-              events: [
+              event:
                 {
                   data: {
                     sku: 'TEST_WEBHOOK_2',
@@ -123,7 +122,7 @@ describe('External backoffice events ingestion webhook', () => {
                   success: 'OK',
                   type: 'be-observer.catalog_product_create'
                 }
-              ]
+
             }
           })
         })
@@ -143,7 +142,7 @@ describe('External backoffice events ingestion webhook', () => {
             error: {
               statusCode: 400,
               body: {
-                error: "missing parameter(s) 'data'"
+                error: "[IngestionWebhook] missing parameter(s) 'data.uid,data.event,data.value'"
               }
             }
           })
@@ -156,7 +155,7 @@ describe('External backoffice events ingestion webhook', () => {
             OAUTH_ORG_ID: 'OAUTH_ORG_ID',
             OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
             AIO_runtime_namespace: 'eistarterkitv1',
-            data: [
+            data:
               {
                 uid: 'product-123',
                 event: 'be-observer.catalog_product_create',
@@ -167,7 +166,6 @@ describe('External backoffice events ingestion webhook', () => {
                   description: 'Test webhook 1 description'
                 }
               }
-            ]
           }
 
           getToken.mockRejectedValue(new Error('fake error'))
@@ -191,7 +189,7 @@ describe('External backoffice events ingestion webhook', () => {
             OAUTH_ORG_ID: 'OAUTH_ORG_ID',
             OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
             AIO_runtime_namespace: 'eistarterkitv1',
-            data: [
+            data:
               {
                 uid: 'product-123',
                 event: 'be-observer.catalog_product_create',
@@ -202,7 +200,7 @@ describe('External backoffice events ingestion webhook', () => {
                   description: 'Test webhook 1 description'
                 }
               }
-            ]
+
           }
 
           getToken.mockResolvedValueOnce(Promise.resolve('access token'))
@@ -228,7 +226,7 @@ describe('External backoffice events ingestion webhook', () => {
             OAUTH_ORG_ID: 'OAUTH_ORG_ID',
             OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
             AIO_runtime_namespace: 'eistarterkitv1',
-            data: [
+            data:
               {
                 uid: 'product-123',
                 event: 'be-observer.catalog_product_create',
@@ -239,7 +237,7 @@ describe('External backoffice events ingestion webhook', () => {
                   description: 'Test webhook 1 description'
                 }
               }
-            ]
+
           }
 
           getToken.mockResolvedValueOnce(Promise.resolve('access token'))
@@ -268,7 +266,7 @@ describe('External backoffice events ingestion webhook', () => {
             OAUTH_ORG_ID: 'OAUTH_ORG_ID',
             OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
             AIO_runtime_namespace: 'eistarterkitv1',
-            data: [
+            data:
               {
                 uid: 'product-123',
                 event: 'be-observer.catalog_product_create',
@@ -279,7 +277,7 @@ describe('External backoffice events ingestion webhook', () => {
                   description: 'Test webhook 1 description'
                 }
               }
-            ]
+
           }
 
           getToken.mockResolvedValueOnce(Promise.resolve('access token'))
@@ -315,59 +313,6 @@ describe('External backoffice events ingestion webhook', () => {
           })
         })
     })
-  })
-  describe('Given ingestion webhook events data', () => {
-    describe('When data is missing required parameters', () => {
-      test('Then returns 400 error',
-        async () => {
-          const params = {
-            OAUTH_ORG_ID: 'OAUTH_ORG_ID',
-            OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
-            AIO_runtime_namespace: 'eistarterkitv1',
-            data: [
-              {
-                sku: 'TEST_WEBHOOK_2',
-                name: 'Test webhook 1 testu',
-                price: 52,
-                description: 'Test webhook 1 description'
-
-              }
-            ]
-          }
-
-          getToken.mockResolvedValueOnce(Promise.resolve('access token'))
-
-          const mockFetchGetExistingProvidersResponse = {
-            ok: true,
-            json: () => Promise.resolve({
-              _embedded: {
-                providers: [
-                  {
-                    id: 'PROVIDER_ID',
-                    label: 'Backoffice Provider - eistarterkitv1',
-                    description: 'string',
-                    source: 'string',
-                    docs_url: 'string',
-                    publisher: 'string'
-                  }
-                ]
-              }
-            })
-          }
-          fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
-
-          const response = await action.main(params)
-
-          expect(response).toEqual({
-            error: {
-              statusCode: 400,
-              body: {
-                error: "Invalid event value: missing parameter(s) 'uid,event,value'"
-              }
-            }
-          })
-        })
-    })
     describe('When Event sdk is initialized', () => {
       test('Then has input credentials received in params',
         async () => {
@@ -375,7 +320,7 @@ describe('External backoffice events ingestion webhook', () => {
             OAUTH_ORG_ID: 'OAUTH_ORG_ID',
             OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
             AIO_runtime_namespace: 'eistarterkitv1',
-            data: [
+            data:
               {
                 uid: 'product-123',
                 event: 'be-observer.catalog_product_create',
@@ -386,7 +331,6 @@ describe('External backoffice events ingestion webhook', () => {
                   description: 'Test webhook 1 description'
                 }
               }
-            ]
           }
 
           getToken.mockResolvedValueOnce(Promise.resolve('access token'))
