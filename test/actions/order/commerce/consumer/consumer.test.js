@@ -35,7 +35,7 @@ describe('Order events received from commerce', () => {
           data: {
             value: {
               real_order_id: 'ORDER_ID',
-              increment_id: 'ORRDER_INCREMENTAL_ID',
+              increment_id: 'ORDER_INCREMENTAL_ID',
               items: [
                 {
                   item_id: 'ITEM_ID'
@@ -69,7 +69,7 @@ describe('Order events received from commerce', () => {
           body: {
             request: {
               real_order_id: 'ORDER_ID',
-              increment_id: 'ORRDER_INCREMENTAL_ID',
+              increment_id: 'ORDER_INCREMENTAL_ID',
               items: [
                 {
                   item_id: 'ITEM_ID'
@@ -93,7 +93,7 @@ describe('Order events received from commerce', () => {
           data: {
             value: {
               real_order_id: 'ORDER_ID',
-              increment_id: 'ORRDER_INCREMENTAL_ID',
+              increment_id: 'ORDER_INCREMENTAL_ID',
               items: [
                 {
                   item_id: 'ITEM_ID'
@@ -127,7 +127,7 @@ describe('Order events received from commerce', () => {
           body: {
             request: {
               real_order_id: 'ORDER_ID',
-              increment_id: 'ORRDER_INCREMENTAL_ID',
+              increment_id: 'ORDER_INCREMENTAL_ID',
               items: [
                 {
                   item_id: 'ITEM_ID'
@@ -167,7 +167,7 @@ describe('Order events received from commerce', () => {
             data: {
               value: {
                 real_order_id: 'ORDER_ID',
-                increment_id: 'ORRDER_INCREMENTAL_ID',
+                increment_id: 'ORDER_INCREMENTAL_ID',
                 items: [
                   {
                     item_id: 'ITEM_ID'
@@ -185,7 +185,7 @@ describe('Order events received from commerce', () => {
             body: {
               request: {
                 real_order_id: 'ORDER_ID',
-                increment_id: 'ORRDER_INCREMENTAL_ID',
+                increment_id: 'ORDER_INCREMENTAL_ID',
                 items: [
                   {
                     item_id: 'ITEM_ID'
