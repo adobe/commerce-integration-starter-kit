@@ -73,9 +73,9 @@ describe('External backoffice events ingestion webhook', () => {
                 event: 'be-observer.catalog_product_create',
                 value: {
                   sku: 'TEST_WEBHOOK_2',
-                  name: 'Test webhook 1 testu',
+                  name: 'Test webhook test',
                   price: 52,
-                  description: 'Test webhook 1 description'
+                  description: 'Test webhook description'
                 }
               }
           }
@@ -112,9 +112,9 @@ describe('External backoffice events ingestion webhook', () => {
                 {
                   data: {
                     sku: 'TEST_WEBHOOK_2',
-                    name: 'Test webhook 1 testu',
+                    name: 'Test webhook test',
                     price: 52,
-                    description: 'Test webhook 1 description'
+                    description: 'Test webhook description'
                   },
                   uid: 'product-123',
                   providerId: 'PROVIDER_ID',
@@ -161,9 +161,9 @@ describe('External backoffice events ingestion webhook', () => {
                 event: 'be-observer.catalog_product_create',
                 value: {
                   sku: 'TEST_WEBHOOK_2',
-                  name: 'Test webhook 1 testu',
+                  name: 'Test webhook test',
                   price: 52,
-                  description: 'Test webhook 1 description'
+                  description: 'Test webhook description'
                 }
               }
           }
@@ -195,9 +195,9 @@ describe('External backoffice events ingestion webhook', () => {
                 event: 'be-observer.catalog_product_create',
                 value: {
                   sku: 'TEST_WEBHOOK_2',
-                  name: 'Test webhook 1 testu',
+                  name: 'Test webhook test',
                   price: 52,
-                  description: 'Test webhook 1 description'
+                  description: 'Test webhook description'
                 }
               }
 
@@ -232,9 +232,9 @@ describe('External backoffice events ingestion webhook', () => {
                 event: 'be-observer.catalog_product_create',
                 value: {
                   sku: 'TEST_WEBHOOK_2',
-                  name: 'Test webhook 1 testu',
+                  name: 'Test webhook test',
                   price: 52,
-                  description: 'Test webhook 1 description'
+                  description: 'Test webhook description'
                 }
               }
 
@@ -272,9 +272,9 @@ describe('External backoffice events ingestion webhook', () => {
                 event: 'be-observer.catalog_product_create',
                 value: {
                   sku: 'TEST_WEBHOOK_2',
-                  name: 'Test webhook 1 testu',
+                  name: 'Test webhook test',
                   price: 52,
-                  description: 'Test webhook 1 description'
+                  description: 'Test webhook description'
                 }
               }
 
@@ -326,9 +326,9 @@ describe('External backoffice events ingestion webhook', () => {
                 event: 'be-observer.catalog_product_create',
                 value: {
                   sku: 'TEST_WEBHOOK_2',
-                  name: 'Test webhook 1 testu',
+                  name: 'Test webhook test',
                   price: 52,
-                  description: 'Test webhook 1 description'
+                  description: 'Test webhook description'
                 }
               }
           }

@@ -23,7 +23,7 @@ const {
 const { getAdobeAccessToken } = require('../../../utils/adobe-auth')
 const { getProviderByKey } = require('../../../utils/adobe-events-api')
 const { validateData } = require('./validator')
-const { checkAuthentication } = require('../auth')
+const { checkAuthentication } = require('./auth')
 
 /**
  * This web action allow external back-office application publish event to IO event using custom authentication mechanism.
@@ -37,16 +37,14 @@ async function main (params) {
     logger.info('[IngestionWebhook] Start processing request')
     logger.debug(`[IngestionWebhook] Webhook main params: ${stringParameters(params)}`)
 
-    const validationResult = validateData(params)
-
-    if (!validationResult.success) {
-      return errorResponse(HTTP_BAD_REQUEST, `[IngestionWebhook] ${validationResult.message}`, logger)
-    }
-
     const authentication = await checkAuthentication(params)
-
     if (!authentication.success) {
       return errorResponse(HTTP_UNAUTHORIZED, `[IngestionWebhook] ${authentication.message}`, logger)
+    }
+
+    const validationResult = validateData(params)
+    if (!validationResult.success) {
+      return errorResponse(HTTP_BAD_REQUEST, `[IngestionWebhook] ${validationResult.message}`, logger)
     }
 
     logger.debug('[IngestionWebhook] Generate Adobe access token')
