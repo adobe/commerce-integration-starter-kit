@@ -37,8 +37,7 @@
       "com.adobe.commerce.observer.sales_order_save_commit_after"
     ],
     "backoffice": [
-      "order.updated",
-      "order.status.updated"
+      "be-observer.order_status_change"
     ]
   },
   "stock": {
@@ -47,14 +46,13 @@
       "com.adobe.commerce.plugin.magento.catalog_inventory.model.resource_model.stock.status.save"
     ],
     "backoffice": [
-      "stock.updated",
-      "stock.status.updated"
+      "be-observer.catalog_stock_update"
     ]
   },
   "shipment": {
     "backoffice": [
-      "shipment.created",
-      "shipments.updated"
+      "be-observer.order_shipment_create",
+      "be-observer.order_shipment_update"
     ]
   }
 }

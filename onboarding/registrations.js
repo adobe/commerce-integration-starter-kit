@@ -13,84 +13,8 @@
  */
 
 const fetch = require('node-fetch')
-
-/**
- * Call adobe events to get existing registrations
- *
- * @param {object} environment - environment params
- * @param {string} accessToken - access token
- * @param {string} next - next url
- */
-async function getExistingRegistrationsData (environment, accessToken, next = null) {
-  const url = `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/registrations`
-
-  const getRegistrationsReq = await fetch(
-    next || url,
-    {
-      method: 'GET',
-      headers: {
-        'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
-        Accept: 'application/hal+json'
-      }
-    }
-  )
-  const getRegistrationsResult = await getRegistrationsReq.json()
-
-  const existingRegistrations = []
-  if (getRegistrationsResult?._embedded?.registrations) {
-    getRegistrationsResult._embedded.registrations.forEach(registration => {
-      existingRegistrations.push({
-        id: registration.id,
-        registration_id: registration.registration_id,
-        name: registration.name,
-        enabled: registration.enabled
-      })
-    })
-  }
-
-  if (getRegistrationsResult?._links?.next) {
-    existingRegistrations.push(...await getExistingRegistrationsData(environment, accessToken, getRegistrationsResult._links.next.href))
-  }
-
-  return existingRegistrations
-}
-
-/**
- * Get existing registrations from IO events
- *
- * @param {object} environment - environment params
- * @param {string} accessToken - access token
- * @returns {Array} - returns array of registrations
- */
-async function getExistingRegistrations (environment, accessToken) {
-  const existingRegistrationsResult = await getExistingRegistrationsData(environment, accessToken)
-  const existingRegistrations = []
-  existingRegistrationsResult.forEach(item => existingRegistrations[item.name] = item)
-  return existingRegistrations
-}
-
-/**
- * Make uppercase the first char of a string
- *
- * @param {string} string - string to change
- * @returns {string} - return changed string
- */
-function stringToUppercaseFirstChar (string) {
-  return string.charAt(0).toUpperCase() + string.slice(1)
-}
-
-/**
- * Build the registration name
- *
- * @param {string} providerKey - provider key
- * @param {string} entityName - entity name
- * @returns {string} - returns the name of registration
- */
-function getRegistrationName (providerKey, entityName) {
-  return stringToUppercaseFirstChar(providerKey) + ' ' + stringToUppercaseFirstChar(entityName) + ' Synchronization'
-}
+const { getExistingRegistrations } = require('../utils/adobe-events-api')
+const { getRegistrationName } = require('../utils/naming')
 
 /**
  * Create the registrations based on the selection of the client from the file custom/registrations.json

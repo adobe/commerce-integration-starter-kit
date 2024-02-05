@@ -1,6 +1,10 @@
 application:
   runtimeManifest:
     packages:
+      ingestion:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/ingestion/actions.config.yaml
       product-commerce:
         license: Apache-2.0
         actions:

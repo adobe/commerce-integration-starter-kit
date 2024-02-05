@@ -12,7 +12,7 @@
  * from Adobe.
  */
 
-const naming = require('../../../onboarding/utils/naming.js')
+const naming = require('../../../utils/naming.js')
 
 describe('Throws error', () => {
   test('when label is undefined', () => {

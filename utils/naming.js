@@ -41,6 +41,43 @@ function addSuffix (labelPrefix, environment) {
   return `${labelPrefix} - ${labelSuffix(environment.AIO_runtime_namespace)}`
 }
 
+/**
+ * Capitalize the first char of a given string
+ *
+ * @param {string} string the text to modify
+ * @returns {string} string
+ */
+function stringToUppercaseFirstChar (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+/**
+ * Generate the registration name based on the provider key and entity name
+ *
+ * @param {string} providerKey provider key
+ * @param {string} entityName entity name
+ * @returns {string} the generated registration name
+ */
+function getRegistrationName (providerKey, entityName) {
+  return `${stringToUppercaseFirstChar(providerKey)} ${stringToUppercaseFirstChar(entityName)} Synchronization`
+}
+
+/**
+ * Generate the external backoffice provider name
+ *
+ * @param {object} params action parameters
+ * @param {string} providerKey the provider key (could be found in onboarding/config/providers.js)
+ * @returns {string} returns the provider name
+ */
+function getProviderName (params, providerKey) {
+  const providersList = require('../onboarding/config/providers.json')
+  const backofficeProvider = providersList.find(provider => provider.key === providerKey)
+
+  return addSuffix(backofficeProvider.label, params)
+}
+
 module.exports = {
-  addSuffix
+  addSuffix,
+  getRegistrationName,
+  getProviderName
 }

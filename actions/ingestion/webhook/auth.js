@@ -11,20 +11,20 @@
  * is strictly forbidden unless prior written permission is obtained
  * from Adobe.
  */
+/**
+ * This method handles the authentication with an external backoffice application
+ * @param {object} params include the parameters received in the runtime action
+ * @returns {object} success status and error message
+ */
+async function checkAuthentication (params) {
+  // @TODO implement the logic to check authetication with you external application
+  // @TODO return { success: false, message: 'error message'} in case of failure
 
-const HTTP_OK = 200
-const HTTP_BAD_REQUEST = 400
-const HTTP_UNAUTHORIZED = 401
-const HTTP_NOT_FOUND = 404
-const HTTP_INTERNAL_ERROR = 500
-
-const BACKOFFICE_PROVIDER_KEY = 'backoffice'
+  return {
+    success: true
+  }
+}
 
 module.exports = {
-  HTTP_OK,
-  HTTP_BAD_REQUEST,
-  HTTP_UNAUTHORIZED,
-  HTTP_NOT_FOUND,
-  HTTP_INTERNAL_ERROR,
-  BACKOFFICE_PROVIDER_KEY
+  checkAuthentication
 }
