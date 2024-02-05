@@ -13,7 +13,7 @@
  */
 
 const { Core, Events } = require('@adobe/aio-sdk')
-const { errorResponse, stringParameters, checkMissingRequestInputs } = require('../../../actions/utils')
+const { errorResponse, stringParameters } = require('../../../actions/utils')
 const { CloudEvent } = require('cloudevents')
 const uuid = require('uuid')
 const {
