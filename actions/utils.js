@@ -119,6 +119,7 @@ function getBearerToken (params) {
  */
 function errorResponse (statusCode, message, logger) {
   if (logger && typeof logger.info === 'function') {
+    // @TODO remove this logger from here and keep the decision of logging the error to the caller
     logger.info(`${statusCode}: ${message}`)
   }
   return {
