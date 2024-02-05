@@ -12,7 +12,6 @@
  * from Adobe.
  */
 
-const { BACKOFFICE_PROVIDER_KEY } = require('../actions/constants')
 const SEPARATOR = '-'
 
 /**
