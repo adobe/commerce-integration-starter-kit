@@ -3,8 +3,7 @@ const { checkMissingRequestInputs } = require('../../../actions/utils')
 /**
  * Validate the event information
  *
- * @param {object} data event information
- * @param params
+ * @param {object} params input parameters
  * @returns {object} returns the success status and error message
  */
 function validateData (params) {
