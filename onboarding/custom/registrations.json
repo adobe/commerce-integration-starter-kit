@@ -2,7 +2,7 @@
   "product": ["commerce", "backoffice"],
   "customer": ["commerce", "backoffice"],
   "customer-group": ["commerce", "backoffice"],
-  "order": ["commerce"],
+  "order": ["commerce", "backoffice"],
   "stock": [],
   "shipment": []
 }
