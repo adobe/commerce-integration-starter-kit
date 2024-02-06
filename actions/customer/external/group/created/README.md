@@ -1,10 +1,10 @@
-# Integrate a third party customer group created event with Adobe Commerce.
+# Integrate a third-party customer group created event with Adobe Commerce.
 This runtime action is responsible for notifying the integration with Adobe Commerce after a customer is created in the 3rd party.
 
 ![Alt text](ExternalCustomerGroupCreateSync.png "Title")
 
 # Incoming information
-The incoming data depends on the third party API and entity model.
+The incoming data depends on the third-party API and entity model.
 Here is JSON sample:
 ```json
 {
@@ -37,8 +37,8 @@ Any preprocessing needed before calling the Adobe Commerce API can be implemente
 
 ## Interact with the Adobe Commerce API
 The interaction with the Adobe Commerce API is defined in the `sendData` function in the `sender.js` file.
-This function delegates to the `createCustomerGroup` method in the `actions/customer/commerceCustomerGroupApiClient.js` the interaction with the Commerce API.
-Any parameters needed from the execution environment could be access from `params`. 
+This function delegates to the `createCustomerGroup` method in the `actions/customer/commerceCustomerGroupApiClient.js` interaction with the Commerce API.
+Any parameters needed from the execution environment could be accessed from `params`.
 These parameters can be passed on the action by configuring them in the  `actions/customer/external/actions.config.yaml` under `group-created -> inputs` as follows:
 ```yaml
 group-created:
@@ -61,7 +61,7 @@ group-created:
 Any postprocessing needed after calling the Adobe Commerce API can be implemented in the `postProcess` function in the `post.js` file.
 
 # Response expected
-The runtime action must respond 400 if the validation fails. It will prevent the message processing from being retried by Adobe I/O.
+The runtime action must respond to 400 if the validation fails. It will prevent the message processing from being retried by Adobe I/O.
 ```javascript
 return {
     statusCode: 400,
@@ -69,18 +69,17 @@ return {
 }
 ```
 
-The runtime action must respond 500 in case of an unexpected error while processing the request. Please send an array of errors so the consumer can log it and trigger the retry mechanism.
+The runtime action must respond to 500 in case of an unexpected error while processing the request.
 ```javascript
 return {
     statusCode: 500,
-    error: errors
+    error: 'error message'
 }
 ```
 
-In case that everything is fine, return 200 to mark the event completed in Adobe I/O and close the loop.
+If everything is fine, return 200 to mark the event completed in Adobe I/O and close the loop.
 ```javascript
 return {
     statusCode: 200
 }
 ```
-
