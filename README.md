@@ -140,8 +140,8 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 
 ### Customer Group entity
 #### Commerce to third party
-- [Customer group updated in commerce](actions/customer-group/commerce/updated/README.md)
-- [Customer group deleted in commerce](actions/customer-group/commerce/deleted/README.md)
+- [Customer group updated in commerce](actions/customer/commerce/group/updated/README.md)
+- [Customer group deleted in commerce](actions/customer/commerce/group/deleted/README.md)
 
 ### Order entity
 #### Commerce to third party

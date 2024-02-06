@@ -13,20 +13,14 @@
   "customer": {
     "commerce": [
       "com.adobe.commerce.observer.customer_save_commit_after",
-      "com.adobe.commerce.observer.customer_delete_commit_after"
-    ],
-    "backoffice": [
-      "be-observer.customer_create",
-      "be-observer.customer_update",
-      "be-observer.customer_delete"
-    ]
-  },
-  "customer-group": {
-    "commerce": [
+      "com.adobe.commerce.observer.customer_delete_commit_after",
       "com.adobe.commerce.observer.customer_group_save_commit_after",
       "com.adobe.commerce.observer.customer_group_delete_commit_after"
     ],
     "backoffice": [
+      "be-observer.customer_create",
+      "be-observer.customer_update",
+      "be-observer.customer_delete",
       "be-observer.customer_group_create",
       "be-observer.customer_group_update",
       "be-observer.customer_group_delete"
@@ -37,7 +31,9 @@
       "com.adobe.commerce.observer.sales_order_save_commit_after"
     ],
     "backoffice": [
-      "be-observer.order_status_change"
+      "be-observer.order_status_change",
+      "be-observer.order_shipment_create",
+      "be-observer.order_shipment_update"
     ]
   },
   "stock": {
@@ -47,12 +43,6 @@
     ],
     "backoffice": [
       "be-observer.catalog_stock_update"
-    ]
-  },
-  "shipment": {
-    "backoffice": [
-      "be-observer.order_shipment_create",
-      "be-observer.order_shipment_update"
     ]
   }
 }

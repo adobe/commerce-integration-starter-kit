@@ -45,24 +45,49 @@ async function main (params) {
 
     logger.info(`[Customer][External][Consumer] Params type: ${params.type}`)
     switch (params.type) {
-      case 'be-observer.customer_create':
+      case 'be-observer.customer_create': {
         logger.info('[Customer][External][Consumer] Invoking customer create')
-        const createRes = await openwhiskClient.invokeAction('customer-backoffice/created', params.data)
+        const createRes = await openwhiskClient.invokeAction(
+          'customer-backoffice/created', params.data)
         response = createRes?.response?.result?.body
         statusCode = createRes?.response?.result?.statusCode
         break
-      case 'be-observer.customer_update':
+      }
+      case 'be-observer.customer_update': {
         logger.info('[Customer][External][Consumer] Invoking customer update')
         const updateRes = await openwhiskClient.invokeAction('customer-backoffice/updated', params.data)
         response = updateRes?.response?.result?.body
         statusCode = updateRes?.response?.result?.statusCode
         break
-      case 'be-observer.customer_delete':
+      }
+      case 'be-observer.customer_delete': {
         logger.info('[Customer][External][Consumer] Invoking customer delete')
         const deleteRes = await openwhiskClient.invokeAction('customer-backoffice/deleted', params.data)
         response = deleteRes?.response?.result?.body
         statusCode = deleteRes?.response?.result?.statusCode
         break
+      }
+      case 'be-observer.customer_group_create': {
+        logger.info('[CustomerGroup][External][Consumer] Invoking customer group create')
+        const createRes = await openwhiskClient.invokeAction('customer-backoffice/group-created', params.data)
+        response = createRes?.response?.result?.body
+        statusCode = createRes?.response?.result?.statusCode
+        break
+      }
+      case 'be-observer.customer_group_update': {
+        logger.info('[CustomerGroup][External][Consumer] Invoking customer group update')
+        const updateRes = await openwhiskClient.invokeAction('customer-backoffice/group-updated', params.data)
+        response = updateRes?.response?.result?.body
+        statusCode = updateRes?.response?.result?.statusCode
+        break
+      }
+      case 'be-observer.customer_group_delete': {
+        logger.info('[CustomerGroup][External][Consumer] Invoking customer group delete')
+        const deleteRes = await openwhiskClient.invokeAction('customer-backoffice/group-deleted', params.data)
+        response = deleteRes?.response?.result?.body
+        statusCode = deleteRes?.response?.result?.statusCode
+        break
+      }
       default:
         logger.error(`[Customer][External][Consumer] type not found: ${params.type}`)
         response = `This case type is not supported: ${params.type}`
