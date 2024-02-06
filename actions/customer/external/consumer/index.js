@@ -68,21 +68,21 @@ async function main (params) {
         break
       }
       case 'be-observer.customer_group_create': {
-        logger.info('[CustomerGroup][External][Consumer] Invoking customer group create')
+        logger.info('[Customer][External][Consumer] Invoking customer group create')
         const createRes = await openwhiskClient.invokeAction('customer-backoffice/group-created', params.data)
         response = createRes?.response?.result?.body
         statusCode = createRes?.response?.result?.statusCode
         break
       }
       case 'be-observer.customer_group_update': {
-        logger.info('[CustomerGroup][External][Consumer] Invoking customer group update')
+        logger.info('[Customer][External][Consumer] Invoking customer group update')
         const updateRes = await openwhiskClient.invokeAction('customer-backoffice/group-updated', params.data)
         response = updateRes?.response?.result?.body
         statusCode = updateRes?.response?.result?.statusCode
         break
       }
       case 'be-observer.customer_group_delete': {
-        logger.info('[CustomerGroup][External][Consumer] Invoking customer group delete')
+        logger.info('[Customer][External][Consumer] Invoking customer group delete')
         const deleteRes = await openwhiskClient.invokeAction('customer-backoffice/group-deleted', params.data)
         response = deleteRes?.response?.result?.body
         statusCode = deleteRes?.response?.result?.statusCode
