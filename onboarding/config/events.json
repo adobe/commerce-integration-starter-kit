@@ -13,16 +13,7 @@
   "customer": {
     "commerce": [
       "com.adobe.commerce.observer.customer_save_commit_after",
-      "com.adobe.commerce.observer.customer_delete_commit_after"
-    ],
-    "backoffice": [
-      "be-observer.customer_create",
-      "be-observer.customer_update",
-      "be-observer.customer_delete"
-    ]
-  },
-  "customer-group": {
-    "commerce": [
+      "com.adobe.commerce.observer.customer_delete_commit_after",
       "com.adobe.commerce.observer.customer_group_save_commit_after",
       "com.adobe.commerce.observer.customer_group_delete_commit_after"
     ],

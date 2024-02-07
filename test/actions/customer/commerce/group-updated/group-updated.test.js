@@ -12,11 +12,11 @@
  * from Adobe.
  */
 
-const action = require('../../../../../../actions/customer/commerce/group/deleted')
+const action = require('../../../../../actions/customer/commerce/group-updated')
 
-describe('Customer group commerce deleted', () => {
+describe('Customer group commerce updated', () => {
   test('main should be defined', () => {
     expect(action.main).toBeInstanceOf(Function)
   })
-  // @TODO Here you can add unit tests to cover the cases implemented in the customer deleted runtime action
+  // @TODO Here you can add unit tests to cover the cases implemented in the customer updated runtime action
 })
