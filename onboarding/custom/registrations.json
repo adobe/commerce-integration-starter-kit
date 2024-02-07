@@ -3,6 +3,6 @@
   "customer": ["commerce", "backoffice"],
   "customer-group": ["commerce", "backoffice"],
   "order": ["commerce", "backoffice"],
-  "stock": [],
+  "stock": ["commerce"],
   "shipment": []
 }

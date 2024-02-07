@@ -37,3 +37,7 @@ application:
         license: Apache-2.0
         actions:
           $include: ./actions/order/external/actions.config.yaml
+      stock-commerce:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/stock/commerce/actions.config.yaml
