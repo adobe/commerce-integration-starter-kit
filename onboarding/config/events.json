@@ -36,8 +36,7 @@
   },
   "stock": {
     "commerce": [
-      "com.adobe.commerce.plugin.magento.catalog_inventory.model.resource_model.stock.save",
-      "com.adobe.commerce.plugin.magento.catalog_inventory.model.resource_model.stock.status.save"
+      "com.adobe.commerce.observer.cataloginventory_stock_item_save_commit_after"
     ],
     "backoffice": [
       "be-observer.catalog_stock_update"

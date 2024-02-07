@@ -144,3 +144,7 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 #### Commerce to third party
 - [Order created in commerce](actions/order/commerce/created/README.md)
 - [Order updated in commerce](actions/order/commerce/updated/README.md)
+
+### Stock entity
+#### Commerce to third party
+- [Stock updated in commerce](actions/stock/commerce/updated/README.md)
