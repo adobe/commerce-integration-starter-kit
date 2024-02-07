@@ -13,7 +13,7 @@
  */
 
 const { Core } = require('@adobe/aio-sdk')
-const { deleteCustomerGroup } = require('../../../commerceCustomerGroupApiClient')
+const { deleteCustomerGroup } = require('../../commerceCustomerGroupApiClient')
 
 /**
  * This function send the customer group deleted data to the Adobe commerce REST API

@@ -13,10 +13,10 @@
  */
 
 const { Core } = require('@adobe/aio-sdk')
-const { createCustomerGroup } = require('../../../commerceCustomerGroupApiClient')
+const { updateCustomerGroup } = require('../../commerceCustomerGroupApiClient')
 
 /**
- * This function send the customer group created data to the Adobe commerce REST API
+ * This function send the customer group updated data to the Adobe commerce REST API
  *
  * @returns {object} - returns the result data of sending information to Adobe commerce
  * @param {object} params - include the env params
@@ -27,7 +27,7 @@ const { createCustomerGroup } = require('../../../commerceCustomerGroupApiClient
 async function sendData (params, transformed, preProcessed) {
   const logger = Core.Logger('sendData', { level: params.LOG_LEVEL || 'info' })
 
-  return await createCustomerGroup(
+  return await updateCustomerGroup(
     params.COMMERCE_BASE_URL,
     params.COMMERCE_CONSUMER_KEY,
     params.COMMERCE_CONSUMER_SECRET,

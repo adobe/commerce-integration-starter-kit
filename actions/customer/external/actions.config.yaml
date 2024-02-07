@@ -50,7 +50,7 @@ deleted:
     require-adobe-auth: true
     final: true
 group-created:
-  function: group/created/index.js
+  function: group-created/index.js
   web: 'no'
   runtime: nodejs:16
   inputs:
@@ -64,7 +64,7 @@ group-created:
     require-adobe-auth: true
     final: true
 group-updated:
-  function: group/updated/index.js
+  function: group-updated/index.js
   web: 'no'
   runtime: nodejs:16
   inputs:
@@ -78,7 +78,7 @@ group-updated:
     require-adobe-auth: true
     final: true
 group-deleted:
-  function: group/deleted/index.js
+  function: group-deleted/index.js
   web: 'no'
   runtime: nodejs:16
   inputs:

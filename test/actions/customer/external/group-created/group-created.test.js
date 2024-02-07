@@ -12,14 +12,14 @@
  * from Adobe.
  */
 
-jest.mock('../../../../../../actions/customer/external/group/created/validator')
-const { validateData } = require('../../../../../../actions/customer/external/group/created/validator')
+jest.mock('../../../../../actions/customer/external/group-created/validator')
+const { validateData } = require('../../../../../actions/customer/external/group-created/validator')
 
-jest.mock('../../../../../../actions/customer/external/group/created/sender')
-const { sendData } = require('../../../../../../actions/customer/external/group/created/sender')
+jest.mock('../../../../../actions/customer/external/group-created/sender')
+const { sendData } = require('../../../../../actions/customer/external/group-created/sender')
 
-const action = require('../../../../../../actions/customer/external/group/created')
-const { HTTP_BAD_REQUEST, HTTP_UNAUTHORIZED, HTTP_INTERNAL_ERROR, HTTP_OK } = require('../../../../../../actions/constants')
+const action = require('../../../../../actions/customer/external/group-created')
+const { HTTP_BAD_REQUEST, HTTP_UNAUTHORIZED, HTTP_INTERNAL_ERROR, HTTP_OK } = require('../../../../../actions/constants')
 const { HTTPError } = require('got')
 
 /**

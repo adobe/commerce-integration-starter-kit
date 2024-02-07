@@ -12,20 +12,20 @@
  * from Adobe.
  */
 
-jest.mock('../../../../../../actions/customer/commerceCustomerGroupApiClient')
-const { deleteCustomerGroup } = require('../../../../../../actions/customer/commerceCustomerGroupApiClient')
+jest.mock('../../../../../actions/customer/commerceCustomerGroupApiClient')
+const { createCustomerGroup } = require('../../../../../actions/customer/commerceCustomerGroupApiClient')
 
-const sender = require('../../../../../../actions/customer/external/group/deleted/sender')
+const sender = require('../../../../../actions/customer/external/group-created/sender')
 
-describe('Customer Group external deleted sender', () => {
+describe('Customer Group external created sender', () => {
   test('sendData should be defined', () => {
     expect(sender.sendData).toBeInstanceOf(Function)
   })
-  test('calls delete customer group', async () => {
+  test('calls create customer group', async () => {
     const params = {}
     const transformed = {}
     const preprocess = {}
     await sender.sendData(params, transformed, preprocess)
-    expect(deleteCustomerGroup).toHaveBeenCalled()
+    expect(createCustomerGroup).toHaveBeenCalled()
   })
 })

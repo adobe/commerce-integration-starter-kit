@@ -12,14 +12,14 @@
  * from Adobe.
  */
 
-jest.mock('../../../../../../actions/customer/external/group/updated/validator')
-const { validateData } = require('../../../../../../actions/customer/external/group/updated/validator')
+jest.mock('../../../../../actions/customer/external/group-deleted/validator')
+const { validateData } = require('../../../../../actions/customer/external/group-deleted/validator')
 
-jest.mock('../../../../../../actions/customer/external/group/updated/sender')
-const { sendData } = require('../../../../../../actions/customer/external/group/updated/sender')
+jest.mock('../../../../../actions/customer/external/group-deleted/sender')
+const { sendData } = require('../../../../../actions/customer/external/group-deleted/sender')
 
-const action = require('../../../../../../actions/customer/external/group/updated')
-const { HTTP_BAD_REQUEST, HTTP_UNAUTHORIZED, HTTP_INTERNAL_ERROR, HTTP_OK } = require('../../../../../../actions/constants')
+const action = require('../../../../../actions/customer/external/group-deleted')
+const { HTTP_BAD_REQUEST, HTTP_UNAUTHORIZED, HTTP_INTERNAL_ERROR, HTTP_OK } = require('../../../../../actions/constants')
 const { HTTPError } = require('got')
 
 /**
@@ -37,7 +37,7 @@ function buildHttpError (statusCode, statusMessage) {
   return httpError
 }
 
-describe('Customer Group external updated', () => {
+describe('Customer Group external deleted', () => {
   test('main should be defined', () => {
     expect(action.main).toBeInstanceOf(Function)
   })

@@ -12,22 +12,22 @@
  * from Adobe.
  */
 
-const validator = require('../../../../../../actions/customer/external/group/updated/validator')
+const validator = require('../../../../../actions/customer/external/group-created/validator')
 
-describe('Customer Group external updated validator', () => {
+describe('Customer Group external created validator', () => {
   test('validateData should be defined', () => {
     expect(validator.validateData).toBeInstanceOf(Function)
   })
   it.each([
-    [{ data: { id: 8, name: 'NAME', taxClassId: 99 } }], // required properties
-    [{ data: { id: 8, name: 'NAME', taxClassId: 99, description: 'DESC' } }] // additional properties
+    [{ data: { name: 'NAME', taxClassId: 99 } }], // required properties
+    [{ data: { name: 'NAME', taxClassId: 99, extra: 'EXTRA' } }] // additional properties
   ])('When data is valid e.g. %o, Then returns successful response', (params) => {
     const SUCCESSFUL_RESPONSE = { success: true }
     expect(validator.validateData(params)).toMatchObject(SUCCESSFUL_RESPONSE)
   })
   it.each([
-    [{ data: { id: 8, name: 'NAME' } }], // missing required properties
-    [{ data: { id: '8', name: 'NAME', taxClassId: 99 } }] // wrong type property
+    [{ data: { name: 'NAME' } }], // missing required properties
+    [{ data: { name: 'NAME', taxClassId: 'TAX_CLASS_ID' } }] // wrong type property
   ])('When data is invalid e.g. %o, Then returns not successful response', (params) => {
     const UNSUCCESSFUL_RESPONSE = { success: false }
     expect(validator.validateData(params)).toMatchObject(UNSUCCESSFUL_RESPONSE)

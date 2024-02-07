@@ -12,7 +12,7 @@
  * from Adobe.
  */
 
-const validator = require('../../../../../../actions/customer/external/group/deleted/validator')
+const validator = require('../../../../../actions/customer/external/group-deleted/validator')
 
 describe('Customer Group external deleted validator', () => {
   test('validateData should be defined', () => {

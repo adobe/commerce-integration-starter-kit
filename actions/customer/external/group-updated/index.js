@@ -13,16 +13,16 @@
  */
 
 const { Core } = require('@adobe/aio-sdk')
-const { stringParameters } = require('../../../../utils')
+const { stringParameters } = require('../../../utils')
 const { transformData } = require('./transformer')
 const { sendData } = require('./sender')
-const { HTTP_OK, HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../../constants')
+const { HTTP_OK, HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../constants')
 const { validateData } = require('./validator')
 const { preProcess } = require('./pre')
 const { postProcess } = require('./post')
 
 /**
- * This action is on charge of sending deleted customer group information in external back-office application to Adobe commerce
+ * This action is on charge of sending updated customer group information in external back-office application to Adobe commerce
  *
  * @returns {object} returns response object with status code, request data received and response of the invoked action
  * @param {object} params - includes the env params, type and the data of the event
@@ -30,11 +30,11 @@ const { postProcess } = require('./post')
 async function main (params) {
   const logger = Core.Logger('main', { level: params.LOG_LEVEL || 'info' })
 
-  logger.info('[CustomerGroup][External][Deleted] Start processing request')
-  logger.debug(`[CustomerGroup][External][Deleted] Action main params: ${stringParameters(params)}`)
+  logger.info('[CustomerGroup][External][Updated] Start processing request')
+  logger.debug(`[CustomerGroup][External][Updated] Action main params: ${stringParameters(params)}`)
 
   try {
-    logger.debug(`[CustomerGroup][External][Deleted] Validate data: ${JSON.stringify(params.data)}`)
+    logger.debug(`[CustomerGroup][External][Updated] Validate data: ${JSON.stringify(params.data)}`)
     const validation = validateData(params)
     if (!validation.success) {
       return {
@@ -46,19 +46,19 @@ async function main (params) {
       }
     }
 
-    logger.debug(`[CustomerGroup][External][Deleted] Transform data: ${JSON.stringify(params)}`)
+    logger.debug(`[CustomerGroup][External][Updated] Transform data: ${JSON.stringify(params)}`)
     const transformed = transformData(params)
 
-    logger.debug(`[CustomerGroup][External][Deleted] Preprocess data: ${JSON.stringify(params)}`)
+    logger.debug(`[CustomerGroup][External][Updated] Preprocess data: ${JSON.stringify(params)}`)
     const preProcessed = preProcess(params, transformed)
 
-    logger.debug(`[CustomerGroup][External][Deleted] Start sending data: ${JSON.stringify(transformed)}`)
+    logger.debug(`[CustomerGroup][External][Updated] Start sending data: ${JSON.stringify(transformed)}`)
     const result = await sendData(params, transformed, preProcessed)
 
-    logger.debug(`[CustomerGroup][External][Deleted] Postprocess data: ${JSON.stringify(params)}`)
+    logger.debug(`[CustomerGroup][External][Updated] Postprocess data: ${JSON.stringify(params)}`)
     const postProcessed = postProcess(params, transformed, preProcessed, result)
 
-    logger.debug('[CustomerGroup][External][Deleted] Process finished successfully')
+    logger.debug('[CustomerGroup][External][Updated] Process finished successfully')
     return {
       statusCode: HTTP_OK,
       body: {
@@ -66,7 +66,7 @@ async function main (params) {
       }
     }
   } catch (error) {
-    logger.error(`[CustomerGroup][External][Deleted] Error processing the request: ${error}`)
+    logger.error(`[CustomerGroup][External][Updated] Error processing the request: ${error}`)
     return {
       statusCode: error.response?.statusCode || HTTP_INTERNAL_ERROR,
       body: {
