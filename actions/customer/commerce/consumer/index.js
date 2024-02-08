@@ -34,38 +34,79 @@ async function main (params) {
     logger.info('[Customer][Commerce][Consumer] Start processing request')
     logger.debug(`[Customer][Commerce][Consumer] Consumer main params: ${stringParameters(params)}`)
 
-    const requiredParams = ['type', 'data.value.created_at', 'data.value.updated_at']
+    const requiredParams = ['type']
     const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
 
     if (errorMessage) {
-      logger.error(`[Customer][Commerce][Consumer] Invalid request parameters: ${stringParameters(params)}`)
-      return errorResponse(HTTP_BAD_REQUEST, errorMessage, logger)
+      return errorResponse(HTTP_BAD_REQUEST, `[Customer][Commerce][Consumer] ${errorMessage}`, logger)
     }
 
     logger.info('[Consumer][Commerce][Consumer] Params type: ' + params.type)
 
     switch (params.type) {
-      case 'com.adobe.commerce.observer.customer_save_commit_after':
+      case 'com.adobe.commerce.observer.customer_save_commit_after': {
+        const requiredParams = [
+          'data.value.created_at',
+          'data.value.updated_at']
+        const errorMessage = checkMissingRequestInputs(params, requiredParams,
+          [])
+        if (errorMessage) {
+          return errorResponse(HTTP_BAD_REQUEST,
+              `[Customer][Commerce][Consumer] ${errorMessage}`, logger)
+        }
+
         const createdAt = Date.parse(params.data.value.created_at)
         const updatedAt = Date.parse(params.data.value.updated_at)
         if (createdAt === updatedAt) {
-          logger.info('[Customer][Commerce][Consumer] Invoking created customer')
-          const res = await openwhiskClient.invokeAction('customer-commerce/created', params.data.value)
+          logger.info(
+            '[Customer][Commerce][Consumer] Invoking created customer')
+          const res = await openwhiskClient.invokeAction(
+            'customer-commerce/created', params.data.value)
           response = res?.response?.result?.body
           statusCode = res?.response?.result?.statusCode
         } else {
           logger.info('[Customer][Commerce][Consumer] Invoking update customer')
-          const res = await openwhiskClient.invokeAction('customer-commerce/updated', params.data.value)
+          const res = await openwhiskClient.invokeAction(
+            'customer-commerce/updated', params.data.value)
           response = res?.response?.result?.body
           statusCode = res?.response?.result?.statusCode
         }
         break
-      case 'com.adobe.commerce.observer.customer_delete_commit_after':
+      }
+      case 'com.adobe.commerce.observer.customer_delete_commit_after': {
         logger.info('[Customer][Commerce][Consumer] Invoking delete customer')
-        const res = await openwhiskClient.invokeAction('customer-commerce/deleted', params.data.value)
+        const res = await openwhiskClient.invokeAction(
+          'customer-commerce/deleted', params.data.value)
         response = res?.response?.result?.body
         statusCode = res?.response?.result?.statusCode
         break
+      }
+      case 'com.adobe.commerce.observer.customer_group_save_commit_after': {
+        logger.info(
+          '[Customer][Commerce][Consumer] Invoking update customer group')
+        const updateRes = await openwhiskClient.invokeAction(
+          'customer-commerce/group-updated', params.data.value)
+        response = updateRes?.response?.result?.body
+        statusCode = updateRes?.response?.result?.statusCode
+        break
+      }
+      case 'com.adobe.commerce.observer.customer_group_delete_commit_after': {
+        const requiredParams = [
+          'data.value.customer_group_code']
+        const errorMessage = checkMissingRequestInputs(params, requiredParams,
+          [])
+        if (errorMessage) {
+          return errorResponse(HTTP_BAD_REQUEST,
+              `[Customer][Commerce][Consumer] ${errorMessage}`, logger)
+        }
+        logger.info(
+          '[Customer][Commerce][Consumer] Invoking delete customer group')
+        const deleteRes = await openwhiskClient.invokeAction(
+          'customer-commerce/group-deleted', params.data.value)
+        response = deleteRes?.response?.result?.body
+        statusCode = deleteRes?.response?.result?.statusCode
+        break
+      }
       default:
         logger.error(`[Customer][Commerce][Consumer] type not found: ${params.type}`)
         response = `This case type is not supported: ${params.type}`

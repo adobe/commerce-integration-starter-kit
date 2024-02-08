@@ -1,8 +1,6 @@
 {
   "product": ["commerce", "backoffice"],
   "customer": ["commerce", "backoffice"],
-  "customer-group": ["commerce", "backoffice"],
   "order": ["commerce", "backoffice"],
-  "stock": ["commerce"],
-  "shipment": []
+  "stock": ["commerce"]
 }

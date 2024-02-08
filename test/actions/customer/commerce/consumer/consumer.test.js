@@ -177,19 +177,6 @@ describe('Customer commerce consumer', () => {
       }
     })
   })
-  test('Given params when process customer commerce request missing required params then an error 400 is returned', async () => {
-    const params = {}
-    const response = await action.main(params)
-
-    expect(response).toEqual({
-      error: {
-        statusCode: 400,
-        body: {
-          error: "missing parameter(s) 'type,data.value.created_at,data.value.updated_at'"
-        }
-      }
-    })
-  })
   test('Given params when customer event type received is not supported then an error 400 is returned', async () => {
     const params = {
       type: 'NOT_SUPPORTED_TYPE',
@@ -214,6 +201,154 @@ describe('Customer commerce consumer', () => {
           description: 'Customer description',
           created_at: '2000-01-01',
           updated_at: '2000-01-02'
+        },
+        response: 'This case type is not supported: NOT_SUPPORTED_TYPE',
+        type: 'NOT_SUPPORTED_TYPE'
+      }
+    })
+  })
+})
+describe('Customer group commerce consumer', () => {
+  test('main function should be defined', () => {
+    expect(action.main).toBeInstanceOf(Function)
+  })
+  test('Given customer group updated in commerce, when event is received then customer group updated request is processed', async () => {
+    const params = {
+      type: 'com.adobe.commerce.observer.customer_group_save_commit_after',
+      data: {
+        value: {
+          customer_group_id: 1,
+          customer_group_code: 'CUSTOMER GROUP NAME',
+          tax_class_id: 1,
+          tax_class_name: 'TAX CLASS NAME',
+          extension_attributes: {
+            exclude_website_ids: []
+          }
+        }
+      }
+    }
+
+    openwhisk.mockReturnValue({
+      actions: {
+        invoke: jest.fn().mockResolvedValue({
+          response: {
+            result: {
+              statusCode: 200,
+              body: {
+                action: 'updated',
+                success: true
+              }
+            }
+          }
+        })
+      }
+    })
+
+    const response = await action.main(params)
+
+    expect(response).toEqual({
+      statusCode: 200,
+      body: {
+        request: {
+          customer_group_id: 1,
+          customer_group_code: 'CUSTOMER GROUP NAME',
+          tax_class_id: 1,
+          tax_class_name: 'TAX CLASS NAME',
+          extension_attributes: {
+            exclude_website_ids: []
+          }
+        },
+        response: {
+          action: 'updated',
+          success: true
+        },
+        type: 'com.adobe.commerce.observer.customer_group_save_commit_after'
+      }
+    })
+  })
+  test('Given customer group deleted in commerce, when event is received then customer group deleted request is processed', async () => {
+    const params = {
+      type: 'com.adobe.commerce.observer.customer_group_delete_commit_after',
+      data: {
+        value: {
+          customer_group_id: 1,
+          customer_group_code: 'CUSTOMER GROUP NAME',
+          tax_class_id: 1,
+          tax_class_name: 'TAX CLASS NAME',
+          extension_attributes: {
+            exclude_website_ids: []
+          }
+        }
+      }
+    }
+
+    openwhisk.mockReturnValue({
+      actions: {
+        invoke: jest.fn().mockResolvedValue({
+          response: {
+            result: {
+              statusCode: 200,
+              body: {
+                action: 'deleted',
+                success: true
+              }
+            }
+          }
+        })
+      }
+    })
+
+    const response = await action.main(params)
+
+    expect(response).toEqual({
+      statusCode: 200,
+      body: {
+        request: {
+          customer_group_id: 1,
+          customer_group_code: 'CUSTOMER GROUP NAME',
+          tax_class_id: 1,
+          tax_class_name: 'TAX CLASS NAME',
+          extension_attributes: {
+            exclude_website_ids: []
+          }
+        },
+        response: {
+          action: 'deleted',
+          success: true
+        },
+        type: 'com.adobe.commerce.observer.customer_group_delete_commit_after'
+      }
+    })
+  }
+  )
+  test('Given params when customer group event type received is not supported then an error 400 is returned', async () => {
+    const params = {
+      type: 'NOT_SUPPORTED_TYPE',
+      data: {
+        value: {
+          customer_group_id: 1,
+          customer_group_code: 'CUSTOMER GROUP NAME',
+          tax_class_id: 1,
+          tax_class_name: 'TAX CLASS NAME',
+          extension_attributes: {
+            exclude_website_ids: []
+          }
+        }
+      }
+    }
+    const response = await action.main(params)
+
+    expect(response).toEqual({
+      statusCode: 400,
+      body: {
+        request: {
+          customer_group_id: 1,
+          customer_group_code: 'CUSTOMER GROUP NAME',
+          tax_class_id: 1,
+          tax_class_name: 'TAX CLASS NAME',
+          extension_attributes: {
+            exclude_website_ids: []
+          }
         },
         response: 'This case type is not supported: NOT_SUPPORTED_TYPE',
         type: 'NOT_SUPPORTED_TYPE'

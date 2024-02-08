@@ -1114,7 +1114,7 @@ describe('On-boarding providers', () => {
     expect(response).toEqual({
       code: 400,
       success: false,
-      error: "missing parameter(s) 'customer,shipment'"
+      error: "missing parameter(s) 'customer'"
 
     })
   })
