@@ -177,24 +177,6 @@ describe('Customer commerce consumer', () => {
       }
     })
   })
-  test('Given params when process customer commerce request missing required params then an error 400 is returned', async () => {
-    const params = {
-      type: 'com.adobe.commerce.observer.customer_delete_commit_after',
-      data: {
-        value: {}
-      }
-    }
-    const response = await action.main(params)
-
-    expect(response).toEqual({
-      error: {
-        statusCode: 400,
-        body: {
-          error: "[Customer][Commerce][Consumer] missing parameter(s) 'data.value.created_at,data.value.updated_at'"
-        }
-      }
-    })
-  })
   test('Given params when customer event type received is not supported then an error 400 is returned', async () => {
     const params = {
       type: 'NOT_SUPPORTED_TYPE',
@@ -339,24 +321,6 @@ describe('Customer group commerce consumer', () => {
     })
   }
   )
-  test('Given params when process customer group commerce request missing customer group code parameter then an error 400 is returned', async () => {
-    const params = {
-      type: 'com.adobe.commerce.observer.customer_group_delete_commit_after',
-      data: {
-        value: {}
-      }
-    }
-    const response = await action.main(params)
-
-    expect(response).toEqual({
-      error: {
-        statusCode: 400,
-        body: {
-          error: "[Customer][Commerce][Consumer] missing parameter(s) 'data.value.customer_group_code'"
-        }
-      }
-    })
-  })
   test('Given params when customer group event type received is not supported then an error 400 is returned', async () => {
     const params = {
       type: 'NOT_SUPPORTED_TYPE',

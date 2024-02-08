@@ -12,10 +12,10 @@
  * from Adobe.
  */
 const { Core } = require('@adobe/aio-sdk')
-const { stringParameters } = require('../../../utils')
+const { stringParameters, checkMissingRequestInputs, errorResponse } = require('../../../utils')
 const { transformData } = require('./transformer')
 const { sendData } = require('./sender')
-const { HTTP_OK, HTTP_INTERNAL_ERROR } = require('../../../constants')
+const { HTTP_OK, HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../constants')
 const { validateData } = require('./validator')
 
 /**
@@ -31,6 +31,12 @@ async function main (params) {
   logger.debug(`[CustomerGroup][Commerce][Updated] Consumer main params: ${stringParameters(params)}`)
 
   try {
+    const requiredParams = ['data.customer_group_code']
+    const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
+    if (errorMessage) {
+      return errorResponse(HTTP_BAD_REQUEST, `[Customer][Commerce][Updated] ${errorMessage}`, logger)
+    }
+
     logger.debug(`[CustomerGroup][Commerce][Updated] Validate data: ${JSON.stringify(params.data)}`)
     validateData(params.data)
 

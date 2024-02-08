@@ -74,15 +74,6 @@ async function main (params) {
         break
       }
       case 'com.adobe.commerce.observer.customer_delete_commit_after': {
-        const requiredParams = [
-          'data.value.created_at',
-          'data.value.updated_at']
-        const errorMessage = checkMissingRequestInputs(params, requiredParams,
-          [])
-        if (errorMessage) {
-          return errorResponse(HTTP_BAD_REQUEST,
-              `[Customer][Commerce][Consumer] ${errorMessage}`, logger)
-        }
         logger.info('[Customer][Commerce][Consumer] Invoking delete customer')
         const res = await openwhiskClient.invokeAction(
           'customer-commerce/deleted', params.data.value)
@@ -91,14 +82,6 @@ async function main (params) {
         break
       }
       case 'com.adobe.commerce.observer.customer_group_save_commit_after': {
-        const requiredParams = [
-          'data.value.customer_group_code']
-        const errorMessage = checkMissingRequestInputs(params, requiredParams,
-          [])
-        if (errorMessage) {
-          return errorResponse(HTTP_BAD_REQUEST,
-              `[Customer][Commerce][Consumer] ${errorMessage}`, logger)
-        }
         logger.info(
           '[Customer][Commerce][Consumer] Invoking update customer group')
         const updateRes = await openwhiskClient.invokeAction(

@@ -18,5 +18,24 @@ describe('Customer group commerce updated', () => {
   test('main should be defined', () => {
     expect(action.main).toBeInstanceOf(Function)
   })
+  describe('When process customer group commerce request missing customer group code parameter', () => {
+    test('Then an error 400 is returned',
+      async () => {
+        const params = {
+          data: {}
+        }
+        const response = await action.main(params)
+
+        expect(response).toEqual({
+          error: {
+            statusCode: 400,
+            body: {
+              error: "[Customer][Commerce][Updated] missing parameter(s) 'data.customer_group_code'"
+            }
+          }
+        })
+      })
+  })
+
   // @TODO Here you can add unit tests to cover the cases implemented in the customer updated runtime action
 })

@@ -64,7 +64,7 @@ group-updated:
 Any postprocessing needed after calling the Adobe Commerce API can be implemented in the `postProcess` function in the `post.js` file.
 
 # Response expected
-The runtime action must respond to 400 if the validation fails. It will prevent the message processing from being retried by Adobe I/O.
+The runtime action must respond with 400 if the validation fails. It will prevent the message processing from being retried by Adobe I/O.
 ```javascript
 return {
     statusCode: 400,
@@ -72,7 +72,7 @@ return {
 }
 ```
 
-The runtime action must respond to 500 in case of an unexpected error while processing the request.
+The runtime action must respond with 500 in case of an unexpected error while processing the request.
 ```javascript
 return {
     statusCode: 500,
