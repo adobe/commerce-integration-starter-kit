@@ -26,6 +26,9 @@ There is other interesting information that you can access in params, like the e
 Please proceed with any data transformation required for the information required format in the external back-office application in the extension module.
 That transformation is defined in the `transformData` function in the `transformer.js` file.
 
+## Preprocess data
+Any preprocessing needed before calling the external backoffice application API can be implemented in the `preProcess` function in the `pre.js` file.
+
 ## Connect with the external back-office application
 The connection with the third party is defined in the `sendData` function in the `sender.js` file.
 Please include all the authentication and connection login on that `sender.js` file or an extracted file outside index.js.
@@ -42,6 +45,9 @@ created:
     require-adobe-auth: true
     final: true
 ```
+
+## Postprocess data
+Any postprocessing needed after calling the external backoffice application API can be implemented in the `postProcess` function in the `post.js` file.
 
 # Response expected
 That runtime action must respond to 500 in case of an error with the external back-office application integration. Please send an array of errors so the consumer can log it and trigger the retry mechanism.
