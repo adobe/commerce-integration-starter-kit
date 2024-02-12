@@ -16,12 +16,16 @@
  *
  * @param {object} params - include the env params
  * @param {object} data - Product data
+ * @param {object} preProcessed - result of the pre-process logic if any
+ * @returns {object} returns the sending result if needed for post process
  * @throws {Error} - throws exception in case the process fail.
  */
-function sendData (params, data) {
+async function sendData (params, data, preProcessed) {
   // @TODO Here add the logic to send the information to 3rd party
-  // @TODO Use params to retrieve need parameters from the environment
+  // @TODO Use params to retrieve needed parameters from the environment
   // @TODO throw exception in case of error
+
+  return {}
 }
 
 module.exports = {
