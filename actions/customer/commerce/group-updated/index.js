@@ -17,6 +17,8 @@ const { transformData } = require('./transformer')
 const { sendData } = require('./sender')
 const { HTTP_OK, HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../constants')
 const { validateData } = require('./validator')
+const { postProcess } = require('../../external/created/post')
+const { preProcess } = require('../../external/created/pre')
 
 /**
  * This action is on charge of sending updated customer group information in Adobe commerce to external back-office application
@@ -41,11 +43,16 @@ async function main (params) {
     validateData(params.data)
 
     logger.debug(`[CustomerGroup][Commerce][Updated] Transform data: ${JSON.stringify(params.data)}`)
+    const transformedData = transformData(params.data)
 
-    const data = transformData(params.data)
+    logger.debug(`[CustomerGroup][Commerce][Updated] Preprocess data: ${JSON.stringify(params)}`)
+    const preProcessed = preProcess(params, transformedData)
 
-    logger.debug(`[CustomerGroup][Commerce][Updated] Start sending data: ${JSON.stringify(data)}`)
-    await sendData(params, data)
+    logger.debug(`[CustomerGroup][Commerce][Updated] Start sending data: ${JSON.stringify(params)}`)
+    const result = await sendData(params, transformedData, preProcessed)
+
+    logger.debug(`[CustomerGroup][Commerce][Updated] Postprocess data: ${JSON.stringify(params)}`)
+    const postProcessed = postProcess(params, transformedData, preProcessed, result)
 
     logger.debug('[CustomerGroup][Commerce][Updated] Process finished successfully')
     return {
