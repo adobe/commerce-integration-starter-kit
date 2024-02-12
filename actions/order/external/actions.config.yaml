@@ -21,3 +21,31 @@ updated:
   annotations:
     require-adobe-auth: true
     final: true
+shipment-created:
+  function: shipment-created/index.js
+  web: 'no'
+  runtime: nodejs:16
+  inputs:
+    LOG_LEVEL: debug
+    COMMERCE_BASE_URL: $COMMERCE_BASE_URL
+    COMMERCE_CONSUMER_KEY: $COMMERCE_CONSUMER_KEY
+    COMMERCE_CONSUMER_SECRET: $COMMERCE_CONSUMER_SECRET
+    COMMERCE_ACCESS_TOKEN: $COMMERCE_ACCESS_TOKEN
+    COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
+  annotations:
+    require-adobe-auth: true
+    final: true
+shipment-updated:
+  function: shipment-updated/index.js
+  web: 'no'
+  runtime: nodejs:16
+  inputs:
+    LOG_LEVEL: debug
+    COMMERCE_BASE_URL: $COMMERCE_BASE_URL
+    COMMERCE_CONSUMER_KEY: $COMMERCE_CONSUMER_KEY
+    COMMERCE_CONSUMER_SECRET: $COMMERCE_CONSUMER_SECRET
+    COMMERCE_ACCESS_TOKEN: $COMMERCE_ACCESS_TOKEN
+    COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
+  annotations:
+    require-adobe-auth: true
+    final: true

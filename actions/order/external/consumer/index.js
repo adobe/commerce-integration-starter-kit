@@ -32,33 +32,49 @@ async function main (params) {
     let response = {}
     let statusCode = HTTP_OK
 
-    logger.info('[OrderStatus][External][Consumer] Start processing request')
-    logger.debug(`[OrderStatus][External][Consumer] Consumer main params: ${stringParameters(params)}`)
+    logger.info('[Order][External][Consumer] Start processing request')
+    logger.debug(`[Order][External][Consumer] Consumer main params: ${stringParameters(params)}`)
 
     // check for missing request input parameters and headers
     const requiredParams = ['type', 'data']
     const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
 
     if (errorMessage) {
-      return errorResponse(HTTP_BAD_REQUEST, `[OrderStatus][External][Consumer] Invalid request parameters: ${errorMessage}`, logger)
+      return errorResponse(HTTP_BAD_REQUEST, `[Order][External][Consumer] Invalid request parameters: ${errorMessage}`, logger)
     }
 
-    logger.info(`[OrderStatus][External][Consumer] Params type: ${params.type}`)
+    logger.info(`[Order][External][Consumer] Params type: ${params.type}`)
     switch (params.type) {
-      case 'be-observer.sales_order_status_update':
-        logger.info('[OrderStatus][External][Consumer] Invoking order status update')
+      case 'be-observer.sales_order_status_update': {
+        logger.info('[Order][External][Consumer] Invoking order status update')
         const updateRes = await openwhiskClient.invokeAction('order-backoffice/updated', params.data)
         response = updateRes?.response?.result?.body
         statusCode = updateRes?.response?.result?.statusCode
         break
-      default:
-        logger.error(`[OrderStatus][External][Consumer] type not found: ${params.type}`)
+      }
+      case 'be-observer.sales_order_shipment_create': {
+        logger.info('[Order][External][Consumer] Invoking shipment create')
+        const updateRes = await openwhiskClient.invokeAction('order-backoffice/shipment-created', params.data)
+        response = updateRes?.response?.result?.body
+        statusCode = updateRes?.response?.result?.statusCode
+        break
+      }
+      case 'be-observer.sales_order_shipment_update': {
+        logger.info('[Order][External][Consumer] Invoking shipment update')
+        const updateRes = await openwhiskClient.invokeAction('order-backoffice/shipment-updated', params.data)
+        response = updateRes?.response?.result?.body
+        statusCode = updateRes?.response?.result?.statusCode
+        break
+      }
+      default: {
+        logger.error(`[Order][External][Consumer] type not found: ${params.type}`)
         response = `This case type is not supported: ${params.type}`
         statusCode = HTTP_BAD_REQUEST
         break
+      }
     }
 
-    logger.info(`[OrderStatus][External][Consumer] ${statusCode}: successful request`)
+    logger.info(`[Order][External][Consumer] ${statusCode}: successful request`)
     return {
       statusCode,
       body: {
@@ -70,7 +86,7 @@ async function main (params) {
   } catch (error) {
     return errorResponse(
       HTTP_INTERNAL_ERROR,
-            `[OrderStatus][External][Consumer] Server error: ${error.message}`,
+            `[Order][External][Consumer] Server error: ${error.message}`,
             logger)
   }
 }

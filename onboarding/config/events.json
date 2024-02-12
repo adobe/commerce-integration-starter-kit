@@ -31,7 +31,9 @@
       "com.adobe.commerce.observer.sales_order_save_commit_after"
     ],
     "backoffice": [
-      "be-observer.sales_order_status_update"
+      "be-observer.sales_order_status_update",
+      "be-observer.sales_order_shipment_create",
+      "be-observer.sales_order_shipment_update"
     ]
   },
   "stock": {
