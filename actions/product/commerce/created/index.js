@@ -18,6 +18,8 @@ const { transformData } = require('./transformer')
 const { sendData } = require('./sender')
 const { HTTP_OK, HTTP_INTERNAL_ERROR } = require('../../../constants')
 const { validateData } = require('./validator')
+const { preProcess } = require('../../../customer/external/created/pre')
+const { postProcess } = require('../../../customer/external/created/post')
 
 /**
  * This action is on charge of sending created product information in Adobe commerce to external back-office application
@@ -26,25 +28,26 @@ const { validateData } = require('./validator')
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main (params) {
-  // create a Logger
   const logger = Core.Logger('main', { level: params.LOG_LEVEL || 'info' })
 
   logger.info('[Product][Commerce][Created] Start processing request')
-  // log parameters, only if params.LOG_LEVEL === 'debug'
   logger.debug(`[Product][Commerce][Created] Consumer main params: ${stringParameters(params)}`)
 
   try {
-    // validate received data from commerce
     logger.debug(`[Product][Commerce][Created] Validate data: ${JSON.stringify(params.data)}`)
     validateData(params.data)
 
-    // transform received data from commerce
     logger.debug(`[Product][Commerce][Created] Transform data: ${JSON.stringify(params.data)}`)
-    const data = transformData(params.data)
+    const transformedData = transformData(params.data)
 
-    // Send data to 3rd party
-    logger.debug(`[Product][Commerce][Created] Start sending data: ${JSON.stringify(data)}`)
-    sendData(params, data)
+    logger.debug(`[Product][Commerce][Created] Preprocess data: ${JSON.stringify(params)}`)
+    const preProcessed = preProcess(params, transformedData)
+
+    logger.debug(`[Product][Commerce][Created] Start sending data: ${JSON.stringify(params)}`)
+    const result = await sendData(params, transformedData, preProcessed)
+
+    logger.debug(`[Product][Commerce][Created] Postprocess data: ${JSON.stringify(params)}`)
+    const postProcessed = postProcess(params, transformedData, preProcessed, result)
 
     logger.debug('[Product][Commerce][Created] Process finished successfully')
     return {

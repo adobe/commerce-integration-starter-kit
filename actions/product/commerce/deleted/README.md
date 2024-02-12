@@ -20,6 +20,9 @@ There is other interesting information that you can access in params like the ev
 Please proceed with any data transformation required for information required format in the 3rd party in the extension module.
 That transformation is defined in the `transformData` function in the `transformer.js` file.
 
+## Preprocess data
+Any preprocessing needed before calling the external backoffice application API can be implemented in the `preProcess` function in the `pre.js` file.
+
 ## Connect with the 3rd party
 The connection with the third party is defined in the `sendData` function in the `sender.js` file.
 Please include all the authentication and connection login on that `sender.js` file or an extracted file outside index.js.
@@ -36,6 +39,9 @@ commerce-deleted:
     require-adobe-auth: true
     final: true
 ```
+
+## Postprocess data
+Any postprocessing needed after calling the external backoffice application API can be implemented in the `postProcess` function in the `post.js` file.
 
 # Response expected
 That runtime action must respond 500 in case of error with the 3rd party integration. Please send an array of errors for the Consumer is able to log it and the retry mechanism is triggered.
