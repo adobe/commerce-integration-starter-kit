@@ -55,7 +55,7 @@ Deploy the runtimes using command:
 aio app deploy
 ```
 ### Setup eventing
-Edit the onboading file in ./onboarding/custom/registrations.json to create the needed events information, the entities that you don't des-comment previously should stay empty.
+Edit the ./onboarding/custom/registrations.json file to create the needed events information, the entities that you don't des-comment previously should stay empty.
 In case you want to receive events from commerce add 'commerce' to the entity value, for backoffice updates add 'backoffice' as showing:
 ```json
 {
@@ -119,7 +119,7 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 
 ## Development
 ### External back-office ingestion webhook
-- [Ingestion webhook consumer](ingestion/README.md)
+- [Ingestion webhook consumer](actions/ingestion/README.md)
 
 ### Product entity
 #### Commerce to third party
@@ -140,11 +140,25 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 - [Customer group updated in commerce](actions/customer/commerce/group-updated/README.md)
 - [Customer group deleted in commerce](actions/customer/commerce/group-deleted/README.md)
 
+#### Third party to Commerce
+- [Customer created in third party](actions/customer/external/created/README.md)
+- [Customer updated in third party](actions/customer/external/updated/README.md)
+- [Customer deleted in third party](actions/customer/external/deleted/README.md)
+- [Customer group created in third party](actions/customer/external/group-created/README.md)
+- [Customer group updated in third party](actions/customer/external/group-updated/README.md)
+- [Customer group deleted in third party](actions/customer/external/group-deleted/README.md)
+- 
 ### Order entity
 #### Commerce to third party
 - [Order created in commerce](actions/order/commerce/created/README.md)
 - [Order updated in commerce](actions/order/commerce/updated/README.md)
 
+#### Third party to Commerce
+- [Order updated in third party](actions/order/external/updated/README.md)
+
 ### Stock entity
 #### Commerce to third party
 - [Stock updated in commerce](actions/stock/commerce/updated/README.md)
+
+#### Third party to Commerce
+- [Stock updated in third party](actions/stock/external/updated/README.md)
