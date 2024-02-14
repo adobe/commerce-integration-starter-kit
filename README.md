@@ -59,7 +59,7 @@ aio console project select
 aio console workspace select
 ```
 
-Sync your local application with the app builder project using the following command:
+Sync your local application with the App Builder project using the following command:
 ```bash
 aio app use
 # Choose the option 'm' (merge) 
