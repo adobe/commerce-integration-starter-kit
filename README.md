@@ -149,7 +149,7 @@ You will configure your Adobe Commerce instance to send events to your App build
 
 #### Configure Adobe I/O Events in Adobe Commerce instance
 To configure the provider in commerce do the following:
-- In the your Adobe Commerce Admin, navigate to Stores > Settings > Configuration > Adobe Services > Adobe I/O Events > General configuration. The following screen displays.
+- In the Adobe Commerce Admin, navigate to Stores > Settings > Configuration > Adobe Services > Adobe I/O Events > General configuration. The following screen displays.
   ![Alt text](commerce-events-configuration.webp "Commerce eventing configuration")
 - Select `OAuth (Recommended)` from the `Adobe I/O Authorization Type` menu.
 - Copy the contents of the `<workspace-name>.json` (Workspace configuration json you downloaded in the previous step [`Create app builder project`](#create-app-builder-project)) into the `Adobe I/O Workspace Configuration` field.
