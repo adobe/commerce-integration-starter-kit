@@ -33,7 +33,7 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 - In the list of integrations, activate your integration.
 - You will need the integration details (consumer key, consumer secret, access token and access token secret) later to configure the starter kit.
 
-### (For Adobe commerce versions 2.4.4 or 2.4.5) Install Commerce Eventing module
+### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5) 
 Install commerce eventing module in your commerce instance following this [documentation](https://developer.adobe.com/commerce/extensibility/events/installation/)
 
 ## Starter Kit first deploy & on-boarding
