@@ -9,7 +9,7 @@ Welcome to Adobe Commerce Extensibility Starter Kit
 ### Create App Builder project
 Go to [Adobe developer console](https://developer.adobe.com/console) portal
 - Click on `Create a new project from template`
-- select `App Builder`
+- Select `App Builder`
 - Chose a name and title
 - Select stage workspace or create a new one
 - Add the following API services (select default Oauth server to server)
