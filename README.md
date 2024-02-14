@@ -36,9 +36,8 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 ### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5) 
 Install Adobe I/O Events for Adobe Commerce module in your commerce instance following this [documentation](https://developer.adobe.com/commerce/extensibility/events/installation/)
 
-## Starter Kit first deploy & on-boarding
-Following the next steps you will be able to deploy for the first time the starter kit and onboard it.
-The process of on-boarding set up the needed events providers and registrations based on your selection.
+## Starter Kit first deploy & onboarding
+Following the next steps, you will deploy the starter kit and onboard it for the first time. The onboarding process sets up event providers and registrations based on your selection.
 
 ### Download the project
 - Download and unzip the project
