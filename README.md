@@ -90,7 +90,7 @@ application:
 ```
 
 ### Deploy
-Run the following command to deploy the entities runtimes packages, this will deploy the runtime actions needed for the onboarding step:
+Run the following command to deploy the project, this will deploy the runtime actions needed for the onboarding step:
 ```bash
 aio app deploy
 ```
