@@ -6,7 +6,7 @@ Welcome to Adobe Commerce Extensibility Starter Kit
 
 ## Prerequisites
 
-### Create app builder project
+### Create App Builder project
 Go to [Adobe developer console](https://developer.adobe.com/console) portal
 - Click on `Create a new project from template`
 - select `App Builder`
