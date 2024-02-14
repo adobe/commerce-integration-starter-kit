@@ -97,7 +97,7 @@ aio app deploy
 You can confirm the success of the deployment in the Adobe Developer Console by navigating to the `Runtime` section on your workspace:
 ![Alt text](console-user-defined-actions.png "Workspace runtimes packages")
 
-### On-boarding
+### Onboarding
 #### Configure the events registrations
 By default, the registrations' config file is set to create all the registrations for all entities. In case you don't need a registration, you can edit the `./onboarding/custom/registrations.json` file.
 In case you don't want to receive events from commerce remove `commerce` from the entity array, for backoffice updates remove `backoffice`.
