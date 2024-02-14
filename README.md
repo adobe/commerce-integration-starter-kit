@@ -94,7 +94,7 @@ Run the following command to deploy the project, this will deploy the runtime ac
 ```bash
 aio app deploy
 ```
-You can confirm the success of the deployment in the Adobe Developer Console by selecting the runtimes option on your workspace:
+You can confirm the success of the deployment in the Adobe Developer Console by navigating to the `Runtime` section on your workspace:
 ![Alt text](console-user-defined-actions.png "Workspace runtimes packages")
 
 ### On-boarding
