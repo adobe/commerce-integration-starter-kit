@@ -89,7 +89,7 @@ application:
         license: Apache-2.0
         actions:
           $include: ./actions/customer/external/actions.config.yaml
-      ...
+    #  ...
 ```
 
 ### Deploy
@@ -183,6 +183,9 @@ Here are the events with the minimal required fields you need to subscribe to:
 
 ## Development
 
+* [Project source code structure](#project-source-code-structure)
+* [Different types of actions included in the starter kit](#different-types-of-actions-included-in-the-starter-kit)
+
 ### Project source code structure
 
 The starter kit provides boilerplate code for the synchronization across systems of the following entities:
@@ -266,6 +269,84 @@ Each individual `action` folder contains the following files:
 - `pre.js` and `post.js` files
 
   These files provide convenient extension points to introduce custom business logic before and after interacting with the target API.
+
+### Different types of actions included in the starter kit
+
+* [consumer](#consumer-action)
+* [event handler](#event-handler-action)
+* [event ingestion](#event-ingestion-action)
+* [synchronous webhook](#synchronous-webhook-actions)
+
+`consumer` and `event handler` actions are the two main types of actions defined by the starter kit
+to implement the business logic needed to synchronize data between the different systems being integrated.
+
+Additionally, boilerplate code and samples for `event ingestion` and `synchronous webhook` actions are provided.
+
+#### `consumer` action
+
+This action is subscribed to a subset of events (typically all of them belonging to the same entity, e.g. `product`, 
+although there are examples where it receives events from various entities belonging to the same “domain",
+e.g. `order` and `shipment`).
+When the event provider it is attached to receives an event, this runtime action will be automatically activated.
+
+The main purpose of this action is to route the event received to the `event handler` action. Normally, 
+this routing is determined by the name of the event received.
+
+The response returned by a `consumer` action is expected to be consistent with the response received 
+from the activation of the subsequent `event handler` action. For example, if the `event handler` action 
+returns an `HTTP/400` status, the consumer action is expected to respond with the same status.
+
+When it receives an event that it does not know how to route, it is expected to return `HTTP/400` status. 
+This will prevent the event handling from being retried.
+
+#### `event handler` action
+
+This action implements the business logic to manage an individual event notifying about a change in one 
+of the systems being integrated. Typically, its business logic includes an API call to propagate the changes 
+to the other system being integrated.
+
+The `consumer` action activates these `event handler` actions to delegate the handling of a particular event. 
+This activation is done in a synchronous way.
+
+The response returned by an `event handler` action is expected to include a `statusCode` attribute. 
+This attribute allows the `consumer` action to propagate the response HTTP status code upstream 
+so it properly reflects on the event registration `Debug Tracing` tab on the Adobe Developer Console.
+
+These are examples including the bare minimum details to be included in the response
+
+- success
+  ```javascript
+  return {
+    statusCode: 200
+  }
+  ```
+
+- failure
+  ```javascript
+  return {
+    statusCode: 400, // 404, 500, etc
+    error: errors
+  }
+  ```
+
+#### `event ingestion` action
+
+The source code for this action can be found at [./actions/ingestion](./actions/ingestion).
+
+This runtime action is provided as an alternative approach to deliver events to the integration 
+if the 3rd-party back-office application cannot fulfill the [Events Publishing API](https://developer.adobe.com/events/docs/guides/api/eventsingress_api/) requirements.
+
+Additional details can be found at this [README](./actions/ingestion/README.md)
+
+#### `synchronous webhook` actions
+
+The source code for these actions can be found at [./actions/webhook](./actions/webhook).
+
+These runtime actions are meant to expose a webhook that can be invoked synchronously from Commerce 
+in order to affect the behavior of a particular business flow.
+
+The [./actions/webhook/check-stock](./actions/webhook/check-stock) folder provides a sample implementation 
+of a `synchronous webhook` action. Additional details can be found at this [README](./actions/webhook/check-stock/README.md)
 
 ### External back-office ingestion webhook
 - [Ingestion webhook consumer](actions/ingestion/README.md)
