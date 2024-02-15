@@ -1,5 +1,9 @@
 # Commerce Extensibility Starter Kit
 
+* [Prerequisites](#prerequisites)
+* [Starter Kit first deploy & onboarding](#starter-kit-first-deploy--onboarding)
+* [Development](#development)
+
 Welcome to Adobe Commerce Extensibility Starter Kit.
 
 Integrating an e-commerce platform with your ERP, OMS, or CRM is a mission-critical requirement. Companies can spend tens of thousands of dollars building these integrations. To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder. The kit includes reference integrations for commonly used commerce data like orders, products, and customers. It also includes onboarding scripts and a standardized architecture for developers to build on following best practices.
@@ -178,6 +182,91 @@ Here are the events with the minimal required fields you need to subscribe to:
 | Stock          | com.adobe.commerce.observer.cataloginventory_stock_item_save_commit_after |                        |
 
 ## Development
+
+### Project source code structure
+
+The starter kit provides boilerplate code for the synchronization across systems of the following entities:
+
+- Product
+- Customer
+- Customer Group
+- Stock
+- Order
+- Shipment
+
+The synchronization is bidirectional by default: changes in Commerce are propagated to the external back-office application. 
+application and the other way around.
+
+The source code is organized following the
+[file structure](https://developer.adobe.com/app-builder/docs/guides/extensions/extension_migration_guide/#old-file-structure) 
+of a typical App Builder application, where the `actions` folder contains the source code for all the serverless actions.
+
+#### `actions` folder structure
+
+The `actions` folder contains:
+ 
+- an `ingestion` folder containing the source code for an alternative events ingestion endpoint.
+ 
+- a `webhook` folder containing the source for synchronous webhooks that could be called from Commerce.
+
+- a folder named after each entity being synchronized (e.g. `customer`, `order`, `product`).
+
+#### `entity` folder structure
+
+Each `entity folder follows a similar structure, and it contains folders named after each system being integrated, namely:
+
+- a `commerce` folder.
+  
+  This folder contains the runtime actions responsible for handling incoming events from Commerce and synchronizing the data with the 3rd-party external system.
+
+- an `external` folder.
+  
+  This folder contains the runtime actions responsible for handling incoming events from the 3rd-party external system and updating the data accordingly in Commerce.
+
+#### `commerce` and `external` folders structure
+
+The `commerce` and `external` folders follow a similar structure:
+
+- a `consumer` folder.
+  
+  This folder contains the code for the runtime action that routes incoming events to the action responsible for handling each event.
+
+- one or more folders named after an action (e.g. `created`, `deleted`, etc.)
+
+  Each of these folders contains the code for the runtime action responsible for handling one particular event.
+
+- an `actions.config.yaml`.
+
+  This file declares the runtime actions responsible for handling the events for an entity originating in a particular system.
+
+#### Individual `action` folder structure
+
+Each individual `action` folder contains the following files:
+
+- an `index.js` file.
+  
+  It contains the `main` method that gets invoked when handling an event and is responsible for coordinating the different activities involved in that handling, such as validating the incoming payload, transforming the payload to the target API, and interacting with the target API.
+
+- a `validator.js` file.
+
+  It implements the logic to validate the incoming event payload.
+  
+  Actions in the `external` folder provide a sample implementation based on a JSON schema specified in the `schema.json` file.
+
+- a `transformer.js` file.
+
+  It implements the logic to transform the incoming event payload to make it suitable for the target API being called to propagate the changes.
+
+- a `sender.js` file.
+
+  It implements the logic to interact with the target API in order to get the changes propagated.
+
+  The target API will be the Commerce API for actions in the `external` folder and the 3rd-party external API for actions in the `commerce` folder.
+
+- `pre.js` and `post.js` files
+
+  These files provide convenient extension points to introduce custom business logic before and after interacting with the target API.
+
 ### External back-office ingestion webhook
 - [Ingestion webhook consumer](actions/ingestion/README.md)
 
