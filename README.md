@@ -186,6 +186,7 @@ Here are the events with the minimal required fields you need to subscribe to:
 * [Project source code structure](#project-source-code-structure)
 * [Different types of actions included in the starter kit](#different-types-of-actions-included-in-the-starter-kit)
 * [Log management & forwarding](#log-management-and-forwarding)
+* [Testing](#testing)
 
 ### Project source code structure
 
@@ -363,6 +364,14 @@ to decide when to store logs in Adobe I/O Runtime and when to forward them to a 
 If you are running your Adobe Commerce instance in the cloud, you already have a New Relic instance provisioned for you.
 The [Forwarding Logs to New Relic](https://developer.adobe.com/app-builder/docs/guides/application_logging/new_relic/)
 page describes the steps to set up the starter kit to forward logs to New Relic.
+
+### Testing
+
+The starter kit provides unit tests for most of the runtime actions it includes. These tests can be located in the `./test/actions` folder.
+
+Additionally, unit tests for the onboarding script can be found in the `.test/onboarding` folder.
+
+You can find more details about unit testing and an example in [Lesson 3: Testing a Serverless Action](https://developer.adobe.com/app-builder/docs/resources/barcode-reader/test/).
 
 ### External back-office ingestion webhook
 - [Ingestion webhook consumer](actions/ingestion/README.md)
