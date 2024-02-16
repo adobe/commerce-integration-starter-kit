@@ -185,6 +185,7 @@ Here are the events with the minimal required fields you need to subscribe to:
 
 * [Project source code structure](#project-source-code-structure)
 * [Different types of actions included in the starter kit](#different-types-of-actions-included-in-the-starter-kit)
+* [Log management & forwarding](#log-management-and-forwarding)
 
 ### Project source code structure
 
@@ -347,6 +348,21 @@ in order to affect the behavior of a particular business flow.
 
 The [./actions/webhook/check-stock](./actions/webhook/check-stock) folder provides a sample implementation 
 of a `synchronous webhook` action. Additional details can be found at this [README](./actions/webhook/check-stock/README.md)
+
+### Log management and forwarding
+
+Application logs allow developers to debug an application in development as well as monitor it in production.
+
+By default, the starter kit uses the [AIO SDK](https://github.com/adobe/aio-sdk) to store logs in Adobe I/O Runtime.
+You can find additional details on this topic in [Managing Application Logs](https://developer.adobe.com/app-builder/docs/guides/application_logging/).
+
+The application logs can alternatively be forwarded to a **customer-owned** log management solution (such as Splunk, Azure, or New Relic).
+Use the comparison in [When to use Log Forwarding](https://developer.adobe.com/app-builder/docs/guides/application_logging/#when-to-use-log-forwarding)
+to decide when to store logs in Adobe I/O Runtime and when to forward them to a log management platform.
+
+If you are running your Adobe Commerce instance in the cloud, you already have a New Relic instance provisioned for you.
+The [Forwarding Logs to New Relic](https://developer.adobe.com/app-builder/docs/guides/application_logging/new_relic/)
+page describes the steps to set up the starter kit to forward logs to New Relic.
 
 ### External back-office ingestion webhook
 - [Ingestion webhook consumer](actions/ingestion/README.md)
