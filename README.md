@@ -3,6 +3,7 @@
 * [Prerequisites](#prerequisites)
 * [Starter Kit first deploy & onboarding](#starter-kit-first-deploy--onboarding)
 * [Development](#development)
+* [References](#references)
 
 Welcome to Adobe Commerce Extensibility Starter Kit.
 
@@ -417,3 +418,12 @@ You can find more details about unit testing and an example in [Lesson 3: Testin
 
 #### Third party to Commerce
 - [Stock updated in third party](actions/stock/external/updated/README.md)
+
+# References
+- [Adobe Commerce Extensibility](https://developer.adobe.com/commerce/extensibility/) 
+- [Adobe developer console](https://developer.adobe.com/developer-console/docs/guides/)
+- [Adobe App Builder](https://developer.adobe.com/app-builder/docs/overview/)
+- [Adobe I/O Events](https://developer.adobe.com/events/docs/)
+- [Adobe I/O Events for Adobe Commerce](https://developer.adobe.com/commerce/extensibility/events/)
+- [Adobe I/O Runtime](https://developer.adobe.com/runtime/docs/)
+- [Commerce Web APIs](https://developer.adobe.com/commerce/webapi/)
