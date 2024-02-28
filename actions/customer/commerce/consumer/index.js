@@ -13,7 +13,8 @@
  */
 
 const { Core } = require('@adobe/aio-sdk')
-const { errorResponse, stringParameters, checkMissingRequestInputs } = require('../../../utils')
+const { stringParameters, checkMissingRequestInputs } = require('../../../utils')
+const { errorResponse, successResponse } = require('../../../responses')
 const { HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR } = require('../../../constants')
 const Openwhisk = require('../../../openwhisk')
 
@@ -38,7 +39,8 @@ async function main (params) {
     const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
 
     if (errorMessage) {
-      return errorResponse(HTTP_BAD_REQUEST, `[Customer][Commerce][Consumer] ${errorMessage}`, logger)
+      logger.error(`[Customer][Commerce][Consumer] ${errorMessage}`)
+      return errorResponse(HTTP_BAD_REQUEST, errorMessage)
     }
 
     logger.info('[Consumer][Commerce][Consumer] Params type: ' + params.type)
@@ -51,8 +53,8 @@ async function main (params) {
         const errorMessage = checkMissingRequestInputs(params, requiredParams,
           [])
         if (errorMessage) {
-          return errorResponse(HTTP_BAD_REQUEST,
-              `[Customer][Commerce][Consumer] ${errorMessage}`, logger)
+          logger.error(`[Customer][Commerce][Consumer] ${errorMessage}`)
+          return errorResponse(HTTP_BAD_REQUEST, errorMessage)
         }
 
         const createdAt = Date.parse(params.data.value.created_at)
@@ -96,8 +98,8 @@ async function main (params) {
         const errorMessage = checkMissingRequestInputs(params, requiredParams,
           [])
         if (errorMessage) {
-          return errorResponse(HTTP_BAD_REQUEST,
-              `[Customer][Commerce][Consumer] ${errorMessage}`, logger)
+          logger.error(`[Customer][Commerce][Consumer] ${errorMessage}`)
+          return errorResponse(HTTP_BAD_REQUEST, errorMessage)
         }
         logger.info(
           '[Customer][Commerce][Consumer] Invoking delete customer group')
@@ -109,22 +111,19 @@ async function main (params) {
       }
       default:
         logger.error(`[Customer][Commerce][Consumer] type not found: ${params.type}`)
-        response = `This case type is not supported: ${params.type}`
-        statusCode = HTTP_BAD_REQUEST
-        break
+        return errorResponse(HTTP_BAD_REQUEST, `This case type is not supported: ${params.type}`)
+    }
+
+    if (!response.success) {
+      logger.error(`[Customer][Commerce][Consumer] ${response.error}`)
+      return errorResponse(statusCode, response.error)
     }
 
     logger.info(`[Customer][Commerce][Consumer] ${statusCode}: successful request`)
-    return {
-      statusCode,
-      body: {
-        type: params.type,
-        request: params.data.value,
-        response
-      }
-    }
+    return successResponse(params.type, response)
   } catch (error) {
-    return errorResponse(HTTP_INTERNAL_ERROR, `[Consumer][Commerce][Consumer] Server error: ${error.message}`, logger)
+    logger.error(`[Consumer][Commerce][Consumer] Server error: ${error.message}`)
+    return errorResponse(HTTP_INTERNAL_ERROR, `Server error: ${error.message}`)
   }
 }
 

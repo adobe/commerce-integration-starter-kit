@@ -68,7 +68,7 @@ describe('Customer Group external deleted', () => {
       statusCode: STATUS_CODE,
       body: {
         success: false,
-        error: ERROR
+        error: ERROR.message
       }
     }
     validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE)
@@ -85,7 +85,7 @@ describe('Customer Group external deleted', () => {
       statusCode: HTTP_INTERNAL_ERROR,
       body: {
         success: false,
-        error: ERROR
+        error: ERROR.message
       }
     }
     validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE)

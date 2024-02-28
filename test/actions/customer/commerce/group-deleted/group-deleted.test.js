@@ -27,11 +27,10 @@ describe('Customer group commerce deleted', () => {
         const response = await action.main(params)
 
         expect(response).toEqual({
-          error: {
-            statusCode: 400,
-            body: {
-              error: "[Customer][Commerce][Deleted] missing parameter(s) 'data.customer_group_code'"
-            }
+          statusCode: 400,
+          body: {
+            success: false,
+            error: "missing parameter(s) 'data.customer_group_code'"
           }
         })
       })

@@ -15,6 +15,8 @@
 const action = require('../../../../../actions/customer/commerce/consumer')
 jest.mock('openwhisk')
 const openwhisk = require('openwhisk')
+const { HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_INTERNAL_ERROR } = require('../../../../../actions/constants')
+const Openwhisk = require('../../../../../actions/openwhisk')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -62,13 +64,6 @@ describe('Customer commerce consumer', () => {
     expect(response).toEqual({
       statusCode: 200,
       body: {
-        request: {
-          sku: 'SKU',
-          name: 'CUSTOMER',
-          description: 'Customer description',
-          created_at: '2000-01-01',
-          updated_at: '2000-01-01'
-        },
         response: {
           action: 'created',
           success: true
@@ -112,13 +107,6 @@ describe('Customer commerce consumer', () => {
     expect(response).toEqual({
       statusCode: 200,
       body: {
-        request: {
-          sku: 'SKU',
-          name: 'CUSTOMER',
-          description: 'Customer description',
-          created_at: '2000-01-01',
-          updated_at: '2000-01-02'
-        },
         response: {
           action: 'updated',
           success: true
@@ -162,13 +150,6 @@ describe('Customer commerce consumer', () => {
     expect(response).toEqual({
       statusCode: 200,
       body: {
-        request: {
-          sku: 'SKU',
-          name: 'CUSTOMER',
-          description: 'Customer description',
-          created_at: '2000-01-01',
-          updated_at: '2000-01-02'
-        },
         response: {
           action: 'deleted',
           success: true
@@ -193,17 +174,11 @@ describe('Customer commerce consumer', () => {
     const response = await action.main(params)
 
     expect(response).toEqual({
-      statusCode: 400,
-      body: {
-        request: {
-          sku: 'SKU',
-          name: 'CUSTOMER',
-          description: 'Customer description',
-          created_at: '2000-01-01',
-          updated_at: '2000-01-02'
-        },
-        response: 'This case type is not supported: NOT_SUPPORTED_TYPE',
-        type: 'NOT_SUPPORTED_TYPE'
+      error: {
+        statusCode: HTTP_BAD_REQUEST,
+        body: {
+          error: 'This case type is not supported: NOT_SUPPORTED_TYPE'
+        }
       }
     })
   })
@@ -249,15 +224,6 @@ describe('Customer group commerce consumer', () => {
     expect(response).toEqual({
       statusCode: 200,
       body: {
-        request: {
-          customer_group_id: 1,
-          customer_group_code: 'CUSTOMER GROUP NAME',
-          tax_class_id: 1,
-          tax_class_name: 'TAX CLASS NAME',
-          extension_attributes: {
-            exclude_website_ids: []
-          }
-        },
         response: {
           action: 'updated',
           success: true
@@ -303,15 +269,6 @@ describe('Customer group commerce consumer', () => {
     expect(response).toEqual({
       statusCode: 200,
       body: {
-        request: {
-          customer_group_id: 1,
-          customer_group_code: 'CUSTOMER GROUP NAME',
-          tax_class_id: 1,
-          tax_class_name: 'TAX CLASS NAME',
-          extension_attributes: {
-            exclude_website_ids: []
-          }
-        },
         response: {
           action: 'deleted',
           success: true
@@ -339,20 +296,39 @@ describe('Customer group commerce consumer', () => {
     const response = await action.main(params)
 
     expect(response).toEqual({
-      statusCode: 400,
-      body: {
-        request: {
-          customer_group_id: 1,
-          customer_group_code: 'CUSTOMER GROUP NAME',
-          tax_class_id: 1,
-          tax_class_name: 'TAX CLASS NAME',
-          extension_attributes: {
-            exclude_website_ids: []
-          }
-        },
-        response: 'This case type is not supported: NOT_SUPPORTED_TYPE',
-        type: 'NOT_SUPPORTED_TYPE'
+      error: {
+        statusCode: 400,
+        body: {
+          error: 'This case type is not supported: NOT_SUPPORTED_TYPE'
+        }
       }
     })
+  })
+  it.each([
+    [HTTP_BAD_REQUEST, { success: false, error: 'Invalid data' }],
+    [HTTP_NOT_FOUND, { success: false, error: 'Entity not found' }],
+    [HTTP_INTERNAL_ERROR, { success: false, error: 'Internal error' }]
+  ]
+  )('When the downstream response success is false, Then returns the status code %p and response', async (statusCode, response) => {
+    const type = 'com.adobe.commerce.observer.customer_group_delete_commit_after'
+    const ACTION_RESPONSE = {
+      response: {
+        result: {
+          body: response,
+          statusCode
+        }
+      }
+    }
+    const CONSUMER_RESPONSE = {
+      error: {
+        statusCode,
+        body: {
+          error: response.error
+        }
+      }
+    }
+    const params = { type, data: { value: { customer_group_code: 'xxx' } } }
+    Openwhisk.prototype.invokeAction = jest.fn().mockResolvedValue(ACTION_RESPONSE)
+    expect(await action.main(params)).toMatchObject(CONSUMER_RESPONSE)
   })
 })

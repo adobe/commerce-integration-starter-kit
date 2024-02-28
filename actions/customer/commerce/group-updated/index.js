@@ -12,13 +12,14 @@
  * from Adobe.
  */
 const { Core } = require('@adobe/aio-sdk')
-const { stringParameters, checkMissingRequestInputs, errorResponse } = require('../../../utils')
+const { stringParameters, checkMissingRequestInputs } = require('../../../utils')
 const { transformData } = require('./transformer')
 const { sendData } = require('./sender')
-const { HTTP_OK, HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../constants')
+const { HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../constants')
 const { validateData } = require('./validator')
 const { postProcess } = require('../../external/created/post')
 const { preProcess } = require('../../external/created/pre')
+const { actionSuccessResponse, actionErrorResponse } = require('../../../responses')
 
 /**
  * This action is on charge of sending updated customer group information in Adobe commerce to external back-office application
@@ -36,7 +37,8 @@ async function main (params) {
     const requiredParams = ['data.customer_group_code']
     const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
     if (errorMessage) {
-      return errorResponse(HTTP_BAD_REQUEST, `[Customer][Commerce][Updated] ${errorMessage}`, logger)
+      logger.error(`[Customer][Commerce][Updated] ${errorMessage}`)
+      return actionErrorResponse(HTTP_BAD_REQUEST, errorMessage)
     }
 
     logger.debug(`[CustomerGroup][Commerce][Updated] Validate data: ${JSON.stringify(params.data)}`)
@@ -55,22 +57,10 @@ async function main (params) {
     const postProcessed = postProcess(params, transformedData, preProcessed, result)
 
     logger.debug('[CustomerGroup][Commerce][Updated] Process finished successfully')
-    return {
-      statusCode: HTTP_OK,
-      body: {
-        action: 'updated',
-        success: true
-      }
-    }
+    return actionSuccessResponse('Customer group updated successfully')
   } catch (error) {
     logger.error(`[CustomerGroup][Commerce][Updated] Error processing the request: ${error.message}`)
-    return {
-      statusCode: HTTP_INTERNAL_ERROR,
-      body: {
-        success: false,
-        error: [error.message]
-      }
-    }
+    return actionErrorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }
 
