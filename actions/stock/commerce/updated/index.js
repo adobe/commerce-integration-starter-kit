@@ -15,10 +15,11 @@ const { Core } = require('@adobe/aio-sdk')
 const { stringParameters } = require('../../../utils')
 const { transformData } = require('./transformer')
 const { sendData } = require('./sender')
-const { HTTP_OK, HTTP_INTERNAL_ERROR } = require('../../../constants')
+const { HTTP_INTERNAL_ERROR } = require('../../../constants')
 const { validateData } = require('./validator')
 const { preProcess } = require('../../../customer/external/created/pre')
 const { postProcess } = require('../../../customer/external/created/post')
+const { actionSuccessResponse, actionErrorResponse } = require('../../../responses')
 
 /**
  * This action is on charge of sending updated stock information in Adobe commerce to external back-office application
@@ -49,22 +50,10 @@ async function main (params) {
     const postProcessed = postProcess(params, transformedData, preProcessed, result)
 
     logger.debug('[Stock][Commerce][Updated] Process finished successfully')
-    return {
-      statusCode: HTTP_OK,
-      body: {
-        action: 'updated',
-        success: true
-      }
-    }
+    return actionSuccessResponse('Stock updated successfully')
   } catch (error) {
     logger.error(`[Stock][Commerce][Updated] Error processing the request: ${error.message}`)
-    return {
-      statusCode: HTTP_INTERNAL_ERROR,
-      body: {
-        success: false,
-        error: [error.message]
-      }
-    }
+    return actionErrorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }
 
