@@ -70,7 +70,7 @@ describe('Order Shipment external updated', () => {
       statusCode: STATUS_CODE,
       body: {
         success: false,
-        error: ERROR
+        error: ERROR.message
       }
     }
     validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE)
@@ -87,7 +87,7 @@ describe('Order Shipment external updated', () => {
       statusCode: HTTP_INTERNAL_ERROR,
       body: {
         success: false,
-        error: ERROR
+        error: ERROR.message
       }
     }
     validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE)

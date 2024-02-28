@@ -15,6 +15,7 @@
 const action = require('../../../../../actions/order/commerce/consumer')
 jest.mock('openwhisk')
 const openwhisk = require('openwhisk')
+const { HTTP_BAD_REQUEST } = require('../../../../../actions/constants')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -67,17 +68,6 @@ describe('Order events received from commerce', () => {
         expect(response).toEqual({
           statusCode: 200,
           body: {
-            request: {
-              real_order_id: 'ORDER_ID',
-              increment_id: 'ORDER_INCREMENTAL_ID',
-              items: [
-                {
-                  item_id: 'ITEM_ID'
-                }
-              ],
-              created_at: '2000-01-01',
-              updated_at: '2000-01-01'
-            },
             response: {
               success: true
             },
@@ -125,17 +115,6 @@ describe('Order events received from commerce', () => {
         expect(response).toEqual({
           statusCode: 200,
           body: {
-            request: {
-              real_order_id: 'ORDER_ID',
-              increment_id: 'ORDER_INCREMENTAL_ID',
-              items: [
-                {
-                  item_id: 'ITEM_ID'
-                }
-              ],
-              created_at: '2000-01-01',
-              updated_at: '2000-01-01'
-            },
             response: {
               success: true
             },
@@ -181,21 +160,11 @@ describe('Order events received from commerce', () => {
           const response = await action.main(params)
 
           expect(response).toEqual({
-            statusCode: 400,
-            body: {
-              request: {
-                real_order_id: 'ORDER_ID',
-                increment_id: 'ORDER_INCREMENTAL_ID',
-                items: [
-                  {
-                    item_id: 'ITEM_ID'
-                  }
-                ],
-                created_at: '2000-01-01',
-                updated_at: '2000-01-01'
-              },
-              response: 'This case type is not supported: NOT_SUPPORTED_TYPE',
-              type: 'NOT_SUPPORTED_TYPE'
+            error: {
+              statusCode: HTTP_BAD_REQUEST,
+              body: {
+                error: 'This case type is not supported: NOT_SUPPORTED_TYPE'
+              }
             }
           })
         })
