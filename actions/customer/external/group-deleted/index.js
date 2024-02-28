@@ -50,6 +50,10 @@ async function main (params) {
 
     logger.debug(`[CustomerGroup][External][Deleted] Start sending data: ${JSON.stringify(transformed)}`)
     const result = await sendData(params, transformed, preProcessed)
+    if (!result.success) {
+      logger.error(`[CustomerGroup][External][Deleted] ${result.message}`)
+      return actionErrorResponse(result.statusCode, result.message)
+    }
 
     logger.debug(`[CustomerGroup][External][Deleted] Postprocess data: ${JSON.stringify(params)}`)
     const postProcessed = postProcess(params, transformed, preProcessed, result)
@@ -58,7 +62,7 @@ async function main (params) {
     return actionSuccessResponse('Customer group deleted successfully')
   } catch (error) {
     logger.error(`[CustomerGroup][External][Deleted] Error processing the request: ${error}`)
-    return actionErrorResponse(error.response?.statusCode || HTTP_INTERNAL_ERROR, error.message)
+    return actionErrorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }
 

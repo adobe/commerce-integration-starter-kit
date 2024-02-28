@@ -51,6 +51,7 @@ async function main (params) {
     logger.debug(`[Customer][External][Created] Start sending data: ${JSON.stringify(transformed)}`)
     const result = await sendData(params, transformed, preProcessed)
     if (!result.success) {
+      logger.error(`[Customer][External][Created] ${result.message}`)
       return actionErrorResponse(result.statusCode, result.message)
     }
 
@@ -61,7 +62,7 @@ async function main (params) {
     return actionSuccessResponse('Customer created successfully')
   } catch (error) {
     logger.error(`[Customer][External][Created] Error processing the request: ${error}`)
-    return actionErrorResponse(HTTP_INTERNAL_ERROR, error)
+    return actionErrorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }
 

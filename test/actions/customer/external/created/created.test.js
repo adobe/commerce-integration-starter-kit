@@ -51,7 +51,7 @@ describe('Customer external created', () => {
       statusCode: HTTP_INTERNAL_ERROR,
       body: {
         success: false,
-        error: ERROR
+        error: ERROR.message
       }
     }
     validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE)

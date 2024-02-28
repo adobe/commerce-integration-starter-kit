@@ -14,6 +14,7 @@
 
 const { Core } = require('@adobe/aio-sdk')
 const { createCustomerGroup } = require('../../commerceCustomerGroupApiClient')
+const { HTTP_INTERNAL_ERROR } = require('../../../constants')
 
 /**
  * This function send the customer group created data to the Adobe commerce REST API
@@ -22,19 +23,32 @@ const { createCustomerGroup } = require('../../commerceCustomerGroupApiClient')
  * @param {object} params - include the env params
  * @param {object} transformed - transformed received data
  * @param {object} preProcessed - preprocessed result data
- * @throws {Error} - throws exception in case the process fail.
  */
 async function sendData (params, transformed, preProcessed) {
   const logger = Core.Logger('sendData', { level: params.LOG_LEVEL || 'info' })
+  try {
+    const response = await createCustomerGroup(
+      params.COMMERCE_BASE_URL,
+      params.COMMERCE_CONSUMER_KEY,
+      params.COMMERCE_CONSUMER_SECRET,
+      params.COMMERCE_ACCESS_TOKEN,
+      params.COMMERCE_ACCESS_TOKEN_SECRET,
+      transformed,
+      logger)
 
-  return await createCustomerGroup(
-    params.COMMERCE_BASE_URL,
-    params.COMMERCE_CONSUMER_KEY,
-    params.COMMERCE_CONSUMER_SECRET,
-    params.COMMERCE_ACCESS_TOKEN,
-    params.COMMERCE_ACCESS_TOKEN_SECRET,
-    transformed,
-    logger)
+    logger.debug(`Response: ${JSON.stringify(response)}`)
+    return {
+      success: true,
+      message: response
+    }
+  } catch (error) {
+    logger.error(`Error calling Commerce API: ${JSON.stringify(error)}`)
+    return {
+      success: false,
+      statusCode: error.response?.statusCode || HTTP_INTERNAL_ERROR,
+      message: error.message
+    }
+  }
 }
 
 module.exports = {

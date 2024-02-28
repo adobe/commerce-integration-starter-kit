@@ -50,6 +50,10 @@ async function main (params) {
 
     logger.debug(`[CustomerGroup][External][Updated] Start sending data: ${JSON.stringify(transformed)}`)
     const result = await sendData(params, transformed, preProcessed)
+    if (!result.success) {
+      logger.error(`[CustomerGroup][External][Updated] ${result.message}`)
+      return actionErrorResponse(result.statusCode, result.message)
+    }
 
     logger.debug(`[CustomerGroup][External][Updated] Postprocess data: ${JSON.stringify(params)}`)
     const postProcessed = postProcess(params, transformed, preProcessed, result)
@@ -58,7 +62,7 @@ async function main (params) {
     return actionSuccessResponse('Customer group updated successfully')
   } catch (error) {
     logger.error(`[CustomerGroup][External][Updated] Error processing the request: ${error}`)
-    return actionErrorResponse(error.response?.statusCode || HTTP_INTERNAL_ERROR, error.message)
+    return actionErrorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }
 
