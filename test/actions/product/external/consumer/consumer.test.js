@@ -40,12 +40,12 @@ describe('Product external consumer', () => {
   test('When receives an unsupported type, Then fails', async () => {
     const UNSUPPORTED_TYPE = 'foo'
     const TYPE_NOT_FOUND_RESPONSE = {
-      body: {
-        request: expect.anything(),
-        response: expect.any(String),
-        type: UNSUPPORTED_TYPE
-      },
-      statusCode: HTTP_BAD_REQUEST
+      error: {
+        body: {
+          error: 'This case type is not supported: foo'
+        },
+        statusCode: HTTP_BAD_REQUEST
+      }
     }
     const params = { type: UNSUPPORTED_TYPE, data: {} }
     expect(await consumer.main(params)).toMatchObject(TYPE_NOT_FOUND_RESPONSE)
@@ -77,12 +77,11 @@ describe('Product external consumer', () => {
     expect(await consumer.main(params)).toMatchObject(INTERNAL_SERVER_ERROR_RESPONSE)
   })
   it.each([
-    [HTTP_OK, {}],
-    [HTTP_BAD_REQUEST, 'data'],
-    [HTTP_NOT_FOUND, { one: 'one', two: 'two' }],
-    [HTTP_INTERNAL_ERROR, { one: { another: 'another' } }]
+    [HTTP_BAD_REQUEST, { success: false, error: 'Invalid data' }],
+    [HTTP_NOT_FOUND, { success: false, error: 'Entity not found' }],
+    [HTTP_INTERNAL_ERROR, { success: false, error: 'Internal error' }]
   ]
-  )('When the downstream response is %p, Then returns the status code and response', async (statusCode, response) => {
+  )('When the downstream response success is false, Then returns the status code %p and response', async (statusCode, response) => {
     const type = 'be-observer.catalog_product_create'
     const ACTION_RESPONSE = {
       response: {
@@ -93,11 +92,38 @@ describe('Product external consumer', () => {
       }
     }
     const CONSUMER_RESPONSE = {
-      statusCode,
+      error: {
+        statusCode,
+        body: {
+          error: response.error
+        }
+      }
+    }
+    const params = { type, data: {} }
+    Openwhisk.prototype.invokeAction = jest.fn().mockResolvedValue(ACTION_RESPONSE)
+    expect(await consumer.main(params)).toMatchObject(CONSUMER_RESPONSE)
+  })
+  test('When the downstream response success is true, Then returns the status code HTTP_OK and response', async () => {
+    const type = 'be-observer.catalog_product_create'
+    const ACTION_RESPONSE = {
+      response: {
+        result: {
+          body: {
+            success: true,
+            message: 'Success message'
+          },
+          statusCode: HTTP_OK
+        }
+      }
+    }
+    const CONSUMER_RESPONSE = {
+      statusCode: HTTP_OK,
       body: {
         type,
-        request: expect.anything(),
-        response
+        response: {
+          success: true,
+          message: 'Success message'
+        }
       }
     }
     const params = { type, data: {} }

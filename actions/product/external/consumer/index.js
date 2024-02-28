@@ -13,9 +13,10 @@
  */
 
 const { Core } = require('@adobe/aio-sdk')
-const { errorResponse, stringParameters, checkMissingRequestInputs } = require('../../../utils')
+const { stringParameters, checkMissingRequestInputs } = require('../../../utils')
 const { HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST, HTTP_OK } = require('../../../constants')
 const Openwhisk = require('../../../openwhisk')
+const { errorResponse, successResponse } = require('../../../responses')
 
 /**
  * This is the consumer of the events coming from External back-office applications related to product entity.
@@ -40,7 +41,8 @@ async function main (params) {
     const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
 
     if (errorMessage) {
-      return errorResponse(HTTP_BAD_REQUEST, `[Product][External][Consumer] Invalid request parameters: ${errorMessage}`, logger)
+      logger.error(`[Product][External][Consumer] Invalid request parameters: ${errorMessage}`)
+      return errorResponse(HTTP_BAD_REQUEST, errorMessage)
     }
 
     logger.info(`[Product][External][Consumer] Params type: ${params.type}`)
@@ -65,25 +67,19 @@ async function main (params) {
         break
       default:
         logger.error(`[Product][External][Consumer] type not found: ${params.type}`)
-        response = `This case type is not supported: ${params.type}`
-        statusCode = HTTP_BAD_REQUEST
-        break
+        return errorResponse(HTTP_BAD_REQUEST, `This case type is not supported: ${params.type}`)
+    }
+
+    if (!response.success) {
+      logger.error(`[Product][External][Consumer] ${response.error}`)
+      return errorResponse(statusCode, response.error)
     }
 
     logger.info(`[Product][External][Consumer] ${statusCode}: successful request`)
-    return {
-      statusCode,
-      body: {
-        type: params.type,
-        request: params.data,
-        response
-      }
-    }
+    return successResponse(params.type, response)
   } catch (error) {
-    return errorResponse(
-      HTTP_INTERNAL_ERROR,
-            `[Product][External][Consumer] Server error: ${error.message}`,
-            logger)
+    logger.error(`[Product][External][Consumer] Server error: ${error.message}`)
+    return errorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }
 

@@ -16,10 +16,11 @@ const { Core } = require('@adobe/aio-sdk')
 const { stringParameters } = require('../../../utils')
 const { transformData } = require('./transformer')
 const { sendData } = require('./sender')
-const { HTTP_OK, HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../constants')
+const { HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../constants')
 const { validateData } = require('./validator')
 const { preProcess } = require('./pre')
 const { postProcess } = require('./post')
+const { actionErrorResponse, actionSuccessResponse } = require('../../../responses')
 
 /**
  * This action is on charge of sending created product information in external back-office application to Adobe commerce
@@ -37,13 +38,8 @@ async function main (params) {
     logger.debug(`[Product][External][Created] Validate data: ${JSON.stringify(params.data)}`)
     const validation = validateData(params)
     if (!validation.success) {
-      return {
-        statusCode: HTTP_BAD_REQUEST,
-        body: {
-          success: false,
-          error: validation.message
-        }
-      }
+      logger.error(`[Product][External][Created] ${validation.message}`)
+      return actionErrorResponse(HTTP_BAD_REQUEST, validation.message)
     }
 
     logger.debug(`[Product][External][Created] Transform data: ${JSON.stringify(params)}`)
@@ -59,21 +55,10 @@ async function main (params) {
     const postProcessed = postProcess(params, transformed, preProcessed, result)
 
     logger.debug('[Product][External][Created] Process finished successfully')
-    return {
-      statusCode: HTTP_OK,
-      body: {
-        success: true
-      }
-    }
+    return actionSuccessResponse('Product created successfully')
   } catch (error) {
     logger.error(`[Product][External][Created] Error processing the request: ${error}`)
-    return {
-      statusCode: error.response?.statusCode || HTTP_INTERNAL_ERROR,
-      body: {
-        success: false,
-        error
-      }
-    }
+    return actionErrorResponse(error.response?.statusCode || HTTP_INTERNAL_ERROR, error.message)
   }
 }
 

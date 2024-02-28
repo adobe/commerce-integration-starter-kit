@@ -16,10 +16,11 @@ const { Core } = require('@adobe/aio-sdk')
 const { stringParameters } = require('../../../utils')
 const { transformData } = require('./transformer')
 const { sendData } = require('./sender')
-const { HTTP_OK, HTTP_INTERNAL_ERROR } = require('../../../constants')
+const { HTTP_INTERNAL_ERROR } = require('../../../constants')
 const { validateData } = require('./validator')
 const { preProcess } = require('../../../customer/external/created/pre')
 const { postProcess } = require('../../../customer/external/created/post')
+const { actionSuccessResponse, actionErrorResponse } = require('../../../responses')
 
 /**
  * This action is on charge of sending created product information in Adobe commerce to external back-office application
@@ -50,22 +51,10 @@ async function main (params) {
     const postProcessed = postProcess(params, transformedData, preProcessed, result)
 
     logger.debug('[Product][Commerce][Created] Process finished successfully')
-    return {
-      statusCode: HTTP_OK,
-      body: {
-        action: 'created',
-        success: true
-      }
-    }
+    return actionSuccessResponse('Product created successfully')
   } catch (error) {
     logger.error(`[Product][Commerce][Created] Error processing the request: ${error.message}`)
-    return {
-      statusCode: HTTP_INTERNAL_ERROR,
-      body: {
-        success: false,
-        error: [error.message]
-      }
-    }
+    return actionErrorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }
 

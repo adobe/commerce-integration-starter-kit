@@ -15,6 +15,8 @@
 const action = require('../../../../../actions/product/commerce/consumer')
 jest.mock('openwhisk')
 const openwhisk = require('openwhisk')
+const { HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_INTERNAL_ERROR } = require('../../../../../actions/constants')
+const Openwhisk = require('../../../../../actions/openwhisk')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -61,13 +63,6 @@ describe('Product commerce consumer', () => {
     expect(response).toEqual({
       statusCode: 200,
       body: {
-        request: {
-          sku: 'SKU',
-          name: 'PRODUCT',
-          description: 'Product description',
-          created_at: '2000-01-01',
-          updated_at: '2000-01-01'
-        },
         response: {
           success: true
         },
@@ -109,13 +104,6 @@ describe('Product commerce consumer', () => {
     expect(response).toEqual({
       statusCode: 200,
       body: {
-        request: {
-          sku: 'SKU',
-          name: 'PRODUCT',
-          description: 'Product description',
-          created_at: '2000-01-01',
-          updated_at: '2000-01-02'
-        },
         response: {
           success: true
         },
@@ -157,13 +145,6 @@ describe('Product commerce consumer', () => {
     expect(response).toEqual({
       statusCode: 200,
       body: {
-        request: {
-          sku: 'SKU',
-          name: 'PRODUCT',
-          description: 'Product description',
-          created_at: '2000-01-01',
-          updated_at: '2000-01-02'
-        },
         response: {
           success: true
         },
@@ -200,18 +181,50 @@ describe('Product commerce consumer', () => {
     const response = await action.main(params)
 
     expect(response).toEqual({
-      statusCode: 400,
-      body: {
-        request: {
+      error: {
+        statusCode: HTTP_BAD_REQUEST,
+        body: {
+          error: 'This case type is not supported: NOT_SUPPORTED_TYPE'
+        }
+      }
+    })
+  })
+
+  it.each([
+    [HTTP_BAD_REQUEST, { success: false, error: 'Invalid data' }],
+    [HTTP_NOT_FOUND, { success: false, error: 'Entity not found' }],
+    [HTTP_INTERNAL_ERROR, { success: false, error: 'Internal error' }]
+  ]
+  )('When the downstream response success is false, Then returns the status code %p and response', async (statusCode, response) => {
+    const params = {
+      type: 'com.adobe.commerce.observer.catalog_product_save_commit_after',
+      data: {
+        value: {
           sku: 'SKU',
           name: 'PRODUCT',
           description: 'Product description',
           created_at: '2000-01-01',
           updated_at: '2000-01-02'
-        },
-        response: 'This case type is not supported: NOT_SUPPORTED_TYPE',
-        type: 'NOT_SUPPORTED_TYPE'
+        }
       }
-    })
+    }
+    const ACTION_RESPONSE = {
+      response: {
+        result: {
+          body: response,
+          statusCode
+        }
+      }
+    }
+    const CONSUMER_RESPONSE = {
+      error: {
+        statusCode,
+        body: {
+          error: response.error
+        }
+      }
+    }
+    Openwhisk.prototype.invokeAction = jest.fn().mockResolvedValue(ACTION_RESPONSE)
+    expect(await action.main(params)).toMatchObject(CONSUMER_RESPONSE)
   })
 })
