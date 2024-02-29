@@ -13,7 +13,7 @@
  */
 
 const { Core, Events } = require('@adobe/aio-sdk')
-const { errorResponse, stringParameters } = require('../../../actions/utils')
+const { stringParameters } = require('../../../actions/utils')
 const { CloudEvent } = require('cloudevents')
 const uuid = require('uuid')
 const {
@@ -24,6 +24,7 @@ const { getAdobeAccessToken } = require('../../../utils/adobe-auth')
 const { getProviderByKey } = require('../../../utils/adobe-events-api')
 const { validateData } = require('./validator')
 const { checkAuthentication } = require('./auth')
+const { errorResponse, successResponse } = require('../../responses')
 
 /**
  * This web action allow external back-office application publish event to IO event using custom authentication mechanism.
@@ -39,12 +40,14 @@ async function main (params) {
 
     const authentication = await checkAuthentication(params)
     if (!authentication.success) {
-      return errorResponse(HTTP_UNAUTHORIZED, `[IngestionWebhook] ${authentication.message}`, logger)
+      logger.error(`[IngestionWebhook] ${authentication.message}`)
+      return errorResponse(HTTP_UNAUTHORIZED, authentication.message)
     }
 
     const validationResult = validateData(params)
     if (!validationResult.success) {
-      return errorResponse(HTTP_BAD_REQUEST, `[IngestionWebhook] ${validationResult.message}`, logger)
+      logger.error(`[IngestionWebhook] ${validationResult.message}`)
+      return errorResponse(HTTP_BAD_REQUEST, validationResult.message)
     }
 
     logger.debug('[IngestionWebhook] Generate Adobe access token')
@@ -54,9 +57,9 @@ async function main (params) {
     const provider = await getProviderByKey(params, accessToken, BACKOFFICE_PROVIDER_KEY)
 
     if (!provider) {
-      const errorMessage = '[IngestionWebhook] Could not found any external backoffice provider'
-      logger.error(errorMessage)
-      return errorResponse(HTTP_INTERNAL_ERROR, errorMessage, logger)
+      const errorMessage = 'Could not find any external backoffice provider'
+      logger.error(`IngestionWebhook] ${errorMessage}`)
+      return errorResponse(HTTP_INTERNAL_ERROR, errorMessage)
     }
 
     const event = {
@@ -90,16 +93,13 @@ async function main (params) {
 
     logger.info(`[IngestionWebhook] ${HTTP_OK}: successful request`)
 
-    return {
-      statusCode: HTTP_OK,
-      body: {
-        success: true,
-        event
-      }
-    }
+    return successResponse(event.type, {
+      success: true,
+      message: 'Event published successfully'
+    })
   } catch (error) {
-    return errorResponse(HTTP_INTERNAL_ERROR,
-        `[IngestionWebhook] Server error: ${error.message}`, logger)
+    logger.error(`[IngestionWebhook] Server error: ${error.message}`)
+    return errorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }
 

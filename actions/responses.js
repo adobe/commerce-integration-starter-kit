@@ -79,9 +79,43 @@ function successResponse (type, response) {
   }
 }
 
+/**
+ * Returns response error adapted to ingestion webhooks module
+ *
+ * @param {string} message the error message.
+ *        e.g. 'missing xyz parameter'
+ * @returns {object} the response object, ready to be returned from the action main's function.
+ */
+function webhookErrorResponse (message) {
+  return {
+    statusCode: HTTP_OK,
+    body: {
+      op: 'exception',
+      message
+    }
+  }
+}
+
+/**
+ *
+ * Returns a success response object, this method should be called on the sync webhooks
+ *
+ * @returns {object} the response object, ready to be returned from the action main's function.
+ */
+function webhookSuccessResponse () {
+  return {
+    statusCode: HTTP_OK,
+    body: {
+      op: 'success'
+    }
+  }
+}
+
 module.exports = {
   successResponse,
   errorResponse,
   actionErrorResponse,
-  actionSuccessResponse
+  actionSuccessResponse,
+  webhookErrorResponse,
+  webhookSuccessResponse
 }

@@ -61,27 +61,3 @@ check-stock:
     require-adobe-auth: false
     final: true
 ```
-
-# Response expected
-the runtime action returns the following response in case of error:
-```javascript
-return {   
-  statusCode: '200',
-  body: {
-    op: 'exception',
-    message: 'Error message'
-  }
-}
-```
-If everything is fine, it returns the flowing response:
-
-```javascript
-return {
-  statusCode: '200',
-  body: {
-    op: 'success'
-  }
-}
-```
-
-Remember, these responses are adapted to [Commerce webhook module](https://developer.adobe.com/commerce/extensibility/webhooks/); in case you want to use a different approach, you can change the response implementation in the code as you need.

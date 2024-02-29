@@ -107,22 +107,11 @@ describe('External backoffice events ingestion webhook', () => {
           expect(response).toEqual({
             statusCode: 200,
             body: {
-              success: true,
-              event:
-                {
-                  data: {
-                    sku: 'TEST_WEBHOOK_2',
-                    name: 'Test webhook test',
-                    price: 52,
-                    description: 'Test webhook description'
-                  },
-                  uid: 'product-123',
-                  providerId: 'PROVIDER_ID',
-                  providerName: 'Backoffice Provider - eistarterkitv1',
-                  success: 'OK',
-                  type: 'be-observer.catalog_product_create'
-                }
-
+              response: {
+                success: true,
+                message: 'Event published successfully'
+              },
+              type: 'be-observer.catalog_product_create'
             }
           })
         })
@@ -142,7 +131,7 @@ describe('External backoffice events ingestion webhook', () => {
             error: {
               statusCode: 400,
               body: {
-                error: "[IngestionWebhook] missing parameter(s) 'data.uid,data.event,data.value'"
+                error: "missing parameter(s) 'data.uid,data.event,data.value'"
               }
             }
           })
@@ -176,7 +165,7 @@ describe('External backoffice events ingestion webhook', () => {
             error: {
               statusCode: 500,
               body: {
-                error: '[IngestionWebhook] Server error: fake error'
+                error: 'fake error'
               }
             }
           })
@@ -213,7 +202,7 @@ describe('External backoffice events ingestion webhook', () => {
             error: {
               statusCode: 500,
               body: {
-                error: '[IngestionWebhook] Server error: fake error'
+                error: 'fake error'
               }
             }
           })
@@ -253,7 +242,7 @@ describe('External backoffice events ingestion webhook', () => {
             error: {
               statusCode: 500,
               body: {
-                error: '[IngestionWebhook] Could not found any external backoffice provider'
+                error: 'Could not find any external backoffice provider'
               }
             }
           })
@@ -307,7 +296,7 @@ describe('External backoffice events ingestion webhook', () => {
             error: {
               statusCode: 500,
               body: {
-                error: '[IngestionWebhook] Server error: fake error'
+                error: 'fake error'
               }
             }
           })

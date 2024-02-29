@@ -302,6 +302,34 @@ returns an `HTTP/400` status, the consumer action is expected to respond with th
 When it receives an event that it does not know how to route, it is expected to return `HTTP/400` status. 
 This will prevent the event handling from being retried.
 
+By default, the response of the `consumer` actions is the following:
+- success
+  ```javascript
+  // ./actions/responses.js#successResponse
+  return {
+    statusCode: 200,
+    body: {
+      type: 'EVENT TYPE',
+      response: {
+        // Response returned by the event handler action
+      }
+    }
+  }
+  ```
+
+- failure
+  ```javascript
+  // ./actions/responses.js#errorResponse
+  return {
+    error: {
+      statusCode: 400, // 404, 500, etc,
+      body : {
+        error: 'YOUR ERROR MESSAGE'
+      }
+    }
+  }
+  ```
+
 #### `event handler` action
 
 This action implements the business logic to manage an individual event notifying about a change in one 
@@ -315,20 +343,29 @@ The response returned by an `event handler` action is expected to include a `sta
 This attribute allows the `consumer` action to propagate the response HTTP status code upstream 
 so it properly reflects on the event registration `Debug Tracing` tab on the Adobe Developer Console.
 
-These are examples including the bare minimum details to be included in the response
+By default, the response of the `event handler` actions is the following:
 
 - success
   ```javascript
+  // ./actions/responses.js#actionSuccessResponse
   return {
-    statusCode: 200
+    statusCode: 200,
+    body: {
+      success: true,
+      message: 'YOUR SUCCESS MESSAGE'
+    }
   }
   ```
 
 - failure
   ```javascript
+  // ./actions/responses.js#actionErrorResponse
   return {
     statusCode: 400, // 404, 500, etc
-    error: errors
+    body: {
+      success: false,
+      error: 'YOUR ERROR MESSAGE'
+    }
   }
   ```
 
@@ -341,6 +378,35 @@ if the 3rd-party back-office application cannot fulfill the [Events Publishing A
 
 Additional details can be found at this [README](./actions/ingestion/README.md)
 
+By default, the response of the `event ingestion` actions is the following:
+- success
+  ```javascript
+  // ./actions/responses.js#successResponse
+  return {
+    statusCode: 200,
+    body: {
+      type: 'EVENT TYPE',
+      response: {
+        success: true,
+        message: 'Event published successfully'
+      }
+    }
+  }
+  ```
+
+- failure
+  ```javascript
+  // ./actions/responses.js#errorResponse
+  return {
+    error: {
+      statusCode: 400, // 404, 500, etc,
+      body : {
+        error: 'YOUR ERROR MESSAGE'
+      }
+    }
+  }
+  ```
+
 #### `synchronous webhook` actions
 
 The source code for these actions can be found at [./actions/webhook](./actions/webhook).
@@ -350,6 +416,33 @@ in order to affect the behavior of a particular business flow.
 
 The [./actions/webhook/check-stock](./actions/webhook/check-stock) folder provides a sample implementation 
 of a `synchronous webhook` action. Additional details can be found at this [README](./actions/webhook/check-stock/README.md)
+
+By default, the response of the `synchronous webhook` actions is the following:
+- success
+  ```javascript
+  // ./actions/responses.js#webhookSuccessResponse
+  return {
+    statusCode: 200,
+    body: {
+      op: 'success'
+    }
+  }
+  ```
+
+- failure
+  ```javascript
+  // ./actions/responses.js#webhookSuccessResponse
+  return {
+    error: {
+      statusCode: 200,
+      body : {
+        op: 'exception'
+      }
+    }
+  }
+  ```
+
+Remember, these responses are adapted to [Commerce webhook module](https://developer.adobe.com/commerce/extensibility/webhooks/); in case you want to use a different approach, you can change the response implementation in the code as you need.
 
 ### Log management and forwarding
 
