@@ -19,14 +19,15 @@
  * @param {object} data - Product data
  * @param {object} preProcessed - result of the pre-process logic if any
  * @returns {object} returns the sending result if needed for post process
- * @throws {Error} - throws exception in case the process fail.
  */
 async function sendData (params, data, preProcessed) {
   // @TODO Here add the logic to send the information to 3rd party
   // @TODO Use params to retrieve need parameters from the environment
-  // @TODO throw exception in case of error
+  // @TODO in case of error return { success: false, statusCode: <error status code>, message: '<error message>' }
 
-  return {}
+  return {
+    success: true
+  }
 }
 
 module.exports = {
