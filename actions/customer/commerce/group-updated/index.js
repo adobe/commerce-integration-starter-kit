@@ -52,6 +52,10 @@ async function main (params) {
 
     logger.debug(`[CustomerGroup][Commerce][Updated] Start sending data: ${JSON.stringify(params)}`)
     const result = await sendData(params, transformedData, preProcessed)
+    if (!result.success) {
+      logger.error(`[CustomerGroup][Commerce][Updated] ${result.message}`)
+      return actionErrorResponse(result.statusCode, result.message)
+    }
 
     logger.debug(`[CustomerGroup][Commerce][Updated] Postprocess data: ${JSON.stringify(params)}`)
     const postProcessed = postProcess(params, transformedData, preProcessed, result)
