@@ -23,9 +23,12 @@
 async function sendData (params, data, preProcessed) {
   // @TODO Here add the logic to send the information to 3rd party
   // @TODO Use params to retrieve needed parameters from the environment
-  // @TODO throw exception in case of error
+  // @TODO Use params to retrieve need parameters from the environment
+  // @TODO in case of error return { success: false, statusCode: <error status code>, message: '<error message>' }
 
-  return {}
+  return {
+    success: true
+  }
 }
 
 module.exports = {

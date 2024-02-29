@@ -90,11 +90,11 @@ describe('Stock external consumer', () => {
       }
     }
     const CONSUMER_RESPONSE = {
-      statusCode,
-      body: {
-        type,
-        request: expect.anything(),
-        response
+      error: {
+        statusCode,
+        body: {
+          error: response.error
+        }
       }
     }
     const params = { type, data: {} }
