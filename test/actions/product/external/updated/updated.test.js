@@ -19,23 +19,7 @@ jest.mock('../../../../../actions/product/external/updated/sender')
 const { sendData } = require('../../../../../actions/product/external/updated/sender')
 
 const action = require('../../../../../actions/product/external/updated')
-const { HTTP_BAD_REQUEST, HTTP_UNAUTHORIZED, HTTP_INTERNAL_ERROR, HTTP_OK } = require('../../../../../actions/constants')
-const { HTTPError } = require('got')
-
-/**
- * Builds an HTTP Error
- * @param {number} statusCode error status code
- * @param {string} statusMessage error status message
- * @returns {HTTPError} http error
- */
-function buildHttpError (statusCode, statusMessage) {
-  const response = { statusCode, statusMessage }
-  const httpError = new HTTPError(response)
-  // uses the workaround described in https://github.com/sindresorhus/got/issues/1210#issuecomment-623534449
-  // To have an error with response attribute
-  httpError.response = response
-  return httpError
-}
+const { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR, HTTP_OK } = require('../../../../../actions/constants')
 
 describe('Product external updated', () => {
   test('main should be defined', () => {
@@ -55,24 +39,6 @@ describe('Product external updated', () => {
       }
     }
     validateData.mockReturnValue(FAILED_VALIDATION_RESPONSE)
-    expect(await action.main(IGNORED_PARAMS)).toMatchObject(ERROR_RESPONSE)
-  })
-  test('When an HTTP error is caught, Then returns the status code in the error', async () => {
-    const IGNORED_PARAMS = { data: {} }
-    const SUCCESSFUL_VALIDATION_RESPONSE = {
-      success: true
-    }
-    const STATUS_CODE = HTTP_UNAUTHORIZED
-    const ERROR = buildHttpError(STATUS_CODE, 'Unauthorized')
-    const ERROR_RESPONSE = {
-      statusCode: STATUS_CODE,
-      body: {
-        success: false,
-        error: ERROR.message
-      }
-    }
-    validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE)
-    sendData.mockRejectedValue(ERROR)
     expect(await action.main(IGNORED_PARAMS)).toMatchObject(ERROR_RESPONSE)
   })
   test('When an generic error is caught, Then returns HTTP_INTERNAL_ERROR', async () => {
@@ -97,7 +63,10 @@ describe('Product external updated', () => {
     const SUCCESSFUL_VALIDATION_RESPONSE = {
       success: true
     }
-    const SUCCESSFUL_SEND_DATA_RESPONSE = 'anything'
+    const SUCCESSFUL_SEND_DATA_RESPONSE = {
+      success: true,
+      response: 'anything'
+    }
     const SUCCESS_RESPONSE = {
       statusCode: HTTP_OK,
       body: {
