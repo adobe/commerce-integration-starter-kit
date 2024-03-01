@@ -13,10 +13,39 @@
  */
 
 const action = require('../../../../../actions/stock/commerce/updated')
+jest.mock('../../../../../actions/stock/commerce/updated/validator')
+const { validateData } = require('../../../../../actions/stock/commerce/updated/validator')
 
+afterEach(() => {
+  jest.clearAllMocks()
+  jest.resetModules()
+})
 describe('Stock item updated in commerce', () => {
   test('main should be defined', () => {
     expect(action.main).toBeInstanceOf(Function)
+  })
+  describe('When process stock commerce request has invalid data', () => {
+    test('Then an error 400 is returned', async () => {
+      const params = {
+        data: {}
+      }
+
+      const ERROR_MESSAGE = 'Invalid data'
+      validateData.mockReturnValue({
+        success: false,
+        message: ERROR_MESSAGE
+      })
+
+      const response = await action.main(params)
+
+      expect(response).toEqual({
+        statusCode: 400,
+        body: {
+          success: false,
+          error: ERROR_MESSAGE
+        }
+      })
+    })
   })
   // @TODO Here you can add unit tests to cover the cases implemented in the stock item updated runtime action
 })
