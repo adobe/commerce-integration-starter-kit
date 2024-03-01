@@ -16,7 +16,7 @@ const { Core } = require('@adobe/aio-sdk')
 const { stringParameters } = require('../../../utils')
 const { transformData } = require('./transformer')
 const { sendData } = require('./sender')
-const { HTTP_INTERNAL_ERROR } = require('../../../constants')
+const { HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../constants')
 const { validateData } = require('./validator')
 const { preProcess } = require('../../external/created/pre')
 const { postProcess } = require('../../external/created/post')
@@ -36,7 +36,11 @@ async function main (params) {
 
   try {
     logger.debug(`[Customer][Commerce][Created] Validate data: ${JSON.stringify(params.data)}`)
-    validateData(params.data)
+    const validation = validateData(params.data)
+    if (!validation.success) {
+      logger.error(`[Customer][Commerce][Created] Validation failed with error: ${validation.message}`)
+      return actionErrorResponse(HTTP_BAD_REQUEST, validation.message)
+    }
 
     logger.debug(`[Customer][Commerce][Created] Transform data: ${JSON.stringify(params.data)}`)
     const transformedData = transformData(params.data)

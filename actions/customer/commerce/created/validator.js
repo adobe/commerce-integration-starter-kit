@@ -15,12 +15,16 @@
 /**
  * This function validate the customer data received
  *
- * @throws {Error} - Throw Error if data is invalid
  * @param {object} data - Received data from adobe commerce
+ * @returns {object} - returns the result of validation object
  */
 function validateData (data) {
-  // @Todo Here add the logic to validate the received data
-  // @Todo Throw exception in case data is invalid
+  // @TODO Here add the logic to validate the received data
+  // @TODO in case of error return { success: false, message: '<error message>' }
+
+  return {
+    success: true
+  }
 }
 
 module.exports = {

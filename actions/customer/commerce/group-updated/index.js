@@ -34,15 +34,12 @@ async function main (params) {
   logger.debug(`[CustomerGroup][Commerce][Updated] Consumer main params: ${stringParameters(params)}`)
 
   try {
-    const requiredParams = ['data.customer_group_code']
-    const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
-    if (errorMessage) {
-      logger.error(`[Customer][Commerce][Updated] ${errorMessage}`)
-      return actionErrorResponse(HTTP_BAD_REQUEST, errorMessage)
-    }
-
     logger.debug(`[CustomerGroup][Commerce][Updated] Validate data: ${JSON.stringify(params.data)}`)
-    validateData(params.data)
+    const validation = validateData(params.data)
+    if (!validation.success) {
+      logger.error(`[CustomerGroup][Commerce][Updated] Validation failed with error: ${validation.message}`)
+      return actionErrorResponse(HTTP_BAD_REQUEST, validation.message)
+    }
 
     logger.debug(`[CustomerGroup][Commerce][Updated] Transform data: ${JSON.stringify(params.data)}`)
     const transformedData = transformData(params.data)
