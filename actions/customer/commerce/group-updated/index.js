@@ -12,7 +12,7 @@
  * from Adobe.
  */
 const { Core } = require('@adobe/aio-sdk')
-const { stringParameters, checkMissingRequestInputs } = require('../../../utils')
+const { stringParameters } = require('../../../utils')
 const { transformData } = require('./transformer')
 const { sendData } = require('./sender')
 const { HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../constants')

@@ -14,7 +14,7 @@
 const { checkMissingRequestInputs } = require('../../../utils')
 
 /**
- * This function validate the customer data received
+ * This function validate the customer group data received
  *
  * @param {object} data - Received data from adobe commerce
  * @returns {object} - returns the result of validation object
