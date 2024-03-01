@@ -13,7 +13,7 @@
  */
 
 const { Core } = require('@adobe/aio-sdk')
-const { deleteProduct } = require('../../commerceProductApiClient')
+const { deleteProduct } = require('../../commerce-product-api-client')
 const { HTTP_INTERNAL_ERROR } = require('../../../constants')
 
 /**

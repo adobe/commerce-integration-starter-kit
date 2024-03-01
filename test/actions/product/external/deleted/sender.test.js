@@ -12,8 +12,8 @@
  * from Adobe.
  */
 
-jest.mock('../../../../../actions/product/commerceProductApiClient')
-const { deleteProduct } = require('../../../../../actions/product/commerceProductApiClient')
+jest.mock('../../../../../actions/product/commerce-product-api-client')
+const { deleteProduct } = require('../../../../../actions/product/commerce-product-api-client')
 
 const sender = require('../../../../../actions/product/external/deleted/sender')
 
