@@ -12,8 +12,8 @@
  * from Adobe.
  */
 
-jest.mock('../../../../../actions/customer/commerceCustomerGroupApiClient')
-const { createCustomerGroup } = require('../../../../../actions/customer/commerceCustomerGroupApiClient')
+jest.mock('../../../../../actions/customer/commerce-customer-group-api-client')
+const { createCustomerGroup } = require('../../../../../actions/customer/commerce-customer-group-api-client')
 
 const sender = require('../../../../../actions/customer/external/group-created/sender')
 

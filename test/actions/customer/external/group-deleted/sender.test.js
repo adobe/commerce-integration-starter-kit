@@ -12,8 +12,8 @@
  * from Adobe.
  */
 
-jest.mock('../../../../../actions/customer/commerceCustomerGroupApiClient')
-const { deleteCustomerGroup } = require('../../../../../actions/customer/commerceCustomerGroupApiClient')
+jest.mock('../../../../../actions/customer/commerce-customer-group-api-client')
+const { deleteCustomerGroup } = require('../../../../../actions/customer/commerce-customer-group-api-client')
 
 const sender = require('../../../../../actions/customer/external/group-deleted/sender')
 
