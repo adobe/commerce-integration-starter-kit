@@ -12,8 +12,8 @@
  * from Adobe.
  */
 
-jest.mock('../../../../../actions/order/commerceShipmentApiClient')
-const { updateShipment } = require('../../../../../actions/order/commerceShipmentApiClient')
+jest.mock('../../../../../actions/order/commerce-shipment-api-client')
+const { updateShipment } = require('../../../../../actions/order/commerce-shipment-api-client')
 
 const sender = require('../../../../../actions/order/external/shipment-updated/sender')
 
