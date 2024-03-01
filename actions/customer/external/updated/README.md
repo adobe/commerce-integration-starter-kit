@@ -34,7 +34,7 @@ Here's an example:
 
 ## Interact with the Adobe Commerce API
 The `sendData` function in the `sender.js` file defines the interaction with the Adobe Commerce API.
-This function delegates to the `updateCustomer` method in the `actions/customer/commerceCustomerApiClient.js` the interaction with the Commerce API.
+This function delegates to the `updateCustomer` method in the `actions/customer/commerce-customer-api-client.js` the interaction with the Commerce API.
 Any parameters needed from the execution environment could be accessed from `params`. 
 These parameters can be passed on the action by configuring them in the  `actions/customer/external/actions.config.yaml` under `updated -> inputs` as follows:
 ```yaml

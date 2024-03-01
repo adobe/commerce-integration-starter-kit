@@ -12,8 +12,8 @@
  * from Adobe.
  */
 
-jest.mock('../../../../../actions/customer/commerceCustomerApiClient')
-const { createCustomer } = require('../../../../../actions/customer/commerceCustomerApiClient')
+jest.mock('../../../../../actions/customer/commerce-customer-api-client')
+const { createCustomer } = require('../../../../../actions/customer/commerce-customer-api-client')
 
 const sender = require('../../../../../actions/customer/external/created/sender')
 
