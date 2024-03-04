@@ -17,15 +17,19 @@ const { createCustomer } = require('../../../../../actions/customer/commerce-cus
 
 const sender = require('../../../../../actions/customer/external/created/sender')
 
-describe('Customer external created sender', () => {
-  test('sendData should be defined', () => {
-    expect(sender.sendData).toBeInstanceOf(Function)
+describe('Given customer external created sender', () => {
+  describe('When method sendData is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(sender.sendData).toBeInstanceOf(Function)
+    })
   })
-  test('calls create customer', async () => {
-    const params = {}
-    const transformed = {}
-    const preprocess = {}
-    await sender.sendData(params, transformed, preprocess)
-    expect(createCustomer).toHaveBeenCalled()
+  describe('When method sendData is called', () => {
+    test('Then create customer is called', async () => {
+      const params = {}
+      const transformed = {}
+      const preprocess = {}
+      await sender.sendData(params, transformed, preprocess)
+      expect(createCustomer).toHaveBeenCalled()
+    })
   })
 })

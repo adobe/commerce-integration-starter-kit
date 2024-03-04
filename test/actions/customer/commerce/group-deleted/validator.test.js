@@ -14,9 +14,9 @@
 
 const { validateData } = require('../../../../../actions/customer/commerce/group-deleted/validator')
 
-describe('Validator of Customer group commerce deleted action', () => {
-  describe('When data passed include customer group code parameter', () => {
-    test('Then return success true', async () => {
+describe('Given the Validator of customer group commerce deleted action', () => {
+  describe('When data received is valid', () => {
+    test('Then returns success response', async () => {
       const response = await validateData({
         customer_group_code: 'CODE'
       })
@@ -26,8 +26,8 @@ describe('Validator of Customer group commerce deleted action', () => {
       })
     })
   })
-  describe('When data passed missing customer group code parameter', () => {
-    test('Then return success false and error message', async () => {
+  describe('When data received is invalid', () => {
+    test('Then returns error response', async () => {
       const response = await validateData({})
 
       expect(response).toEqual({

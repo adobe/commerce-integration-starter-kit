@@ -17,15 +17,19 @@ const { updateCustomerGroup } = require('../../../../../actions/customer/commerc
 
 const sender = require('../../../../../actions/customer/external/group-updated/sender')
 
-describe('Customer Group external updated sender', () => {
-  test('sendData should be defined', () => {
-    expect(sender.sendData).toBeInstanceOf(Function)
+describe('Given customer group external updated sender', () => {
+  describe('When method sendData is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(sender.sendData).toBeInstanceOf(Function)
+    })
   })
-  test('calls update customer group', async () => {
-    const params = {}
-    const transformed = {}
-    const preprocess = {}
-    await sender.sendData(params, transformed, preprocess)
-    expect(updateCustomerGroup).toHaveBeenCalled()
+  describe('When method sendData is called', () => {
+    test('Then update customer group is called', async () => {
+      const params = {}
+      const transformed = {}
+      const preprocess = {}
+      await sender.sendData(params, transformed, preprocess)
+      expect(updateCustomerGroup).toHaveBeenCalled()
+    })
   })
 })

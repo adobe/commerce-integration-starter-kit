@@ -17,15 +17,19 @@ const { deleteCustomer } = require('../../../../../actions/customer/commerce-cus
 
 const sender = require('../../../../../actions/customer/external/deleted/sender')
 
-describe('Customer external deleted sender', () => {
-  test('sendData should be defined', () => {
-    expect(sender.sendData).toBeInstanceOf(Function)
+describe('Given customer external deleted sender', () => {
+  describe('When method sendData is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(sender.sendData).toBeInstanceOf(Function)
+    })
   })
-  test('calls delete customer', async () => {
-    const params = {}
-    const transformed = {}
-    const preprocess = {}
-    await sender.sendData(params, transformed, preprocess)
-    expect(deleteCustomer).toHaveBeenCalled()
+  describe('When method sendData is called', () => {
+    test('Then delete customer is called', async () => {
+      const params = {}
+      const transformed = {}
+      const preprocess = {}
+      await sender.sendData(params, transformed, preprocess)
+      expect(deleteCustomer).toHaveBeenCalled()
+    })
   })
 })

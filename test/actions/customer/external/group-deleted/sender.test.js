@@ -17,15 +17,19 @@ const { deleteCustomerGroup } = require('../../../../../actions/customer/commerc
 
 const sender = require('../../../../../actions/customer/external/group-deleted/sender')
 
-describe('Customer Group external deleted sender', () => {
-  test('sendData should be defined', () => {
-    expect(sender.sendData).toBeInstanceOf(Function)
+describe('Given customer group external deleted sender', () => {
+  describe('When method sendData is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(sender.sendData).toBeInstanceOf(Function)
+    })
   })
-  test('calls delete customer group', async () => {
-    const params = {}
-    const transformed = {}
-    const preprocess = {}
-    await sender.sendData(params, transformed, preprocess)
-    expect(deleteCustomerGroup).toHaveBeenCalled()
+  describe('When method sendData is called', () => {
+    test('Then delete customer group is called', async () => {
+      const params = {}
+      const transformed = {}
+      const preprocess = {}
+      await sender.sendData(params, transformed, preprocess)
+      expect(deleteCustomerGroup).toHaveBeenCalled()
+    })
   })
 })

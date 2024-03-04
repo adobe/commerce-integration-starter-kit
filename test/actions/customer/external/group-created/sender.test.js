@@ -17,15 +17,19 @@ const { createCustomerGroup } = require('../../../../../actions/customer/commerc
 
 const sender = require('../../../../../actions/customer/external/group-created/sender')
 
-describe('Customer Group external created sender', () => {
-  test('sendData should be defined', () => {
-    expect(sender.sendData).toBeInstanceOf(Function)
+describe('Given customer group external created sender', () => {
+  describe('When method sendData is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(sender.sendData).toBeInstanceOf(Function)
+    })
   })
-  test('calls create customer group', async () => {
-    const params = {}
-    const transformed = {}
-    const preprocess = {}
-    await sender.sendData(params, transformed, preprocess)
-    expect(createCustomerGroup).toHaveBeenCalled()
+  describe('When method sendData is called', () => {
+    test('Then create customer group is called', async () => {
+      const params = {}
+      const transformed = {}
+      const preprocess = {}
+      await sender.sendData(params, transformed, preprocess)
+      expect(createCustomerGroup).toHaveBeenCalled()
+    })
   })
 })
