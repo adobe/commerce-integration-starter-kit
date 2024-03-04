@@ -22,17 +22,128 @@ afterEach(() => {
   jest.resetModules()
 })
 
-describe('Order events received from commerce', () => {
-  test('main should be defined', () => {
-    expect(action.main).toBeInstanceOf(Function)
+describe('Given order commerce consumer', () => {
+  describe('When method main is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(action.main).toBeInstanceOf(Function)
+    })
   })
-  describe('Given order created or updated in commerce', () => {
-    describe('When event is received with equal created and updated date', () => {
-      test('Then order created request is processed', async () => {
+  describe('When a valid order created event is received', () => {
+    test('Then returns success response', async () => {
+      const params = {
+        API_HOST: 'API_HOST',
+        API_AUTH: 'API_AUTH',
+        type: 'com.adobe.commerce.observer.sales_order_save_commit_after',
+        data: {
+          value: {
+            real_order_id: 'ORDER_ID',
+            increment_id: 'ORDER_INCREMENTAL_ID',
+            items: [
+              {
+                item_id: 'ITEM_ID'
+              }
+            ],
+            created_at: '2000-01-01',
+            updated_at: '2000-01-01'
+          }
+        }
+      }
+
+      openwhisk.mockReturnValue({
+        actions: {
+          invoke: jest.fn().mockResolvedValue({
+            response: {
+              result: {
+                statusCode: 200,
+                body: {
+                  success: true
+                }
+              }
+            }
+          })
+        }
+      })
+
+      const response = await action.main(params)
+
+      expect(response).toEqual({
+        statusCode: 200,
+        body: {
+          response: {
+            success: true
+          },
+          type: 'com.adobe.commerce.observer.sales_order_save_commit_after'
+        }
+      })
+    })
+  })
+  describe('When a valid order updated event is received', () => {
+    test('Then returns success response', async () => {
+      const params = {
+        type: 'com.adobe.commerce.observer.sales_order_save_commit_after',
+        data: {
+          value: {
+            real_order_id: 'ORDER_ID',
+            increment_id: 'ORDER_INCREMENTAL_ID',
+            items: [
+              {
+                item_id: 'ITEM_ID'
+              }
+            ],
+            created_at: '2000-01-01',
+            updated_at: '2000-01-01'
+          }
+        }
+      }
+
+      openwhisk.mockReturnValue({
+        actions: {
+          invoke: jest.fn().mockResolvedValue({
+            response: {
+              result: {
+                statusCode: 200,
+                body: {
+                  success: true
+                }
+              }
+            }
+          })
+        }
+      })
+
+      const response = await action.main(params)
+
+      expect(response).toEqual({
+        statusCode: 200,
+        body: {
+          response: {
+            success: true
+          },
+          type: 'com.adobe.commerce.observer.sales_order_save_commit_after'
+        }
+      })
+    })
+  })
+  describe('When an invalid order event is received', () => {
+    test('Then returns error response', async () => {
+      const params = {}
+      const response = await action.main(params)
+
+      expect(response).toEqual({
+        error: {
+          statusCode: 400,
+          body: {
+            error: "Invalid request parameters: missing parameter(s) 'type,data.value.created_at,data.value.updated_at'"
+          }
+        }
+      })
+    })
+  })
+  describe('When order event type received is not supported', () => {
+    test('Then returns error response',
+      async () => {
         const params = {
-          API_HOST: 'API_HOST',
-          API_AUTH: 'API_AUTH',
-          type: 'com.adobe.commerce.observer.sales_order_save_commit_after',
+          type: 'NOT_SUPPORTED_TYPE',
           data: {
             value: {
               real_order_id: 'ORDER_ID',
@@ -47,127 +158,16 @@ describe('Order events received from commerce', () => {
             }
           }
         }
-
-        openwhisk.mockReturnValue({
-          actions: {
-            invoke: jest.fn().mockResolvedValue({
-              response: {
-                result: {
-                  statusCode: 200,
-                  body: {
-                    success: true
-                  }
-                }
-              }
-            })
-          }
-        })
-
-        const response = await action.main(params)
-
-        expect(response).toEqual({
-          statusCode: 200,
-          body: {
-            response: {
-              success: true
-            },
-            type: 'com.adobe.commerce.observer.sales_order_save_commit_after'
-          }
-        })
-      })
-    })
-    describe('When event is received with not equal created and updated date', () => {
-      test('Then order updated request is processed', async () => {
-        const params = {
-          type: 'com.adobe.commerce.observer.sales_order_save_commit_after',
-          data: {
-            value: {
-              real_order_id: 'ORDER_ID',
-              increment_id: 'ORDER_INCREMENTAL_ID',
-              items: [
-                {
-                  item_id: 'ITEM_ID'
-                }
-              ],
-              created_at: '2000-01-01',
-              updated_at: '2000-01-01'
-            }
-          }
-        }
-
-        openwhisk.mockReturnValue({
-          actions: {
-            invoke: jest.fn().mockResolvedValue({
-              response: {
-                result: {
-                  statusCode: 200,
-                  body: {
-                    success: true
-                  }
-                }
-              }
-            })
-          }
-        })
-
-        const response = await action.main(params)
-
-        expect(response).toEqual({
-          statusCode: 200,
-          body: {
-            response: {
-              success: true
-            },
-            type: 'com.adobe.commerce.observer.sales_order_save_commit_after'
-          }
-        })
-      })
-    })
-    describe('When event is received with missing required parameters', () => {
-      test('Then process return a 400 and message error', async () => {
-        const params = {}
         const response = await action.main(params)
 
         expect(response).toEqual({
           error: {
-            statusCode: 400,
+            statusCode: HTTP_BAD_REQUEST,
             body: {
-              error: "Invalid request parameters: missing parameter(s) 'type,data.value.created_at,data.value.updated_at'"
+              error: 'This case type is not supported: NOT_SUPPORTED_TYPE'
             }
           }
         })
       })
-    })
-    describe('When event is received with not supported event type', () => {
-      test('Then process return 400 and message error',
-        async () => {
-          const params = {
-            type: 'NOT_SUPPORTED_TYPE',
-            data: {
-              value: {
-                real_order_id: 'ORDER_ID',
-                increment_id: 'ORDER_INCREMENTAL_ID',
-                items: [
-                  {
-                    item_id: 'ITEM_ID'
-                  }
-                ],
-                created_at: '2000-01-01',
-                updated_at: '2000-01-01'
-              }
-            }
-          }
-          const response = await action.main(params)
-
-          expect(response).toEqual({
-            error: {
-              statusCode: HTTP_BAD_REQUEST,
-              body: {
-                error: 'This case type is not supported: NOT_SUPPORTED_TYPE'
-              }
-            }
-          })
-        })
-    })
   })
 })

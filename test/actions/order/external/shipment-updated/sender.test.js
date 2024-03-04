@@ -17,15 +17,19 @@ const { updateShipment } = require('../../../../../actions/order/commerce-shipme
 
 const sender = require('../../../../../actions/order/external/shipment-updated/sender')
 
-describe('Order Shipment external updated sender', () => {
-  test('sendData should be defined', () => {
-    expect(sender.sendData).toBeInstanceOf(Function)
+describe('Given order external shipment updated sender', () => {
+  describe('When method sendData is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(sender.sendData).toBeInstanceOf(Function)
+    })
   })
-  test('calls update shipment', async () => {
-    const params = {}
-    const transformed = {}
-    const preprocess = {}
-    await sender.sendData(params, transformed, preprocess)
-    expect(updateShipment).toHaveBeenCalled()
+  describe('When method sendData is called', () => {
+    test('Then update order shipment is called', async () => {
+      const params = {}
+      const transformed = {}
+      const preprocess = {}
+      await sender.sendData(params, transformed, preprocess)
+      expect(updateShipment).toHaveBeenCalled()
+    })
   })
 })

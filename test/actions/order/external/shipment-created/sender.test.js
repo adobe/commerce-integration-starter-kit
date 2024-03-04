@@ -17,15 +17,19 @@ const { createShipment } = require('../../../../../actions/order/commerce-shipme
 
 const sender = require('../../../../../actions/order/external/shipment-created/sender')
 
-describe('Order Shipment external created sender', () => {
-  test('sendData should be defined', () => {
-    expect(sender.sendData).toBeInstanceOf(Function)
+describe('Given order external shipment created sender', () => {
+  describe('When method sendData is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(sender.sendData).toBeInstanceOf(Function)
+    })
   })
-  test('calls create shipment', async () => {
-    const params = {}
-    const transformed = {}
-    const preprocess = {}
-    await sender.sendData(params, transformed, preprocess)
-    expect(createShipment).toHaveBeenCalled()
+  describe('When method sendData is called', () => {
+    test('Then create order shipment is called', async () => {
+      const params = {}
+      const transformed = {}
+      const preprocess = {}
+      await sender.sendData(params, transformed, preprocess)
+      expect(createShipment).toHaveBeenCalled()
+    })
   })
 })

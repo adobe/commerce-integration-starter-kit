@@ -17,15 +17,19 @@ const { addComment } = require('../../../../../actions/order/commerce-order-api-
 
 const sender = require('../../../../../actions/order/external/updated/sender')
 
-describe('Order external updated sender', () => {
-  test('sendData should be defined', () => {
-    expect(sender.sendData).toBeInstanceOf(Function)
+describe('Given order external updated sender', () => {
+  describe('When method sendData is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(sender.sendData).toBeInstanceOf(Function)
+    })
   })
-  test('calls add comment', async () => {
-    const params = { data: { id: 99 } }
-    const transformed = {}
-    const preprocess = {}
-    await sender.sendData(params, transformed, preprocess)
-    expect(addComment).toHaveBeenCalled()
+  describe('When method sendData is called', () => {
+    test('Then order add comment is called', async () => {
+      const params = { data: { id: 99 } }
+      const transformed = {}
+      const preprocess = {}
+      await sender.sendData(params, transformed, preprocess)
+      expect(addComment).toHaveBeenCalled()
+    })
   })
 })
