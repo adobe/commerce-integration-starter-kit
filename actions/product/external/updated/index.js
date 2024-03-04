@@ -38,7 +38,7 @@ async function main (params) {
     logger.debug(`[Product][External][Updated] Validate data: ${JSON.stringify(params.data)}`)
     const validation = validateData(params)
     if (!validation.success) {
-      logger.error(`[Product][External][Updated] ${validation.message}`)
+      logger.error(`[Product][External][Updated] Validation failed with error: ${validation.message}`)
       return actionErrorResponse(HTTP_BAD_REQUEST, validation.message)
     }
 
