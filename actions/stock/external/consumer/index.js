@@ -25,7 +25,7 @@ const { errorResponse, successResponse } = require('../../../responses')
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main (params) {
-  const logger = Core.Logger('main', { level: params.LOG_LEVEL || 'info' })
+  const logger = Core.Logger('stock-external-consumer', { level: params.LOG_LEVEL || 'info' })
 
   try {
     const openwhiskClient = new Openwhisk(params.API_HOST, params.API_AUTH)
@@ -33,42 +33,42 @@ async function main (params) {
     let response = {}
     let statusCode = HTTP_OK
 
-    logger.info('[Stock][External][Consumer] Start processing request')
-    logger.debug(`[Stock][External][Consumer] Consumer main params: ${stringParameters(params)}`)
+    logger.info('Start processing request')
+    logger.debug(`Consumer main params: ${stringParameters(params)}`)
 
     // check for missing request input parameters and headers
     const requiredParams = ['type', 'data']
     const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
 
     if (errorMessage) {
-      logger.error(`[Stock][External][Consumer] Invalid request parameters: ${errorMessage}`)
-      return errorResponse(HTTP_BAD_REQUEST, errorMessage)
+      logger.error(`Invalid request parameters: ${errorMessage}`)
+      return errorResponse(HTTP_BAD_REQUEST, `Invalid request parameters: ${errorMessage}`)
     }
 
-    logger.info(`[Stock][External][Consumer] Params type: ${params.type}`)
+    logger.info(`Params type: ${params.type}`)
     switch (params.type) {
       case 'be-observer.catalog_stock_update': {
-        logger.info('[Stock][External][Consumer] Invoking stock update')
+        logger.info('Invoking stock update')
         const updateRes = await openwhiskClient.invokeAction('stock-backoffice/updated', params.data)
         response = updateRes?.response?.result?.body
         statusCode = updateRes?.response?.result?.statusCode
         break
       }
       default: {
-        logger.error(`[Stock][External][Consumer] type not found: ${params.type}`)
+        logger.error(`Event type not found: ${params.type}`)
         return errorResponse(HTTP_BAD_REQUEST, `This case type is not supported: ${params.type}`)
       }
     }
 
     if (!response.success) {
-      logger.error(`[Stock][External][Consumer] ${response.error}`)
+      logger.error(`Error response: ${response.error}`)
       return errorResponse(statusCode, response.error)
     }
 
-    logger.info(`[Stock][External][Consumer] ${statusCode}: successful request`)
+    logger.info(`Successful request: ${statusCode}`)
     return successResponse(params.type, response)
   } catch (error) {
-    logger.error(`[Stock][External][Consumer] Server error: ${error.message}`)
+    logger.error(`Server error: ${error.message}`)
     return errorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }

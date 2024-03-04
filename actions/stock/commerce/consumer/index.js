@@ -24,48 +24,48 @@ const { errorResponse, successResponse } = require('../../../responses')
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main (params) {
-  const logger = Core.Logger('main', { level: params.LOG_LEVEL || 'info' })
+  const logger = Core.Logger('stock-commerce-consumer', { level: params.LOG_LEVEL || 'info' })
   try {
     const openwhiskClient = new Openwhisk(params.API_HOST, params.API_AUTH)
 
     let response = {}
     let statusCode = HTTP_OK
 
-    logger.info('[Stock][Commerce][Consumer] Start processing request')
-    logger.debug(`[Stock][Commerce][Consumer] Consumer main params: ${stringParameters(params)}`)
+    logger.info('Start processing request')
+    logger.debug(`Consumer main params: ${stringParameters(params)}`)
 
     const requiredParams = ['type']
     const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
 
     if (errorMessage) {
-      logger.error(`[Stock][Commerce][Consumer] Invalid request parameters: ${stringParameters(params)}`)
-      return errorResponse(HTTP_BAD_REQUEST, errorMessage)
+      logger.error(`Invalid request parameters: ${stringParameters(params)}`)
+      return errorResponse(HTTP_BAD_REQUEST, `Invalid request parameters: ${errorMessage}`)
     }
 
-    logger.info('[Stock][Commerce][Consumer] Params type: ' + params.type)
+    logger.info('Params type: ' + params.type)
 
     switch (params.type) {
       case 'com.adobe.commerce.observer.cataloginventory_stock_item_save_commit_after': {
-        logger.info('[Stock][Commerce][Consumer] Invoking update stock item')
+        logger.info('Invoking update stock item')
         const res = await openwhiskClient.invokeAction('stock-commerce/updated', params.data.value)
         response = res?.response?.result?.body
         statusCode = res?.response?.result?.statusCode
         break
       }
       default:
-        logger.error(`[Stock][Commerce][Consumer] type not found: ${params.type}`)
+        logger.error(`Event type not found: ${params.type}`)
         return errorResponse(HTTP_BAD_REQUEST, `This case type is not supported: ${params.type}`)
     }
 
     if (!response.success) {
-      logger.error(`[Stock][Commerce][Consumer] ${response.error}`)
+      logger.error(`Error response: ${response.error}`)
       return errorResponse(statusCode, response.error)
     }
 
-    logger.info(`[Stock][Commerce][Consumer] ${statusCode}: successful request`)
+    logger.info(`Successful request: ${statusCode}`)
     return successResponse(params.type, response)
   } catch (error) {
-    logger.error(`[Stock][Commerce][Consumer] Server error: ${error.message}`)
+    logger.error(`Server error: ${error.message}`)
     return errorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }

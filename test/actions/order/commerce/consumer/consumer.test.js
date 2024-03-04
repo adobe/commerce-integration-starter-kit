@@ -132,7 +132,7 @@ describe('Order events received from commerce', () => {
           error: {
             statusCode: 400,
             body: {
-              error: "missing parameter(s) 'type,data.value.created_at,data.value.updated_at'"
+              error: "Invalid request parameters: missing parameter(s) 'type,data.value.created_at,data.value.updated_at'"
             }
           }
         })
