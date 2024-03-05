@@ -13,6 +13,8 @@
  */
 
 const { getCommerceOauthClient } = require('../oauth1a')
+const { Core } = require('@adobe/aio-sdk')
+const logger = Core.Logger('commerce-consumer-api-client', 'info')
 
 /**
  * This function call Adobe commerce rest API to create a customer
@@ -24,9 +26,8 @@ const { getCommerceOauthClient } = require('../oauth1a')
  * @param {string} accessToken - Adobe commerce integration access token
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
  * @param {object} data - Adobe commerce api payload
- * @param {object} logger - Logger
  */
-async function createCustomer (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data, logger) {
+async function createCustomer (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,
@@ -56,9 +57,8 @@ async function createCustomer (baseUrl, consumerKey, consumerSecret, accessToken
  * @param {string} accessToken - Adobe commerce integration access token
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
  * @param {object} data - Adobe commerce api payload
- * @param {object} logger - Logger
  */
-async function updateCustomer (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data, logger) {
+async function updateCustomer (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,
@@ -87,9 +87,8 @@ async function updateCustomer (baseUrl, consumerKey, consumerSecret, accessToken
  * @param {string} accessToken - Adobe commerce integration access token
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
  * @param {number} id - Id
- * @param {object} logger - Logger
  */
-async function deleteCustomer (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, id, logger) {
+async function deleteCustomer (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, id) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,
