@@ -12,7 +12,6 @@
  * from Adobe.
  */
 
-const { Core } = require('@adobe/aio-sdk')
 const { addComment } = require('../../commerce-order-api-client')
 const { HTTP_INTERNAL_ERROR } = require('../../../constants')
 
@@ -25,8 +24,6 @@ const { HTTP_INTERNAL_ERROR } = require('../../../constants')
  * @param {object} preProcessed - preprocessed result data
  */
 async function sendData (params, transformed, preProcessed) {
-  const logger = Core.Logger('sendData', { level: params.LOG_LEVEL || 'info' })
-
   try {
     const response = await addComment(
       params.COMMERCE_BASE_URL,
@@ -35,16 +32,13 @@ async function sendData (params, transformed, preProcessed) {
       params.COMMERCE_ACCESS_TOKEN,
       params.COMMERCE_ACCESS_TOKEN_SECRET,
       params.data.id,
-      transformed,
-      logger)
+      transformed)
 
-    logger.debug(`Response: ${JSON.stringify(response)}`)
     return {
       success: true,
       message: response
     }
   } catch (error) {
-    logger.error(`Error calling Commerce API: ${JSON.stringify(error)}`)
     return {
       success: false,
       statusCode: error.response?.statusCode || HTTP_INTERNAL_ERROR,

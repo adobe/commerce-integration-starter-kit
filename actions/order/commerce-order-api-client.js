@@ -13,6 +13,8 @@
  */
 
 const { getCommerceOauthClient } = require('../oauth1a')
+const { Core } = require('@adobe/aio-sdk')
+const logger = Core.Logger('commerce-order-api-client', 'info')
 
 /**
  * This function call Adobe commerce rest API to create a product
@@ -25,9 +27,8 @@ const { getCommerceOauthClient } = require('../oauth1a')
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
  * @param {number} orderId - order id
  * @param {object} data - Adobe commerce api payload
- * @param {object} logger - Logger
  */
-async function addComment (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, orderId, data, logger) {
+async function addComment (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, orderId, data) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,

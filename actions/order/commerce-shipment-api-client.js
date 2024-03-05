@@ -13,6 +13,8 @@
  */
 
 const { getCommerceOauthClient } = require('../oauth1a')
+const { Core } = require('@adobe/aio-sdk')
+const logger = Core.Logger('commerce-shipment-api-client', 'info')
 
 /**
  * This function call Adobe commerce rest API to create a customer group
@@ -24,9 +26,8 @@ const { getCommerceOauthClient } = require('../oauth1a')
  * @param {string} accessToken - Adobe commerce integration access token
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
  * @param {object} data - Adobe commerce api payload
- * @param {object} logger - Logger
  */
-async function createShipment (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data, logger) {
+async function createShipment (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,
@@ -56,9 +57,8 @@ async function createShipment (baseUrl, consumerKey, consumerSecret, accessToken
  * @param {string} accessToken - Adobe commerce integration access token
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
  * @param {object} data - Adobe commerce api payload
- * @param {object} logger - Logger
  */
-async function updateShipment (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data, logger) {
+async function updateShipment (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,
