@@ -21,60 +21,68 @@ const { sendData } = require('../../../../../actions/product/external/updated/se
 const action = require('../../../../../actions/product/external/updated')
 const { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR, HTTP_OK } = require('../../../../../actions/constants')
 
-describe('Product external updated', () => {
-  test('main should be defined', () => {
-    expect(action.main).toBeInstanceOf(Function)
+describe('Given product external updated action', () => {
+  describe('When method main is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(action.main).toBeInstanceOf(Function)
+    })
   })
-  test('When validation fails, Then returns HTTP_BAD_REQUEST', async () => {
-    const IGNORED_PARAMS = { data: {} }
-    const FAILED_VALIDATION_RESPONSE = {
-      success: false,
-      message: 'Data provided does not validate with the schema'
-    }
-    const ERROR_RESPONSE = {
-      statusCode: HTTP_BAD_REQUEST,
-      body: {
+  describe('When product event data is invalid', () => {
+    test('Then returns action error response', async () => {
+      const IGNORED_PARAMS = { data: {} }
+      const FAILED_VALIDATION_RESPONSE = {
         success: false,
-        error: 'Data provided does not validate with the schema'
+        message: 'Data provided does not validate with the schema'
       }
-    }
-    validateData.mockReturnValue(FAILED_VALIDATION_RESPONSE)
-    expect(await action.main(IGNORED_PARAMS)).toMatchObject(ERROR_RESPONSE)
-  })
-  test('When an generic error is caught, Then returns HTTP_INTERNAL_ERROR', async () => {
-    const IGNORED_PARAMS = { data: {} }
-    const SUCCESSFUL_VALIDATION_RESPONSE = {
-      success: true
-    }
-    const ERROR = new Error('generic error')
-    const ERROR_RESPONSE = {
-      statusCode: HTTP_INTERNAL_ERROR,
-      body: {
-        success: false,
-        error: ERROR.message
+      const ERROR_RESPONSE = {
+        statusCode: HTTP_BAD_REQUEST,
+        body: {
+          success: false,
+          error: 'Data provided does not validate with the schema'
+        }
       }
-    }
-    validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE)
-    sendData.mockRejectedValue(ERROR)
-    expect(await action.main(IGNORED_PARAMS)).toMatchObject(ERROR_RESPONSE)
+      validateData.mockReturnValue(FAILED_VALIDATION_RESPONSE)
+      expect(await action.main(IGNORED_PARAMS)).toMatchObject(ERROR_RESPONSE)
+    })
   })
-  test('When success, Then returns HTTP_OK', async () => {
-    const IGNORED_PARAMS = { data: {} }
-    const SUCCESSFUL_VALIDATION_RESPONSE = {
-      success: true
-    }
-    const SUCCESSFUL_SEND_DATA_RESPONSE = {
-      success: true,
-      response: 'anything'
-    }
-    const SUCCESS_RESPONSE = {
-      statusCode: HTTP_OK,
-      body: {
+  describe('When an exception is thrown', () => {
+    test('Then return action error response', async () => {
+      const IGNORED_PARAMS = { data: {} }
+      const SUCCESSFUL_VALIDATION_RESPONSE = {
         success: true
       }
-    }
-    validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE)
-    sendData.mockReturnValue(SUCCESSFUL_SEND_DATA_RESPONSE)
-    expect(await action.main(IGNORED_PARAMS)).toMatchObject(SUCCESS_RESPONSE)
+      const ERROR = new Error('generic error')
+      const ERROR_RESPONSE = {
+        statusCode: HTTP_INTERNAL_ERROR,
+        body: {
+          success: false,
+          error: ERROR.message
+        }
+      }
+      validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE)
+      sendData.mockRejectedValue(ERROR)
+      expect(await action.main(IGNORED_PARAMS)).toMatchObject(ERROR_RESPONSE)
+    })
+  })
+  describe('When product event data is valid', () => {
+    test('Then returns action success response', async () => {
+      const IGNORED_PARAMS = { data: {} }
+      const SUCCESSFUL_VALIDATION_RESPONSE = {
+        success: true
+      }
+      const SUCCESSFUL_SEND_DATA_RESPONSE = {
+        success: true,
+        response: 'anything'
+      }
+      const SUCCESS_RESPONSE = {
+        statusCode: HTTP_OK,
+        body: {
+          success: true
+        }
+      }
+      validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE)
+      sendData.mockReturnValue(SUCCESSFUL_SEND_DATA_RESPONSE)
+      expect(await action.main(IGNORED_PARAMS)).toMatchObject(SUCCESS_RESPONSE)
+    })
   })
 })

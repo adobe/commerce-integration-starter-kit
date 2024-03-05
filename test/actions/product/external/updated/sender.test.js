@@ -17,15 +17,19 @@ const { updateProduct } = require('../../../../../actions/product/commerce-produ
 
 const sender = require('../../../../../actions/product/external/updated/sender')
 
-describe('Product external updated sender', () => {
-  test('sendData should be defined', () => {
-    expect(sender.sendData).toBeInstanceOf(Function)
+describe('Given product external updated sender', () => {
+  describe('When method sendData is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(sender.sendData).toBeInstanceOf(Function)
+    })
   })
-  test('calls update product', async () => {
-    const params = {}
-    const transformed = {}
-    const preprocess = {}
-    await sender.sendData(params, transformed, preprocess)
-    expect(updateProduct).toHaveBeenCalled()
+  describe('When method sendData is called', () => {
+    test('Then update product is called', async () => {
+      const params = {}
+      const transformed = {}
+      const preprocess = {}
+      await sender.sendData(params, transformed, preprocess)
+      expect(updateProduct).toHaveBeenCalled()
+    })
   })
 })

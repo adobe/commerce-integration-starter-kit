@@ -21,12 +21,14 @@ afterEach(() => {
   jest.resetModules()
 })
 
-describe('Product commerce created', () => {
-  test('main should be defined', () => {
-    expect(action.main).toBeInstanceOf(Function)
+describe('Given product commerce created action', () => {
+  describe('When method main is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(action.main).toBeInstanceOf(Function)
+    })
   })
-  describe('When process product commerce request has invalid data', () => {
-    test('Then an error 400 is returned', async () => {
+  describe('When invalid product created event data is received', () => {
+    test('Then returns action error response', async () => {
       const params = {
         data: {}
       }
