@@ -13,7 +13,6 @@
  */
 
 const Ajv = require('ajv')
-const { Core } = require('@adobe/aio-sdk')
 
 /**
  * This function validate the customer group data received from external back-office application
@@ -22,25 +21,16 @@ const { Core } = require('@adobe/aio-sdk')
  * @param {object} params - Received data from adobe commerce
  */
 function validateData (params) {
-  const logger = Core.Logger('validateData', { level: params.LOG_LEVEL || 'info' })
   const data = params.data
-  const dataAsString = JSON.stringify(data)
-
-  logger.info(`Starting schema validation for data: ${dataAsString}`)
   const ajv = new Ajv()
   const schema = require('./schema.json')
-  const schemaAsJson = JSON.stringify(schema)
 
-  logger.debug(`Compiling schema: ${schemaAsJson}`)
   const validate = ajv.compile(schema)
-
-  logger.debug(`Validating schema: ${schemaAsJson}`)
   const isValid = validate(data)
   if (!isValid) {
-    logger.error(`Data provided ${dataAsString} does not validate with the schema`)
     return {
       success: false,
-      message: `Data provided ${dataAsString} does not validate with the schema`
+      message: `Data provided does not validate with the schema: ${JSON.stringify(data)}`
     }
   }
   return {

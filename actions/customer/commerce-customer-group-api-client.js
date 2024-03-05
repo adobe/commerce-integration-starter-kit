@@ -13,6 +13,8 @@
  */
 
 const { getCommerceOauthClient } = require('../oauth1a')
+const { Core } = require('@adobe/aio-sdk')
+const logger = Core.Logger('commerce-customer-group-api-client', 'info')
 
 /**
  * This function call Adobe commerce rest API to create a customer group
@@ -24,9 +26,8 @@ const { getCommerceOauthClient } = require('../oauth1a')
  * @param {string} accessToken - Adobe commerce integration access token
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
  * @param {object} data - Adobe commerce api payload
- * @param {object} logger - Logger
  */
-async function createCustomerGroup (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data, logger) {
+async function createCustomerGroup (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,
@@ -56,9 +57,8 @@ async function createCustomerGroup (baseUrl, consumerKey, consumerSecret, access
  * @param {string} accessToken - Adobe commerce integration access token
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
  * @param {object} data - Adobe commerce api payload
- * @param {object} logger - Logger
  */
-async function updateCustomerGroup (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data, logger) {
+async function updateCustomerGroup (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,
@@ -87,9 +87,8 @@ async function updateCustomerGroup (baseUrl, consumerKey, consumerSecret, access
  * @param {string} accessToken - Adobe commerce integration access token
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
  * @param {number} id - Id
- * @param {object} logger - Logger
  */
-async function deleteCustomerGroup (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, id, logger) {
+async function deleteCustomerGroup (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, id) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,
