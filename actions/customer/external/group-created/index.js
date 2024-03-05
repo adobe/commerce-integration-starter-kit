@@ -29,39 +29,39 @@ const { actionErrorResponse, actionSuccessResponse } = require('../../../respons
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main (params) {
-  const logger = Core.Logger('main', { level: params.LOG_LEVEL || 'info' })
+  const logger = Core.Logger('customer-external-group-created', { level: params.LOG_LEVEL || 'info' })
 
-  logger.info('[CustomerGroup][External][Created] Start processing request')
-  logger.debug(`[CustomerGroup][External][Created] Action main params: ${stringParameters(params)}`)
+  logger.info('Start processing request')
+  logger.debug(`Received params: ${stringParameters(params)}`)
 
   try {
-    logger.debug(`[CustomerGroup][External][Created] Validate data: ${JSON.stringify(params.data)}`)
+    logger.debug(`Validate data: ${JSON.stringify(params.data)}`)
     const validation = validateData(params)
     if (!validation.success) {
-      logger.error(`[CustomerGroup][External][Created] Validation failed with error: ${validation.message}`)
+      logger.error(`Validation failed with error: ${validation.message}`)
       return actionErrorResponse(HTTP_BAD_REQUEST, validation.message)
     }
 
-    logger.debug(`[CustomerGroup][External][Created] Transform data: ${JSON.stringify(params)}`)
+    logger.debug(`Transform data: ${JSON.stringify(params)}`)
     const transformed = transformData(params)
 
-    logger.debug(`[CustomerGroup][External][Created] Preprocess data: ${JSON.stringify(params)}`)
+    logger.debug(`Preprocess data: ${JSON.stringify(params)}`)
     const preProcessed = preProcess(params, transformed)
 
-    logger.debug(`[CustomerGroup][External][Created] Start sending data: ${JSON.stringify(transformed)}`)
+    logger.debug(`Start sending data: ${JSON.stringify(transformed)}`)
     const result = await sendData(params, transformed, preProcessed)
     if (!result.success) {
-      logger.error(`[CustomerGroup][External][Created] ${result.message}`)
+      logger.error(`Send data failed: ${result.message}`)
       return actionErrorResponse(result.statusCode, result.message)
     }
 
-    logger.debug(`[CustomerGroup][External][Created] Postprocess data: ${JSON.stringify(params)}`)
+    logger.debug(`Postprocess data: ${JSON.stringify(params)}`)
     const postProcessed = postProcess(params, transformed, preProcessed, result)
 
-    logger.debug('[CustomerGroup][External][Created] Process finished successfully')
+    logger.debug('Process finished successfully')
     return actionSuccessResponse('Customer group created successfully')
   } catch (error) {
-    logger.error(`[CustomerGroup][External][Created] Error processing the request: ${error}`)
+    logger.error(`Error processing the request: ${error}`)
     return actionErrorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }
