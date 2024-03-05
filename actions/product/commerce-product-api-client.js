@@ -13,6 +13,8 @@
  */
 
 const { getCommerceOauthClient } = require('../oauth1a')
+const { Core } = require('@adobe/aio-sdk')
+const logger = Core.Logger('commerce-product-api-client', 'info')
 
 /**
  * This function call Adobe commerce rest API to create a product
@@ -24,9 +26,8 @@ const { getCommerceOauthClient } = require('../oauth1a')
  * @param {string} accessToken - Adobe commerce integration access token
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
  * @param {object} data - Adobe commerce api payload
- * @param {object} logger - Logger
  */
-async function createProduct (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data, logger) {
+async function createProduct (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,
@@ -56,9 +57,8 @@ async function createProduct (baseUrl, consumerKey, consumerSecret, accessToken,
  * @param {string} accessToken - Adobe commerce integration access token
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
  * @param {object} data - Adobe commerce api payload
- * @param {object} logger - Logger
  */
-async function updateProduct (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data, logger) {
+async function updateProduct (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,
@@ -86,11 +86,9 @@ async function updateProduct (baseUrl, consumerKey, consumerSecret, accessToken,
  * @param {string} consumerSecret - Adobe commerce integration consumer secret
  * @param {string} accessToken - Adobe commerce integration access token
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
- * @param {object} data - Adobe commerce api payload
- * @param sku
- * @param {object} logger - Logger
+ * @param {string} sku - Stock keeping unit
  */
-async function deleteProduct (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, sku, logger) {
+async function deleteProduct (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, sku) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,
