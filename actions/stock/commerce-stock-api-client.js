@@ -13,9 +13,11 @@
  */
 
 const { getCommerceOauthClient } = require('../oauth1a')
+const { Core } = require('@adobe/aio-sdk')
+const logger = Core.Logger('commerce-stock-api-client', 'info')
 
 /**
- * This function call Adobe commerce rest API to update the stock of an sku in a source
+ * This function call Adobe commerce rest API to update the stock of a sku in a source
  *
  * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
@@ -24,9 +26,8 @@ const { getCommerceOauthClient } = require('../oauth1a')
  * @param {string} accessToken - Adobe commerce integration access token
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
  * @param {object} data - Adobe commerce api payload
- * @param {object} logger - Logger
  */
-async function updateStock (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data, logger) {
+async function updateStock (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,
