@@ -20,12 +20,14 @@ afterEach(() => {
   jest.clearAllMocks()
   jest.resetModules()
 })
-describe('Stock item updated in commerce', () => {
-  test('main should be defined', () => {
-    expect(action.main).toBeInstanceOf(Function)
+describe('Given stock item commerce updated action', () => {
+  describe('When method main is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(action.main).toBeInstanceOf(Function)
+    })
   })
-  describe('When process stock commerce request has invalid data', () => {
-    test('Then an error 400 is returned', async () => {
+  describe('When invalid stock item updated event data is received', () => {
+    test('Then returns action error response', async () => {
       const params = {
         data: {}
       }

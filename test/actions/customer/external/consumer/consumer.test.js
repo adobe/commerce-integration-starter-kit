@@ -15,14 +15,13 @@
 const Openwhisk = require('../../../../../actions/openwhisk')
 const consumer = require('../../../../../actions/customer/external/consumer')
 const { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_INTERNAL_ERROR } = require('../../../../../actions/constants')
-const action = require('../../../../../actions/customer/commerce/consumer')
 
 jest.mock('Openwhisk')
 
 describe('Given customer external consumer', () => {
   describe('When method main is defined', () => {
     test('Then is an instance of Function', () => {
-      expect(action.main).toBeInstanceOf(Function)
+      expect(consumer.main).toBeInstanceOf(Function)
     })
   })
   describe('When required params are missing', () => {
@@ -119,8 +118,7 @@ describe('Given customer external consumer', () => {
           }
         }
         const params = { type, data: {} }
-        Openwhisk.prototype.invokeAction = jest.fn()
-          .mockResolvedValue(ACTION_RESPONSE)
+        Openwhisk.prototype.invokeAction = jest.fn().mockResolvedValue(ACTION_RESPONSE)
         expect(await consumer.main(params)).toMatchObject(CONSUMER_RESPONSE)
       })
   })

@@ -15,14 +15,13 @@
 const Openwhisk = require('../../../../../actions/openwhisk')
 const consumer = require('../../../../../actions/order/external/consumer')
 const { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_INTERNAL_ERROR } = require('../../../../../actions/constants')
-const action = require('../../../../../actions/order/commerce/consumer')
 
 jest.mock('Openwhisk')
 
 describe('Given order external consumer', () => {
   describe('When method main is defined', () => {
     test('Then is an instance of Function', () => {
-      expect(action.main).toBeInstanceOf(Function)
+      expect(consumer.main).toBeInstanceOf(Function)
     })
   })
   describe('When required params are missing', () => {

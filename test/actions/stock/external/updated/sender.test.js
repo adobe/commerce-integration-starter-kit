@@ -17,15 +17,19 @@ const { updateStock } = require('../../../../../actions/stock/commerce-stock-api
 
 const sender = require('../../../../../actions/stock/external/updated/sender')
 
-describe('Stock external updated sender', () => {
-  test('sendData should be defined', () => {
-    expect(sender.sendData).toBeInstanceOf(Function)
+describe('Given stock external updated sender', () => {
+  describe('When method sendData is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(sender.sendData).toBeInstanceOf(Function)
+    })
   })
-  test('calls update stock', async () => {
-    const params = {}
-    const transformed = {}
-    const preprocess = {}
-    await sender.sendData(params, transformed, preprocess)
-    expect(updateStock).toHaveBeenCalled()
+  describe('When method sendData is called', () => {
+    test('Then update stock is called', async () => {
+      const params = {}
+      const transformed = {}
+      const preprocess = {}
+      await sender.sendData(params, transformed, preprocess)
+      expect(updateStock).toHaveBeenCalled()
+    })
   })
 })
