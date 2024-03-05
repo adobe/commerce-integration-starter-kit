@@ -29,39 +29,39 @@ const { actionSuccessResponse, actionErrorResponse } = require('../../../respons
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main (params) {
-  const logger = Core.Logger('main', { level: params.LOG_LEVEL || 'info' })
+  const logger = Core.Logger('product-commerce-created', { level: params.LOG_LEVEL || 'info' })
 
-  logger.info('[Product][Commerce][Created] Start processing request')
-  logger.debug(`[Product][Commerce][Created] Consumer main params: ${stringParameters(params)}`)
+  logger.info('Start processing request')
+  logger.debug(`Received params: ${stringParameters(params)}`)
 
   try {
-    logger.debug(`[Product][Commerce][Created] Validate data: ${JSON.stringify(params.data)}`)
+    logger.debug(`Validate data: ${JSON.stringify(params.data)}`)
     const validation = validateData(params.data)
     if (!validation.success) {
-      logger.error(`[Product][Commerce][Created] Validation failed with error: ${validation.message}`)
+      logger.error(`Validation failed with error: ${validation.message}`)
       return actionErrorResponse(HTTP_BAD_REQUEST, validation.message)
     }
 
-    logger.debug(`[Product][Commerce][Created] Transform data: ${JSON.stringify(params.data)}`)
+    logger.debug(`Transform data: ${JSON.stringify(params.data)}`)
     const transformedData = transformData(params.data)
 
-    logger.debug(`[Product][Commerce][Created] Preprocess data: ${JSON.stringify(params)}`)
+    logger.debug(`Preprocess data: ${JSON.stringify(params)}`)
     const preProcessed = preProcess(params, transformedData)
 
-    logger.debug(`[Product][Commerce][Created] Start sending data: ${JSON.stringify(params)}`)
+    logger.debug(`Start sending data: ${JSON.stringify(params)}`)
     const result = await sendData(params, transformedData, preProcessed)
     if (!result.success) {
-      logger.error(`[Product][Commerce][Created] ${result.message}`)
+      logger.error(`Send data failed: ${result.message}`)
       return actionErrorResponse(result.statusCode, result.message)
     }
 
-    logger.debug(`[Product][Commerce][Created] Postprocess data: ${JSON.stringify(params)}`)
+    logger.debug(`Postprocess data: ${JSON.stringify(params)}`)
     const postProcessed = postProcess(params, transformedData, preProcessed, result)
 
-    logger.debug('[Product][Commerce][Created] Process finished successfully')
+    logger.debug('Process finished successfully')
     return actionSuccessResponse('Product created successfully')
   } catch (error) {
-    logger.error(`[Product][Commerce][Created] Error processing the request: ${error.message}`)
+    logger.error(`Error processing the request: ${error.message}`)
     return actionErrorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }
