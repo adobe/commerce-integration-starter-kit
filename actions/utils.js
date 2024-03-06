@@ -105,72 +105,6 @@ function getBearerToken (params) {
   }
   return undefined
 }
-/**
- *
- * Returns an error response object and attempts to log.info the status code and error message
- *
- * @param {number} statusCode the error status code.
- *        e.g. 400
- * @param {string} message the error message.
- *        e.g. 'missing xyz parameter'
- * @param {*} [logger] an optional logger instance object with an `info` method
- *        e.g. `new require('@adobe/aio-sdk').Core.Logger('name')`
- * @returns {object} the error object, ready to be returned from the action main's function.
- */
-function errorResponse (statusCode, message, logger) {
-  if (logger && typeof logger.info === 'function') {
-    // @TODO remove this logger from here and keep the decision of logging the error to the caller
-    logger.info(`${statusCode}: ${message}`)
-  }
-  return {
-    error: {
-      statusCode,
-      body: {
-        error: message
-      }
-    }
-  }
-}
-
-/**
- *
- * Returns a success response object
- *
- * @param {number} statusCode the status code.
- *        e.g. 200
- * @param {string} message a descriptive message of the result
- *        e.g. 'missing xyz parameter'
- * @returns {object} the response object, ready to be returned from the action main's function.
- */
-function actionSuccessResponse (statusCode, message) {
-  return {
-    statusCode,
-    success: true,
-    body: {
-      message
-    }
-  }
-}
-
-/**
- *
- * Returns a success response object
- *
- * @param {number} statusCode the status code.
- *        e.g. 400
- * @param {string} error a descriptive message of the result
- *        e.g. 'missing xyz parameter'
- * @returns {object} the response object, ready to be returned from the action main's function.
- */
-function actionErrorResponse (statusCode, error) {
-  return {
-    statusCode,
-    success: false,
-    body: {
-      error
-    }
-  }
-}
 
 /**
  * Function to check if an object contains a specific value
@@ -189,9 +123,6 @@ function objectContainsValue (obj, value) {
 }
 
 module.exports = {
-  errorResponse,
-  actionErrorResponse,
-  actionSuccessResponse,
   getBearerToken,
   stringParameters,
   checkMissingRequestInputs,
