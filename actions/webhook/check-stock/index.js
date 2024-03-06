@@ -26,27 +26,27 @@ const { webhookErrorResponse, webhookSuccessResponse } = require('../../response
  * @returns {object} - response with success status and result
  */
 async function main (params) {
-  const logger = Core.Logger('main', { level: params.LOG_LEVEL || 'info' })
+  const logger = Core.Logger('webhook-check-stock', { level: params.LOG_LEVEL || 'info' })
   try {
-    logger.info('[WebhookCheckStock] Start processing request')
-    logger.debug(`[WebhookCheckStock] Webhook main params: ${stringParameters(params)}`)
+    logger.info('Start processing request')
+    logger.debug(`Webhook main params: ${stringParameters(params)}`)
 
     const validationResult = validateData(params)
     if (!validationResult.success) {
-      logger.error(`[WebhookCheckStock] ${validationResult.message}`)
+      logger.error(`Validation failed with error: ${validationResult.message}`)
       return webhookErrorResponse(validationResult.message)
     }
 
     const checkAvailableStockResult = await checkAvailableStock(params.data)
     if (!checkAvailableStockResult.success) {
-      logger.error(`[WebhookCheckStock] ${checkAvailableStockResult.message}`)
+      logger.error(`${checkAvailableStockResult.message}`)
       return webhookErrorResponse(checkAvailableStockResult.message)
     }
 
-    logger.info(`[WebhookCheckStock] ${HTTP_OK}: successful request`)
+    logger.info(`Successful request: ${HTTP_OK}`)
     return webhookSuccessResponse()
   } catch (error) {
-    logger.error(`[WebhookCheckStock] Server error: ${error.message}`, error)
+    logger.error(`Server error: ${error.message}`, error)
     return webhookErrorResponse(error.message)
   }
 }

@@ -33,32 +33,32 @@ const { errorResponse, successResponse } = require('../../responses')
  * @returns {object} - response with success status and result
  */
 async function main (params) {
-  const logger = Core.Logger('main', { level: params.LOG_LEVEL || 'info' })
+  const logger = Core.Logger('ingestion-webhook', { level: params.LOG_LEVEL || 'info' })
   try {
-    logger.info('[IngestionWebhook] Start processing request')
-    logger.debug(`[IngestionWebhook] Webhook main params: ${stringParameters(params)}`)
+    logger.info('Start processing request')
+    logger.debug(`Webhook main params: ${stringParameters(params)}`)
 
     const authentication = await checkAuthentication(params)
     if (!authentication.success) {
-      logger.error(`[IngestionWebhook] ${authentication.message}`)
+      logger.error(`Authentication failed with error: ${authentication.message}`)
       return errorResponse(HTTP_UNAUTHORIZED, authentication.message)
     }
 
     const validationResult = validateData(params)
     if (!validationResult.success) {
-      logger.error(`[IngestionWebhook] ${validationResult.message}`)
+      logger.error(`Validation failed with error: ${validationResult.message}`)
       return errorResponse(HTTP_BAD_REQUEST, validationResult.message)
     }
 
-    logger.debug('[IngestionWebhook] Generate Adobe access token')
+    logger.debug('Generate Adobe access token')
     const accessToken = await getAdobeAccessToken(params)
 
-    logger.debug('[IngestionWebhook] Get existing registrations')
+    logger.debug('Get existing registrations')
     const provider = await getProviderByKey(params, accessToken, BACKOFFICE_PROVIDER_KEY)
 
     if (!provider) {
       const errorMessage = 'Could not find any external backoffice provider'
-      logger.error(`IngestionWebhook] ${errorMessage}`)
+      logger.error(`${errorMessage}`)
       return errorResponse(HTTP_INTERNAL_ERROR, errorMessage)
     }
 
@@ -70,15 +70,15 @@ async function main (params) {
       uid: params.data.uid
     }
 
-    logger.debug('[IngestionWebhook] Initiate events client')
+    logger.debug('Initiate events client')
     const eventsClient = await Events.init(
       params.OAUTH_ORG_ID,
       params.OAUTH_CLIENT_ID,
       accessToken)
 
-    logger.info('[IngestionWebhook] Process event data')
+    logger.info('Process event data')
     logger.debug(
-          `[IngestionWebhook] Process event ${event.type} for entity ${event.entity}`)
+          `Process event ${event.type} for entity ${event.entity}`)
 
     const cloudEvent = new CloudEvent({
       source: 'urn:uuid:' + event.providerId,
@@ -88,17 +88,17 @@ async function main (params) {
       id: uuid.v4()
     })
 
-    logger.debug(`[IngestionWebhook] Publish event ${event.type} to provider ${event.providerName}`)
+    logger.debug(`Publish event ${event.type} to provider ${event.providerName}`)
     event.success = await eventsClient.publishEvent(cloudEvent)
 
-    logger.info(`[IngestionWebhook] ${HTTP_OK}: successful request`)
+    logger.info(`Successful request: ${HTTP_OK}`)
 
     return successResponse(event.type, {
       success: true,
       message: 'Event published successfully'
     })
   } catch (error) {
-    logger.error(`[IngestionWebhook] Server error: ${error.message}`)
+    logger.error(`Server error: ${error.message}`)
     return errorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }
