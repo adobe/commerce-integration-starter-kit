@@ -103,7 +103,7 @@ You can confirm the success of the deployment in the Adobe Developer Console by 
 
 ### Onboarding
 #### Configure the event registrations
-By default, the registrations' config file creates all the registrations for all entities. You can edit the `./onboarding/custom/registrations.json` file if you don't need a registration.
+By default, the registrations' config file creates all the registrations for all entities. You can edit the `./onboarding/custom/starter-kit-registrations.json` file if you don't need a registration.
 If you don't want to receive events from commerce, remove `commerce` from the entity array; for backoffice updates, remove `backoffice`.
 e.g., In the previous onboarding step (`Configure the project`), we commented on the product-backoffice package. In this case, we have to remove `backoffice` from the `product` entity:
 ```json

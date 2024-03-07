@@ -23,7 +23,7 @@ require('dotenv').config()
 async function main () {
   console.log('Starting the process of on-boarding based on you registration choice')
 
-  const registrations = require('./custom/registrations.json')
+  const registrations = require('./custom/starter-kit-registrations.json')
 
   const accessToken = await getAdobeAccessToken(process.env)
 

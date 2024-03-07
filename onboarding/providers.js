@@ -80,7 +80,7 @@ function hasSelection (selection, clientRegistrations) {
 }
 
 /**
- * Create events providers based on the config/providers.json and client registrations custom/registrations.json
+ * Create events providers based on the config/providers.json and client registrations custom/starter-kit-registrations.json
  *
  * @param {object} clientRegistrations - client registrations
  * @param {object} environment - environment params

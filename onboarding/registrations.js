@@ -17,7 +17,7 @@ const { getExistingRegistrations } = require('../utils/adobe-events-api')
 const { getRegistrationName } = require('../utils/naming')
 
 /**
- * Create the registrations based on the selection of the client from the file custom/registrations.json
+ * Create the registrations based on the selection of the client from the file custom/starter-kit-registrations.json
  *
  * @param {object} clientRegistrations - client registrations
  * @param {Array} providers - list of providers
