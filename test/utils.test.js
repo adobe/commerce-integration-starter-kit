@@ -34,6 +34,17 @@ describe('stringParameters', () => {
     expect(utils.stringParameters(params)).toEqual(expect.stringContaining('"authorization":"<hidden>"'))
     expect(utils.stringParameters(params)).not.toEqual(expect.stringContaining('secret'))
   })
+  test('with fields to be hidden', () => {
+    const params = {
+      x_secret: 'secret', secret_x: 'secret', x_secret_x: 'secret', x_TOKEN: 'secret', TOKEN_x: 'secret', x_TOKEN_x: 'secret'
+    }
+    expect(utils.stringParameters(params)).toEqual(expect.stringContaining('"x_secret":"<hidden>"'))
+    expect(utils.stringParameters(params)).toEqual(expect.stringContaining('"secret_x":"<hidden>"'))
+    expect(utils.stringParameters(params)).toEqual(expect.stringContaining('"x_secret_x":"<hidden>"'))
+    expect(utils.stringParameters(params)).toEqual(expect.stringContaining('"x_TOKEN":"<hidden>"'))
+    expect(utils.stringParameters(params)).toEqual(expect.stringContaining('"TOKEN_x":"<hidden>"'))
+    expect(utils.stringParameters(params)).toEqual(expect.stringContaining('"x_TOKEN_x":"<hidden>"'))
+  })
 })
 
 describe('checkMissingRequestInputs', () => {

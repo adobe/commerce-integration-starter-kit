@@ -459,6 +459,23 @@ If you are running your Adobe Commerce instance in the cloud, you already have a
 The [Forwarding Logs to New Relic](https://developer.adobe.com/app-builder/docs/guides/application_logging/new_relic/)
 page describes the steps to set up the starter kit to forward logs to New Relic.
 
+#### Prevent secrets from leaking in logs.
+
+The `stringParameters` in the `./actions/utils.js` file can be used to avoid secrets leaking when logging the parameters received by a runtime action.
+It will replace
+
+* the `authorization` header value with `<hidden>`, and
+* any parameters containing a term present in the `hidden` array with `<hidden>`
+
+The default parameters to be hidden are:
+```javascript
+const hidden = [
+  'secret',
+  'token'
+]
+```
+Adjust these values to hide secrets passed as params to your runtime actions if needed.
+
 ### Testing
 
 The starter kit provides unit tests for most of the runtime actions it includes. These tests can be located in the `./test/actions` folder.

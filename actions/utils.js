@@ -14,10 +14,16 @@
 
 /* This file exposes some common utilities for your actions */
 
+const hidden = [
+  'secret',
+  'token'
+]
+
 /**
  *
  * Returns a log ready string of the action input parameters.
  * The `Authorization` header content will be replaced by '<hidden>'.
+ * Any parameter containing in the name a term in the 'hidden' array will be replaced by '<hidden>'.
  *
  * @param {object} params action input parameters.
  * @returns {string} - returns a json string
@@ -28,6 +34,14 @@ function stringParameters (params) {
   if (headers.authorization) {
     headers = { ...headers, authorization: '<hidden>' }
   }
+  // hide parameters including terms in the 'hidden' array
+  for (const key of Object.keys(params)) {
+    if (!hidden.every(v => { return key.toLowerCase().indexOf(v) === -1 })) {
+      params = { ...params, [key]: '<hidden>' }
+    }
+  }
+
+  // loop over params keys and replace if needed
   return JSON.stringify({ ...params, __ow_headers: headers })
 }
 
