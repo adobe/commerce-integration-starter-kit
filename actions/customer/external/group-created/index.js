@@ -42,10 +42,10 @@ async function main (params) {
       return actionErrorResponse(HTTP_BAD_REQUEST, validation.message)
     }
 
-    logger.debug(`Transform data: ${JSON.stringify(params)}`)
+    logger.debug(`Transform data: ${stringParameters(params)}`)
     const transformed = transformData(params)
 
-    logger.debug(`Preprocess data: ${JSON.stringify(params)}`)
+    logger.debug(`Preprocess data: ${stringParameters(params)}`)
     const preProcessed = preProcess(params, transformed)
 
     logger.debug(`Start sending data: ${JSON.stringify(transformed)}`)
@@ -55,7 +55,7 @@ async function main (params) {
       return actionErrorResponse(result.statusCode, result.message)
     }
 
-    logger.debug(`Postprocess data: ${JSON.stringify(params)}`)
+    logger.debug(`Postprocess data: ${stringParameters(params)}`)
     const postProcessed = postProcess(params, transformed, preProcessed, result)
 
     logger.debug('Process finished successfully')

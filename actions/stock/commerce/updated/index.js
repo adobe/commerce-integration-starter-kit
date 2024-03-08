@@ -44,7 +44,7 @@ async function main (params) {
     logger.debug(`Transform data: ${JSON.stringify(params.data)}`)
     const transformedData = transformData(params.data)
 
-    logger.debug(`Preprocess data: ${JSON.stringify(params)}`)
+    logger.debug(`Preprocess data: ${stringParameters(params)}`)
     const preProcessed = preProcess(params, transformedData)
 
     logger.debug(`Start sending data: ${JSON.stringify(params)}`)
@@ -53,7 +53,7 @@ async function main (params) {
       logger.error(`Send data failed: ${result.message}`)
       return actionErrorResponse(result.statusCode, result.message)
     }
-    logger.debug(`Postprocess data: ${JSON.stringify(params)}`)
+    logger.debug(`Postprocess data: ${stringParameters(params)}`)
     const postProcessed = postProcess(params, transformedData, preProcessed, result)
 
     logger.debug('Process finished successfully')
