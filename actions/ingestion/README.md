@@ -10,7 +10,7 @@ This runtime action exposes a web entry point to an external back office applica
 ![Alt text](BackofficeEventsIngestionWebhook.png "Title")
 
 # Input information
-Data parameters hold the array of events to publish; each event must include entity, event, and value. The value parameter contains the data to send through the event.
+Data parameters hold the event information to publish; each event must include entity, event, and value. The value parameter contains the data to send through the event.
 - The entities available are [product, customer, customer-group, order, shipment, stock]
 - The list of events available by an entity can be found in the file `onboarding/config/events.json` under the `backoffice` sections.
 
