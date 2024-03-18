@@ -32,7 +32,7 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
   ![Alt text](new-integration.png "New Integration")
 - Give the integration a name. The rest of the fields can be left blank.
 - Select API on the left and grant access to all the resources.
-  ![Alt text](integration-all-apis-access.png "New Integration")
+  ![Alt text](docs/integration-all-apis-access.png "New Integration")
 - Click Save.
 - In the list of integrations, activate your integration.
 - To configure the starter kit, you will need the integration details (consumer key, consumer secret, access token, and access token secret).
@@ -99,7 +99,7 @@ Run the following command to deploy the project; this will deploy the runtime ac
 aio app deploy
 ```
 You can confirm the success of the deployment in the Adobe Developer Console by navigating to the `Runtime` section on your workspace:
-![Alt text](console-user-defined-actions.png "Workspace runtimes packages")
+![Alt text](docs/console-user-defined-actions.png "Workspace runtimes packages")
 
 ### Onboarding
 #### Configure the event registrations
@@ -145,7 +145,7 @@ Process of On-Boarding done successfully: [
 
 ```
 Check your App developer console to confirm the creation of the registrations:
-![Alt text](console-event-registrations.png "Workspace registrations")
+![Alt text](docs/console-event-registrations.png "Workspace registrations")
 
 
 ### Complete the Adobe Commerce eventing configuration
@@ -154,7 +154,7 @@ You will configure your Adobe Commerce instance to send events to your App build
 #### Configure Adobe I/O Events in Adobe Commerce instance
 To configure the provider in Commerce, do the following:
 - In the Adobe Commerce Admin, navigate to Stores > Settings > Configuration > Adobe Services > Adobe I/O Events > General configuration. The following screen displays.
-  ![Alt text](commerce-events-configuration.webp "Commerce eventing configuration")
+  ![Alt text](docs/commerce-events-configuration.webp "Commerce eventing configuration")
 - Select `OAuth (Recommended)` from the `Adobe I/O Authorization Type` menu.
 - Copy the contents of the `<workspace-name>.json` (Workspace configuration JSON you downloaded in the previous step [`Create app builder project`](#create-app-builder-project)) into the `Adobe I/O Workspace Configuration` field.
 - Copy the commerce provider instance ID you saved in the previous step [`Execute the onboarding](#execute-the-onboarding) into the `Adobe Commerce Instance ID` field.
@@ -173,16 +173,16 @@ For events of type 'plugin' you can also check this [documentation](https://deve
 
 Here are the events with the minimal required fields you need to subscribe to, it includes the REST API endpoints that could trigger this events:
 
-| Entity         | Event                                                                     | Required fields        | REST API Ref                                                                                                                                                                                                                                                                                                                                                                                                                                |
-|----------------|---------------------------------------------------------------------------|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Product        | com.adobe.commerce.observer.catalog_product_delete_commit_after           |                        | product [delete](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/productssku#operation/DeleteV1ProductsSku)                                                                                                                                                                                                                                                                                                                                 |
-| Product        | com.adobe.commerce.observer.catalog_product_save_commit_after             | created_at, updated_at | product [create](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/products#operation/GetV1Products) / [update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/productssku#operation/PutV1ProductsSku)                                                                                                                                                                                                                                       |
-| Customer       | com.adobe.commerce.observer.customer_save_commit_after                    | created_at, updated_at | customer  [create](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customers#operation/PostV1Customers) / [update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerscustomerId#operation/PutV1CustomersCustomerId)                                                                                                                                                                                                                  |
-| Customer       | com.adobe.commerce.observer.customer_delete_commit_after                  |                        | customer [delete](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerscustomerId#operation/DeleteV1CustomersCustomerId)                                                                                                                                                                                                                                                                                                                |
-| Customer group | com.adobe.commerce.observer.customer_group_save_commit_after              |                        | customer group [create](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerGroups#operation/PostV1CustomerGroups) / [update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerGroupsid#operation/PutV1CustomerGroupsId)                                                                                                                                                                                                         |
-| Customer group | com.adobe.commerce.observer.customer_group_delete_commit_after            | customer_group_code    | customer group [delete](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerGroupsid#operation/DeleteV1CustomerGroupsId)                                                                                                                                                                                                                                                                                                                |
-| Order          | com.adobe.commerce.observer.sales_order_save_commit_after                 | created_at, updated_at | order update ([hold](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidhold#operation/PostV1OrdersIdHold), [unhold](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidunhold#operation/PostV1OrdersIdUnhold), [cancel](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidcancel#operation/PostV1OrdersIdCancel), [emails](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidemails#operation/PostV1OrdersIdEmails)) |
-| Stock          | com.adobe.commerce.observer.cataloginventory_stock_item_save_commit_after |                        | product [stock update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/productsproductSkustockItemsitemId/#operation/PutV1ProductsProductSkuStockItemsItemId)                                                                                                                                                                                                                                                                               |
+| Entity         | Event                                                  | Required fields             | REST API Ref                                                                                                                                                                                                                                                                                                                                                                                                                                |
+|----------------|--------------------------------------------------------|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Product        | observer.catalog_product_delete_commit_after           | sku                         | product [delete](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/productssku#operation/DeleteV1ProductsSku)                                                                                                                                                                                                                                                                                                                                 |
+| Product        | observer.catalog_product_save_commit_after             | sku, created_at, updated_at | product [create](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/products#operation/GetV1Products) / [update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/productssku#operation/PutV1ProductsSku)                                                                                                                                                                                                                                       |
+| Customer       | observer.customer_save_commit_after                    | created_at, updated_at      | customer  [create](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customers#operation/PostV1Customers) / [update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerscustomerId#operation/PutV1CustomersCustomerId)                                                                                                                                                                                                                  |
+| Customer       | observer.customer_delete_commit_after                  | entity_id                   | customer [delete](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerscustomerId#operation/DeleteV1CustomersCustomerId)                                                                                                                                                                                                                                                                                                                |
+| Customer group | observer.customer_group_save_commit_after              | customer_group_code         | customer group [create](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerGroups#operation/PostV1CustomerGroups) / [update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerGroupsid#operation/PutV1CustomerGroupsId)                                                                                                                                                                                                         |
+| Customer group | observer.customer_group_delete_commit_after            | customer_group_code         | customer group [delete](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerGroupsid#operation/DeleteV1CustomerGroupsId)                                                                                                                                                                                                                                                                                                                |
+| Order          | observer.sales_order_save_commit_after                 | created_at, updated_at      | order update ([hold](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidhold#operation/PostV1OrdersIdHold), [unhold](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidunhold#operation/PostV1OrdersIdUnhold), [cancel](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidcancel#operation/PostV1OrdersIdCancel), [emails](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidemails#operation/PostV1OrdersIdEmails)) |
+| Stock          | observer.cataloginventory_stock_item_save_commit_after | product_id                  | product [stock update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/productsproductSkustockItemsitemId/#operation/PutV1ProductsProductSkuStockItemsItemId)                                                                                                                                                                                                                                                                               |
 
 ## Development
 
@@ -274,6 +274,33 @@ Each individual `action` folder contains the following files:
 - `pre.js` and `post.js` files
 
   These files provide convenient extension points to introduce custom business logic before and after interacting with the target API.
+
+#### Pass `env` params to an `action`
+You can pass values from the environment to the action`params` object following:
+Add your parameter to .env file:
+```bash
+HERE_YOUR_PARAM=any value
+```
+Pass the required parameters to the action by configuring them in the `actions/{entity}/../actions.config.yaml` under `{action name} -> inputs` as follows:
+```yaml
+{action name}:
+  function: commerce/{action name}/index.js
+  web: 'no'
+  runtime: nodejs:16
+  inputs:
+    LOG_LEVEL: debug
+    HERE_YOUR_PARAM: $HERE_YOUR_PARAM_ENV
+  annotations:
+    require-adobe-auth: true
+    final: true
+```
+
+This parameter should be accessible on the params object
+```javascript
+async function main(params) {
+  params.HERE_YOUR_PARAM
+}
+```
 
 ### Different types of actions included in the starter kit
 
@@ -378,7 +405,12 @@ The source code for this action can be found at [./actions/ingestion](./actions/
 This runtime action is provided as an alternative approach to deliver events to the integration 
 if the 3rd-party back-office application cannot fulfill the [Events Publishing API](https://developer.adobe.com/events/docs/guides/api/eventsingress_api/) requirements.
 
-Additional details can be found at this [README](./actions/ingestion/README.md)
+Additional details can be found at this [README](actions/ingestion/webhook/docs/README.md)
+
+To get the URL of the webhook, run the following command:
+```bash
+aio runtime action get ingestion/webhook --url
+```
 
 By default, the response of the `event ingestion` actions is the following:
 - success
@@ -417,7 +449,12 @@ These runtime actions are meant to expose a webhook that can be invoked synchron
 in order to affect the behavior of a particular business flow.
 
 The [./actions/webhook/check-stock](./actions/webhook/check-stock) folder provides a sample implementation 
-of a `synchronous webhook` action. Additional details can be found at this [README](./actions/webhook/check-stock/README.md)
+of a `synchronous webhook` action. Additional details can be found at this [README](actions/webhook/check-stock/docs/README.md)
+
+To get the URL of the webhook, run the following command:
+```bash
+aio runtime action get webhook/check-stock --url
+```
 
 By default, the response of the `synchronous webhook` actions is the following:
 - success
@@ -487,49 +524,49 @@ Additionally, unit tests for the onboarding script can be found in the `.test/on
 You can find more details about unit testing and an example in [Lesson 3: Testing a Serverless Action](https://developer.adobe.com/app-builder/docs/resources/barcode-reader/test/).
 
 ### External back-office ingestion webhook
-- [Ingestion webhook consumer](actions/ingestion/README.md)
+- [Ingestion webhook consumer](actions/ingestion/webhook/docs/README.md)
 
 ### Product entity
 #### Commerce to third party
-- [Product created in commerce](actions/product/commerce/created/README.md)
-- [Product updated in commerce](actions/product/commerce/updated/README.md)
-- [Product deleted in commerce](actions/product/commerce/deleted/README.md)
+- [Product created in commerce](actions/product/commerce/created/docs/README.md)
+- [Product updated in commerce](actions/product/commerce/updated/docs/README.md)
+- [Product deleted in commerce](actions/product/commerce/deleted/docs/README.md)
 
 #### Third party to Commerce
-- [Product created in third party](actions/product/external/created/README.md)
-- [Product updated in third party](actions/product/external/updated/README.md)
-- [Product deleted in third party](actions/product/external/deleted/README.md)
+- [Product created in third party](actions/product/external/created/docs/README.md)
+- [Product updated in third party](actions/product/external/updated/docs/README.md)
+- [Product deleted in third party](actions/product/external/deleted/docs/README.md)
 
 ### Customer entity
 #### Commerce to third party
-- [Customer created in commerce](actions/customer/commerce/created/README.md)
-- [Customer updated in commerce](actions/customer/commerce/updated/README.md)
-- [Customer deleted in commerce](actions/customer/commerce/deleted/README.md)
-- [Customer group updated in commerce](actions/customer/commerce/group-updated/README.md)
-- [Customer group deleted in commerce](actions/customer/commerce/group-deleted/README.md)
+- [Customer created in commerce](actions/customer/commerce/created/docs/README.md)
+- [Customer updated in commerce](actions/customer/commerce/updated/docs/README.md)
+- [Customer deleted in commerce](actions/customer/commerce/deleted/docs/README.md)
+- [Customer group updated in commerce](actions/customer/commerce/group-updated/docs/README.md)
+- [Customer group deleted in commerce](actions/customer/commerce/group-deleted/docs/README.md)
 
 #### Third party to Commerce
-- [Customer created in third party](actions/customer/external/created/README.md)
-- [Customer updated in third party](actions/customer/external/updated/README.md)
-- [Customer deleted in third party](actions/customer/external/deleted/README.md)
-- [Customer group created in third party](actions/customer/external/group-created/README.md)
-- [Customer group updated in third party](actions/customer/external/group-updated/README.md)
-- [Customer group deleted in third party](actions/customer/external/group-deleted/README.md)
+- [Customer created in third party](actions/customer/external/created/docs/README.md)
+- [Customer updated in third party](actions/customer/external/updated/docs/README.md)
+- [Customer deleted in third party](actions/customer/external/deleted/docs/README.md)
+- [Customer group created in third party](actions/customer/external/group-created/docs/README.md)
+- [Customer group updated in third party](actions/customer/external/group-updated/docs/README.md)
+- [Customer group deleted in third party](actions/customer/external/group-deleted/docs/README.md)
 - 
 ### Order entity
 #### Commerce to third party
-- [Order created in commerce](actions/order/commerce/created/README.md)
-- [Order updated in commerce](actions/order/commerce/updated/README.md)
+- [Order created in commerce](actions/order/commerce/created/docs/README.md)
+- [Order updated in commerce](actions/order/commerce/updated/docs/README.md)
 
 #### Third party to Commerce
-- [Order updated in third party](actions/order/external/updated/README.md)
+- [Order updated in third party](actions/order/external/updated/docs/README.md)
 
 ### Stock entity
 #### Commerce to third party
-- [Stock updated in commerce](actions/stock/commerce/updated/README.md)
+- [Stock updated in commerce](actions/stock/commerce/updated/docs/README.md)
 
 #### Third party to Commerce
-- [Stock updated in third party](actions/stock/external/updated/README.md)
+- [Stock updated in third party](actions/stock/external/updated/docs/README.md)
 
 # References
 - [Adobe Commerce Extensibility](https://developer.adobe.com/commerce/extensibility/) 

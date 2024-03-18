@@ -5,7 +5,7 @@ It is an alternative method to deliver events for scenarios where the calling sy
 
 This runtime action exposes a web entry point to an external back office application for publishing information to IO events.
 
-**To activate this feature**, remove the comment '#' from the line `#$include: ./ingestion/actions.config.yaml` in the file `app.config.yaml`.
+**This feature is turned off by default. To activate it**, remove the comment '#' from the line `#$include ./ingestion/actions.config.yaml` in the file `app.config.yaml`.
 
 ![Alt text](BackofficeEventsIngestionWebhook.png "Title")
 
