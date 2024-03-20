@@ -15,7 +15,7 @@
  * This function send the customer group updated dara to the external back-office application
  *
  * @param {object} params - include the env params
- * @param {object} data - Product data
+ * @param {object} data - Customer data
  * @param {object} preProcessed - result of the pre-process logic if any
  * @returns {object} returns the sending result if needed for post process
  */

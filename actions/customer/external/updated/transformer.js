@@ -13,7 +13,7 @@
  */
 
 /**
- * This function transform the received product data from external back-office application to Adobe commerce
+ * This function transform the received customer data from external back-office application to Adobe commerce
  *
  * @param {object} params - Data received from Adobe commerce
  * @returns {object} - Returns transformed data object

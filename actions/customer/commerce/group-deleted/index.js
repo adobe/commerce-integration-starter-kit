@@ -17,8 +17,8 @@ const { transformData } = require('./transformer')
 const { sendData } = require('./sender')
 const { HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../constants')
 const { validateData } = require('./validator')
-const { preProcess } = require('../../external/created/pre')
-const { postProcess } = require('../../external/created/post')
+const { preProcess } = require('./pre')
+const { postProcess } = require('./post')
 const { actionSuccessResponse, actionErrorResponse } = require('../../../responses')
 
 /**

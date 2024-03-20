@@ -1,5 +1,5 @@
 # Integrate a third party product-updated event with Adobe Commerce.
-This runtime action is responsible for notifying the integration with Adobe Commerce after a customer is updated in the 3rd party.
+This runtime action is responsible for notifying the integration with Adobe Commerce after a product is updated in the 3rd party.
 
 ![Alt text](ExternalProductUpdateSync.png "Title")
 

@@ -17,7 +17,7 @@ const { Core } = require('@adobe/aio-sdk')
 const logger = Core.Logger('commerce-shipment-api-client', 'info')
 
 /**
- * This function call Adobe commerce rest API to create a customer group
+ * This function call Adobe commerce rest API to create a shipment
  *
  * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
@@ -48,7 +48,7 @@ async function createShipment (baseUrl, consumerKey, consumerSecret, accessToken
 }
 
 /**
- * This function call Adobe commerce rest API to update a customer group
+ * This function call Adobe commerce rest API to update a shipment
  *
  * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url

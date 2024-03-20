@@ -18,6 +18,7 @@ const got = require('got')
 /**
  * This function return the Adobe commerce OAuth client
  *
+ * @returns {object} - The Oauth client
  * @param {object} options - include the information to configure oauth
  * @param {object} logger - Logger
  */
@@ -44,8 +45,8 @@ function getOauthClient (options, logger) {
    * This function create the sha 256 hash
    *
    * @returns  {string} - returns generated hash
-   * @param {string} baseString
-   * @param {string} key
+   * @param {string} baseString - base string
+   * @param {string} key - key to encrypt
    */
   function hashFunctionSha256 (baseString, key) {
     return crypto.createHmac('sha256', key).update(baseString).digest('base64')

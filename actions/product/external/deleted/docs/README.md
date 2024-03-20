@@ -1,5 +1,5 @@
 # Integrate a third party product-deleted event with Adobe Commerce.
-This runtime action is responsible for notifying the integration with Adobe Commerce after a customer is deleted in the 3rd party.
+This runtime action is responsible for notifying the integration with Adobe Commerce after a product is deleted in the 3rd party.
 
 ![Alt text](ExternalProductDeleteSync.png "Title")
 
