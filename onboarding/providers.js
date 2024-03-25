@@ -73,10 +73,7 @@ async function createProvider (environment, accessToken, provider) {
  * @returns {boolean} - returns true or false
  */
 function hasSelection (selection, clientRegistrations) {
-  for (const [entityName, options] of Object.entries(clientRegistrations)) {
-    return !!(options !== undefined && options.includes(selection))
-  }
-  return false
+  return Object.values(clientRegistrations).some(value => value.includes(selection))
 }
 
 /**
@@ -118,6 +115,7 @@ async function main (clientRegistrations, environment, accessToken) {
       // Calculate provider label
       provider.label = addSuffix(provider.label, environment)
       const isProviderSelectedByClient = hasSelection(provider.key, clientRegistrations)
+      console.log('LOGGG ', isProviderSelectedByClient)
       if (isProviderSelectedByClient) {
         // Check if provider is already created
         const persistedProvider = existingProviders[provider.label]

@@ -11,9 +11,7 @@
  * is strictly forbidden unless prior written permission is obtained
  * from Adobe.
  */
-
 const Ajv = require('ajv')
-const { Core } = require('@adobe/aio-sdk')
 
 /**
  * This function validate the customer data received from external back-office application

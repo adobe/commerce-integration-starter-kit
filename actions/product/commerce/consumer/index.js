@@ -50,12 +50,11 @@ async function main (params) {
     logger.info('Params type: ' + params.type)
 
     switch (params.type) {
-      case 'com.adobe.commerce.observer.catalog_product_save_commit_after':
+      case 'com.adobe.commerce.observer.catalog_product_save_commit_after': {
         const createdAt = Date.parse(params.data.value.created_at)
         const updatedAt = Date.parse(params.data.value.updated_at)
         if (createdAt === updatedAt) {
           logger.info('Invoking created product')
-
           const res = await openwhiskClient.invokeAction('product-commerce/created', params.data.value)
           response = res?.response?.result?.body
           statusCode = res?.response?.result?.statusCode
@@ -66,15 +65,18 @@ async function main (params) {
           statusCode = res?.response?.result?.statusCode
         }
         break
-      case 'com.adobe.commerce.observer.catalog_product_delete_commit_after':
+      }
+      case 'com.adobe.commerce.observer.catalog_product_delete_commit_after': {
         logger.info('Invoking delete product')
         const res = await openwhiskClient.invokeAction('product-commerce/deleted', params.data.value)
         response = res?.response?.result?.body
         statusCode = res?.response?.result?.statusCode
         break
-      default:
+      }
+      default: {
         logger.error(`Event type not found: ${params.type}`)
         return errorResponse(HTTP_BAD_REQUEST, `This case type is not supported: ${params.type}`)
+      }
     }
 
     if (!response.success) {

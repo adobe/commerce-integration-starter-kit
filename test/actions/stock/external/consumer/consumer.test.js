@@ -16,7 +16,7 @@ const Openwhisk = require('../../../../../actions/openwhisk')
 const consumer = require('../../../../../actions/stock/external/consumer')
 const { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_INTERNAL_ERROR } = require('../../../../../actions/constants')
 
-jest.mock('Openwhisk')
+jest.mock('../../../../../actions/openwhisk')
 
 describe('Given stock external consumer', () => {
   describe('When method main is defined', () => {

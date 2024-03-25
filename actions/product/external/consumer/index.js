@@ -47,27 +47,31 @@ async function main (params) {
 
     logger.info(`Params type: ${params.type}`)
     switch (params.type) {
-      case 'be-observer.catalog_product_create':
+      case 'be-observer.catalog_product_create': {
         logger.info('Invoking product create')
         const createRes = await openwhiskClient.invokeAction('product-backoffice/created', params.data)
         response = createRes?.response?.result?.body
         statusCode = createRes?.response?.result?.statusCode
         break
-      case 'be-observer.catalog_product_update':
+      }
+      case 'be-observer.catalog_product_update': {
         logger.info('Invoking product update')
         const updateRes = await openwhiskClient.invokeAction('product-backoffice/updated', params.data)
         response = updateRes?.response?.result?.body
         statusCode = updateRes?.response?.result?.statusCode
         break
-      case 'be-observer.catalog_product_delete':
+      }
+      case 'be-observer.catalog_product_delete': {
         logger.info('Invoking product delete')
         const deleteRes = await openwhiskClient.invokeAction('product-backoffice/deleted', params.data)
         response = deleteRes?.response?.result?.body
         statusCode = deleteRes?.response?.result?.statusCode
         break
-      default:
+      }
+      default: {
         logger.error(`Event type not found: ${params.type}`)
         return errorResponse(HTTP_BAD_REQUEST, `This case type is not supported: ${params.type}`)
+      }
     }
 
     if (!response.success) {

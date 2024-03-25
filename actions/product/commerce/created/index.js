@@ -56,7 +56,7 @@ async function main (params) {
     }
 
     logger.debug(`Postprocess data: ${stringParameters(params)}`)
-    const postProcessed = postProcess(params, transformedData, preProcessed, result)
+    postProcess(params, transformedData, preProcessed, result)
 
     logger.debug('Process finished successfully')
     return actionSuccessResponse('Product created successfully')

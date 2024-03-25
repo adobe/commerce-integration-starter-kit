@@ -56,7 +56,7 @@ async function main (params) {
     }
 
     logger.debug(`Postprocess data: ${stringParameters(params)}`)
-    const postProcessed = postProcess(params, transformed, preProcessed, result)
+    postProcess(params, transformed, preProcessed, result)
 
     logger.debug('Process finished successfully')
     return actionSuccessResponse('Stock updated successfully')

@@ -17,7 +17,6 @@ const utils = require('./../actions/utils.js')
 test('interface', () => {
   expect(typeof utils.stringParameters).toBe('function')
   expect(typeof utils.checkMissingRequestInputs).toBe('function')
-  expect(typeof utils.getBearerToken).toBe('function')
 })
 
 describe('stringParameters', () => {
@@ -80,26 +79,5 @@ describe('checkMissingRequestInputs', () => {
   })
   test('({ a: undefined }, [a])', () => {
     expect(utils.checkMissingRequestInputs({ a: undefined }, ['a'])).toEqual('missing parameter(s) \'a\'')
-  })
-})
-
-describe('getBearerToken', () => {
-  test('({})', () => {
-    expect(utils.getBearerToken({})).toEqual(undefined)
-  })
-  test('({ authorization: Bearer fake, __ow_headers: {} })', () => {
-    expect(utils.getBearerToken({ authorization: 'Bearer fake', __ow_headers: {} })).toEqual(undefined)
-  })
-  test('({ authorization: Bearer fake, __ow_headers: { authorization: fake } })', () => {
-    expect(utils.getBearerToken({ authorization: 'Bearer fake', __ow_headers: { authorization: 'fake' } })).toEqual(undefined)
-  })
-  test('({ __ow_headers: { authorization: Bearerfake} })', () => {
-    expect(utils.getBearerToken({ __ow_headers: { authorization: 'Bearerfake' } })).toEqual(undefined)
-  })
-  test('({ __ow_headers: { authorization: Bearer fake} })', () => {
-    expect(utils.getBearerToken({ __ow_headers: { authorization: 'Bearer fake' } })).toEqual('fake')
-  })
-  test('({ __ow_headers: { authorization: Bearer fake Bearer fake} })', () => {
-    expect(utils.getBearerToken({ __ow_headers: { authorization: 'Bearer fake Bearer fake' } })).toEqual('fake Bearer fake')
   })
 })

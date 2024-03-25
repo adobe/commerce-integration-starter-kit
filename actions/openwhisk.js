@@ -11,25 +11,25 @@
  * is strictly forbidden unless prior written permission is obtained
  * from Adobe.
  */
- 
-const openwhisk = require('openwhisk');
+
+const openwhisk = require('openwhisk')
 
 class Openwhisk {
-    #openwhiskClient;
+  #openwhiskClient
 
-    constructor(host, apiKey) {
-        this.#openwhiskClient = openwhisk({apihost: host, api_key: apiKey});
-    }
+  constructor (host, apiKey) {
+    this.#openwhiskClient = openwhisk({ apihost: host, api_key: apiKey })
+  }
 
-    async invokeAction(action, data) {
-        return await this.#openwhiskClient.actions.invoke({
-            name: action,
-            blocking: true,
-            params: {
-                data
-            }
-        });
-    }
+  async invokeAction (action, data) {
+    return await this.#openwhiskClient.actions.invoke({
+      name: action,
+      blocking: true,
+      params: {
+        data
+      }
+    })
+  }
 }
 
 module.exports = Openwhisk
