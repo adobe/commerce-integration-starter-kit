@@ -1,6 +1,13 @@
 {
   "name": "enterprise-integrations-starter-kit",
-  "version": "0.0.1",
+  "version": "1.0.2-beta",
+  "description": "To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder. The kit includes reference integrations for commonly used commerce data like orders, products, and customers. It also includes onboarding scripts and a standardized architecture for developers to build on following best practices.",
+  "keywords": [
+    "testing",
+    "aio",
+    "adobe-io"
+  ],
+  "author": "Adobe Inc.",
   "private": true,
   "dependencies": {
     "@adobe/aio-lib-ims": "^6.5.0",
@@ -41,7 +48,7 @@
     "test": "jest --passWithNoTests ./test",
     "e2e": "jest --collectCoverage=false --testRegex ./e2e",
     "onboard": "node -e 'require(\"./onboarding/index.js\").main()'",
-    "code-check": "npx eslint 'actions/**/*.js' 'onboarding/**/*.js' 'test/**/*.js'"
+    "code-check": "npx eslint 'actions/**/*.js' 'onboarding/**/*.js' 'test/**/*.js' 'utils/**/*.js'"
   },
   "engines": {
     "node": "^14.18 || ^16.13 || >=18"

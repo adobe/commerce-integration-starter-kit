@@ -1,6 +1,6 @@
 {
   "extends": "@adobe/eslint-config-aio-lib-config",
   "parserOptions": {
-    "ecmaVersion": 13
+    "ecmaVersion": "latest"
   }
 }

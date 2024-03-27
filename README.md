@@ -1,4 +1,5 @@
 # Commerce Extensibility Starter Kit
+[![Node.js CI](https://github.com/magento/starter-kit/actions/workflows/deploy_node_stage.yml/badge.svg)](https://github.com/magento/starter-kit/actions/workflows/deploy_node_stage.yml)
 
 * [Prerequisites](#prerequisites)
 * [Starter Kit first deploy & onboarding](#starter-kit-first-deploy--onboarding)
@@ -29,7 +30,7 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
 Configure a new Integration to secure the calls to Commerce from App Builder using OAuth by following these steps:
 - In the Commerce Admin, navigate to System > Extensions > Integrations.
 - Click the `Add New Integration` button. The following screen displays
-  ![Alt text](new-integration.png "New Integration")
+  ![Alt text](docs/new-integration.png "New Integration")
 - Give the integration a name. The rest of the fields can be left blank.
 - Select API on the left and grant access to all the resources.
   ![Alt text](docs/integration-all-apis-access.png "New Integration")
@@ -576,3 +577,7 @@ You can find more details about unit testing and an example in [Lesson 3: Testin
 - [Adobe I/O Events for Adobe Commerce](https://developer.adobe.com/commerce/extensibility/events/)
 - [Adobe I/O Runtime](https://developer.adobe.com/runtime/docs/)
 - [Commerce Web APIs](https://developer.adobe.com/commerce/webapi/)
+
+## Contributing
+
+Contributions are welcomed! Read the [Contributing Guide](./.github/CONTRIBUTING.md) for more information.
