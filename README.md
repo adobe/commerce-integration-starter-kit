@@ -191,6 +191,7 @@ Here are the events with the minimal required fields you need to subscribe to, i
 * [Different types of actions included in the starter kit](#different-types-of-actions-included-in-the-starter-kit)
 * [Log management & forwarding](#log-management-and-forwarding)
 * [Testing](#testing)
+* [How to subscribe to a new event](#how-to-subscribe-to-a-new-event)
 
 ### Project source code structure
 
@@ -524,6 +525,58 @@ Additionally, unit tests for the onboarding script can be found in the `.test/on
 
 You can find more details about unit testing and an example in [Lesson 3: Testing a Serverless Action](https://developer.adobe.com/app-builder/docs/resources/barcode-reader/test/).
 
+### How to subscribe to a new event
+The starter kit comes with predefined events for each entity. Sometimes, you may need to add a new event to an entity, e.g., a customer. To do this, follow the next steps:
+- Add the event to the `./onboarding/config/events.json` file under the related entity flow; for example, if the event is related to a customer and is coming from commerce, you should add it under entity customer -> commerce. e.g.,
+  ```json
+      "customer": {
+        "commerce": [
+          "com.adobe.commerce.observer.customer_save_commit_after",
+          "com.adobe.commerce.observer.customer_delete_commit_after",
+          "com.adobe.commerce.observer.customer_group_save_commit_after",
+          "com.adobe.commerce.observer.customer_group_delete_commit_after",
+          "com.adobe.commerce.THE_NEW_CUSTOMER_EVENT"
+        ],
+      ...
+      }
+  ```
+- Run the onboarding script:
+  ```bash
+  npm run onboard
+  ```
+- In the `actions/{entity}/{flow}` directory, add the action that will handle this event, e.g., `actions/customer/commerce/NEW_OPERATION/index.js`
+- Configure the newly created operation action in the `actions.config.yaml` file inside the `actions/{entity}/{flow}` folder, e.g.:
+  ```yaml
+  NEW_OPERATION:
+    function: NEW_OPERATION/index.js
+    web: 'no'
+    runtime: nodejs:16
+    inputs:
+      LOG_LEVEL: debug
+    annotations:
+      require-adobe-auth: true
+      final: true
+  ```
+- Add a new `case` to the `switch` statement in the consumer of the entity flow `actions/{entity}/{flow}/consumer/index.js`:
+  ```javascript
+    case 'com.adobe.commerce.observer.THE_NEW_CUSTOMER_EVENT': {
+      logger.info('Invoking THE NEW OPERATION')
+      const res = await openwhiskClient.invokeAction('customer-commerce/NEW_OPERATION', params.data.value)
+      response = res?.response?.result?.body
+      statusCode = res?.response?.result?.statusCode
+      break
+    }
+  ```
+- Deploy the changes: `aio app deploy`
+
+With these steps, you can consume the new event you added to the project.
+If you want to change an existing event, make the changes in the same places:
+- Edit the event in the `./onboarding/config/events.json` file
+- Modify the event in the consumer of the flow where the event belongs
+- Make changes to the operation action invoked by the consumer switch case.
+- Deploy your changes
+
+## Included actions documentation
 ### External back-office ingestion webhook
 - [Ingestion webhook consumer](actions/ingestion/webhook/docs/README.md)
 
