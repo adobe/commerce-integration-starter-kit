@@ -12,7 +12,7 @@
  * from Adobe.
  */
 
-const utils = require('./../actions/utils.js')
+const utils = require('../../actions/utils.js')
 
 test('interface', () => {
   expect(typeof utils.stringParameters).toBe('function')

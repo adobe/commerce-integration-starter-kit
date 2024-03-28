@@ -523,6 +523,8 @@ The starter kit provides unit tests for most of the runtime actions it includes.
 
 Additionally, unit tests for the onboarding script can be found in the `.test/onboarding` folder.
 
+The coverage report could be found in the  `.test/test-coverage` folder.
+
 You can find more details about unit testing and an example in [Lesson 3: Testing a Serverless Action](https://developer.adobe.com/app-builder/docs/resources/barcode-reader/test/).
 
 ### How to subscribe to a new event
