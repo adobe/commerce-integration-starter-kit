@@ -310,6 +310,7 @@ async function main(params) {
 * [event handler](#event-handler-action)
 * [event ingestion](#event-ingestion-action)
 * [synchronous webhook](#synchronous-webhook-actions)
+* [starter kit info](#starter-kit-info-action)
 
 `consumer` and `event handler` actions are the two main types of actions defined by the starter kit
 to implement the business logic needed to synchronize data between the different systems being integrated.
@@ -484,6 +485,50 @@ By default, the response of the `synchronous webhook` actions is the following:
   ```
 
 Remember, these responses are adapted to [Commerce webhook module](https://developer.adobe.com/commerce/extensibility/webhooks/); in case you want to use a different approach, you can change the response implementation in the code as you need.
+
+#### `starter kit info` action
+
+> **Warning**  
+> Please do not remove or rename this runtime action; it is being used to track adoption of the starter kit.
+
+The source code for this action can be found at [./actions/starter-kit-info](./actions/starter-kit-info).
+
+This runtime action, when invoked, returns information about the starter-kit used to develop the project, such as
+- the starter kit version, and
+- the configured event registrations
+
+To get the URL of the webhook, run the following command:
+```bash
+aio runtime action get starter-kit/info --url
+```
+
+By default, the response of the `starter kit info` action is the following:
+- success
+  ```javascript
+  // ./actions/responses.js#actionSuccessResponse
+  return {
+    statusCode: HTTP_OK,
+    body: {
+      success: true,
+      registrations: 'REGISTERED REGISTRATIONS',
+      starter_kit_version: 'M.m.p-beta'
+    }
+  }
+  ```
+
+- failure
+  ```javascript
+  // ./actions/responses.js#actionErrorResponse
+  return {
+    error: {
+      statusCode: 400, // 404, 500, etc,
+      body : {
+        success: false,
+        error: 'ERROR MESSAGE'
+      }
+    }
+  }
+  ```
 
 ### Log management and forwarding
 
