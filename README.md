@@ -489,7 +489,7 @@ Remember, these responses are adapted to [Commerce webhook module](https://devel
 #### `starter kit info` action
 
 > **Warning**  
-> Please do not remove or rename this runtime action; it is being used to track adoption of the starter kit.
+> Please DO NOT DELETE this action; future functionalities planned for upcoming starter kit releases may stop working.
 
 The source code for this action can be found at [./actions/starter-kit-info](./actions/starter-kit-info).
 

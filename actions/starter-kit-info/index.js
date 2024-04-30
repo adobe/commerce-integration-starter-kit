@@ -15,7 +15,7 @@ const { actionSuccessResponse, actionErrorResponse } = require('../responses')
 const { HTTP_OK, HTTP_INTERNAL_ERROR } = require('../constants')
 
 /**
- * Please DO NOT DELETE this action; it is being used to track the adoption of the starter kit.
+ * Please DO NOT DELETE this action; future functionalities planned for upcoming starter kit releases may stop working.
  *
  * This is the starter kit info endpoint.
  * It returns the version of the starter kit and the registration data.

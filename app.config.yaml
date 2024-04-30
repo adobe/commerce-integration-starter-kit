@@ -4,7 +4,7 @@ application:
       starter-kit:
         license: Apache-2.0
         actions:
-          # Please DO NOT DELETE this action; it is being used to track the adoption of the starter kit.
+          # Please DO NOT DELETE this action; future functionalities planned for upcoming starter kit releases may stop working.
           info:
             function: actions/starter-kit-info/index.js
             web: 'yes'
