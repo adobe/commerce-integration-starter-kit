@@ -13,7 +13,7 @@ webhook:
     IO_CONSUMER_ID: $IO_CONSUMER_ID
     IO_PROJECT_ID: $IO_PROJECT_ID
     IO_WORKSPACE_ID: $IO_WORKSPACE_ID
-    AIO_runtime_namespace: $AIO_runtime_namespace
+    AIO_runtime_namespace: $AIO_RUNTIME_NAMESPACE
   annotations:
     require-adobe-auth: false
     final: true
