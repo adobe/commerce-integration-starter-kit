@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 const { getCommerceOauthClient } = require('../oauth1a')
 const { Core } = require('@adobe/aio-sdk')
-const logger = Core.Logger('commerce-consumer-api-client', 'info')
+const logger = Core.Logger('commerce-consumer-api-client', { level: 'info' })
 
 /**
  * This function call Adobe commerce rest API to create a customer
