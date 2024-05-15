@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 jest.mock('node-fetch')
 const fetch = require('node-fetch')
-const action = require('../../onboarding/providers.js')
+const action = require('../../../scripts/lib/providers.js')
 const ACCESS_TOKEN = 'token'
 const RUNTIME_NAMESPACE = '1340225-testOrg-testWorkspace'
 const PROVIDER_SUFFIX = 'testOrg-testWorkspace'
@@ -354,7 +354,7 @@ describe('Given On-boarding providers file', () => {
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse)
 
-      const clientRegistrations = require('../data/onboarding/providers/create_commerce_and_backoffice_providers.json')
+      const clientRegistrations = require('../../data/onboarding/providers/create_commerce_and_backoffice_providers.json')
 
       const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 
@@ -599,7 +599,7 @@ describe('Given On-boarding providers file', () => {
       fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse)
 
-      const clientRegistrations = require('../data/onboarding/providers/create_commerce_provider_only.json')
+      const clientRegistrations = require('../../data/onboarding/providers/create_commerce_provider_only.json')
 
       const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 
@@ -838,7 +838,7 @@ describe('Given On-boarding providers file', () => {
       fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse)
 
-      const clientRegistrations = require('../data/onboarding/providers/create_backoffice_provider_only.json')
+      const clientRegistrations = require('../../data/onboarding/providers/create_backoffice_provider_only.json')
 
       const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 
@@ -1079,7 +1079,7 @@ describe('Given On-boarding providers file', () => {
       fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse)
 
-      const clientRegistrations = require('../data/onboarding/providers/create_commerce_and_backoffice_providers.json')
+      const clientRegistrations = require('../../data/onboarding/providers/create_commerce_and_backoffice_providers.json')
 
       const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 
@@ -1107,7 +1107,7 @@ describe('Given On-boarding providers file', () => {
     test('Then returns error response', async () => {
       const fakeError = new Error('fake')
       fetch.mockRejectedValue(fakeError)
-      const clientRegistrations = require('../data/onboarding/providers/create_commerce_and_backoffice_providers.json')
+      const clientRegistrations = require('../../data/onboarding/providers/create_commerce_and_backoffice_providers.json')
       const response = await action.main(clientRegistrations, ACCESS_TOKEN)
       expect(response).toEqual({
         code: 500,
@@ -1119,7 +1119,7 @@ describe('Given On-boarding providers file', () => {
   })
   describe('When configuration is invalid', () => {
     test('Then returns error response', async () => {
-      const invalidClientRegistrations = require('../data/onboarding/providers/missing_entities_client_registration.json')
+      const invalidClientRegistrations = require('../../data/onboarding/providers/missing_entities_client_registration.json')
 
       const response = await action.main(invalidClientRegistrations, ACCESS_TOKEN)
       expect(response).toEqual({
@@ -1258,7 +1258,7 @@ describe('Given On-boarding providers file', () => {
       fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse)
 
-      const clientRegistrations = require('../data/onboarding/providers/create_commerce_and_backoffice_providers.json')
+      const clientRegistrations = require('../../data/onboarding/providers/create_commerce_and_backoffice_providers.json')
 
       const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 

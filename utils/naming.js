@@ -68,7 +68,7 @@ function getRegistrationName (providerKey, entityName) {
  * @returns {string} returns the provider name
  */
 function getProviderName (params, providerKey) {
-  const providersList = require('../onboarding/config/providers.json')
+  const providersList = require('../scripts/onboarding/config/providers.json')
   const backofficeProvider = providersList.find(provider => provider.key === providerKey)
 
   return addSuffix(backofficeProvider.label, params)

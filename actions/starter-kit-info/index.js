@@ -25,7 +25,7 @@ const { HTTP_OK, HTTP_INTERNAL_ERROR } = require('../constants')
  */
 async function main (params) {
   const version = require('../../package.json').version
-  const registrations = require('../../onboarding/custom/starter-kit-registrations.json')
+  const registrations = require('../../scripts/onboarding/config/starter-kit-registrations.json')
 
   // create a Logger
   const logger = Core.Logger('starter-kit-info', { level: params.LOG_LEVEL || 'info' })

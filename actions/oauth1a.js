@@ -61,7 +61,7 @@ function getOauthClient (options, logger) {
    */
   async function apiCall (requestData, requestToken = '', customHeaders = {}) {
     try {
-      logger.info('Fetching URL: ' + requestData.url + ' with method: ' + requestData.method)
+      logger.debug('Fetching URL: ' + requestData.url + ' with method: ' + requestData.method)
 
       const headers = {
         ...(requestToken

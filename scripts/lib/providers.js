@@ -11,11 +11,11 @@ governing permissions and limitations under the License.
 */
 
 require('dotenv').config()
-const { checkMissingRequestInputs } = require('../actions/utils')
+const { checkMissingRequestInputs } = require('../../actions/utils')
 const fetch = require('node-fetch')
 const uuid = require('uuid')
-const { getExistingProviders } = require('../utils/adobe-events-api')
-const { addSuffix } = require('../utils/naming')
+const { getExistingProviders } = require('../../utils/adobe-events-api')
+const { addSuffix } = require('../../utils/naming')
 
 /**
  * Create the events provider
@@ -84,8 +84,8 @@ function hasSelection (selection, clientRegistrations) {
  */
 async function main (clientRegistrations, environment, accessToken) {
   // Load predefined provider, providerEvents and clientRegistrations
-  const providersList = require('./config/providers.json')
-  const providersEventsConfig = require('./config/events.json')
+  const providersList = require('../onboarding/config/providers.json')
+  const providersEventsConfig = require('../onboarding/config/events.json')
 
   try {
     // 'info' is the default level if not set
@@ -113,7 +113,6 @@ async function main (clientRegistrations, environment, accessToken) {
       // Calculate provider label
       provider.label = addSuffix(provider.label, environment)
       const isProviderSelectedByClient = hasSelection(provider.key, clientRegistrations)
-      console.log('LOGGG ', isProviderSelectedByClient)
       if (isProviderSelectedByClient) {
         // Check if provider is already created
         const persistedProvider = existingProviders[provider.label]

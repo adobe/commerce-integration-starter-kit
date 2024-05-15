@@ -159,7 +159,7 @@ async function getExistingMetadata (providerId, environment, accessToken, next =
  */
 async function main (clientRegistrations, providers, environment, accessToken) {
   try {
-    const providersEventsConfig = require('./config/events.json')
+    const providersEventsConfig = require('../onboarding/config/events.json')
     const providersEvents = []
 
     const result = []

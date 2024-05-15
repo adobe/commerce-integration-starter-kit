@@ -24,7 +24,7 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
   - I/0 events
   - Adobe I/O Events for Adobe Commerce
   - I/O management API
-- Download the [workspace configuration JSON](https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file) file and save it because you will use it to configure Adobe IO Events in commerce afterward.
+- Download the [workspace configuration JSON](https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file) file and save it as `workspace.json` in the `./scripts/onboarding/config` starter kit folder because you will use it to configure Adobe IO Events in commerce afterward.
 
 ### Configure a new Integration in commerce
 Configure a new Integration to secure the calls to Commerce from App Builder using OAuth by following these steps:
@@ -40,6 +40,10 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 
 ### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5) 
 Install Adobe I/O Events for Adobe Commerce module in your commerce instance following this [documentation](https://developer.adobe.com/commerce/extensibility/events/installation/)
+
+> **Note**
+> 
+> By upgrading the Adobe I/O Events for Adobe Commerce module to version 1.6.0 or greater, you will benefit from some additional automated steps during onboarding.  
 
 ## Starter Kit first deploy & onboarding
 Following the next steps, you will deploy and onboard the starter kit for the first time. The onboarding process sets up event providers and registrations based on your selection.
@@ -119,6 +123,7 @@ e.g., In the previous onboarding step (`Configure the project`), we commented on
 
 #### Execute the onboarding
 This step will generate the IO Events providers and the registrations for your starter kit project.
+If your Commerce instance Adobe I/O Events for Adobe Commerce module version 1.6.0 or greater, the module will also be automatically configured by the onboarding script.  
 To start the process run the command:
 ```bash
 npm run onboard
@@ -150,6 +155,12 @@ Check your App developer console to confirm the creation of the registrations:
 
 
 ### Complete the Adobe Commerce eventing configuration
+
+> **Note**
+>
+> If your Commerce instance Adobe I/O Events for Adobe Commerce module version is 1.6.0 or greater and the onboarding script completed successfully, the following steps are not required. The onboarding script will configure the Adobe Commerce instance automatically.
+> Follow the steps in the next section to validate that the configuration is correct or skip to the next section.
+
 You will configure your Adobe Commerce instance to send events to your App builder project using the following steps
 
 #### Configure Adobe I/O Events in Adobe Commerce instance
@@ -169,6 +180,14 @@ To configure the provider in Commerce, do the following:
 - Click `Save Config`.
 
 #### Subscribe to events in Adobe Commerce instance
+> **Note**
+>
+> If your Commerce instance Adobe I/O Events for Adobe Commerce module version is 1.6.0 or greater, run the commerce-event-subscribe script to automatically subscribe to the Commerce events in `scripts/commerce-event-subscribe/config/commerce-event-subscribe.json`
+> ```bash
+> npm run commerce-event-subscribe
+> ```
+> Otherwise, follow the steps below to subscribe to the events manually.
+
 To subscribe to events, follow this [documentation](https://developer.adobe.com/commerce/extensibility/events/configure-commerce/#subscribe-and-register-events).
 For events of type 'plugin' you can also check this [documentation](https://developer.adobe.com/commerce/extensibility/events/commands/#subscribe-to-an-event).
 

@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const naming = require('../../../utils/naming.js')
+const naming = require('../../utils/naming.js')
 
 describe('Given naming file', () => {
   describe('When method addSufix is called with label parameter undefined', () => {

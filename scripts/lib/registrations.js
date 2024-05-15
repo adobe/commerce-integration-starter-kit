@@ -11,8 +11,8 @@ governing permissions and limitations under the License.
 */
 
 const fetch = require('node-fetch')
-const { getExistingRegistrations } = require('../utils/adobe-events-api')
-const { getRegistrationName } = require('../utils/naming')
+const { getExistingRegistrations } = require('../../utils/adobe-events-api')
+const { getRegistrationName } = require('../../utils/naming')
 
 /**
  * Create the registrations based on the selection of the client from the file custom/starter-kit-registrations.json
@@ -24,7 +24,7 @@ const { getRegistrationName } = require('../utils/naming')
  * @returns {object} - returns response with success status and registrations information
  */
 async function main (clientRegistrations, providers, environment, accessToken) {
-  const eventsConfig = require('./config/events.json')
+  const eventsConfig = require('../onboarding/config/events.json')
   const result = []
 
   try {

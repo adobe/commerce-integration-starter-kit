@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 jest.mock('node-fetch')
 const fetch = require('node-fetch')
-const action = require('../../onboarding/metadata.js')
+const action = require('../../../scripts/lib/metadata.js')
 const ACCESS_TOKEN = 'token'
 const EMPTY_ENVIRONMENT = {}
 
@@ -60,7 +60,7 @@ describe('Given on-boarding metadata file', () => {
       }
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse)
 
-      const clientRegistrations = require('../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json')
+      const clientRegistrations = require('../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json')
 
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
@@ -99,7 +99,7 @@ describe('Given on-boarding metadata file', () => {
       }
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse)
 
-      const clientRegistrations = require('../data/onboarding/metadata/create_only_commerce_providers_metadata.json')
+      const clientRegistrations = require('../../data/onboarding/metadata/create_only_commerce_providers_metadata.json')
 
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
@@ -135,7 +135,7 @@ describe('Given on-boarding metadata file', () => {
       }
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse)
 
-      const clientRegistrations = require('../data/onboarding/metadata/create_only_backoffice_providers_metadata.json')
+      const clientRegistrations = require('../../data/onboarding/metadata/create_only_backoffice_providers_metadata.json')
 
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
@@ -155,7 +155,7 @@ describe('Given on-boarding metadata file', () => {
     test('Then returns error response', async () => {
       const fakeError = new Error('fake')
       fetch.mockRejectedValue(fakeError)
-      const clientRegistrations = require('../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json')
+      const clientRegistrations = require('../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json')
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
       expect(response).toEqual({
         code: 500,
@@ -175,7 +175,7 @@ describe('Given on-boarding metadata file', () => {
       }
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse)
 
-      const clientRegistrations = require('../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json')
+      const clientRegistrations = require('../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json')
 
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT)
 

@@ -12,8 +12,8 @@ governing permissions and limitations under the License.
 
 jest.mock('node-fetch')
 const fetch = require('node-fetch')
-const action = require('../../onboarding/registrations.js')
-const clientRegistrations = require('../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
+const action = require('../../../scripts/lib/registrations.js')
+const clientRegistrations = require('../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -247,7 +247,7 @@ describe('Given on-boarding registrations file', () => {
         .mockResolvedValueOnce(mockFetchCreateProductCommerceRegistrationResponse)
         .mockResolvedValueOnce(mockFetchCreateProductBackofficeRegistrationResponse)
 
-      const clientRegistrations = require('../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
+      const clientRegistrations = require('../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
 
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
@@ -440,7 +440,7 @@ describe('Given on-boarding registrations file', () => {
       fetch.mockResolvedValueOnce(mockFetchExistingRegistrationResponse)
         .mockResolvedValueOnce(mockFetchCreateProductCommerceRegistrationResponse)
 
-      const clientRegistrations = require('../data/onboarding/registrations/create_only_commerce_registrations.json')
+      const clientRegistrations = require('../../data/onboarding/registrations/create_only_commerce_registrations.json')
 
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
@@ -627,7 +627,7 @@ describe('Given on-boarding registrations file', () => {
       fetch.mockResolvedValueOnce(mockFetchExistingRegistrationResponse)
         .mockResolvedValueOnce(mockFetchCreateProductBackofficeRegistrationResponse)
 
-      const clientRegistrations = require('../data/onboarding/registrations/create_only_backoffice_registrations.json')
+      const clientRegistrations = require('../../data/onboarding/registrations/create_only_backoffice_registrations.json')
 
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
@@ -814,7 +814,7 @@ describe('Given on-boarding registrations file', () => {
       fetch.mockResolvedValueOnce(mockFetchExistingRegistrationResponse)
         .mockResolvedValueOnce(mockFetchCreateProductBackofficeRegistrationResponse)
 
-      const clientRegistrations = require('../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
+      const clientRegistrations = require('../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
 
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
@@ -862,7 +862,7 @@ describe('Given on-boarding registrations file', () => {
 
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse)
 
-      const clientRegistrations = require('../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
+      const clientRegistrations = require('../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
 
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 

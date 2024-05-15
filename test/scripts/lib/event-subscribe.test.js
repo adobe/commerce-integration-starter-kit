@@ -10,30 +10,11 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-module.exports = {
-  collectCoverage: true,
-  verbose: false,
-  silent: true,
-  collectCoverageFrom: [
-    '../actions/**/*.js',
-    '../onboarding/**/*.js',
-    '../utils/**/*.js'
-  ],
-  coverageDirectory: 'test-coverage',
-  coverageReporters: ['text-summary', 'html'],
-  coverageThreshold: {
-    global: {
-      branches: 70,
-      functions: 50,
-      lines: 80,
-      statements: 80
-    }
-  },
-  reporters: [
-    'default'
-  ],
-  testEnvironment: 'node',
-  setupFilesAfterEnv: [
-    './jest.setup.js'
-  ]
-}
+const action = require('../../../scripts/lib/event-subscribe')
+describe('Given the event-subscribe file', () => {
+  describe('When method main is defined', () => {
+    test('Then is an instance of Function', () => {
+      expect(action.main).toBeInstanceOf(Function)
+    })
+  })
+})
