@@ -1,6 +1,6 @@
 {
   "name": "enterprise-integrations-starter-kit",
-  "version": "1.0.2-beta",
+  "version": "1.0.2",
   "license": "Apache-2.0",
   "description": "To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder. The kit includes reference integrations for commonly used commerce data like orders, products, and customers. It also includes onboarding scripts and a standardized architecture for developers to build on following best practices.",
   "keywords": [
