@@ -1,4 +1,4 @@
-# Commerce Extensibility Starter Kit
+# Commerce  Integration Starter Kit
 [![Node.js CI](https://github.com/magento/starter-kit/actions/workflows/deploy_node_stage.yml/badge.svg)](https://github.com/magento/starter-kit/actions/workflows/deploy_node_stage.yml)
 
 * [Prerequisites](#prerequisites)
@@ -6,7 +6,7 @@
 * [Development](#development)
 * [References](#references)
 
-Welcome to Adobe Commerce Extensibility Starter Kit.
+Welcome to Adobe Commerce  Integration Starter Kit.
 
 Integrating an e-commerce platform with your ERP, OMS, or CRM is a mission-critical requirement. Companies can spend tens of thousands of dollars building these integrations. To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder. The kit includes reference integrations for commonly used commerce data like orders, products, and customers. It also includes onboarding scripts and a standardized architecture for developers to build on following best practices.
 
