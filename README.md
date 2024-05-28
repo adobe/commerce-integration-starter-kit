@@ -1,5 +1,4 @@
 # Commerce  Integration Starter Kit
-[![Node.js CI](https://github.com/magento/starter-kit/actions/workflows/deploy_node_stage.yml/badge.svg)](https://github.com/magento/starter-kit/actions/workflows/deploy_node_stage.yml)
 
 * [Prerequisites](#prerequisites)
 * [Starter Kit first deploy & onboarding](#starter-kit-first-deploy--onboarding)
