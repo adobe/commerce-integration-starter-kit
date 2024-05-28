@@ -1,5 +1,7 @@
 # Commerce  Integration Starter Kit
 
+[![Node.js CI](https://github.com/adobe/commerce-integration-starter-kit/actions/workflows/deploy_node_stage.yml/badge.svg)](https://github.com/adobe/commerce-integration-starter-kit/actions/workflows/deploy_node_stage.yml)
+  
 * [Prerequisites](#prerequisites)
 * [Starter Kit first deploy & onboarding](#starter-kit-first-deploy--onboarding)
 * [Development](#development)
