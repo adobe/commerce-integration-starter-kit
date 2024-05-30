@@ -60,14 +60,6 @@ async function main (params) {
       return errorResponse(HTTP_INTERNAL_ERROR, errorMessage)
     }
 
-    const event = {
-      providerId: provider.id,
-      providerName: provider.label,
-      type: params.data.event,
-      data: params.data.value,
-      uid: params.data.uid
-    }
-
     logger.debug('Initiate events client')
     const eventsClient = await Events.init(
       params.OAUTH_ORG_ID,
@@ -76,22 +68,22 @@ async function main (params) {
 
     logger.info('Process event data')
     logger.debug(
-          `Process event ${event.type} for entity ${event.entity}`)
+          `Process event ${params.data.event}`)
 
     const cloudEvent = new CloudEvent({
-      source: 'urn:uuid:' + event.providerId,
-      type: event.type,
+      source: 'urn:uuid:' + provider.id,
+      type: params.data.event,
       datacontenttype: 'application/json',
-      data: event.data,
+      data:params.data.value,
       id: uuid.v4()
     })
 
-    logger.debug(`Publish event ${event.type} to provider ${event.providerName}`)
-    event.success = await eventsClient.publishEvent(cloudEvent)
+    logger.debug(`Publish event ${params.data.event} to provider ${provider.label}`)
+    const success = await eventsClient.publishEvent(cloudEvent)
 
     logger.info(`Successful request: ${HTTP_OK}`)
 
-    return successResponse(event.type, {
+    return successResponse(params.data.event, {
       success: true,
       message: 'Event published successfully'
     })
