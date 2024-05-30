@@ -16,7 +16,7 @@ const { CloudEvent } = require('cloudevents')
 const uuid = require('uuid')
 const {
   HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR, HTTP_UNAUTHORIZED,
-  BACKOFFICE_PROVIDER_KEY
+  BACKOFFICE_PROVIDER_KEY, PUBLISH_EVENT_SUCCESS
 } = require('../../../actions/constants')
 const { getAdobeAccessToken } = require('../../../utils/adobe-auth')
 const { getProviderByKey } = require('../../../utils/adobe-events-api')
@@ -79,7 +79,12 @@ async function main (params) {
     })
 
     logger.debug(`Publish event ${params.data.event} to provider ${provider.label}`)
-    const success = await eventsClient.publishEvent(cloudEvent)
+    const publishEventResult = await eventsClient.publishEvent(cloudEvent)
+    logger.debug(`Publish event result: ${publishEventResult}`)
+    if (publishEventResult !== PUBLISH_EVENT_SUCCESS) {
+      logger.error(`Unable to publish event ${params.data.event}: Unknown event type`)
+      return errorResponse(HTTP_BAD_REQUEST, `Unable to publish event ${params.data.event}: Unknown event type`)
+    }
 
     logger.info(`Successful request: ${HTTP_OK}`)
 
