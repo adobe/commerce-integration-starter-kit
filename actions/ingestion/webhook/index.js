@@ -74,7 +74,7 @@ async function main (params) {
       source: 'urn:uuid:' + provider.id,
       type: params.data.event,
       datacontenttype: 'application/json',
-      data:params.data.value,
+      data: params.data.value,
       id: uuid.v4()
     })
 
