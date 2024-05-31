@@ -66,26 +66,27 @@ async function main (params) {
       params.OAUTH_CLIENT_ID,
       accessToken)
 
-    logger.info(`Process event data ${params.data.event}`)
+    const eventType = params.data.event
+    logger.info(`Process event data ${eventType}`)
     const cloudEvent = new CloudEvent({
       source: 'urn:uuid:' + provider.id,
-      type: params.data.event,
+      type: eventType,
       datacontenttype: 'application/json',
       data: params.data.value,
       id: uuid.v4()
     })
 
-    logger.debug(`Publish event ${params.data.event} to provider ${provider.label}`)
+    logger.debug(`Publish event ${eventType} to provider ${provider.label}`)
     const publishEventResult = await eventsClient.publishEvent(cloudEvent)
     logger.debug(`Publish event result: ${publishEventResult}`)
     if (publishEventResult !== PUBLISH_EVENT_SUCCESS) {
-      logger.error(`Unable to publish event ${params.data.event}: Unknown event type`)
-      return errorResponse(HTTP_BAD_REQUEST, `Unable to publish event ${params.data.event}: Unknown event type`)
+      logger.error(`Unable to publish event ${eventType}: Unknown event type`)
+      return errorResponse(HTTP_BAD_REQUEST, `Unable to publish event ${eventType}: Unknown event type`)
     }
 
     logger.info(`Successful request: ${HTTP_OK}`)
 
-    return successResponse(params.data.event, {
+    return successResponse(eventType, {
       success: true,
       message: 'Event published successfully'
     })
