@@ -66,10 +66,7 @@ async function main (params) {
       params.OAUTH_CLIENT_ID,
       accessToken)
 
-    logger.info('Process event data')
-    logger.debug(
-          `Process event ${params.data.event}`)
-
+    logger.info(`Process event data ${params.data.event}`)
     const cloudEvent = new CloudEvent({
       source: 'urn:uuid:' + provider.id,
       type: params.data.event,
