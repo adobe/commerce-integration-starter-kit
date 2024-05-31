@@ -16,7 +16,7 @@ const { CloudEvent } = require('cloudevents')
 const uuid = require('uuid')
 const {
   HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR, HTTP_UNAUTHORIZED,
-  BACKOFFICE_PROVIDER_KEY
+  BACKOFFICE_PROVIDER_KEY, PUBLISH_EVENT_SUCCESS
 } = require('../../../actions/constants')
 const { getAdobeAccessToken } = require('../../../utils/adobe-auth')
 const { getProviderByKey } = require('../../../utils/adobe-events-api')
@@ -60,38 +60,33 @@ async function main (params) {
       return errorResponse(HTTP_INTERNAL_ERROR, errorMessage)
     }
 
-    const event = {
-      providerId: provider.id,
-      providerName: provider.label,
-      type: params.data.event,
-      data: params.data.value,
-      uid: params.data.uid
-    }
-
     logger.debug('Initiate events client')
     const eventsClient = await Events.init(
       params.OAUTH_ORG_ID,
       params.OAUTH_CLIENT_ID,
       accessToken)
 
-    logger.info('Process event data')
-    logger.debug(
-          `Process event ${event.type} for entity ${event.entity}`)
-
+    const eventType = params.data.event
+    logger.info(`Process event data ${eventType}`)
     const cloudEvent = new CloudEvent({
-      source: 'urn:uuid:' + event.providerId,
-      type: event.type,
+      source: 'urn:uuid:' + provider.id,
+      type: eventType,
       datacontenttype: 'application/json',
-      data: event.data,
+      data: params.data.value,
       id: uuid.v4()
     })
 
-    logger.debug(`Publish event ${event.type} to provider ${event.providerName}`)
-    event.success = await eventsClient.publishEvent(cloudEvent)
+    logger.debug(`Publish event ${eventType} to provider ${provider.label}`)
+    const publishEventResult = await eventsClient.publishEvent(cloudEvent)
+    logger.debug(`Publish event result: ${publishEventResult}`)
+    if (publishEventResult !== PUBLISH_EVENT_SUCCESS) {
+      logger.error(`Unable to publish event ${eventType}: Unknown event type`)
+      return errorResponse(HTTP_BAD_REQUEST, `Unable to publish event ${eventType}: Unknown event type`)
+    }
 
     logger.info(`Successful request: ${HTTP_OK}`)
 
-    return successResponse(event.type, {
+    return successResponse(eventType, {
       success: true,
       message: 'Event published successfully'
     })
