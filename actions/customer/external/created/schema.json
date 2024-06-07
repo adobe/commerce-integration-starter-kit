@@ -1,10 +1,11 @@
 {
   "type": "object",
   "properties": {
-    "name": { "type": "string" },
-    "lastname": {"type": "string"},
-    "email": {"type":  "string"}
+    "PersonFirstName": { "type": "string" },
+    "PersonMiddleName": { "type": "string" },
+    "PersonLastName": {"type": "string"},
+    "Email": {"type":  "string"}
   },
-  "required": ["name", "lastname", "email"],
+  "required": ["PersonFirstName", "PersonMiddleName", "PersonLastName", "Email"],
   "additionalProperties": true
 }

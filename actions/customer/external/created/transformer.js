@@ -21,9 +21,10 @@ function transformData (params) {
   // @TODO Notice that the attribute_set_id may need to be changed
   return {
     customer: {
-      email: params.data.email,
-      firstname: params.data.name,
-      lastname: params.data.lastname
+      email: params.data.Email,
+      firstname: params.data.PersonFirstName,
+      middlename: params.data.PersonMiddleName,
+      lastname: params.data.PersonLastName
     }
   }
 }
