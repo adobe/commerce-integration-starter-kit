@@ -21,9 +21,9 @@ const got = require("got");
  * @param {string} body - Payload
  */
 async function createCustomer (baseUrl, body) {
+    const logger = Core.Logger('mockapi-api-client', { level: 'debug' })
+    logger.debug(`Fetching URL: ${baseUrl} with method: POST and body: ${body}`)
     try {
-        const logger = Core.Logger('mockapi-api-client', { level: 'debug' })
-        logger.debug(`Fetching URL: ${baseUrl} with method: POST and body: ${body}`)
 
         return await got(`${baseUrl}customer`, {
             http2: true,

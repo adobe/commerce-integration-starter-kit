@@ -10,6 +10,9 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const {createCustomer} = require("../../mockapi-api-client");
+const {HTTP_INTERNAL_ERROR} = require("../../../constants");
+
 /**
  * This function send the customer created dara to the external back-office application
  *
@@ -19,12 +22,18 @@ governing permissions and limitations under the License.
  * @returns {object} returns the sending result if needed for post process
  */
 async function sendData (params, data, preProcessed) {
-  // @TODO Here add the logic to send the information to 3rd party
-  // @TODO Use params to retrieve needed parameters from the environment
-  // @TODO in case of error return { success: false, statusCode: <error status code>, message: '<error message>' }
 
-  return {
-    success: true
+  try {
+    const createCustomerResult = await createCustomer('https://6661805163e6a0189fea31d1.mockapi.io/api/v1/', data)
+    return {
+      success: true
+    }
+  } catch (error) {
+    return {
+      success:false,
+      statusCode: HTTP_INTERNAL_ERROR,
+      message: error.message
+    }
   }
 }
 

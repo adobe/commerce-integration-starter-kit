@@ -17,10 +17,11 @@ governing permissions and limitations under the License.
  * @returns {object} - Returns transformed data object
  */
 function transformData (data) {
-  // @Todo Here transform the data as needed for external back-office application API
-  const transformedData = data
-
-  return transformedData
+  return {
+    PersonFirstName: data.firstname,
+    PersonLastName: data.lastname,
+    Email: data.email
+  }
 }
 
 module.exports = {
