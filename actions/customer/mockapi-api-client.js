@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const { Core } = require('@adobe/aio-sdk')
-const got = require("got");
+const got = require('got')
 
 /**
  * This function call Adobe commerce rest API to create a customer
@@ -21,21 +21,19 @@ const got = require("got");
  * @param {string} body - Payload
  */
 async function createCustomer (baseUrl, body) {
-    const logger = Core.Logger('mockapi-api-client', { level: 'debug' })
-    logger.debug(`Fetching URL: ${baseUrl} with method: POST and body: ${body}`)
-    try {
-
-        return await got(`${baseUrl}customer`, {
-            http2: true,
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(body),
-            responseType: 'json'
-        }).json()
-    } catch (error) {
-        logger.error(`Error fetching URL ${baseUrl}: ${error}`)
-        throw error
-    }
+  const logger = Core.Logger('mockapi-api-client', { level: 'debug' })
+  logger.debug(`Fetching URL: ${baseUrl} with method: POST and body: ${body}`)
+  try {
+    return await got(`${baseUrl}save-events`, {
+      http2: true,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }).text()
+  } catch (error) {
+    logger.error(`Error fetching URL ${baseUrl}save-events: ${error}`)
+    throw error
+  }
 }
 
 module.exports = {
