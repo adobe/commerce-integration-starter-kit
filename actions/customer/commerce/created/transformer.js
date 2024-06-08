@@ -10,6 +10,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const uuid = require('uuid')
+
 /**
  * This function transform the received customer data from Adobe commerce to external back-office application
  *
@@ -18,9 +20,15 @@ governing permissions and limitations under the License.
  */
 function transformData (data) {
   return {
-    PersonFirstName: data.firstname,
-    PersonLastName: data.lastname,
-    Email: data.email
+    data: {
+      key: uuid.v4(),
+      value: {
+        email: data.email,
+        firstname: data.firstname,
+        lastname: data.lastname
+      }
+    },
+    type: 'com.adobe.commerce.observer.customer_save_after'
   }
 }
 

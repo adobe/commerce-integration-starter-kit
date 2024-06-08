@@ -10,8 +10,9 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const {createCustomer} = require("../../mockapi-api-client");
-const {HTTP_INTERNAL_ERROR} = require("../../../constants");
+const { createCustomer } = require('../../mockapi-api-client')
+const { HTTP_INTERNAL_ERROR } = require('../../../constants')
+const { Core } = require('@adobe/aio-sdk')
 
 /**
  * This function send the customer created dara to the external back-office application
@@ -22,15 +23,17 @@ const {HTTP_INTERNAL_ERROR} = require("../../../constants");
  * @returns {object} returns the sending result if needed for post process
  */
 async function sendData (params, data, preProcessed) {
+  const logger = Core.Logger('customer-commerce-created.sendData', { level: params.LOG_LEVEL || 'info' })
+  logger.info(`data: ${JSON.stringify(data)}`)
 
   try {
-    const createCustomerResult = await createCustomer('https://6661805163e6a0189fea31d1.mockapi.io/api/v1/', data)
+    const createCustomerResult = await createCustomer('https://1339710-967summiteventing-stage.adobeioruntime.net/api/v1/web/Production/', data)
     return {
       success: true
     }
   } catch (error) {
     return {
-      success:false,
+      success: false,
       statusCode: HTTP_INTERNAL_ERROR,
       message: error.message
     }
