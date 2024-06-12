@@ -95,7 +95,7 @@ These parameters can be passed on the action by configuring them in the  `action
 shipment-created:
   function: shipment-created/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
     COMMERCE_BASE_URL: $COMMERCE_BASE_URL

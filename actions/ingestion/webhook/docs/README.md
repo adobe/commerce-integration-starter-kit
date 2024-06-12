@@ -39,7 +39,7 @@ You can access any needed environment parameter from `params`. Add the required 
 webhook:
   function: ./consumer/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
     OAUTH_ORG_ID: $OAUTH_ORG_ID

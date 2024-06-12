@@ -51,7 +51,7 @@ You can access any needed environment parameter from `params`. Add the required 
 check-stock:
   function: check-stock/index.js
   web: 'yes'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
     

@@ -29,7 +29,7 @@ Any values from the environment could be accessed from `params`. Pass the requir
 updated:
   function: commerce/updated/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
     HERE_YOUR_PARAM: $HERE_YOUR_PARAM_ENV

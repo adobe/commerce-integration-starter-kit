@@ -1,7 +1,7 @@
 consumer:
   function: consumer/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
   annotations:
@@ -10,7 +10,7 @@ consumer:
 updated:
   function: updated/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
     COMMERCE_BASE_URL: $COMMERCE_BASE_URL
