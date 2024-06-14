@@ -54,3 +54,5 @@ application:
         license: Apache-2.0
         actions:
           $include: ./actions/stock/external/actions.config.yaml
+productDependencies:
+  - code: Commerce
