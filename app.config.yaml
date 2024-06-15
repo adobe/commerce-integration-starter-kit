@@ -55,5 +55,5 @@ application:
         actions:
           $include: ./actions/stock/external/actions.config.yaml
 productDependencies:
-  - code: Commerce
+  - code: COMMC
     minVersion: 2.4.4
