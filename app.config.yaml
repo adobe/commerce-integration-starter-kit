@@ -54,3 +54,6 @@ application:
         license: Apache-2.0
         actions:
           $include: ./actions/stock/external/actions.config.yaml
+productDependencies:
+  - code: COMMC
+    minVersion: 2.4.4
