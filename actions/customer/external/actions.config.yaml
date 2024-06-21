@@ -1,7 +1,7 @@
 consumer:
   function: consumer/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
   annotations:
@@ -10,7 +10,7 @@ consumer:
 created:
   function: created/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
     COMMERCE_BASE_URL: $COMMERCE_BASE_URL
@@ -24,7 +24,7 @@ created:
 updated:
   function: updated/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
     COMMERCE_BASE_URL: $COMMERCE_BASE_URL
@@ -38,7 +38,7 @@ updated:
 deleted:
   function: deleted/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
     COMMERCE_BASE_URL: $COMMERCE_BASE_URL
@@ -52,7 +52,7 @@ deleted:
 group-created:
   function: group-created/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
     COMMERCE_BASE_URL: $COMMERCE_BASE_URL
@@ -66,7 +66,7 @@ group-created:
 group-updated:
   function: group-updated/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
     COMMERCE_BASE_URL: $COMMERCE_BASE_URL
@@ -80,7 +80,7 @@ group-updated:
 group-deleted:
   function: group-deleted/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
     COMMERCE_BASE_URL: $COMMERCE_BASE_URL

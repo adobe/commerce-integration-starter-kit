@@ -23,7 +23,7 @@ Any values from the environment could be accessed from `params`. Pass the requir
 created:
   function: commerce/created/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
     HERE_YOUR_PARAM: $HERE_YOUR_PARAM_ENV

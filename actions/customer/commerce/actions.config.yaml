@@ -1,7 +1,7 @@
 consumer:
   function: consumer/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
   annotations:
@@ -10,7 +10,7 @@ consumer:
 created:
   function: created/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
   annotations:
@@ -19,7 +19,7 @@ created:
 updated:
   function: updated/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
   annotations:
@@ -28,7 +28,7 @@ updated:
 deleted:
   function: deleted/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
   annotations:
@@ -37,7 +37,7 @@ deleted:
 group-updated:
   function: group-updated/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
   annotations:
@@ -46,7 +46,7 @@ group-updated:
 group-deleted:
   function: group-deleted/index.js
   web: 'no'
-  runtime: nodejs:16
+  runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
   annotations:
