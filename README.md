@@ -207,6 +207,20 @@ Here are the events with the minimal required fields you need to subscribe to, i
 | Order          | observer.sales_order_save_commit_after                 | created_at, updated_at      | order update ([hold](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidhold#operation/PostV1OrdersIdHold), [unhold](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidunhold#operation/PostV1OrdersIdUnhold), [cancel](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidcancel#operation/PostV1OrdersIdCancel), [emails](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidemails#operation/PostV1OrdersIdEmails)) |
 | Stock          | observer.cataloginventory_stock_item_save_commit_after | product_id                  | product [stock update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/productsproductSkustockItemsitemId/#operation/PutV1ProductsProductSkuStockItemsItemId)                                                                                                                                                                                                                                                                               |
 
+### Automating the execution of onboarding and event subscription
+App builder defines lifecycle event hooks that make possible to automatically execute custom code when a particular application lifecycle event happens.
+To learn more these hooks navigate to [App Builder application tooling lifecycle event hooks](https://developer.adobe.com/app-builder/docs/guides/app-hooks/).
+
+This code snapshot in the `app.config.yaml` file shows how to define a hook that will execute the onboarding and event subscription scripts after the application has been deployed:
+
+```yaml
+application:
+  hooks:
+    post-app-deploy: ./hooks/post-app-deploy.js
+```
+
+For convenience, the hook configuration is commented out in the `app.config.yaml` file. To enable the hook, uncomment the hook configuration.
+
 ## Development
 
 * [Project source code structure](#project-source-code-structure)
