@@ -211,7 +211,7 @@ Here are the events with the minimal required fields you need to subscribe to, i
 App builder defines lifecycle event hooks that make possible to automatically execute custom code when a particular application lifecycle event happens.
 To learn more these hooks navigate to [App Builder application tooling lifecycle event hooks](https://developer.adobe.com/app-builder/docs/guides/app-hooks/).
 
-This code snapshot in the `app.config.yaml` file shows how to define a hook that will execute the onboarding and event subscription scripts after the application has been deployed:
+The following code snapshot in the `app.config.yaml` file shows how to define a hook that will execute the onboarding and event subscription scripts after the application has been deployed:
 
 ```yaml
 application:
@@ -220,6 +220,8 @@ application:
 ```
 
 For convenience, the hook configuration is commented out in the `app.config.yaml` file. To enable the hook, uncomment the hook configuration.
+
+If you plan to add more hooks to the application, you can define them in the `hooks` folder and reference them in the `app.config.yaml` file.
 
 ## Development
 
