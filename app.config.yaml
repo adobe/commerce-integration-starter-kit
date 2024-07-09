@@ -1,4 +1,6 @@
 application:
+#  hooks:
+#    post-app-deploy: ./hooks/post-app-deploy.js
   runtimeManifest:
     packages:
       starter-kit:
