@@ -119,8 +119,7 @@ e.g., In the previous onboarding step (`Configure the project`), we commented on
   "product": ["commerce"],
   "customer": ["commerce", "backoffice"],
   "order": ["commerce", "backoffice"],
-  "stock": ["commerce", "backoffice"],
-  "shipment": ["commerce", "backoffice"]
+  "stock": ["commerce", "backoffice"]
 }
 ```
 
