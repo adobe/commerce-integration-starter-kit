@@ -57,7 +57,7 @@ function stringToUppercaseFirstChar (string) {
  * @returns {string} the generated registration name
  */
 function getRegistrationName (providerKey, entityName) {
-  return `${stringToUppercaseFirstChar(providerKey)} ${stringToUppercaseFirstChar(entityName)} Synchronization`
+  return `${stringToUppercaseFirstChar(providerKey)} ${stringToUppercaseFirstChar(entityName)} Sync`
 }
 
 /**

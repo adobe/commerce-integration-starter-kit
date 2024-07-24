@@ -49,7 +49,7 @@ describe('Given on-boarding registrations file', () => {
         json: () => Promise.resolve(
           {
             id: 1,
-            name: 'Commerce Product Synchronization',
+            name: 'Commerce Product Sync',
             description: 'string',
             client_id: 'CLIENT_ID',
             registration_id: 'REGISTRATION_ID_1',
@@ -213,7 +213,7 @@ describe('Given on-boarding registrations file', () => {
         json: () => Promise.resolve(
           {
             id: 2,
-            name: 'Backoffice Product Synchronization',
+            name: 'Backoffice Product Sync',
             description: 'string',
             client_id: 'CLIENT_ID',
             registration_id: 'REGISTRATION_ID_2',
@@ -258,13 +258,13 @@ describe('Given on-boarding registrations file', () => {
           {
             id: 1,
             registration_id: 'REGISTRATION_ID_1',
-            name: 'Commerce Product Synchronization',
+            name: 'Commerce Product Sync',
             enabled: true
           },
           {
             id: 2,
             registration_id: 'REGISTRATION_ID_2',
-            name: 'Backoffice Product Synchronization',
+            name: 'Backoffice Product Sync',
             enabled: true
           }
         ]
@@ -407,7 +407,7 @@ describe('Given on-boarding registrations file', () => {
         json: () => Promise.resolve(
           {
             id: 1,
-            name: 'Commerce Product Synchronization',
+            name: 'Commerce Product Sync',
             description: 'string',
             client_id: 'CLIENT_ID',
             registration_id: 'REGISTRATION_ID_1',
@@ -451,7 +451,7 @@ describe('Given on-boarding registrations file', () => {
           {
             id: 1,
             registration_id: 'REGISTRATION_ID_1',
-            name: 'Commerce Product Synchronization',
+            name: 'Commerce Product Sync',
             enabled: true
           }
         ]
@@ -594,7 +594,7 @@ describe('Given on-boarding registrations file', () => {
         json: () => Promise.resolve(
           {
             id: 2,
-            name: 'Backoffice Product Synchronization',
+            name: 'Backoffice Product Sync',
             description: 'string',
             client_id: 'CLIENT_ID',
             registration_id: 'REGISTRATION_ID_2',
@@ -638,7 +638,7 @@ describe('Given on-boarding registrations file', () => {
           {
             id: 2,
             registration_id: 'REGISTRATION_ID_2',
-            name: 'Backoffice Product Synchronization',
+            name: 'Backoffice Product Sync',
             enabled: true
           }
         ]
@@ -708,7 +708,7 @@ describe('Given on-boarding registrations file', () => {
               registrations: [
                 {
                   id: 2,
-                  name: 'Backoffice Product Synchronization',
+                  name: 'Backoffice Product Sync',
                   description: 'string',
                   client_id: 'string',
                   registration_id: 'EXISTING_BACKOFFICE_ID',
@@ -781,7 +781,7 @@ describe('Given on-boarding registrations file', () => {
         json: () => Promise.resolve(
           {
             id: 1,
-            name: 'Commerce Product Synchronization',
+            name: 'Commerce Product Sync',
             description: 'string',
             client_id: 'CLIENT_ID',
             registration_id: 'CREATED_REGISTRATION_ID',
@@ -825,13 +825,13 @@ describe('Given on-boarding registrations file', () => {
           {
             id: 1,
             registration_id: 'CREATED_REGISTRATION_ID',
-            name: 'Commerce Product Synchronization',
+            name: 'Commerce Product Sync',
             enabled: true
           },
           {
             id: 2,
             registration_id: 'EXISTING_BACKOFFICE_ID',
-            name: 'Backoffice Product Synchronization',
+            name: 'Backoffice Product Sync',
             enabled: true
           }
         ]
