@@ -49,7 +49,7 @@ describe('Given naming file', () => {
       expect(naming.addSuffix(label, environment)).toEqual('Label - testProject-testWorkspace')
     })
   })
-  describe('When getRegistrationname is called', () => {
+  describe('When getRegistrationName is called', () => {
     Object.keys(events).forEach(entityName => {
       providers.forEach(provider => {
         test('Then returns a string of 25 characters or less', () => {
