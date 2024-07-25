@@ -51,13 +51,13 @@ describe('Given naming file', () => {
   })
   describe('When getRegistrationName is called', () => {
     const cases = Object.keys(events).flatMap(entityName =>
-        providers.map(({ key: providerKey }) => ({ providerKey, entityName }))
-    );
+      providers.map(({ key: providerKey }) => ({ providerKey, entityName }))
+    )
 
-    test.each(cases)("naming.getRegistrationName($providerKey, $entityName) returns strings with 25 or less chars",
-        ({ providerKey, entityName }) => {
-      const result = naming.getRegistrationName(providerKey, entityName);
-      expect(result.length).toBeLessThanOrEqual(25)
-    })
+    test.each(cases)('naming.getRegistrationName($providerKey, $entityName) returns strings with 25 or less chars',
+      ({ providerKey, entityName }) => {
+        const result = naming.getRegistrationName(providerKey, entityName)
+        expect(result.length).toBeLessThanOrEqual(25)
+      })
   })
 })
