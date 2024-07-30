@@ -11,6 +11,8 @@ governing permissions and limitations under the License.
 */
 
 const naming = require('../../utils/naming.js')
+const providers = require('../../scripts/onboarding/config/providers.json')
+const events = require('../../scripts/onboarding/config/events.json')
 
 describe('Given naming file', () => {
   describe('When method addSufix is called with label parameter undefined', () => {
@@ -46,5 +48,16 @@ describe('Given naming file', () => {
       const environment = { AIO_runtime_namespace: '1340225-testProject-testWorkspace' }
       expect(naming.addSuffix(label, environment)).toEqual('Label - testProject-testWorkspace')
     })
+  })
+  describe('When getRegistrationName is called', () => {
+    const cases = Object.keys(events).flatMap(entityName =>
+      providers.map(({ key: providerKey }) => ({ providerKey, entityName }))
+    )
+
+    test.each(cases)('naming.getRegistrationName($providerKey, $entityName) returns strings with 25 or less chars',
+      ({ providerKey, entityName }) => {
+        const result = naming.getRegistrationName(providerKey, entityName)
+        expect(result.length).toBeLessThanOrEqual(25)
+      })
   })
 })
