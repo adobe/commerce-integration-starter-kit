@@ -27,17 +27,22 @@ function buildProviderData (providerEvents) {
       eventCode: event,
       label: event,
       description: event,
-      sampleEventTemplate: sampleEventTemplate ?? {}
+      sampleEventTemplate
     })
   }
-
-  console.log({ events })
 
   return events
 }
 
-function buildSampleEventTemplate(sampleEventTemplate) {
-  return Buffer.from(JSON.stringify(sampleEventTemplate)).toString('base64') ?? null
+/**
+ * This method builds a base64 encoded sample event if one exists
+ * @param {object} sampleEventTemplate - Sample Event Template as object
+ */
+function base64EncodedSampleEvent (sampleEventTemplate) {
+  if (!sampleEventTemplate || typeof sampleEventTemplate !== 'object') {
+    return null
+  }
+  return Buffer.from(JSON.stringify(sampleEventTemplate)).toString('base64')
 }
 
 /**
@@ -50,16 +55,25 @@ function buildSampleEventTemplate(sampleEventTemplate) {
  * @returns {object} - returns response with success true or false
  */
 async function addEventCodeToProvider (metadata, providerId, environment, accessToken) {
-  console.log(`Trying to create metadata for ${metadata?.event_code} to provider ${providerId}`)
+  console.log(`Trying to create metadata for ${metadata?.eventCode} to provider ${providerId}`)
 
   const { eventCode, label, description, sampleEventTemplate } = metadata
-  const body = {
+  let body = {
     // eslint-disable-next-line camelcase
-    event_code: eventCode ?? null,
-    label: label ?? null,
-    description: description ?? null,
-    sample_event_template: buildSampleEventTemplate(sampleEventTemplate)
+    event_code: eventCode,
+    label,
+    description
   }
+
+  const sampleEvent = base64EncodedSampleEvent(sampleEventTemplate)
+  if (sampleEvent) {
+    body = {
+      // eslint-disable-next-line camelcase
+      ...body,
+      sample_event_template: sampleEvent
+    }
+  }
+
   const addEventMetadataReq = await fetch(
         `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers/${providerId}/eventmetadata`,
         {
