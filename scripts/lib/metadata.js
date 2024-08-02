@@ -37,6 +37,7 @@ function buildProviderData (providerEvents) {
 /**
  * This method builds a base64 encoded sample event if one exists
  * @param {object} sampleEventTemplate - Sample Event Template as object
+ * @returns {string} - returns base64 encoded string
  */
 function base64EncodedSampleEvent (sampleEventTemplate) {
   if (!sampleEventTemplate || typeof sampleEventTemplate !== 'object') {
