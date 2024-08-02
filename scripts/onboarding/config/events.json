@@ -66,8 +66,16 @@
           "email": "john.doe@fakedomain.com"
         }
       },
-      "com.adobe.commerce.observer.customer_group_save_commit_after": {},
-      "com.adobe.commerce.observer.customer_group_delete_commit_after": {}
+      "com.adobe.commerce.observer.customer_group_save_commit_after": {
+        "sampleEventTemplate": {
+          "tax_class_name": ""
+        }
+      },
+      "com.adobe.commerce.observer.customer_group_delete_commit_after": {
+        "sampleEventTemplate": {
+          "tax_class_name": ""
+        }
+      }
     },
     "backoffice": {
       "be-observer.customer_create": {
