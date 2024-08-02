@@ -33,7 +33,6 @@ function transformItems (items) {
 function transformTracks (orderId, tracks) {
   return tracks.map(track => (
     {
-      order_id: orderId,
       track_number: track.trackNumber,
       title: track.title,
       carrier_code: track.carrierCode
@@ -49,7 +48,6 @@ function transformTracks (orderId, tracks) {
 function transformComments (comments) {
   return comments.map(comment => (
     {
-      is_customer_notified: comment.notifyCustomer ? 1 : 0,
       comment: comment.comment,
       is_visible_on_front: comment.visibleOnFront ? 1 : 0
     }
@@ -68,7 +66,6 @@ function transformData (params) {
 
   return {
     entity: {
-      order_id: params.data.orderId,
       items: transformItems(params.data.items),
       tracks: transformTracks(params.data.orderId, params.data.tracks),
       comments: transformComments(params.data.comments),

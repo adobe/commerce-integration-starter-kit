@@ -23,9 +23,10 @@ const logger = Core.Logger('commerce-shipment-api-client', { level: 'info' })
  * @param {string} consumerSecret - Adobe commerce integration consumer secret
  * @param {string} accessToken - Adobe commerce integration access token
  * @param {string} accessTokenSecret - Adobe commerce integration access token secret
+ * @param {string} orderId - Adobe commerce order id
  * @param {object} data - Adobe commerce api payload
  */
-async function createShipment (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
+async function createShipment (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, orderId, data) {
   const client = getCommerceOauthClient(
     {
       url: baseUrl,
@@ -38,7 +39,7 @@ async function createShipment (baseUrl, consumerKey, consumerSecret, accessToken
   )
 
   return await client.post(
-    'shipment',
+    `order/${orderId}/ship`,
     JSON.stringify(data),
     '',
     { 'Content-Type': 'application/json' }
