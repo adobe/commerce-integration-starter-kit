@@ -23,9 +23,27 @@
       }
     },
     "backoffice": {
-      "be-observer.catalog_product_create": {},
-      "be-observer.catalog_product_update": {},
-      "be-observer.catalog_product_delete": {}
+      "be-observer.catalog_product_create": {
+        "sampleEventTemplate": {
+          "sku": "POSTBUSTER_TEST",
+          "name": "PostBusterTest",
+          "price": 0.0,
+          "description": "Post Buster Test"
+        }
+      },
+      "be-observer.catalog_product_update": {
+        "sampleEventTemplate": {
+          "sku": "POSTBUSTER_TEST",
+          "name": "PostBusterTest",
+          "price": 99.99,
+          "description": "Post Buster Test"
+        }
+      },
+      "be-observer.catalog_product_delete": {
+        "sampleEventTemplate": {
+          "sku": "POSTBUSTER_TEST"
+        }
+      }
     }
   },
   "customer": {
@@ -52,12 +70,44 @@
       "com.adobe.commerce.observer.customer_group_delete_commit_after": {}
     },
     "backoffice": {
-      "be-observer.customer_create": {},
-      "be-observer.customer_update": {},
-      "be-observer.customer_delete": {},
-      "be-observer.customer_group_create": {},
-      "be-observer.customer_group_update": {},
-      "be-observer.customer_group_delete": {}
+      "be-observer.customer_create": {
+        "sampleEventTemplate": {
+          "name": "PostBusterUpd",
+          "lastname": "TestUpd",
+          "email": "postbuster@testupd.com"
+        }
+      },
+      "be-observer.customer_update": {
+        "sampleEventTemplate": {
+          "id": 15,
+          "name": "PostBusterUpd",
+          "lastname": "TestUpd",
+          "email": "postbuster@testupd.com"
+        }
+      },
+      "be-observer.customer_delete": {
+        "sampleEventTemplate": {
+          "id": 15
+        }
+      },
+      "be-observer.customer_group_create": {
+        "sampleEventTemplate": {
+          "name": "PostBuster",
+          "taxClassId": 3
+        }
+      },
+      "be-observer.customer_group_update": {
+        "sampleEventTemplate": {
+          "id": 9,
+          "name": "PostBuster",
+          "taxClassId": 3
+        }
+      },
+      "be-observer.customer_group_delete": {
+        "sampleEventTemplate": {
+          "id": 9
+        }
+      }
     }
   },
   "order": {
@@ -72,9 +122,69 @@
       }
     },
     "backoffice": {
-      "be-observer.sales_order_status_update": {},
-      "be-observer.sales_order_shipment_create": {},
-      "be-observer.sales_order_shipment_update": {}
+      "be-observer.sales_order_status_update": {
+        "sampleEventTemplate": {
+          "id": 1,
+          "status": "shipped",
+          "notifyCustomer": false
+        }
+      },
+      "be-observer.sales_order_shipment_create": {
+        "sampleEventTemplate": {
+          "orderId": 8,
+          "items": [
+            {
+              "orderItemId": 8,
+              "qty": 1
+            }
+          ],
+          "tracks": [
+            {
+              "trackNumber": "Custom Value",
+              "title": "Custom Title",
+              "carrierCode": "custom"
+            }
+          ],
+          "comments": [
+            {
+              "notifyCustomer": false,
+              "comment": "Order Shipped from API",
+              "visibleOnFront": true
+            }
+          ],
+          "stockSourceCode": "default"
+        }
+      },
+      "be-observer.sales_order_shipment_update": {
+        "sampleEventTemplate": {
+          "id": 33,
+          "orderId": 8,
+          "items": [
+            {
+              "entityId": 19,
+              "orderItemId": 8,
+              "qty": 1
+            }
+          ],
+          "tracks": [
+            {
+              "entityId": 19,
+              "trackNumber": "Custom Value Upd",
+              "title": "Custom Title Upd",
+              "carrierCode": "custom"
+            }
+          ],
+          "comments": [
+            {
+              "entityId": 19,
+              "notifyCustomer": false,
+              "comment": "Order Shipped from API Upd",
+              "visibleOnFront": true
+            }
+          ],
+          "stockSourceCode": "default"
+        }
+      }
     }
   },
   "stock": {
@@ -91,7 +201,22 @@
       }
     },
     "backoffice": {
-      "be-observer.catalog_stock_update": {}
+      "be-observer.catalog_stock_update": {
+        "sampleEventTemplate": [
+          {
+            "sku": "sku-rojo-25",
+            "source": "default",
+            "quantity": 0,
+            "outOfStock": true
+          },
+          {
+            "sku": "sku-rojo-25",
+            "source": "test",
+            "quantity": 66,
+            "outOfStock": false
+          }
+        ]
+      }
     }
   }
 }
