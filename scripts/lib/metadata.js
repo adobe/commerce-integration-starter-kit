@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const fetch = require('node-fetch')
+const providersEventsConfig = require('../onboarding/config/events.json')
 
 /**
  * This method build an array of provider events
@@ -45,6 +46,12 @@ function buildProviderData (providerEvents) {
  */
 async function addEventCodeToProvider (metadata, providerId, environment, accessToken) {
   console.log(`Trying to create metadata for ${metadata?.event_code} to provider ${providerId}`)
+  const body = {
+    ...(metadata?.event_code ? { event_code: `${metadata?.event_code}` } : null),
+    ...(metadata?.label ? { label: `${metadata?.label}` } : null),
+    ...(metadata?.description ? { description: `${metadata?.description}` } : null),
+    sample_event_template: Buffer.from('{"test": "test"}').toString('base64')
+  }
   const addEventMetadataReq = await fetch(
         `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers/${providerId}/eventmetadata`,
         {
@@ -55,13 +62,7 @@ async function addEventCodeToProvider (metadata, providerId, environment, access
             'content-type': 'application/json',
             Accept: 'application/hal+json'
           },
-          body: JSON.stringify(
-            {
-              ...(metadata?.event_code ? { event_code: `${metadata?.event_code}` } : null),
-              ...(metadata?.label ? { label: `${metadata?.label}` } : null),
-              ...(metadata?.description ? { description: `${metadata?.description}` } : null)
-            }
-          )
+          body: JSON.stringify(body)
         }
   )
 
@@ -121,7 +122,6 @@ async function addMetadataToProvider (providerEvents, providerId, environment, a
  */
 async function getExistingMetadata (providerId, environment, accessToken, next = null) {
   const url = `${environment.IO_MANAGEMENT_BASE_URL}providers/${providerId}/eventmetadata`
-
   const getExistingMetadataReq = await fetch(
     next || url,
     {
@@ -159,7 +159,6 @@ async function getExistingMetadata (providerId, environment, accessToken, next =
  */
 async function main (clientRegistrations, providers, environment, accessToken) {
   try {
-    const providersEventsConfig = require('../onboarding/config/events.json')
     const providersEvents = []
 
     const result = []
@@ -169,7 +168,7 @@ async function main (clientRegistrations, providers, environment, accessToken) {
       for (const [entityName, options] of Object.entries(clientRegistrations)) {
         if (options !== undefined && options.includes(provider.key)) {
           if (providersEventsConfig[entityName]) {
-            for (const event of providersEventsConfig[entityName][provider.key]) {
+            for (const event of Object.keys(providersEventsConfig[entityName][provider.key])) {
               if (existingMetadata[event]) {
                 console.log(`Skipping, Metadata event code ${event} already exists!`)
                 continue

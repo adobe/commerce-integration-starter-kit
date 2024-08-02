@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 const fetch = require('node-fetch')
 const { getExistingRegistrations } = require('../../utils/adobe-events-api')
 const { getRegistrationName } = require('../../utils/naming')
+const providersEventsConfig = require('../onboarding/config/events.json')
 
 /**
  * Create the registrations based on the selection of the client from the file custom/starter-kit-registrations.json
@@ -24,7 +25,6 @@ const { getRegistrationName } = require('../../utils/naming')
  * @returns {object} - returns response with success status and registrations information
  */
 async function main (clientRegistrations, providers, environment, accessToken) {
-  const eventsConfig = require('../onboarding/config/events.json')
   const result = []
 
   try {
@@ -45,12 +45,13 @@ async function main (clientRegistrations, providers, environment, accessToken) {
         }
 
         const events = []
-        for (const event of eventsConfig[entityName][provider.key]) {
+        for (const event of Object.keys(providersEventsConfig[entityName][provider.key])) {
           events.push({
             provider_id: provider.id,
             event_code: event
           })
         }
+
         const createEventRegistrationResult = await createRequestRegistration(accessToken, entityName, provider.key, events, environment)
         if (!createEventRegistrationResult.success) {
           const errorMessage = `Unable to create registration for ${entityName} with provider ${provider.key} - ${provider.id}`

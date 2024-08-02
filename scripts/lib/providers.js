@@ -16,6 +16,7 @@ const fetch = require('node-fetch')
 const uuid = require('uuid')
 const { getExistingProviders } = require('../../utils/adobe-events-api')
 const { addSuffix } = require('../../utils/naming')
+const providersEventsConfig = require('../onboarding/config/events.json')
 
 /**
  * Create the events provider
@@ -85,7 +86,6 @@ function hasSelection (selection, clientRegistrations) {
 async function main (clientRegistrations, environment, accessToken) {
   // Load predefined provider, providerEvents and clientRegistrations
   const providersList = require('../onboarding/config/providers.json')
-  const providersEventsConfig = require('../onboarding/config/events.json')
 
   try {
     // 'info' is the default level if not set

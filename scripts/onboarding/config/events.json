@@ -1,47 +1,47 @@
 {
   "product": {
-    "commerce": [
-      "com.adobe.commerce.observer.catalog_product_delete_commit_after",
-      "com.adobe.commerce.observer.catalog_product_save_commit_after"
-    ],
-    "backoffice": [
-      "be-observer.catalog_product_create",
-      "be-observer.catalog_product_update",
-      "be-observer.catalog_product_delete"
-    ]
+    "commerce": {
+      "com.adobe.commerce.observer.catalog_product_delete_commit_after":  {},
+      "com.adobe.commerce.observer.catalog_product_save_commit_after": {}
+    },
+    "backoffice": {
+      "be-observer.catalog_product_create": {},
+      "be-observer.catalog_product_update": {},
+      "be-observer.catalog_product_delete": {}
+    }
   },
   "customer": {
-    "commerce": [
-      "com.adobe.commerce.observer.customer_save_commit_after",
-      "com.adobe.commerce.observer.customer_delete_commit_after",
-      "com.adobe.commerce.observer.customer_group_save_commit_after",
-      "com.adobe.commerce.observer.customer_group_delete_commit_after"
-    ],
-    "backoffice": [
-      "be-observer.customer_create",
-      "be-observer.customer_update",
-      "be-observer.customer_delete",
-      "be-observer.customer_group_create",
-      "be-observer.customer_group_update",
-      "be-observer.customer_group_delete"
-    ]
+    "commerce": {
+      "com.adobe.commerce.observer.customer_save_commit_after": {},
+      "com.adobe.commerce.observer.customer_delete_commit_after": {},
+      "com.adobe.commerce.observer.customer_group_save_commit_after": {},
+      "com.adobe.commerce.observer.customer_group_delete_commit_after": {}
+    },
+    "backoffice": {
+      "be-observer.customer_create": {},
+      "be-observer.customer_update": {},
+      "be-observer.customer_delete": {},
+      "be-observer.customer_group_create": {},
+      "be-observer.customer_group_update": {},
+      "be-observer.customer_group_delete": {}
+    }
   },
   "order": {
-    "commerce": [
-      "com.adobe.commerce.observer.sales_order_save_commit_after"
-    ],
-    "backoffice": [
-      "be-observer.sales_order_status_update",
-      "be-observer.sales_order_shipment_create",
-      "be-observer.sales_order_shipment_update"
-    ]
+    "commerce": {
+      "com.adobe.commerce.observer.sales_order_save_commit_after": {}
+    },
+    "backoffice": {
+      "be-observer.sales_order_status_update": {},
+      "be-observer.sales_order_shipment_create": {},
+      "be-observer.sales_order_shipment_update": {}
+    }
   },
   "stock": {
-    "commerce": [
-      "com.adobe.commerce.observer.cataloginventory_stock_item_save_commit_after"
-    ],
-    "backoffice": [
-      "be-observer.catalog_stock_update"
-    ]
+    "commerce": {
+      "com.adobe.commerce.observer.cataloginventory_stock_item_save_commit_after": {}
+    },
+    "backoffice": {
+      "be-observer.catalog_stock_update": {}
+    }
   }
 }
