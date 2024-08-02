@@ -1,47 +1,110 @@
 {
   "product": {
     "commerce": {
-      "com.adobe.commerce.observer.catalog_product_delete_commit_after":  {},
-      "com.adobe.commerce.observer.catalog_product_save_commit_after": {}
+      "com.adobe.commerce.observer.catalog_product_delete_commit_after":  {
+        "sampleEventTemplate": {
+          "id": "12345",
+          "sku": "SKU",
+          "name": "Duffel bag",
+          "created_at": "created_at",
+          "updated_at": "updated_at",
+          "description": "Comfortable sporty duffel bag"
+        }
+      },
+      "com.adobe.commerce.observer.catalog_product_save_commit_after": {
+        "sampleEventTemplate": {
+          "id": "12345",
+          "sku": "SKU",
+          "name": "Duffel bag",
+          "created_at": "",
+          "updated_at": "updated_at",
+          "description": "Comfortable sporty duffel bag"
+        }
+      }
     },
     "backoffice": {
-      "be-observer.catalog_product_create": {},
-      "be-observer.catalog_product_update": {},
-      "be-observer.catalog_product_delete": {}
+      "be-observer.catalog_product_create": {
+        "sampleEventTemplate": {}
+      },
+      "be-observer.catalog_product_update": {
+        "sampleEventTemplate": {}
+      },
+      "be-observer.catalog_product_delete": {
+        "sampleEventTemplate": {}
+      }
     }
   },
   "customer": {
     "commerce": {
-      "com.adobe.commerce.observer.customer_save_commit_after": {},
-      "com.adobe.commerce.observer.customer_delete_commit_after": {},
-      "com.adobe.commerce.observer.customer_group_save_commit_after": {},
-      "com.adobe.commerce.observer.customer_group_delete_commit_after": {}
+      "com.adobe.commerce.observer.customer_save_commit_after": {
+        "sampleEventTemplate": {
+          "id": "123",
+          "firstname": "John",
+          "lastname": "Doe",
+          "email": "john.doe@fakedomain.com",
+          "created_at": "created_at",
+          "updated_at": "created_at"
+        }
+      },
+      "com.adobe.commerce.observer.customer_delete_commit_after": {
+        "sampleEventTemplate": {}
+      },
+      "com.adobe.commerce.observer.customer_group_save_commit_after": {
+        "sampleEventTemplate": {}
+      },
+      "com.adobe.commerce.observer.customer_group_delete_commit_after": {
+        "sampleEventTemplate": {}
+      }
     },
     "backoffice": {
-      "be-observer.customer_create": {},
-      "be-observer.customer_update": {},
-      "be-observer.customer_delete": {},
-      "be-observer.customer_group_create": {},
-      "be-observer.customer_group_update": {},
-      "be-observer.customer_group_delete": {}
+      "be-observer.customer_create": {
+        "sampleEventTemplate": {}
+      },
+      "be-observer.customer_update": {
+        "sampleEventTemplate": {}
+      },
+      "be-observer.customer_delete": {
+        "sampleEventTemplate": {}
+      },
+      "be-observer.customer_group_create": {
+        "sampleEventTemplate": {}
+      },
+      "be-observer.customer_group_update": {
+        "sampleEventTemplate": {}
+      },
+      "be-observer.customer_group_delete": {
+        "sampleEventTemplate": {}
+      }
     }
   },
   "order": {
     "commerce": {
-      "com.adobe.commerce.observer.sales_order_save_commit_after": {}
+      "com.adobe.commerce.observer.sales_order_save_commit_after": {
+        "sampleEventTemplate": {}
+      }
     },
     "backoffice": {
-      "be-observer.sales_order_status_update": {},
-      "be-observer.sales_order_shipment_create": {},
-      "be-observer.sales_order_shipment_update": {}
+      "be-observer.sales_order_status_update": {
+        "sampleEventTemplate": {}
+      },
+      "be-observer.sales_order_shipment_create": {
+        "sampleEventTemplate": {}
+      },
+      "be-observer.sales_order_shipment_update": {
+        "sampleEventTemplate": {}
+      }
     }
   },
   "stock": {
     "commerce": {
-      "com.adobe.commerce.observer.cataloginventory_stock_item_save_commit_after": {}
+      "com.adobe.commerce.observer.cataloginventory_stock_item_save_commit_after": {
+        "sampleEventTemplate": {}
+      }
     },
     "backoffice": {
-      "be-observer.catalog_stock_update": {}
+      "be-observer.catalog_stock_update": {
+        "sampleEventTemplate": {}
+      }
     }
   }
 }
