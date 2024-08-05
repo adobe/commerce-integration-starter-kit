@@ -18,7 +18,7 @@ governing permissions and limitations under the License.
 function transformItems (items) {
   return items.map(item => (
     {
-      //entity_id: item.entityId,
+      entity_id: item.entityId,
       order_item_id: item.orderItemId,
       qty: item.qty
     }
@@ -34,8 +34,8 @@ function transformItems (items) {
 function transformTracks (orderId, tracks) {
   return tracks.map(track => (
     {
-      //entity_id: track.entityId,
-      //order_id: orderId,
+      entity_id: track.entityId,
+      order_id: orderId,
       track_number: track.trackNumber,
       title: track.title,
       carrier_code: track.carrierCode
@@ -51,8 +51,8 @@ function transformTracks (orderId, tracks) {
 function transformComments (comments) {
   return comments.map(comment => (
     {
-      //entity_id: comment.entityId,
-      //is_customer_notified: comment.notifyCustomer ? 1 : 0,
+      entity_id: comment.entityId,
+      is_customer_notified: comment.notifyCustomer ? 1 : 0,
       comment: comment.comment,
       is_visible_on_front: comment.visibleOnFront ? 1 : 0
     }
@@ -71,6 +71,8 @@ function transformData (params) {
 
   return {
     entity: {
+      entity_id: params.data.id,
+      order_id: params.data.orderId,
       items: transformItems(params.data.items),
       tracks: transformTracks(params.data.orderId, params.data.tracks),
       comments: transformComments(params.data.comments),
