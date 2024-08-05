@@ -103,7 +103,7 @@ These parameters can be passed on the action by configuring them in the  `action
 shipment-updated:
   function: updated/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:16
   inputs:
     LOG_LEVEL: debug
     COMMERCE_BASE_URL: $COMMERCE_BASE_URL
