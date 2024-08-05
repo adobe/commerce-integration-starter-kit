@@ -58,22 +58,23 @@ async function createShipment (baseUrl, consumerKey, consumerSecret, accessToken
  * @param {object} data - Adobe commerce api payload
  */
 async function updateShipment (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
-    const client = getCommerceOauthClient(
-        {
-            url: baseUrl,
-            consumerKey,
-            consumerSecret,
-            accessToken,
-            accessTokenSecret
-        },
-        logger
-    )
-    return await client.post(
-        'shipment',
-        JSON.stringify(data),
-        '',
-        { 'Content-Type': 'application/json' }
-    )
+  const client = getCommerceOauthClient(
+    {
+      url: baseUrl,
+      consumerKey,
+      consumerSecret,
+      accessToken,
+      accessTokenSecret
+    },
+    logger
+  )
+
+  return await client.post(
+    'shipment',
+    JSON.stringify(data),
+    '',
+    { 'Content-Type': 'application/json' }
+  )
 }
 
 module.exports = {
