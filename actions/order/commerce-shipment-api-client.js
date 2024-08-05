@@ -68,7 +68,6 @@ async function updateShipment (baseUrl, consumerKey, consumerSecret, accessToken
     },
     logger
   )
-
   return await client.post(
     'shipment',
     JSON.stringify(data),
