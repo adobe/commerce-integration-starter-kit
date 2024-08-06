@@ -238,4 +238,3 @@ async function main (clientRegistrations, providers, environment, accessToken) {
 }
 
 exports.main = main
-exports.foo = {}
