@@ -41,17 +41,15 @@ function transformTracks (orderId, tracks) {
 }
 
 /**
- * Transforms incoming comments
- * @param {Array} comments - incoming comments
- * @returns {Array} - transformed comments
+ * Transforms incoming comment
+ * @param {object} comment - incoming comment
+ * @returns {object} - transformed comment
  */
-function transformComments (comments) {
-  return comments.map(comment => (
-    {
-      comment: comment.comment,
-      is_visible_on_front: comment.visibleOnFront ? 1 : 0
-    }
-  ))
+function transformComment (comment) {
+  return {
+    comment: comment.comment,
+    is_visible_on_front: comment.visibleOnFront ? 1 : 0
+  }
 }
 
 /**
@@ -65,13 +63,11 @@ function transformData (params) {
   // @TODO Notice that the attribute_set_id may need to be changed
 
   return {
-    entity: {
-      items: transformItems(params.data.items),
-      tracks: transformTracks(params.data.orderId, params.data.tracks),
-      comments: transformComments(params.data.comments),
-      extension_attributes: {
-        source_code: params.data.stockSourceCode
-      }
+    items: transformItems(params.data.items),
+    tracks: transformTracks(params.data.orderId, params.data.tracks),
+    comment: transformComment(params.data.comment),
+    extension_attributes: {
+      source_code: params.data.stockSourceCode
     }
   }
 }

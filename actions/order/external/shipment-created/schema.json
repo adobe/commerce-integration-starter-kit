@@ -27,21 +27,17 @@
         "additionalProperties": false
       }
     },
-    "comments" : {
-      "type": "array",
-      "items": {
+    "comment" : {
         "type": "object",
         "properties": {
-          "notifyCustomer": { "type":  "boolean" },
           "comment": { "type":  "string" },
           "visibleOnFront": { "type":  "boolean" }
         },
-        "required": ["notifyCustomer", "comment", "visibleOnFront"],
+        "required": ["comment", "visibleOnFront"],
         "additionalProperties": false
-      }
     },
     "stockSourceCode": { "type":  "string" }
   },
-  "required": ["orderId", "items", "tracks", "comments", "stockSourceCode"],
+  "required": ["orderId", "items", "tracks", "comment", "stockSourceCode"],
   "additionalProperties": false
 }
