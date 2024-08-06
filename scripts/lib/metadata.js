@@ -59,20 +59,13 @@ async function addEventCodeToProvider (metadata, providerId, environment, access
   console.log(`Trying to create metadata for ${metadata?.eventCode} to provider ${providerId}`)
 
   const { eventCode, label, description, sampleEventTemplate } = metadata
+  const sampleEvent = base64EncodedSampleEvent(sampleEventTemplate)
   let body = {
     // eslint-disable-next-line camelcase
     event_code: eventCode,
     label,
-    description
-  }
-
-  const sampleEvent = base64EncodedSampleEvent(sampleEventTemplate)
-  if (sampleEvent) {
-    body = {
-      // eslint-disable-next-line camelcase
-      ...body,
-      sample_event_template: sampleEvent
-    }
+    description,
+    ...(sampleEvent ? { sample_event_template: sampleEvent } : {})
   }
 
   const addEventMetadataReq = await fetch(
