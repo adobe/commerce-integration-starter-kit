@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const fetch = require('node-fetch')
+const providersEventsConfig = require('../onboarding/config/events.json')
 
 /**
  * This method build an array of provider events
@@ -21,17 +22,28 @@ const fetch = require('node-fetch')
 function buildProviderData (providerEvents) {
   const events = []
 
-  if (providerEvents.length > 0) {
-    for (const event of providerEvents) {
-      events.push({
-        event_code: event,
-        label: event,
-        description: event
-      })
-    }
+  for (const [event, { sampleEventTemplate }] of Object.entries(providerEvents)) {
+    events.push({
+      eventCode: event,
+      label: event,
+      description: event,
+      sampleEventTemplate
+    })
   }
 
   return events
+}
+
+/**
+ * This method builds a base64 encoded sample event if one exists
+ * @param {object} sampleEventTemplate - Sample Event Template as object
+ * @returns {string|null} - returns base64 encoded string
+ */
+function base64EncodedSampleEvent (sampleEventTemplate) {
+  if (!sampleEventTemplate || typeof sampleEventTemplate !== 'object') {
+    return null
+  }
+  return Buffer.from(JSON.stringify(sampleEventTemplate)).toString('base64')
 }
 
 /**
@@ -44,7 +56,18 @@ function buildProviderData (providerEvents) {
  * @returns {object} - returns response with success true or false
  */
 async function addEventCodeToProvider (metadata, providerId, environment, accessToken) {
-  console.log(`Trying to create metadata for ${metadata?.event_code} to provider ${providerId}`)
+  console.log(`Trying to create metadata for ${metadata?.eventCode} to provider ${providerId}`)
+
+  const { eventCode, label, description, sampleEventTemplate } = metadata
+  const sampleEvent = base64EncodedSampleEvent(sampleEventTemplate)
+  const body = {
+    // eslint-disable-next-line camelcase
+    event_code: eventCode,
+    label,
+    description,
+    ...(sampleEvent ? { sample_event_template: sampleEvent } : {})
+  }
+
   const addEventMetadataReq = await fetch(
         `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers/${providerId}/eventmetadata`,
         {
@@ -55,13 +78,7 @@ async function addEventCodeToProvider (metadata, providerId, environment, access
             'content-type': 'application/json',
             Accept: 'application/hal+json'
           },
-          body: JSON.stringify(
-            {
-              ...(metadata?.event_code ? { event_code: `${metadata?.event_code}` } : null),
-              ...(metadata?.label ? { label: `${metadata?.label}` } : null),
-              ...(metadata?.description ? { description: `${metadata?.description}` } : null)
-            }
-          )
+          body: JSON.stringify(body)
         }
   )
 
@@ -95,7 +112,6 @@ async function addMetadataToProvider (providerEvents, providerId, environment, a
     const result = await addEventCodeToProvider(metadata, providerId, environment, accessToken)
     if (!result.success) {
       const errorMessage = `Unable to add event metadata: reason = '${result.error?.reason}', message = '${result.error?.message}'`
-
       console.log(errorMessage)
 
       return {
@@ -121,7 +137,6 @@ async function addMetadataToProvider (providerEvents, providerId, environment, a
  */
 async function getExistingMetadata (providerId, environment, accessToken, next = null) {
   const url = `${environment.IO_MANAGEMENT_BASE_URL}providers/${providerId}/eventmetadata`
-
   const getExistingMetadataReq = await fetch(
     next || url,
     {
@@ -159,8 +174,7 @@ async function getExistingMetadata (providerId, environment, accessToken, next =
  */
 async function main (clientRegistrations, providers, environment, accessToken) {
   try {
-    const providersEventsConfig = require('../onboarding/config/events.json')
-    const providersEvents = []
+    let providersEvents = {}
 
     const result = []
     for (const provider of providers) {
@@ -169,12 +183,15 @@ async function main (clientRegistrations, providers, environment, accessToken) {
       for (const [entityName, options] of Object.entries(clientRegistrations)) {
         if (options !== undefined && options.includes(provider.key)) {
           if (providersEventsConfig[entityName]) {
-            for (const event of providersEventsConfig[entityName][provider.key]) {
+            for (const [event, eventProps] of Object.entries(providersEventsConfig[entityName][provider.key])) {
               if (existingMetadata[event]) {
                 console.log(`Skipping, Metadata event code ${event} already exists!`)
                 continue
               }
-              providersEvents.push(event)
+              providersEvents = {
+                ...providersEvents,
+                [event]: eventProps
+              }
             }
             result.push({
               entity: entityName,
