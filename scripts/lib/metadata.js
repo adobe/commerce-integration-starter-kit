@@ -60,7 +60,7 @@ async function addEventCodeToProvider (metadata, providerId, environment, access
 
   const { eventCode, label, description, sampleEventTemplate } = metadata
   const sampleEvent = base64EncodedSampleEvent(sampleEventTemplate)
-  let body = {
+  const body = {
     // eslint-disable-next-line camelcase
     event_code: eventCode,
     label,
