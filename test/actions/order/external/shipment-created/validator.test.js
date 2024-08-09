@@ -25,7 +25,7 @@ describe('Given order external shipment created validator', () => {
           orderId: 6,
           items: [{ orderItemId: 7, qty: 1 }],
           tracks: [{ trackNumber: 'Custom Value', title: 'Custom Title', carrierCode: 'custom' }],
-          comments: [{ notifyCustomer: false, comment: 'Order Shipped from API', visibleOnFront: true }],
+          comment: { comment: 'Order Shipped from API', visibleOnFront: true },
           stockSourceCode: 'default'
         }
       }]

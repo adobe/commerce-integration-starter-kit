@@ -23,7 +23,7 @@ describe('Given order external shipment created sender', () => {
   })
   describe('When method sendData is called', () => {
     test('Then create order shipment is called', async () => {
-      const params = {}
+      const params = { data: { id: 99 } }
       const transformed = {}
       const preprocess = {}
       await sender.sendData(params, transformed, preprocess)
