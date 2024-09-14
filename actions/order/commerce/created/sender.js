@@ -10,6 +10,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const {createOrder} = require("../../mock-oms-order-api-client");
+
 /**
  * This function send the order created data to the external back-office application
  *
@@ -19,10 +21,22 @@ governing permissions and limitations under the License.
  * @returns {object} returns the sending result if needed for post process
  */
 async function sendData (params, data, preProcessed) {
-  // @TODO Here add the logic to send the information to 3rd party
-  // @TODO Use params to retrieve need parameters from the environment
-  // @TODO in case of error return { success: false, statusCode: <error status code>, message: '<error message>' }
 
+  const response = await createOrder(
+    params.OMS_API_BASE_URL,
+    data
+  )
+
+  const result = await response.json()
+  if (result?.reason) {
+    return {
+      success: false,
+      error: {
+        reason: result?.reason,
+        message: result?.message
+      }
+    }
+  }
   return {
     success: true
   }
