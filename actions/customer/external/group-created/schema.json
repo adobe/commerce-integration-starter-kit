@@ -1,9 +1,0 @@
-{
-  "type": "object",
-  "properties": {
-    "name": { "type": "string" },
-    "taxClassId": { "type": "number" }
-  },
-  "required": ["name", "taxClassId"],
-  "additionalProperties": true
-}
