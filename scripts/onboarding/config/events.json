@@ -174,13 +174,10 @@
               "carrierCode": "custom"
             }
           ],
-          "comments": [
-            {
-              "notifyCustomer": false,
+          "comment": {
               "comment": "Order Shipped in Backoffice",
               "visibleOnFront": true
-            }
-          ],
+            },
           "stockSourceCode": "default"
         }
       },
