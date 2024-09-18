@@ -13,6 +13,7 @@ created:
   runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
+    OMS_API_BASE_URL: $OMS_API_BASE_URL
   annotations:
     require-adobe-auth: true
     final: true

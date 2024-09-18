@@ -17,10 +17,23 @@ governing permissions and limitations under the License.
  * @returns {object} - Returns transformed data object
  */
 function transformData (data) {
-  // @TODO Here transform the data as needed for 3rd party API
-  const transformedData = data
-
-  return transformedData
+  return {
+    data: {
+      ids: {
+        order: `${data.id}`,
+        increment: `${data.increment_id}`
+      },
+      timestamps: {
+        createdAt: `${data.created_at}`,
+        updatedAt: `${data.updated_at}`,
+      },
+      items: data.items.map(item => ({
+        id: `${item.item_id}`,
+        sku: `${item.sku}`,
+        qty: `${item.qty_ordered}`
+      }))
+    }
+  }
 }
 
 module.exports = {

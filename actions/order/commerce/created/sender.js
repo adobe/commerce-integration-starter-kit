@@ -28,17 +28,17 @@ async function sendData (params, data, preProcessed) {
   )
 
   const result = await response.json()
-  if (result?.reason) {
+  if (!response.ok) {
     return {
-      success: false,
-      error: {
-        reason: result?.reason,
-        message: result?.message
-      }
+        success: false,
+        statusCode: response.status,
+        message: result.error
+        }
     }
-  }
+
   return {
-    success: true
+    success: true,
+    result: result
   }
 }
 
