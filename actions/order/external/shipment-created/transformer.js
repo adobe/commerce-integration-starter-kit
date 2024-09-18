@@ -18,7 +18,7 @@ governing permissions and limitations under the License.
 function transformItems (items) {
   return items.map(item => (
     {
-      order_item_id: item.orderItemId,
+      order_item_id: item.id,
       qty: item.qty
     }
   ))
@@ -33,22 +33,22 @@ function transformItems (items) {
 function transformTracks (orderId, tracks) {
   return tracks.map(track => (
     {
-      track_number: track.trackNumber,
-      title: track.title,
-      carrier_code: track.carrierCode
+      track_number: track.number,
+      title: track.carrier.title,
+      carrier_code: track.carrier.code
     }
   ))
 }
 
 /**
  * Transforms incoming comment
- * @param {object} comment - incoming comment
+ * @param {string} comment - incoming comment
  * @returns {object} - transformed comment
  */
 function transformComment (comment) {
   return {
-    comment: comment.comment,
-    is_visible_on_front: comment.visibleOnFront ? 1 : 0
+    comment: comment,
+    is_visible_on_front: 1
   }
 }
 
@@ -67,7 +67,7 @@ function transformData (params) {
     tracks: transformTracks(params.data.orderId, params.data.tracks),
     comment: transformComment(params.data.comment),
     extension_attributes: {
-      source_code: params.data.stockSourceCode
+      source_code: params.data.inventoryCode
     }
   }
 }

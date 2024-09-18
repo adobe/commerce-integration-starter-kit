@@ -29,7 +29,7 @@ async function sendData (params, transformed, preProcessed) {
       params.COMMERCE_CONSUMER_SECRET,
       params.COMMERCE_ACCESS_TOKEN,
       params.COMMERCE_ACCESS_TOKEN_SECRET,
-      params.data.orderId,
+      params.data.id,
       transformed)
 
     return {

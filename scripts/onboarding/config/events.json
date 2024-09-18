@@ -22,28 +22,11 @@
     "backoffice": {
       "be-observer.sales_order_shipment_create": {
         "sampleEventTemplate": {
-          "orderId": 8,
-          "items": [
-            {
-              "orderItemId": 8,
-              "qty": 1
-            }
-          ],
-          "tracks": [
-            {
-              "trackNumber": "Custom Value",
-              "title": "Custom Title",
-              "carrierCode": "custom"
-            }
-          ],
-          "comments": [
-            {
-              "notifyCustomer": false,
-              "comment": "Order Shipped in Backoffice",
-              "visibleOnFront": true
-            }
-          ],
-          "stockSourceCode": "default"
+          "id": 8,
+          "items": [{"id": 8, "qty": 1}],
+          "tracks": [{"number": "Custom Value", "carrier": {"title": "Custom Title", "code": "custom"}}],
+          "comment": "Order Shipped in Backoffice",
+          "inventoryCode": "default"
         }
       },
       "be-observer.sales_order_shipment_update": {
