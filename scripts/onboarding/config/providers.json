@@ -10,5 +10,11 @@
     "label": "Backoffice Provider",
     "description": "Backoffice Provider that will receive events from commerce",
     "docs_url": null
+  },
+  {
+    "key": "email",
+    "label": "Email Provider",
+    "description": "Email Provider that will receive events to send emails",
+    "docs_url": null
   }
 ]

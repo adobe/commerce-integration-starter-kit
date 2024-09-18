@@ -1,0 +1,18 @@
+consumer:
+  function: consumer/index.js
+  web: 'no'
+  runtime: nodejs:20
+  inputs:
+    LOG_LEVEL: debug
+  annotations:
+    require-adobe-auth: true
+    final: true
+created:
+  function: created/index.js
+  web: 'no'
+  runtime: nodejs:20
+  inputs:
+    LOG_LEVEL: debug
+  annotations:
+    require-adobe-auth: true
+    final: true

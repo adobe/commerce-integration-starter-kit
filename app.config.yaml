@@ -24,6 +24,10 @@ application:
         license: Apache-2.0
         actions:
           $include: ./actions/order/external/actions.config.yaml
+      order-email:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/order/email/actions.config.yaml
 productDependencies:
   - code: COMMC
     minVersion: 2.4.4

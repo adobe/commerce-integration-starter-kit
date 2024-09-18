@@ -59,6 +59,13 @@
           "stockSourceCode": "default"
         }
       }
+    },
+    "email": {
+      "email.sales_order.created": {
+        "sampleEventTemplate": {
+          "orderId": "000000060"
+        }
+      }
     }
   }
 }
