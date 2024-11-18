@@ -23,13 +23,18 @@ const { HTTP_INTERNAL_ERROR } = require('../../../constants')
  */
 async function sendData (params, transformed, preProcessed) {
   try {
-    return await updateCustomer(
+    const response = await updateCustomer(
       params.COMMERCE_BASE_URL,
       params.COMMERCE_CONSUMER_KEY,
       params.COMMERCE_CONSUMER_SECRET,
       params.COMMERCE_ACCESS_TOKEN,
       params.COMMERCE_ACCESS_TOKEN_SECRET,
       transformed)
+
+    return {
+      success: true,
+      message: response
+    }
   } catch (error) {
     return {
       success: false,
