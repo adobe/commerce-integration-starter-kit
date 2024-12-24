@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { getCommerceOauthClient } = require('../../actions/oauth1a')
+const { getClient } = require('../../actions/oauth1a')
 const { Core } = require('@adobe/aio-sdk')
 const logger = Core.Logger('commerce-eventing-api-client', { level: 'info' })
 
@@ -26,7 +26,7 @@ const logger = Core.Logger('commerce-eventing-api-client', { level: 'info' })
  * @param {object} data - Adobe commerce api payload
  */
 async function updateConfiguration (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
-  const client = getCommerceOauthClient(
+  const client = getClient(
     {
       url: baseUrl,
       consumerKey,
@@ -57,7 +57,7 @@ async function updateConfiguration (baseUrl, consumerKey, consumerSecret, access
  * @param {object} data - Adobe commerce api payload
  */
 async function eventSubscribe (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
-  const client = getCommerceOauthClient(
+  const client = getClient(
     {
       url: baseUrl,
       consumerKey,

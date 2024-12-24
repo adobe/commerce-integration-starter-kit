@@ -10,45 +10,58 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const Oauth1a = require('oauth-1.0a')
-const crypto = require('crypto')
 const got = require('got')
+const { getImsAccessToken, getOAuthHeader } = require('@adobe/commerce-sdk-auth')
+const { fromParams } = require('./auth')
+
+/**
+ * @returns {string} - returns the bearer token
+ * @param {string} token - access token
+ */
+function withBearer (token) {
+  return `Bearer ${token}`
+}
 
 /**
  * This function return the Adobe commerce OAuth client
  *
  * @returns {object} - The Oauth client
  * @param {object} options - include the information to configure oauth
+ * @param {object} authOptions - 'IMS' or 'COMMERCE'
  * @param {object} logger - Logger
  */
-function getOauthClient (options, logger) {
+function createClient (options, authOptions, logger) {
   const instance = {}
 
   // Remove trailing slash if any
   const serverUrl = options.url
   const apiVersion = options.version
-  const oauth = Oauth1a({
-    consumer: {
-      key: options.consumerKey,
-      secret: options.consumerSecret
-    },
-    signature_method: 'HMAC-SHA256',
-    hash_function: hashFunctionSha256
-  })
-  const token = {
-    key: options.accessToken,
-    secret: options.accessTokenSecret
+
+  let getAuthorizationHeaders = async (opts) => {
+    throw new Error('getAuthorizationHeaders not implemented')
   }
 
-  /**
-   * This function create the sha 256 hash
-   *
-   * @returns  {string} - returns generated hash
-   * @param {string} baseString - base string
-   * @param {string} key - key to encrypt
-   */
-  function hashFunctionSha256 (baseString, key) {
-    return crypto.createHmac('sha256', key).update(baseString).digest('base64')
+  if (authOptions?.ims) {
+    const { ims } = authOptions
+    getAuthorizationHeaders = async (_opts) => {
+      const imsResponse = await getImsAccessToken(ims)
+      return {
+        Authorization: withBearer(imsResponse.access_token)
+      }
+    }
+  } else if (authOptions?.commerceOAuth1) {
+    const { commerceOAuth1 } = authOptions
+    const oauthToken = {
+      key: commerceOAuth1.accessToken,
+      secret: commerceOAuth1.accessTokenSecret
+    }
+    const oauth = getOAuthHeader(commerceOAuth1)
+    getAuthorizationHeaders = async ({ url, method }) => {
+      return oauth.toHeader(oauth.authorize({
+        url,
+        method
+      }, oauthToken))
+    }
   }
 
   /**
@@ -63,13 +76,18 @@ function getOauthClient (options, logger) {
     try {
       logger.debug('Fetching URL: ' + requestData.url + ' with method: ' + requestData.method)
 
-      const headers = {
-        ...(requestToken
-          ? { Authorization: 'Bearer ' + requestToken }
-          : oauth.toHeader(oauth.authorize(requestData, token))),
-        ...customHeaders
+      let authHeaders = {}
+
+      if (requestToken.length > 0) {
+        authHeaders = { Authorization: withBearer(requestToken) }
+      } else {
+        authHeaders = await getAuthorizationHeaders(requestData)
       }
 
+      const headers = {
+        ...customHeaders,
+        ...authHeaders
+      }
       return await got(requestData.url, {
         http2: true,
         method: requestData.method,
@@ -142,16 +160,16 @@ function getOauthClient (options, logger) {
  * This function create the oauth client to use for calling adobe commerce api
  *
  * @returns {object} - returns the oauth client
- * @param {object} options - define the options for the client
+ * @param {object} clientOptions - define the options for the client
  * @param {object} logger - define the Logger
  */
-function getCommerceOauthClient (options, logger) {
+function getClient (clientOptions, logger) {
+  const { params, ...options } = clientOptions
   options.version = 'V1'
   options.url = options.url + 'rest/'
-  return getOauthClient(options, logger)
+  return createClient(options, fromParams(params), logger)
 }
 
 module.exports = {
-  getOauthClient,
-  getCommerceOauthClient
+  getClient
 }

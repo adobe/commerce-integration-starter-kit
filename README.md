@@ -29,7 +29,9 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
   - I/O management API
 - Download the [workspace configuration JSON](https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file) file and save it as `workspace.json` in the `./scripts/onboarding/config` starter kit folder because you will use it to configure Adobe IO Events in commerce afterward.
 
-### Configure a new Integration in commerce
+## Supported Auth types
+
+### Commerce OAuth1 - Configure a new Integration in commerce
 Configure a new Integration to secure the calls to Commerce from App Builder using OAuth by following these steps:
 - In the Commerce Admin, navigate to System > Extensions > Integrations.
 - Click the `Add New Integration` button. The following screen displays
@@ -40,6 +42,26 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 - Click Save.
 - In the list of integrations, activate your integration.
 - To configure the starter kit, you will need the integration details (consumer key, consumer secret, access token, and access token secret).
+
+Store the credentials in the `.env` file, these are the minimum required values:
+```dotenv
+COMMERCE_BASE_URL=
+COMMERCE_CONSUMER_KEY=
+COMMERCE_CONSUMER_SECRET=
+COMMERCE_ACCESS_TOKEN=
+COMMERCE_ACCESS_TOKEN_SECRET=
+```
+
+### IMS OAuth - Configure a new OAuth Server to Server credentials
+Configure a new IMS OAuth Server to Server following this [documentation](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/implementation/#setting-up-the-oauth-server-to-server-credential/)
+
+Store the credentials in the `.env` file, these are the minimum required values:
+```dotenv
+OAUTH_CLIENT_ID=YOUR_CLIENT_ID
+OAUTH_CLIENT_SECRET=YOUR_CLIENT_SECRET
+OAUTH_SCOPES=['scope1', 'scope2']
+OAUTH_ENV=prod
+```
 
 ### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5) 
 Install Adobe I/O Events for Adobe Commerce module in your commerce instance following this [documentation](https://developer.adobe.com/commerce/extensibility/events/installation/)

@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { getCommerceOauthClient } = require('../oauth1a')
+const { getClient } = require('../oauth1a')
 const { Core } = require('@adobe/aio-sdk')
 const logger = Core.Logger('commerce-order-api-client', { level: 'info' })
 
@@ -19,21 +19,15 @@ const logger = Core.Logger('commerce-order-api-client', { level: 'info' })
  *
  * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
- * @param {string} consumerKey - Adobe commerce integration consumer key
- * @param {string} consumerSecret - Adobe commerce integration consumer secret
- * @param {string} accessToken - Adobe commerce integration access token
- * @param {string} accessTokenSecret - Adobe commerce integration access token secret
+ * @param {object} params - Environment params from the IO Runtime request
  * @param {number} orderId - order id
  * @param {object} data - Adobe commerce api payload
  */
-async function addComment (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, orderId, data) {
-  const client = getCommerceOauthClient(
+async function addComment (baseUrl, params, orderId, data) {
+  const client = getClient(
     {
       url: baseUrl,
-      consumerKey,
-      consumerSecret,
-      accessToken,
-      accessTokenSecret
+      params
     },
     logger
   )
