@@ -6,9 +6,9 @@
     "docs_url": null
   },
   {
-    "key": "backoffice",
-    "label": "Backoffice Provider",
-    "description": "Backoffice Provider that will receive events from commerce",
+    "key": "external",
+    "label": "External Provider",
+    "description": "External Provider that will receive events from commerce",
     "docs_url": null
   }
 ]
