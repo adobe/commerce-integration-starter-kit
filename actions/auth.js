@@ -49,15 +49,24 @@ function validateParams (params, expected) {
 function fromParams (params) {
   if (params.OAUTH_CLIENT_ID) {
     validateParams(params,
-      ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET', 'OAUTH_SCOPES', 'OAUTH_ENV'])
-    const { OAUTH_CLIENT_ID: clientId, OAUTH_CLIENT_SECRET: clientSecret, OAUTH_SCOPES: scopes, OAUTH_ENV: env } = params
-    return {
-      ims: {
-        clientId,
-        clientSecret,
-        scopes,
-        env
+      ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET', 'OAUTH_SCOPES'])
+    const { OAUTH_CLIENT_ID: clientId, OAUTH_CLIENT_SECRET: clientSecret, OAUTH_SCOPES: scopes } = params
+
+    const imsProps = {
+      clientId,
+      clientSecret,
+      scopes
+    }
+    if (params.OAUTH_HOST) {
+      return {
+        ims: {
+          ...imsProps,
+          host: params.OAUTH_HOST
+        }
       }
+    }
+    return {
+      ims: imsProps
     }
   }
 

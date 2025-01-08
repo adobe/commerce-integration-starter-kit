@@ -19,20 +19,14 @@ const logger = Core.Logger('commerce-eventing-api-client', { level: 'info' })
  *
  * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
- * @param {string} consumerKey - Adobe commerce integration consumer key
- * @param {string} consumerSecret - Adobe commerce integration consumer secret
- * @param {string} accessToken - Adobe commerce integration access token
- * @param {string} accessTokenSecret - Adobe commerce integration access token secret
+ * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
  */
-async function updateConfiguration (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
+async function updateConfiguration (baseUrl, params, data) {
   const client = getClient(
     {
       url: baseUrl,
-      consumerKey,
-      consumerSecret,
-      accessToken,
-      accessTokenSecret
+      params
     },
     logger
   )
@@ -50,20 +44,14 @@ async function updateConfiguration (baseUrl, consumerKey, consumerSecret, access
  *
  * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
- * @param {string} consumerKey - Adobe commerce integration consumer key
- * @param {string} consumerSecret - Adobe commerce integration consumer secret
- * @param {string} accessToken - Adobe commerce integration access token
- * @param {string} accessTokenSecret - Adobe commerce integration access token secret
+ * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
  */
-async function eventSubscribe (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
+async function eventSubscribe (baseUrl, params, data) {
   const client = getClient(
     {
       url: baseUrl,
-      consumerKey,
-      consumerSecret,
-      accessToken,
-      accessTokenSecret
+      params
     },
     logger
   )

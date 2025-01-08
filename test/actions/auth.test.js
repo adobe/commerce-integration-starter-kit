@@ -7,20 +7,19 @@ describe('validateParams', () => {
     }
 
     expect(() => {
-      validateParams(params, ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET', 'OAUTH_ENV'])
-    }).toThrow('Expected parameters are missing OAUTH_CLIENT_SECRET, OAUTH_ENV')
+      validateParams(params, ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET'])
+    }).toThrow('Expected parameters are missing OAUTH_CLIENT_SECRET')
   })
 
   it('should not throw error if params are not missing', () => {
     const params = {
       OAUTH_CLIENT_ID: 'client-id',
       OAUTH_CLIENT_SECRET: 'client-secret',
-      OAUTH_ENV: 'env',
       OAUTH_SCOPES: ['scope1', 'scope2']
     }
 
     expect(() => {
-      validateParams(params, ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET', 'OAUTH_ENV', 'OAUTH_SCOPES'])
+      validateParams(params, ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET', 'OAUTH_SCOPES'])
     }).not.toThrow()
   })
 })
@@ -30,16 +29,14 @@ describe('fromParams', () => {
     const params = {
       OAUTH_CLIENT_ID: 'client-id',
       OAUTH_CLIENT_SECRET: 'client-secret',
-      OAUTH_SCOPES: ['scope1', 'scope2'],
-      OAUTH_ENV: 'stage'
+      OAUTH_SCOPES: ['scope1', 'scope2']
     }
 
     expect(fromParams(params)).toEqual({
       ims: {
         clientId: 'client-id',
         clientSecret: 'client-secret',
-        scopes: ['scope1', 'scope2'],
-        env: 'stage'
+        scopes: ['scope1', 'scope2']
       }
     })
   })

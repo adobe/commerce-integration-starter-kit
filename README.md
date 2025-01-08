@@ -52,15 +52,18 @@ COMMERCE_ACCESS_TOKEN=
 COMMERCE_ACCESS_TOKEN_SECRET=
 ```
 
-### IMS OAuth - Configure a new OAuth Server to Server credentials
+### IMS OAuth - Add the OAuth Server to Server credentials to the environment
 Configure a new IMS OAuth Server to Server following this [documentation](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/implementation/#setting-up-the-oauth-server-to-server-credential/)
 
 Store the credentials in the `.env` file, these are the minimum required values:
 ```dotenv
-OAUTH_CLIENT_ID=YOUR_CLIENT_ID
-OAUTH_CLIENT_SECRET=YOUR_CLIENT_SECRET
-OAUTH_SCOPES=['scope1', 'scope2']
-OAUTH_ENV=prod
+OAUTH_CLIENT_ID=<string> # Your client ID
+OAUTH_CLIENT_SECRET=<string> # Your client secret
+OAUTH_SCOPES=<array> # ['scope1', 'scope2']
+```
+These are optional values that can be provided:
+```dotenv
+OAUTH_HOST=<string> # default: https://ims-na1.adobelogin.com
 ```
 
 ### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5) 

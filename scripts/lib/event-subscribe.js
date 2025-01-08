@@ -22,12 +22,8 @@ async function main (eventSpec, environment) {
   try {
     await eventSubscribe(
       environment.COMMERCE_BASE_URL,
-      environment.COMMERCE_CONSUMER_KEY,
-      environment.COMMERCE_CONSUMER_SECRET,
-      environment.COMMERCE_ACCESS_TOKEN,
-      environment.COMMERCE_ACCESS_TOKEN_SECRET,
+      environment,
       eventSpec
-
     )
     return {
       code: 200,

@@ -58,12 +58,11 @@ describe('getClient', () => {
       params: {
         OAUTH_CLIENT_ID: 'client-id',
         OAUTH_CLIENT_SECRET: 'client-secret',
-        OAUTH_ENV: 'stage',
         OAUTH_SCOPES: ['scope1', 'scope2']
       }
     }, console)
 
-    const imsScope = nock('https://ims-na1-stg1.adobelogin.com', {})
+    const imsScope = nock('https://ims-na1.adobelogin.com', {})
       .post('/ims/token/v3')
       .reply(200, {
         access_token: 'TOKEN',

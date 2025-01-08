@@ -13,13 +13,8 @@ governing permissions and limitations under the License.
 // @ts-ignore
 import { ClientCredentials } from 'simple-oauth2';
 
-const environments = {
-  stage: 'https://ims-na1-stg1.adobelogin.com',
-  prod: 'https://ims-na1.adobelogin.com',
-};
-
 export interface ImsAuthParams {
-  env?: 'stage' | 'prod';
+  host?: string;
   clientId: string;
   clientSecret: string;
   scopes: Array<string>;
@@ -42,10 +37,9 @@ interface ImsTokenResponse {
 export async function getImsAccessToken({
   clientId,
   clientSecret,
-  env = 'prod',
+  host = 'https://ims-na1.adobelogin.com',
   scopes,
 }: ImsAuthParams): Promise<ImsTokenResponse> {
-  const baseUrl = environments[env] ?? environments['prod'];
 
   const config = {
     client: {
@@ -53,7 +47,7 @@ export async function getImsAccessToken({
       secret: clientSecret,
     },
     auth: {
-      tokenHost: baseUrl,
+      tokenHost: host,
       tokenPath: '/ims/token/v3',
     },
     options: {
