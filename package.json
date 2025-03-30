@@ -58,6 +58,7 @@
     "onboard": "node --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
     "commerce-event-subscribe": "node --no-warnings -e 'require(\"./scripts/commerce-event-subscribe/index.js\").main()'",
     "code-check": "npx eslint 'actions/**/*.js' 'scripts/**/*.js' 'test/**/*.js' 'utils/**/*.js'",
+    "prebuild": "npm install --workspace=@adobe/commerce-sdk-auth && npm run build --workspace=@adobe/commerce-sdk-auth",
     "build": "npm run build --workspaces",
     "clean": "rimraf ./packages/*/dist-* ./packages/*/*.tsbuildinfo"
   },
