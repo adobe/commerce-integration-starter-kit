@@ -44,7 +44,7 @@ describe('getClient', () => {
       }
     })
       .matchHeader('accept', 'application/json')
-      .get('/rest/V1/foo')
+      .get('/V1/foo')
       .reply(200, { success: true })
     expect(await client.get('foo', '')).toStrictEqual({
       success: true
@@ -79,7 +79,7 @@ describe('getClient', () => {
       }
     })
       .matchHeader('accept', 'application/json')
-      .get('/rest/V1/foo')
+      .get('/V1/foo')
       .reply(200, { success: true })
 
     const result = await client.get('foo', '')

@@ -166,7 +166,6 @@ function createClient (options, authOptions, logger) {
 function getClient (clientOptions, logger) {
   const { params, ...options } = clientOptions
   options.version = 'V1'
-  options.url = options.url + 'rest/'
   return createClient(options, fromParams(params), logger)
 }
 
