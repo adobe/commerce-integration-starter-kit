@@ -47,6 +47,21 @@ function validateParams (params, expected) {
  * @throws {Error} - throws error if the params are missing
  */
 function fromParams (params) {
+
+  if (params.COMMERCE_CONSUMER_KEY) {
+    validateParams(params,
+      ['COMMERCE_CONSUMER_KEY', 'COMMERCE_CONSUMER_SECRET', 'COMMERCE_ACCESS_TOKEN', 'COMMERCE_ACCESS_TOKEN_SECRET'])
+    const { COMMERCE_CONSUMER_KEY: consumerKey, COMMERCE_CONSUMER_SECRET: consumerSecret, COMMERCE_ACCESS_TOKEN: accessToken, COMMERCE_ACCESS_TOKEN_SECRET: accessTokenSecret } = params
+    return {
+      commerceOAuth1: {
+        consumerKey,
+        consumerSecret,
+        accessToken,
+        accessTokenSecret
+      }
+    }
+  }
+
   if (params.OAUTH_CLIENT_ID) {
     validateParams(params,
       ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET', 'OAUTH_SCOPES'])
@@ -70,19 +85,6 @@ function fromParams (params) {
     }
   }
 
-  if (params.COMMERCE_CONSUMER_KEY) {
-    validateParams(params,
-      ['COMMERCE_CONSUMER_KEY', 'COMMERCE_CONSUMER_SECRET', 'COMMERCE_ACCESS_TOKEN', 'COMMERCE_ACCESS_TOKEN_SECRET'])
-    const { COMMERCE_CONSUMER_KEY: consumerKey, COMMERCE_CONSUMER_SECRET: consumerSecret, COMMERCE_ACCESS_TOKEN: accessToken, COMMERCE_ACCESS_TOKEN_SECRET: accessTokenSecret } = params
-    return {
-      commerceOAuth1: {
-        consumerKey,
-        consumerSecret,
-        accessToken,
-        accessTokenSecret
-      }
-    }
-  }
   throw new Error('Unknown auth type, supported IMS OAuth or Commerce OAuth1. Please review documented auth types')
 }
 
