@@ -59,7 +59,7 @@ export async function getImsAccessToken({
   const client = new ClientCredentials(config);
 
   const tokenParams = {
-    scope: scopes.join(','),
+    scope: scopes,
   };
 
   try {
