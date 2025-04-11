@@ -70,7 +70,7 @@ function fromParams (params) {
     const imsProps = {
       clientId,
       clientSecret,
-      scopes
+      scopes: JSON.parse(scopes.replace(/'/g, '"')).join(',')
     }
     if (params.OAUTH_HOST) {
       return {
