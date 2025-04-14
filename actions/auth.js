@@ -10,6 +10,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const { Core } = require('@adobe/aio-sdk')
+const logger = Core.Logger('auth', { level: 'info' })
 /**
  *
  * @param {object} params - Environment params from the IO Runtime request
@@ -48,7 +50,8 @@ function validateParams (params, expected) {
  */
 function fromParams (params) {
 
-  if (params.COMMERCE_CONSUMER_KEY) {
+  if (params.COMMERCE_CONSUMER_KEY !== '$COMMERCE_CONSUMER_KEY') {
+    logger.info('Using Commerce OAuth1 authentication')
     validateParams(params,
       ['COMMERCE_CONSUMER_KEY', 'COMMERCE_CONSUMER_SECRET', 'COMMERCE_ACCESS_TOKEN', 'COMMERCE_ACCESS_TOKEN_SECRET'])
     const { COMMERCE_CONSUMER_KEY: consumerKey, COMMERCE_CONSUMER_SECRET: consumerSecret, COMMERCE_ACCESS_TOKEN: accessToken, COMMERCE_ACCESS_TOKEN_SECRET: accessTokenSecret } = params
@@ -62,7 +65,8 @@ function fromParams (params) {
     }
   }
 
-  if (params.OAUTH_CLIENT_ID) {
+  if (params.OAUTH_CLIENT_ID !== '$OAUTH_CLIENT_ID') {
+    logger.info('Using IMS OAuth authentication')
     validateParams(params,
       ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET', 'OAUTH_SCOPES'])
     const { OAUTH_CLIENT_ID: clientId, OAUTH_CLIENT_SECRET: clientSecret, OAUTH_SCOPES: scopes } = params
