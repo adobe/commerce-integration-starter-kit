@@ -50,8 +50,9 @@ function validateParams (params, expected) {
  */
 function fromParams (params) {
 
-  if (params.COMMERCE_CONSUMER_KEY !== '$COMMERCE_CONSUMER_KEY') {
-    logger.info('Using Commerce OAuth1 authentication')
+  // `aio app dev` compatibility: inputs mapped to undefined env vars come as $<input_name> in dev mode, but as '' in prod mode
+  if (params.COMMERCE_CONSUMER_KEY && params.COMMERCE_CONSUMER_KEY !== '$COMMERCE_CONSUMER_KEY') {
+    logger.info('Commerce client is using Commerce OAuth1 authentication')
     validateParams(params,
       ['COMMERCE_CONSUMER_KEY', 'COMMERCE_CONSUMER_SECRET', 'COMMERCE_ACCESS_TOKEN', 'COMMERCE_ACCESS_TOKEN_SECRET'])
     const { COMMERCE_CONSUMER_KEY: consumerKey, COMMERCE_CONSUMER_SECRET: consumerSecret, COMMERCE_ACCESS_TOKEN: accessToken, COMMERCE_ACCESS_TOKEN_SECRET: accessTokenSecret } = params
@@ -65,8 +66,9 @@ function fromParams (params) {
     }
   }
 
-  if (params.OAUTH_CLIENT_ID !== '$OAUTH_CLIENT_ID') {
-    logger.info('Using IMS OAuth authentication')
+  // `aio app dev` compatibility: inputs mapped to undefined env vars come as $<input_name> in dev mode, but as '' in prod mode
+  if (params.OAUTH_CLIENT_ID && params.OAUTH_CLIENT_ID !== '$OAUTH_CLIENT_ID') {
+    logger.info('Commerce client is using IMS OAuth authentication')
     validateParams(params,
       ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET', 'OAUTH_SCOPES'])
     const { OAUTH_CLIENT_ID: clientId, OAUTH_CLIENT_SECRET: clientSecret, OAUTH_SCOPES: scopes } = params
