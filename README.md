@@ -28,17 +28,30 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
   - Adobe I/O Events for Adobe Commerce
   - I/O management API
 - Download the [workspace configuration JSON](https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file) file and save it as `workspace.json` in the `./scripts/onboarding/config` starter kit folder because you will use it to configure Adobe IO Events in commerce afterward.
+  
+### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5) 
+Install Adobe I/O Events for Adobe Commerce module in your commerce instance following this [documentation](https://developer.adobe.com/commerce/extensibility/events/installation/)
+
+> [!TIP]
+> 
+> By upgrading the Adobe I/O Events for Adobe Commerce module to version 1.6.0 or greater, you will benefit from some additional automated steps during onboarding.  
 
 ## Supported Auth types
 
-### Commerce OAuth1 - Configure a new Integration in commerce
+With the new announcement of **Adobe Commerce as a Cloud Service** (ACCS), requests to Commerce will now use different authentication strategies depending on the flavor you're using:
+
+- If you're using the traditional Adobe Commerce Platform (PaaS) offering, you'll need to authenticate via OAuth1, like you've been doing until now.
+
+- If you're using the new cloud service (SaaS) offering, you'll need to authenticate your requests using [Adobe Identity Management System](https://experienceleague.adobe.com/en/docs/experience-manager-learn/foundation/authentication/adobe-ims-authentication-technical-video-understand) (IMS).
+
+### [PaaS] Commerce OAuth1 - Configure a new Integration in Commerce
 Configure a new Integration to secure the calls to Commerce from App Builder using OAuth by following these steps:
 - In the Commerce Admin, navigate to System > Extensions > Integrations.
 - Click the `Add New Integration` button. The following screen displays
-  ![Alt text](docs/new-integration.png "New Integration")
+  ![New Integration Screen](docs/new-integration.png "New Integration")
 - Give the integration a name. The rest of the fields can be left blank.
 - Select API on the left and grant access to all the resources.
-  ![Alt text](docs/integration-all-apis-access.png "New Integration")
+  ![API Access Grant Screen](docs/integration-all-apis-access.png "New Integration")
 - Click Save.
 - In the list of integrations, activate your integration.
 - To configure the starter kit, you will need the integration details (consumer key, consumer secret, access token, and access token secret).
@@ -52,7 +65,7 @@ COMMERCE_ACCESS_TOKEN=
 COMMERCE_ACCESS_TOKEN_SECRET=
 ```
 
-### IMS OAuth - Add the OAuth Server to Server credentials to the environment
+### [SaaS] IMS OAuth - Add the OAuth Server to Server credentials to the environment
 Configure a new IMS OAuth Server to Server following this [documentation](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/implementation/#setting-up-the-oauth-server-to-server-credential/)
 
 Store the credentials in the `.env` file, these are the minimum required values:
@@ -66,12 +79,12 @@ These are optional values that can be provided:
 OAUTH_HOST=<string> # default: https://ims-na1.adobelogin.com
 ```
 
-### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5) 
-Install Adobe I/O Events for Adobe Commerce module in your commerce instance following this [documentation](https://developer.adobe.com/commerce/extensibility/events/installation/)
+### How to use one or another?
+The starter kit is designed to work with both offerings, but only one of them at the same time. By default, (and to prevent breaking changes) the SaaS offering is opt-in, which means that you will need to explicitly configure it in order to start using it. **OAuth1** will be the first authentication mechanism tried before **IMS**.
 
-> **Note**
-> 
-> By upgrading the Adobe I/O Events for Adobe Commerce module to version 1.6.0 or greater, you will benefit from some additional automated steps during onboarding.  
+- If you want to use PaaS follow the [first guide above](#paas-commerce-oauth1---configure-a-new-integration-in-commerce) and make sure you're environment variables `COMMERCE_XXXX` are set correctly.
+
+- If you want to use SaaS follow the [latter guide above](saas-ims-oauth---add-the-oauth-server-to-server-credentials-to-the-environment) and make sure the environment variables `COMMERCE_XXXX` are **NOT SET** (blank) or deleted.
 
 ## Starter Kit first deploy & onboarding
 Following the next steps, you will deploy and onboard the starter kit for the first time. The onboarding process sets up event providers and registrations based on your selection.
@@ -183,7 +196,7 @@ Check your App developer console to confirm the creation of the registrations:
 
 ### Complete the Adobe Commerce eventing configuration
 
-> **Note**
+> [!IMPORTANT]
 >
 > If your Commerce instance Adobe I/O Events for Adobe Commerce module version is 1.6.0 or greater and the onboarding script completed successfully, the following steps are not required. The onboarding script will configure the Adobe Commerce instance automatically.
 > Follow the steps in the next section to validate that the configuration is correct or skip to the next section.
@@ -207,7 +220,7 @@ To configure the provider in Commerce, do the following:
 - Click `Save Config`.
 
 #### Subscribe to events in Adobe Commerce instance
-> **Note**
+> [!TIP]
 >
 > If your Commerce instance Adobe I/O Events for Adobe Commerce module version is 1.6.0 or greater, run the commerce-event-subscribe script to automatically subscribe to the Commerce events in `scripts/commerce-event-subscribe/config/commerce-event-subscribe.json`
 > ```bash
