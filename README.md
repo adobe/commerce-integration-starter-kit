@@ -1,7 +1,10 @@
 # Commerce  Integration Starter Kit
 
 [![Node.js CI](https://github.com/adobe/commerce-integration-starter-kit/actions/workflows/deploy_node_stage.yml/badge.svg)](https://github.com/adobe/commerce-integration-starter-kit/actions/workflows/deploy_node_stage.yml)
-  
+
+<details>
+<summary>Table of Contents</summary>
+
 - [Commerce  Integration Starter Kit](#commerce--integration-starter-kit)
   - [Prerequisites](#prerequisites)
     - [Create App Builder project](#create-app-builder-project)
@@ -54,8 +57,9 @@
       - [Third party to Commerce](#third-party-to-commerce-3)
 - [References](#references)
   - [Contributing](#contributing)
+</details>
 
-
+&nbsp;
 Welcome to Adobe Commerce Integration Starter Kit.
 
 Integrating an e-commerce platform with your ERP, OMS, or CRM is a mission-critical requirement. Companies can spend tens of thousands of dollars building these integrations. To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder. The kit includes reference integrations for commonly used commerce data like orders, products, and customers. It also includes onboarding scripts and a standardized architecture for developers to build on following best practices.
@@ -261,7 +265,7 @@ To configure the provider in Commerce, do the following:
   ![Alt text](docs/commerce-events-configuration.webp "Commerce eventing configuration")
 - Select `OAuth (Recommended)` from the `Adobe I/O Authorization Type` menu.
 - Copy the contents of the `<workspace-name>.json` (Workspace configuration JSON you downloaded in the previous step [`Create app builder project`](#create-app-builder-project)) into the `Adobe I/O Workspace Configuration` field.
-- Copy the commerce provider instance ID you saved in the previous step [`Execute the onboarding](#execute-the-onboarding) into the `Adobe Commerce Instance ID` field.
+- Copy the commerce provider instance ID you saved in the previous step [`Execute the onboarding`](#execute-the-onboarding) into the `Adobe Commerce Instance ID` field.
 - Copy the commerce provider ID  you saved in the previous step [`Execute the onboarding`](#execute-the-onboarding) into the `Adobe I/O Event Provider ID` field.
 - Click `Save Config`.
 - Enable Commerce Eventing by setting the `Enabled` menu to Yes. (Note: You must enable cron so that Commerce can send events to the endpoint.)
@@ -447,7 +451,7 @@ Additionally, boilerplate code and samples for `event ingestion` and `synchronou
 #### `consumer` action
 
 This action is subscribed to a subset of events (typically all of them belonging to the same entity, e.g. `product`, 
-although there are examples where it receives events from various entities belonging to the same “domain",
+although there are examples where it receives events from various entities belonging to the same "domain",
 e.g. `order` and `shipment`).
 When the event provider it is attached to receives an event, this runtime action will be automatically activated.
 
