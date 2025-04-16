@@ -111,7 +111,6 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 
 Store the credentials in the `.env` file, these are the minimum required values:
 ```dotenv
-COMMERCE_BASE_URL=
 COMMERCE_CONSUMER_KEY=
 COMMERCE_CONSUMER_SECRET=
 COMMERCE_ACCESS_TOKEN=
