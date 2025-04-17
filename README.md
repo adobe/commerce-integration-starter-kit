@@ -93,6 +93,19 @@ Following the next steps, you will deploy and onboard the starter kit for the fi
 - Copy the env file `cp env.dist .env`
 - Fill in the values following the comments on the env file.
 
+> [!NOTE]
+> When configuring the `COMMERCE_BASE_URL` environment variable, the format differs between PaaS and SaaS:
+> 
+> For PaaS (On-Premise/Cloud):
+> - Must include your base site URL + `/rest/` suffix
+> - Example: `https://[environment-name].us-4.magentosite.cloud/rest/`
+>
+> For SaaS:
+> - Must be the REST API endpoint provided by Adobe Commerce 
+> - Example: `https://na1-sandbox.api.commerce.adobe.com/[tenant-id]/`
+>
+> Make sure to use your actual environment name or tenant ID in the URL. The examples above use placeholder values.
+
 ### Configure the project
 Install the npm dependencies using the command:
 ```bash
