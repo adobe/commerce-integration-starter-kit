@@ -19,6 +19,10 @@ console.json
 # Test output
 junit.xml
 
+# TypeScript cache
+*.tsbuildinfo
+dist*/
+
 # IDE & Temp
 .cache
 .idea

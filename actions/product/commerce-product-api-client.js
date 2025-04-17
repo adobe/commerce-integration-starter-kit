@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { getCommerceOauthClient } = require('../oauth1a')
+const { getClient } = require('../oauth1a')
 const { Core } = require('@adobe/aio-sdk')
 const logger = Core.Logger('commerce-product-api-client', { level: 'info' })
 
@@ -19,20 +19,14 @@ const logger = Core.Logger('commerce-product-api-client', { level: 'info' })
  *
  * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
- * @param {string} consumerKey - Adobe commerce integration consumer key
- * @param {string} consumerSecret - Adobe commerce integration consumer secret
- * @param {string} accessToken - Adobe commerce integration access token
- * @param {string} accessTokenSecret - Adobe commerce integration access token secret
+ * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
  */
-async function createProduct (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
-  const client = getCommerceOauthClient(
+async function createProduct (baseUrl, params, data) {
+  const client = getClient(
     {
       url: baseUrl,
-      consumerKey,
-      consumerSecret,
-      accessToken,
-      accessTokenSecret
+      params
     },
     logger
   )
@@ -50,20 +44,14 @@ async function createProduct (baseUrl, consumerKey, consumerSecret, accessToken,
  *
  * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
- * @param {string} consumerKey - Adobe commerce integration consumer key
- * @param {string} consumerSecret - Adobe commerce integration consumer secret
- * @param {string} accessToken - Adobe commerce integration access token
- * @param {string} accessTokenSecret - Adobe commerce integration access token secret
+ * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
  */
-async function updateProduct (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, data) {
-  const client = getCommerceOauthClient(
+async function updateProduct (baseUrl, params, data) {
+  const client = getClient(
     {
       url: baseUrl,
-      consumerKey,
-      consumerSecret,
-      accessToken,
-      accessTokenSecret
+      params
     },
     logger
   )
@@ -80,20 +68,14 @@ async function updateProduct (baseUrl, consumerKey, consumerSecret, accessToken,
  *
  * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
- * @param {string} consumerKey - Adobe commerce integration consumer key
- * @param {string} consumerSecret - Adobe commerce integration consumer secret
- * @param {string} accessToken - Adobe commerce integration access token
- * @param {string} accessTokenSecret - Adobe commerce integration access token secret
+ * @param {object} params - Environment params from the IO Runtime request
  * @param {string} sku - Stock keeping unit
  */
-async function deleteProduct (baseUrl, consumerKey, consumerSecret, accessToken, accessTokenSecret, sku) {
-  const client = getCommerceOauthClient(
+async function deleteProduct (baseUrl, params, sku) {
+  const client = getClient(
     {
       url: baseUrl,
-      consumerKey,
-      consumerSecret,
-      accessToken,
-      accessTokenSecret
+      params
     },
     logger
   )

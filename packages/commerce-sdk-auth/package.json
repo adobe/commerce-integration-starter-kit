@@ -1,0 +1,29 @@
+{
+  "name": "@adobe/commerce-sdk-auth",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./dist-cjs/index.js",
+  "module": "./dist-es/index.js",
+  "types": "./dist-types/index.d.ts",
+  "scripts": {
+    "build": "concurrently 'npm:build:cjs' 'npm:build:es' 'npm:build:types'",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:es": "tsc -p tsconfig.es.json",
+    "build:types": "tsc -p tsconfig.types.json",
+    "clean": "rimraf ./dist-* && rimraf *.tsbuildinfo",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.1.0",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@hey-api/client-fetch": "^0.5.2",
+    "oauth-1.0a": "^2.2.6",
+    "simple-oauth2": "^5.1.0"
+  }
+}

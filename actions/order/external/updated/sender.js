@@ -25,10 +25,7 @@ async function sendData (params, transformed, preProcessed) {
   try {
     const response = await addComment(
       params.COMMERCE_BASE_URL,
-      params.COMMERCE_CONSUMER_KEY,
-      params.COMMERCE_CONSUMER_SECRET,
-      params.COMMERCE_ACCESS_TOKEN,
-      params.COMMERCE_ACCESS_TOKEN_SECRET,
+      params,
       params.data.id,
       transformed)
 
