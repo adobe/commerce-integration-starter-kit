@@ -2,64 +2,8 @@
 
 [![Node.js CI](https://github.com/adobe/commerce-integration-starter-kit/actions/workflows/deploy_node_stage.yml/badge.svg)](https://github.com/adobe/commerce-integration-starter-kit/actions/workflows/deploy_node_stage.yml)
 
-<details>
-<summary>Table of Contents</summary>
+_Table of contents_: **[Prerequisites](#prerequisites)** | **[Supported Auth types](#supported-auth-types)** | **[Starter Kit first deploy & onboarding](#starter-kit-first-deploy--onboarding)** | **[Development](#development)** | **[Included actions documentation](#included-actions-documentation)** | **[References](#references)**
 
-- [Commerce  Integration Starter Kit](#commerce--integration-starter-kit)
-  - [Prerequisites](#prerequisites)
-    - [Create App Builder project](#create-app-builder-project)
-    - [Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5)](#install-commerce-eventing-module-only-required-when-running-adobe-commerce-versions-244-or-245)
-  - [Supported Auth types](#supported-auth-types)
-    - [\[PaaS\] Commerce OAuth1 - Configure a new Integration in Commerce](#paas-commerce-oauth1---configure-a-new-integration-in-commerce)
-    - [\[SaaS\] IMS OAuth - Add the OAuth Server to Server credentials to the environment](#saas-ims-oauth---add-the-oauth-server-to-server-credentials-to-the-environment)
-    - [How to use one or another?](#how-to-use-one-or-another)
-  - [Starter Kit first deploy \& onboarding](#starter-kit-first-deploy--onboarding)
-    - [Download the project](#download-the-project)
-    - [Configure the project](#configure-the-project)
-    - [Deploy](#deploy)
-    - [Onboarding](#onboarding)
-      - [Configure the event registrations](#configure-the-event-registrations)
-      - [Execute the onboarding](#execute-the-onboarding)
-    - [Complete the Adobe Commerce eventing configuration](#complete-the-adobe-commerce-eventing-configuration)
-      - [Configure Adobe I/O Events in Adobe Commerce instance](#configure-adobe-io-events-in-adobe-commerce-instance)
-      - [Subscribe to events in Adobe Commerce instance](#subscribe-to-events-in-adobe-commerce-instance)
-    - [Automating the execution of onboarding and event subscription](#automating-the-execution-of-onboarding-and-event-subscription)
-  - [Development](#development)
-    - [Project source code structure](#project-source-code-structure)
-      - [`actions` folder structure](#actions-folder-structure)
-      - [`entity` folder structure](#entity-folder-structure)
-      - [`commerce` and `external` folders structure](#commerce-and-external-folders-structure)
-      - [Individual `action` folder structure](#individual-action-folder-structure)
-      - [Pass `env` params to an `action`](#pass-env-params-to-an-action)
-    - [Different types of actions included in the starter kit](#different-types-of-actions-included-in-the-starter-kit)
-      - [`consumer` action](#consumer-action)
-      - [`event handler` action](#event-handler-action)
-      - [`event ingestion` action](#event-ingestion-action)
-      - [`synchronous webhook` actions](#synchronous-webhook-actions)
-      - [`starter kit info` action](#starter-kit-info-action)
-    - [Log management and forwarding](#log-management-and-forwarding)
-      - [Prevent secrets from leaking in logs.](#prevent-secrets-from-leaking-in-logs)
-    - [Testing](#testing)
-    - [How to subscribe to a new event](#how-to-subscribe-to-a-new-event)
-  - [Included actions documentation](#included-actions-documentation)
-    - [External back-office ingestion webhook](#external-back-office-ingestion-webhook)
-    - [Product entity](#product-entity)
-      - [Commerce to third party](#commerce-to-third-party)
-      - [Third party to Commerce](#third-party-to-commerce)
-    - [Customer entity](#customer-entity)
-      - [Commerce to third party](#commerce-to-third-party-1)
-      - [Third party to Commerce](#third-party-to-commerce-1)
-    - [Order entity](#order-entity)
-      - [Commerce to third party](#commerce-to-third-party-2)
-      - [Third party to Commerce](#third-party-to-commerce-2)
-    - [Stock entity](#stock-entity)
-      - [Commerce to third party](#commerce-to-third-party-3)
-      - [Third party to Commerce](#third-party-to-commerce-3)
-- [References](#references)
-  - [Contributing](#contributing)
-</details>
-
-&nbsp;
 Welcome to Adobe Commerce Integration Starter Kit.
 
 Integrating an e-commerce platform with your ERP, OMS, or CRM is a mission-critical requirement. Companies can spend tens of thousands of dollars building these integrations. To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder. The kit includes reference integrations for commonly used commerce data like orders, products, and customers. It also includes onboarding scripts and a standardized architecture for developers to build on following best practices.
