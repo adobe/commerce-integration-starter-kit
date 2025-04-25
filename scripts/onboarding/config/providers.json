@@ -1,14 +1,8 @@
 [
   {
     "key": "commerce",
-    "label": "Commerce Provider",
-    "description": "Commerce Provider that will receive events from commerce",
-    "docs_url": null
-  },
-  {
-    "key": "backoffice",
-    "label": "Backoffice Provider",
-    "description": "Backoffice Provider that will receive events from commerce",
+    "label": "Commerce Provider MultiEvent test5",
+    "description": "Commerce Provider that will receive events from commerce test5",
     "docs_url": null
   }
 ]

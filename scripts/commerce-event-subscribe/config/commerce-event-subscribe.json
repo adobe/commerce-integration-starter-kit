@@ -1,145 +1,45 @@
 [
   {
     "event": {
-      "name": "observer.catalog_product_delete_commit_after",
+      "name": "observer.catalog_product_save_after",
       "fields": [
-        {
-          "name": "id"
-        },
         {
           "name": "sku"
         },
         {
           "name": "name"
-        },
-        {
-          "name": "created_at"
-        },
-        {
-          "name": "updated_at"
-        },
-        {
-          "name": "description"
         }
       ]
     }
   },
   {
     "event": {
-      "name": "observer.catalog_product_save_commit_after",
+      "name": "starter_kit_workspace1.observer.catalog_product_save_after",
+      "parent": "observer.catalog_product_save_after",
       "fields": [
         {
-          "name": "id"
-        },
-        {
-          "name": "sku'"
+          "name": "sku"
         },
         {
           "name": "name"
-        },
-        {
-          "name": "created_at"
-        },
-        {
-          "name": "updated_at"
-        },
-        {
-          "name": "description"
         }
-      ]
+      ],
+      "provider_id": "b3a883c1-b04f-42c7-ab67-145af15f1fad"
     }
   },
   {
     "event": {
-      "name": "observer.customer_save_commit_after",
+      "name": "starter_kit_workspace2.observer.catalog_product_save_after",
+      "parent": "observer.catalog_product_save_after",
       "fields": [
         {
-          "name": "id"
+          "name": "sku"
         },
         {
-          "name": "email"
-        },
-        {
-          "name": "firstname"
-        },
-        {
-          "name": "lastname"
-        },
-        {
-          "name": "created_at"
-        },
-        {
-          "name": "updated_at"
+          "name": "name"
         }
-      ]
-    }
-  },
-  {
-    "event": {
-      "name": "observer.customer_delete_commit_after",
-      "fields": [
-        {
-          "name": "id"
-        },
-        {
-          "name": "email"
-        },
-        {
-          "name": "firstname"
-        },
-        {
-          "name": "lastname"
-        }
-      ]
-    }
-  },
-  {
-    "event": {
-      "name": "observer.customer_group_save_commit_after",
-      "fields": [
-        {
-          "name": "*"
-        }
-      ]
-    }
-  },
-  {
-    "event": {
-      "name": "observer.customer_group_delete_commit_after",
-      "fields": [
-        {
-          "name": "*"
-        }
-      ]
-    }
-  },
-  {
-    "event": {
-      "name": "observer.sales_order_save_commit_after",
-      "fields": [
-        {
-          "name": "id"
-        },
-        {
-          "name": "increment_id"
-        },
-        {
-          "name": "created_at"
-        },
-        {
-          "name": "updated_at"
-        }
-      ]
-    }
-  },
-  {
-    "event": {
-      "name": "observer.cataloginventory_stock_item_save_commit_after",
-      "fields": [
-        {
-          "name": "*"
-        }
-      ]
+      ],
+      "provider_id": "30015127-159a-4720-976f-691cc109b022"
     }
   }
 ]
