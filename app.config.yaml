@@ -59,4 +59,3 @@ application:
 productDependencies:
   - code: COMMC
     minVersion: 2.4.4
-    
