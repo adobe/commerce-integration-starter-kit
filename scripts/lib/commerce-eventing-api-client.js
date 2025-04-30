@@ -66,7 +66,7 @@ async function eventSubscribe (baseUrl, params, data) {
 
 /**
  * This function calls Adobe commerce rest API to return list of all event providers configured for the Commerce instance
- * 
+ *
  * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
@@ -89,7 +89,7 @@ async function getEventProviders (baseUrl, params) {
 /**
  * This function calls Adobe commerce rest API to register a new event provider in an Adobe Commerce instance.
  * The event provider must be created in the Adobe Developer Console before it can be registered in Adobe Commerce instance.
- * 
+ *
  * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request

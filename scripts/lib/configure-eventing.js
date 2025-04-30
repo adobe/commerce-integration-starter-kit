@@ -24,12 +24,12 @@ const { addEventProvider } = require('./commerce-eventing-api-client')
  */
 async function main (providerId, instanceId, workspaceConfiguration, environment) {
   try {
-    const eventProviderResult = await getEventProviders(environment.COMMERCE_BASE_URL,environment);
-    const isDefaultProviderConfigured = !eventProviderResult.some(item => !('id' in item));
-    const isNonDefaultProviderAdded = eventProviderResult.some(provider => provider.provider_id === providerId);
+    const eventProviderResult = await getEventProviders(environment.COMMERCE_BASE_URL, environment)
+    const isDefaultProviderConfigured = !eventProviderResult.some(item => !('id' in item))
+    const isNonDefaultProviderAdded = eventProviderResult.some(provider => provider.provider_id === providerId)
 
-    if(isDefaultProviderConfigured && !isNonDefaultProviderAdded) {
-      await updateConfiguration( 
+    if (isDefaultProviderConfigured && !isNonDefaultProviderAdded) {
+      await updateConfiguration(
         environment.COMMERCE_BASE_URL,
         environment,
         {
@@ -50,17 +50,17 @@ async function main (providerId, instanceId, workspaceConfiguration, environment
       }
     }
 
-    if(!isNonDefaultProviderAdded) {
+    if (!isNonDefaultProviderAdded) {
       const providersList = require('../onboarding/config/providers.json')
-      let label, description;
+      let label, description
 
       providersList.forEach(provider => {
-        if (provider.key === "commerce") {
-          label = provider.label;
+        if (provider.key === 'commerce') {
+          label = provider.label
           description = provider.description
         }
-      });
-  
+      })
+
       await addEventProvider(
         environment.COMMERCE_BASE_URL,
         environment,
@@ -68,19 +68,18 @@ async function main (providerId, instanceId, workspaceConfiguration, environment
           eventProvider: {
             provider_id: providerId,
             instance_id: instanceId,
-            label: label,
-            description: description,
+            label,
+            description,
             workspace_configuration: JSON.stringify(workspaceConfiguration)
           }
         }
-      );
+      )
       console.log(`\nAdding non-default provider with id "${providerId}" and instance id "${instanceId}" to the commerce instance`)
     }
     return {
       code: 200,
       success: true
     }
-    
   } catch (error) {
     const errorMessage = `Unable to complete the process of commerce configuration: ${error.message}`
     console.log(errorMessage)
