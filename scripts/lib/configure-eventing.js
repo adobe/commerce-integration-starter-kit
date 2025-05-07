@@ -25,57 +25,40 @@ const { addEventProvider } = require('./commerce-eventing-api-client')
 async function main (providerId, instanceId, workspaceConfiguration, environment) {
   try {
     const eventProviderResult = await getEventProviders(environment.COMMERCE_BASE_URL, environment)
-    const isDefaultProviderConfigured = !eventProviderResult.some(item => !('id' in item))
+    const isWorkspaceEmpty = !eventProviderResult.some(item => !('id' in item))
+    const hasValidWorkspaceConfig = eventProviderResult.some(item => item.workspace_configuration === '******')
+    const hasEmptyWorkspaceConfig = eventProviderResult.some(item => item.workspace_configuration === '')
     const isNonDefaultProviderAdded = eventProviderResult.some(provider => provider.provider_id === providerId)
 
-    if (isDefaultProviderConfigured && !isNonDefaultProviderAdded) {
-      await updateConfiguration(
-        environment.COMMERCE_BASE_URL,
-        environment,
-        {
-          config: {
-            enabled: true,
-            merchant_id: environment.COMMERCE_ADOBE_IO_EVENTS_MERCHANT_ID,
-            environment_id: 'Stage',
-            provider_id: providerId,
-            instance_id: instanceId,
-            workspace_configuration: JSON.stringify(workspaceConfiguration)
-          }
-        }
-      )
-      console.log(`\nUpdating the commerce instance with default provider with id "${providerId}" and instance id "${instanceId}"`)
+    // Return false if conditions aren't met (no '******' or there's an empty workspace config)
+    if (!hasValidWorkspaceConfig || hasEmptyWorkspaceConfig) {
+      await updateCommerceEventingConfiguration(workspaceConfiguration, environment)
+
+      // Add the provider if it's not already added
+      if (!isNonDefaultProviderAdded) {
+        await addCommerceEventProvider(providerId, instanceId, workspaceConfiguration, environment)
+      }
+
       return {
         code: 200,
         success: true
       }
     }
 
+    // If the provider isn't added, add it
     if (!isNonDefaultProviderAdded) {
-      const providersList = require('../onboarding/config/providers.json')
-      let label, description
-
-      providersList.forEach(provider => {
-        if (provider.key === 'commerce') {
-          label = provider.label
-          description = provider.description
-        }
-      })
-
-      await addEventProvider(
-        environment.COMMERCE_BASE_URL,
-        environment,
-        {
-          eventProvider: {
-            provider_id: providerId,
-            instance_id: instanceId,
-            label,
-            description,
-            workspace_configuration: JSON.stringify(workspaceConfiguration)
-          }
-        }
-      )
-      console.log(`\nAdding non-default provider with id "${providerId}" and instance id "${instanceId}" to the commerce instance`)
+      await addCommerceEventProvider(providerId, instanceId, workspaceConfiguration, environment)
+      return {
+        code: 200,
+        success: true
+      }
     }
+
+    // If workspace is empty, update configuration
+    if (isWorkspaceEmpty) {
+      await updateCommerceEventingConfiguration(workspaceConfiguration, environment)
+    }
+
     return {
       code: 200,
       success: true
@@ -89,6 +72,62 @@ async function main (providerId, instanceId, workspaceConfiguration, environment
       error: errorMessage
     }
   }
+}
+
+/**
+ * Adds the event provider to the commerce instance.
+ *
+ * @param {string} providerId - provider id
+ * @param {string} instanceId - instance id
+ * @param {object} workspaceConfiguration - workspace configuration
+ * @param {object} environment - environment variables
+ */
+async function addCommerceEventProvider (providerId, instanceId, workspaceConfiguration, environment) {
+  const providersList = require('../onboarding/config/providers.json')
+
+  // Find the commerce provider's label and description
+  const { label, description } = providersList.find(provider => provider.key === 'commerce') || {}
+
+  if (!label || !description) {
+    throw new Error('Commerce provider label or description is missing')
+  }
+
+  await addEventProvider(
+    environment.COMMERCE_BASE_URL,
+    environment,
+    {
+      eventProvider: {
+        provider_id: providerId,
+        instance_id: instanceId,
+        label,
+        description,
+        workspace_configuration: JSON.stringify(workspaceConfiguration)
+      }
+    }
+  )
+  console.log(`\nAdded non-default provider with id "${providerId}" and instance id "${instanceId}" to the commerce instance`)
+}
+
+/**
+ * Updates the workspace configuration for the commerce instance.
+ *
+ * @param {object} workspaceConfiguration - workspace configuration
+ * @param {object} environment - environment variables
+ */
+async function updateCommerceEventingConfiguration (workspaceConfiguration, environment) {
+  await updateConfiguration(
+    environment.COMMERCE_BASE_URL,
+    environment,
+    {
+      config: {
+        enabled: true,
+        merchant_id: environment.COMMERCE_ADOBE_IO_EVENTS_MERCHANT_ID,
+        environment_id: 'Stage',
+        workspace_configuration: JSON.stringify(workspaceConfiguration)
+      }
+    }
+  )
+  console.log('\nUpdated the commerce instance with workspace configuration')
 }
 
 exports.main = main
