@@ -25,38 +25,17 @@ const { addEventProvider } = require('./commerce-eventing-api-client')
 async function main (providerId, instanceId, workspaceConfiguration, environment) {
   try {
     const eventProviderResult = await getEventProviders(environment.COMMERCE_BASE_URL, environment)
-    const isWorkspaceEmpty = !eventProviderResult.some(item => !('id' in item))
-    const hasValidWorkspaceConfig = eventProviderResult.some(item => item.workspace_configuration === '******')
-    const hasEmptyWorkspaceConfig = eventProviderResult.some(item => item.workspace_configuration === '')
     const isNonDefaultProviderAdded = eventProviderResult.some(provider => provider.provider_id === providerId)
+    const isDefaultWorkspaceEmpty = eventProviderResult.every(item =>
+      'id' in item || (item.workspace_configuration === '')
+    )
 
-    // Return false if conditions aren't met (no '******' or there's an empty workspace config)
-    if (!hasValidWorkspaceConfig || hasEmptyWorkspaceConfig) {
+    if (isDefaultWorkspaceEmpty) {
       await updateCommerceEventingConfiguration(workspaceConfiguration, environment)
-
-      // Add the provider if it's not already added
-      if (!isNonDefaultProviderAdded) {
-        await addCommerceEventProvider(providerId, instanceId, workspaceConfiguration, environment)
-      }
-
-      return {
-        code: 200,
-        success: true
-      }
     }
 
-    // If the provider isn't added, add it
     if (!isNonDefaultProviderAdded) {
       await addCommerceEventProvider(providerId, instanceId, workspaceConfiguration, environment)
-      return {
-        code: 200,
-        success: true
-      }
-    }
-
-    // If workspace is empty, update configuration
-    if (isWorkspaceEmpty) {
-      await updateCommerceEventingConfiguration(workspaceConfiguration, environment)
     }
 
     return {
