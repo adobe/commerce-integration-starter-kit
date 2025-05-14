@@ -67,10 +67,6 @@ async function addCommerceEventProvider (providerId, instanceId, workspaceConfig
   // Find the commerce provider's label and description
   const { label, description } = providersList.find(provider => provider.key === 'commerce') || {}
 
-  if (!label || !description) {
-    throw new Error('Commerce provider label or description is missing')
-  }
-
   await addEventProvider(
     environment.COMMERCE_BASE_URL,
     environment,
@@ -78,8 +74,8 @@ async function addCommerceEventProvider (providerId, instanceId, workspaceConfig
       eventProvider: {
         provider_id: providerId,
         instance_id: instanceId,
-        label,
-        description,
+        label: label,
+        description: description,
         workspace_configuration: JSON.stringify(workspaceConfiguration)
       }
     }
