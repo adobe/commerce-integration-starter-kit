@@ -63,8 +63,6 @@ async function main (providerId, instanceId, workspaceConfiguration, environment
  */
 async function addCommerceEventProvider (providerId, instanceId, workspaceConfiguration, environment) {
   const providersList = require('../onboarding/config/providers.json')
-
-  // Find the commerce provider's label and description
   const { label, description } = providersList.find(provider => provider.key === 'commerce') || {}
 
   await addEventProvider(
