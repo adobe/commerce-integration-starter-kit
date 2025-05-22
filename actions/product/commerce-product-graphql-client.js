@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { GraphQLClient } = require("graphql-request");
+const { GraphQLClient } = require('graphql-request')
 
 const PRODUCTS_QUERY = `
   query GetProducts($pageSize: Int!, $currentPage: Int!) {
@@ -39,17 +39,17 @@ const PRODUCTS_QUERY = `
  * @param {object} headers - Headers for the client
  * @returns {object} - GraphQL client instance
  */
-function createGraphqlClient(baseUrl, headers = {}) {
-    if (typeof baseUrl !== 'string') {
-        throw new TypeError(`The "baseUrl" argument must be of type string. Received ${typeof baseUrl}`);
-    }
+function createGraphqlClient (baseUrl, headers = {}) {
+  if (typeof baseUrl !== 'string') {
+    throw new TypeError(`The "baseUrl" argument must be of type string. Received ${typeof baseUrl}`)
+  }
 
-    return new GraphQLClient(baseUrl, {
-        headers: {
-            'Content-Type': 'application/json',
-            ...headers,
-        },
-    });
+  return new GraphQLClient(baseUrl, {
+    headers: {
+      'Content-Type': 'application/json',
+      ...headers
+    }
+  })
 }
 
 /**
@@ -65,8 +65,8 @@ async function queryProducts (baseUrl, pageSize, currentPage) {
 
   return await client.request(PRODUCTS_QUERY, {
     pageSize,
-    currentPage,
-  });
+    currentPage
+  })
 }
 
 module.exports = {

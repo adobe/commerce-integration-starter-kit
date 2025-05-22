@@ -14,12 +14,12 @@ const { Core } = require('@adobe/aio-sdk')
 const { stringParameters } = require('../../../utils')
 const { HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../constants')
 const { actionErrorResponse, actionSuccessResponse } = require('../../../responses')
-const { queryProducts } = require('../../commerce-product-graphql-client');
-const { validateData } = require('./validator');
-const { transformData } = require('./transformer');
-const { preProcess } = require('./pre');
-const { sendData } = require('./sender');
-const { postProcess } = require('./post');
+const { queryProducts } = require('../../commerce-product-graphql-client')
+const { validateData } = require('./validator')
+const { transformData } = require('./transformer')
+const { preProcess } = require('./pre')
+const { sendData } = require('./sender')
+const { postProcess } = require('./post')
 
 /**
  * This action is on charge of obtaining product information from Adobe Commerce and send it to external back-office application
@@ -27,7 +27,7 @@ const { postProcess } = require('./post');
  * @param {object} params - includes the env params and configuration
  * @returns {object} returns response object with status code and result
  */
-async function main(params) {
+async function main (params) {
   const logger = Core.Logger('product-commerce-full-sync', { level: params.LOG_LEVEL || 'debug' })
 
   logger.info('Start processing product full sync')
@@ -44,16 +44,16 @@ async function main(params) {
     while (currentPage <= totalPages) {
       logger.info(`Fetching products page ${currentPage}`)
 
-      const pageResult = await processPage(params, pageSize, currentPage, logger);
-      results.push(pageResult);
+      const pageResult = await processPage(params, pageSize, currentPage, logger)
+      results.push(pageResult)
 
       if (!pageResult.success) {
-        hasErrors = true;
+        hasErrors = true
       }
 
       if (currentPage === 1 && pageResult.totalCount) {
-        totalPages = Math.ceil(pageResult.totalCount / pageSize);
-        logger.info(`Total products: ${pageResult.totalCount}, Total pages: ${totalPages}`);
+        totalPages = Math.ceil(pageResult.totalCount / pageSize)
+        logger.info(`Total products: ${pageResult.totalCount}, Total pages: ${totalPages}`)
       }
 
       currentPage++
@@ -64,7 +64,7 @@ async function main(params) {
         `${results.filter(item => !item.success).length} failed. ` +
         `Results: ${JSON.stringify(results.map(({ totalCount, ...rest }) => rest))}`
 
-    logger.info('Product sync completed successfully');
+    logger.info('Product sync completed successfully')
     return actionSuccessResponse(message)
   } catch (error) {
     logger.error(`Error processing the request: ${error.message}`)
@@ -72,54 +72,53 @@ async function main(params) {
   }
 }
 
-
 /**
  * Processes a single page of products
  *
  * @param {object} params - Environment parameters
  * @param {number} pageSize - Number of items per page
  * @param {number} currentPage - Current page number
- * @param logger
+ * @param {object} logger - Logger instance for logging operations
  * @returns {object} Result of the page processing
  */
-async function processPage(params, pageSize, currentPage, logger) {
+async function processPage (params, pageSize, currentPage, logger) {
   try {
-    const response = await queryProducts(params.COMMERCE_GRAPHQL_ENDPOINT, pageSize, currentPage);
+    const response = await queryProducts(params.COMMERCE_GRAPHQL_ENDPOINT, pageSize, currentPage)
     logger.debug(`Raw GraphQL response: ${JSON.stringify(response)}`)
 
     if (response.errors) {
-      throw new Error(`GraphQL query failed: ${JSON.stringify(response.errors[0].message)}`);
+      throw new Error(`GraphQL query failed: ${JSON.stringify(response.errors[0].message)}`)
     }
 
-    logger.debug(`Validate data: ${JSON.stringify(response)}`);
-    const validation = validateData(response);
+    logger.debug(`Validate data: ${JSON.stringify(response)}`)
+    const validation = validateData(response)
     if (!validation.success) {
-      return createResult(currentPage, false, validation.message, HTTP_BAD_REQUEST);
+      return createResult(currentPage, false, validation.message, HTTP_BAD_REQUEST)
     }
 
-    const { items, total_count } = response.products;
+    const { items, total_count: totalCount } = response.products
 
-    logger.info(`Successfully fetched products for page ${currentPage}. Found ${items.length} products.`);
+    logger.info(`Successfully fetched products for page ${currentPage}. Found ${items.length} products.`)
 
-    logger.debug(`Transform data: ${JSON.stringify(items)}`);
-    const transformedData = transformData(items);
+    logger.debug(`Transform data: ${JSON.stringify(items)}`)
+    const transformedData = transformData(items)
 
-    logger.debug(`Preprocess data: ${JSON.stringify(items)}`);
-    const preProcessed = preProcess(items, transformedData);
+    logger.debug(`Preprocess data: ${JSON.stringify(items)}`)
+    const preProcessed = preProcess(items, transformedData)
 
-    logger.debug(`Start sending data: ${JSON.stringify(items)}`);
-    const result = await sendData(params, transformedData, preProcessed);
+    logger.debug(`Start sending data: ${JSON.stringify(items)}`)
+    const result = await sendData(params, transformedData, preProcessed)
     if (!result.success) {
-      return createResult(currentPage, false, result.message, result.statusCode);
+      return createResult(currentPage, false, result.message, result.statusCode)
     }
 
-    logger.debug(`Postprocess data: ${JSON.stringify(items)}`);
-    postProcess(items, transformedData, preProcessed, result);
+    logger.debug(`Postprocess data: ${JSON.stringify(items)}`)
+    postProcess(items, transformedData, preProcessed, result)
 
-    return createResult(currentPage, true, null, null, total_count);
+    return createResult(currentPage, true, null, null, totalCount)
   } catch (error) {
-    logger.error(`Error processing page ${currentPage}: ${error.message}`);
-    return createResult(currentPage, false, error.message, HTTP_INTERNAL_ERROR);
+    logger.error(`Error processing page ${currentPage}: ${error.message}`)
+    return createResult(currentPage, false, error.message, HTTP_INTERNAL_ERROR)
   }
 }
 
@@ -133,12 +132,12 @@ async function processPage(params, pageSize, currentPage, logger) {
  * @param {number} [totalCount] - Total count of products (only for the first page)
  * @returns {object} Result object
  */
-function createResult(page, success, message, statusCode, totalCount ) {
-  const result = { page, success };
-  if (message) result.message = message;
-  if (statusCode) result.statusCode = statusCode;
-  if (totalCount) result.totalCount = totalCount;
-  return result;
+function createResult (page, success, message, statusCode, totalCount) {
+  const result = { page, success }
+  if (message) result.message = message
+  if (statusCode) result.statusCode = statusCode
+  if (totalCount) result.totalCount = totalCount
+  return result
 }
 
 exports.main = main
