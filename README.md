@@ -16,7 +16,7 @@ The public documentation can be found at [Adobe Developer Starter Kit docs](http
 
 ### Create App Builder project
 Go to the [Adobe developer console](https://developer.adobe.com/console) portal
-- Click on `Create a new project from template`
+- Click on `Create project from template`
 - Select `App Builder`
 - Chose a name and title
 - Select stage workspace or create a new one
@@ -31,59 +31,7 @@ Install Adobe I/O Events for Adobe Commerce module in your commerce instance fol
 
 > [!TIP]
 > 
-> By upgrading the Adobe I/O Events for Adobe Commerce module to version 1.6.0 or greater, you will benefit from some additional automated steps during onboarding.  
-
-## Supported Auth types
-
-With the new announcement of **Adobe Commerce as a Cloud Service** (ACCS), requests to Commerce will now use different authentication strategies depending on the flavor you're using:
-
-- If you're using the traditional Adobe Commerce Platform (PaaS) offering, you'll need to authenticate via OAuth1, like you've been doing until now.
-
-- If you're using the new cloud service (SaaS) offering, you'll need to authenticate your requests using [Adobe Identity Management System](https://experienceleague.adobe.com/en/docs/experience-manager-learn/foundation/authentication/adobe-ims-authentication-technical-video-understand) (IMS).
-
-### [PaaS] Commerce OAuth1 - Configure a new Integration in Commerce
-Configure a new Integration to secure the calls to Commerce from App Builder using OAuth by following these steps:
-- In the Commerce Admin, navigate to System > Extensions > Integrations.
-- Click the `Add New Integration` button. The following screen displays
-  ![New Integration Screen](docs/new-integration.png "New Integration")
-- Give the integration a name. The rest of the fields can be left blank.
-- Select API on the left and grant access to all the resources.
-  ![API Access Grant Screen](docs/integration-all-apis-access.png "New Integration")
-- Click Save.
-- In the list of integrations, activate your integration.
-- To configure the starter kit, you will need the integration details (consumer key, consumer secret, access token, and access token secret).
-
-Store the credentials in the `.env` file, these are the minimum required values:
-```dotenv
-COMMERCE_CONSUMER_KEY=
-COMMERCE_CONSUMER_SECRET=
-COMMERCE_ACCESS_TOKEN=
-COMMERCE_ACCESS_TOKEN_SECRET=
-```
-
-### [SaaS] IMS OAuth - Add the OAuth Server to Server credentials to the environment
-Configure a new IMS OAuth Server to Server following this [documentation](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/implementation/#setting-up-the-oauth-server-to-server-credential/)
-
-Store the credentials in the `.env` file, these are the minimum required values:
-```dotenv
-OAUTH_CLIENT_ID=<string> # Your client ID
-OAUTH_CLIENT_SECRET=<string> # Your client secret
-OAUTH_SCOPES=<array> # ['scope1', 'scope2']
-```
-These are optional values that can be provided:
-```dotenv
-OAUTH_HOST=<string> # default: https://ims-na1.adobelogin.com
-```
-
-### How to use one or another?
-The starter kit is designed to work with both offerings, but only one of them at the same time. By default, (and to prevent breaking changes) the SaaS offering is opt-in, which means that you will need to explicitly configure it in order to start using it. **OAuth1** will be the first authentication mechanism tried before **IMS**.
-
-- If you want to use PaaS follow the [first guide above](#paas-commerce-oauth1---configure-a-new-integration-in-commerce) and make sure your environment variables `COMMERCE_XXXX` are set correctly in the `.env` file.
-
-- If you want to use SaaS follow the [latter guide above](#saas-ims-oauth---add-the-oauth-server-to-server-credentials-to-the-environment) and make sure the environment variables `COMMERCE_XXXX` are **NOT SET** (blank) or deleted from the `.env` file.
-
-> [!NOTE]
-> You'll notice that the `app.config.yaml` has both types of environment variables declared (those are the ones that end up in the runtime action context). The code is built to work regardless of the offering you've configured, so you shouldn't need to modify anything in that file unless you want to do some cleanup.
+> By upgrading the Adobe I/O Events for Adobe Commerce module to version 1.6.0 or greater, you will benefit from some additional automated steps during onboarding.
 
 ## Starter Kit first deploy & onboarding
 Following the next steps, you will deploy and onboard the starter kit for the first time. The onboarding process sets up event providers and registrations based on your selection.
@@ -105,6 +53,58 @@ Following the next steps, you will deploy and onboard the starter kit for the fi
 > - Example: `https://na1-sandbox.api.commerce.adobe.com/[tenant-id]/`
 >
 > Make sure to use your actual environment name or tenant ID in the URL. The examples above use placeholder values.
+
+### Supported Auth types
+
+With the new announcement of **Adobe Commerce as a Cloud Service** (ACCS), requests to Commerce will now use different authentication strategies depending on the flavor you're using:
+
+- If you're using the traditional Adobe Commerce Platform (PaaS) offering, you'll need to authenticate via OAuth1, like you've been doing until now.
+
+- If you're using the new cloud service (SaaS) offering, you'll need to authenticate your requests using [Adobe Identity Management System](https://experienceleague.adobe.com/en/docs/experience-manager-learn/foundation/authentication/adobe-ims-authentication-technical-video-understand) (IMS).
+
+#### [PaaS] Commerce OAuth1 - Configure a new Integration in Commerce
+Configure a new Integration to secure the calls to Commerce from App Builder using OAuth by following these steps:
+- In the Commerce Admin, navigate to System > Extensions > Integrations.
+- Click the `Add New Integration` button. The following screen displays
+  ![New Integration Screen](docs/new-integration.png "New Integration")
+- Give the integration a name. The rest of the fields can be left blank.
+- Select API on the left and grant access to all the resources.
+  ![API Access Grant Screen](docs/integration-all-apis-access.png "New Integration")
+- Click Save.
+- In the list of integrations, activate your integration.
+- To configure the starter kit, you will need the integration details (consumer key, consumer secret, access token, and access token secret).
+
+Store the credentials in the `.env` file, these are the minimum required values:
+```dotenv
+COMMERCE_CONSUMER_KEY=
+COMMERCE_CONSUMER_SECRET=
+COMMERCE_ACCESS_TOKEN=
+COMMERCE_ACCESS_TOKEN_SECRET=
+```
+
+#### [SaaS] IMS OAuth - Add the OAuth Server to Server credentials to the environment
+Configure a new IMS OAuth Server to Server following this [documentation](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/implementation/#setting-up-the-oauth-server-to-server-credential/)
+
+Store the credentials in the `.env` file, these are the minimum required values:
+```dotenv
+OAUTH_CLIENT_ID=<string> # Your client ID
+OAUTH_CLIENT_SECRET=<string> # Your client secret
+OAUTH_SCOPES=<array> # ['scope1', 'scope2']
+```
+These are optional values that can be provided:
+```dotenv
+OAUTH_HOST=<string> # default: https://ims-na1.adobelogin.com
+```
+
+#### How to use one or another?
+The starter kit is designed to work with both offerings, but only one of them at the same time. By default, (and to prevent breaking changes) the SaaS offering is opt-in, which means that you will need to explicitly configure it in order to start using it. **OAuth1** will be the first authentication mechanism tried before **IMS**.
+
+- If you want to use PaaS follow the [first guide above](#paas-commerce-oauth1---configure-a-new-integration-in-commerce) and make sure your environment variables `COMMERCE_XXXX` are set correctly in the `.env` file.
+
+- If you want to use SaaS follow the [latter guide above](#saas-ims-oauth---add-the-oauth-server-to-server-credentials-to-the-environment) and make sure the environment variables `COMMERCE_XXXX` are **NOT SET** (blank) or deleted from the `.env` file.
+
+> [!NOTE]
+> You'll notice that the `app.config.yaml` has both types of environment variables declared (those are the ones that end up in the runtime action context). The code is built to work regardless of the offering you've configured, so you shouldn't need to modify anything in that file unless you want to do some cleanup.
 
 ### Configure the project
 Install the npm dependencies using the command:
@@ -161,7 +161,7 @@ You can confirm the success of the deployment in the Adobe Developer Console by 
 
 ### Onboarding
 #### Configure the event registrations
-By default, the registrations' config file creates all the registrations for all entities. You can edit the `./onboarding/custom/starter-kit-registrations.json` file if you don't need a registration.
+By default, the registrations' config file creates all the registrations for all entities. You can edit the `./scripts/onboarding/custom/starter-kit-registrations.json` file if you don't need a registration.
 If you don't want to receive events from commerce, remove `commerce` from the entity array; for backoffice updates, remove `backoffice`.
 e.g., In the previous onboarding step (`Configure the project`), we commented on the product-backoffice package. In this case, we have to remove `backoffice` from the `product` entity:
 ```json
@@ -310,7 +310,7 @@ The `actions` folder contains:
 
 #### `entity` folder structure
 
-Each `entity folder follows a similar structure, and it contains folders named after each system being integrated, namely:
+Each `entity` folder follows a similar structure, and it contains folders named after each system being integrated, namely:
 
 - a `commerce` folder.
   
@@ -719,6 +719,7 @@ If you want to change an existing event, make the changes in the same places:
 - [Product created in commerce](actions/product/commerce/created/docs/README.md)
 - [Product updated in commerce](actions/product/commerce/updated/docs/README.md)
 - [Product deleted in commerce](actions/product/commerce/deleted/docs/README.md)
+- [Product full sync in commerce](actions/product/commerce/full-sync/docs/README.md)
 
 #### Third party to Commerce
 - [Product created in third party](actions/product/external/created/docs/README.md)
@@ -740,7 +741,7 @@ If you want to change an existing event, make the changes in the same places:
 - [Customer group created in third party](actions/customer/external/group-created/docs/README.md)
 - [Customer group updated in third party](actions/customer/external/group-updated/docs/README.md)
 - [Customer group deleted in third party](actions/customer/external/group-deleted/docs/README.md)
-- 
+
 ### Order entity
 #### Commerce to third party
 - [Order created in commerce](actions/order/commerce/created/docs/README.md)
