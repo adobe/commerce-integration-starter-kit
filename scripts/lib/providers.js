@@ -152,7 +152,7 @@ async function main (clientRegistrations, environment, accessToken) {
       }
     }
 
-    result.forEach(provider => console.log(`Defining the ${provider.key} provider id as : ${provider.id}`))
+    result.forEach(provider => console.log(`Defining the ${provider.key} provider id as : ${provider.id} having instance id : ${provider.instanceId}`))
 
     const response = {
       code: 200,
