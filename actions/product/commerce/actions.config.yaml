@@ -34,3 +34,13 @@ deleted:
   annotations:
     require-adobe-auth: true
     final: true
+full-sync:
+  function: full-sync/index.js
+  web: 'yes'
+  runtime: nodejs:20
+  inputs:
+    LOG_LEVEL: debug
+    COMMERCE_GRAPHQL_ENDPOINT: $COMMERCE_GRAPHQL_ENDPOINT
+  annotations:
+    require-adobe-auth: true
+    final: true
