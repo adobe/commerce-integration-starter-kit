@@ -79,14 +79,14 @@ export function getRuntimeActionMetadata(): RuntimeMetadata {
   };
 
   if (process.env.__OW_ACTION_NAME?.includes("/")) {
-    const [, _, packageName, action] =
+    const [, _, packageName, ...action] =
       process.env.__OW_ACTION_NAME?.split("/") ?? [];
 
     runtimeMetadata = {
       ...meta,
 
       packageName,
-      actionName: action,
+      actionName: action.join("/"),
     };
   } else {
     runtimeMetadata = {
