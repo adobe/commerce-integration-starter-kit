@@ -3,7 +3,7 @@ import { defineConfig } from "tsdown";
 
 const OUT_DIR = "./dist";
 export default defineConfig({
-  entry: ["./source/index.ts"],
+  entry: ["./source/index.ts", "./source/providers/index.ts"],
   format: ["cjs", "esm"],
 
   outputOptions: {
