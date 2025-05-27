@@ -11,7 +11,27 @@ governing permissions and limitations under the License.
 */
 
 jest.mock('node-fetch')
+jest.mock('fs', () => ({
+  readFileSync: jest.fn(),
+  writeFileSync: jest.fn(),
+  existsSync: jest.fn()
+}))
+
+// Mock path module to handle the actual path resolution
+jest.mock('path', () => ({
+  resolve: jest.fn((...args) => {
+    // When resolving the .env path from providers.js
+    if (args.includes('../../.env')) {
+      return '/test/.env_test'
+    }
+    // For any other path resolution, join the arguments
+    return args.join('/')
+  })
+}))
+
 const fetch = require('node-fetch')
+const fs = require('fs')
+const path = require('path')
 const action = require('../../../scripts/lib/providers.js')
 const ACCESS_TOKEN = 'token'
 const RUNTIME_NAMESPACE = '1340225-testOrg-testWorkspace'
@@ -19,7 +39,12 @@ const PROVIDER_SUFFIX = 'testOrg-testWorkspace'
 const ENVIRONMENT = { AIO_runtime_namespace: RUNTIME_NAMESPACE }
 
 beforeEach(() => {
-  jest.resetModules() // Most important - it clears the cache
+  jest.resetModules()
+  fs.readFileSync.mockReset()
+  fs.writeFileSync.mockReset()
+  fs.existsSync.mockReset()
+  fs.readFileSync.mockReturnValue('')
+  path.resolve.mockClear()
 })
 
 afterEach(() => {
@@ -1267,6 +1292,108 @@ describe('Given On-boarding providers file', () => {
         success: false,
         error: "Unable to create provider: reason = 'Invalid data', message = 'Please provide valid data'"
       })
+    })
+  })
+  describe('When writing provider IDs to env file', () => {
+    test('Then writes provider IDs correctly when file is empty', async () => {
+      const commerceProviderId = 'COMMERCE_PROVIDER_ID'
+      const mockFetchGetExistingProvidersResponse = {
+        ok: true,
+        json: () => Promise.resolve({
+          _embedded: { providers: [] }
+        })
+      }
+      const mockFetchCreateCommerceProviderResponse = {
+        ok: true,
+        json: () => Promise.resolve({
+          id: commerceProviderId,
+          label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
+          instance_id: 'AC_INSTANCE_ID'
+        })
+      }
+
+      fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
+        .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse)
+
+      const clientRegistrations = {
+        product: ['commerce'],
+        customer: ['commerce'],
+        order: ['commerce'],
+        stock: ['commerce']
+      }
+
+      const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
+
+      expect(response).toEqual({
+        code: 200,
+        success: true,
+        result: [
+          {
+            key: 'commerce',
+            id: commerceProviderId,
+            instanceId: 'AC_INSTANCE_ID',
+            label: `Commerce Provider - ${PROVIDER_SUFFIX}`
+          }
+        ]
+      })
+
+      // Verify writeFileSync was called with correct content
+      expect(fs.writeFileSync).toHaveBeenCalledTimes(1)
+      const [filePath, content] = fs.writeFileSync.mock.calls[0]
+      expect(filePath).toBe('/test/.env_test')
+      expect(content).toBe(`COMMERCE_PROVIDER_ID=${commerceProviderId}\n`)
+    })
+
+    test('Then updates existing provider IDs', async () => {
+      // Mock existing content in .env file
+      fs.readFileSync.mockReturnValue('EXISTING_KEY=existing_value\n')
+
+      const commerceProviderId = 'COMMERCE_PROVIDER_ID'
+      const mockFetchGetExistingProvidersResponse = {
+        ok: true,
+        json: () => Promise.resolve({
+          _embedded: { providers: [] }
+        })
+      }
+      const mockFetchCreateCommerceProviderResponse = {
+        ok: true,
+        json: () => Promise.resolve({
+          id: commerceProviderId,
+          label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
+          instance_id: 'AC_INSTANCE_ID'
+        })
+      }
+
+      fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
+        .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse)
+
+      const clientRegistrations = {
+        product: ['commerce'],
+        customer: ['commerce'],
+        order: ['commerce'],
+        stock: ['commerce']
+      }
+
+      const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
+
+      expect(response).toEqual({
+        code: 200,
+        success: true,
+        result: [
+          {
+            key: 'commerce',
+            id: commerceProviderId,
+            instanceId: 'AC_INSTANCE_ID',
+            label: `Commerce Provider - ${PROVIDER_SUFFIX}`
+          }
+        ]
+      })
+
+      // Verify writeFileSync was called with correct content
+      expect(fs.writeFileSync).toHaveBeenCalledTimes(1)
+      const [filePath, content] = fs.writeFileSync.mock.calls[0]
+      expect(filePath).toBe('/test/.env_test')
+      expect(content).toBe(`EXISTING_KEY=existing_value\nCOMMERCE_PROVIDER_ID=${commerceProviderId}\n`)
     })
   })
 })
