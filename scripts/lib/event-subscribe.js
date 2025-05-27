@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const { eventSubscribe } = require('./commerce-eventing-api-client')
+const { getEventName } = require('../../utils/naming')
 
 /**
  * This method subscribes to an event in the commerce eventing module
@@ -19,6 +20,12 @@ const { eventSubscribe } = require('./commerce-eventing-api-client')
  * @returns {object} - returns response object
  */
 async function main (eventSpec, environment) {
+  if (environment.PROJECT_NAME && environment.COMMERCE_PROVIDER_ID) {
+    eventSpec.event.parent = eventSpec.event.name
+    eventSpec.event.provider_id = environment.COMMERCE_PROVIDER_ID
+    eventSpec.event.name = getEventName(eventSpec.event.name, environment)
+  }
+
   try {
     await eventSubscribe(
       environment.COMMERCE_BASE_URL,

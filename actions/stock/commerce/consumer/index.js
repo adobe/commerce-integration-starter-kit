@@ -44,7 +44,7 @@ async function main (params) {
     logger.info('Params type: ' + params.type)
 
     switch (params.type) {
-      case 'com.adobe.commerce.observer.cataloginventory_stock_item_save_commit_after': {
+      case `com.adobe.commerce.${params.PROJECT_NAME}.observer.cataloginventory_stock_item_save_commit_after`: {
         logger.info('Invoking update stock item')
         const res = await openwhiskClient.invokeAction('stock-commerce/updated', params.data.value)
         response = res?.response?.result?.body

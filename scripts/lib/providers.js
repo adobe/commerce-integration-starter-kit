@@ -12,10 +12,13 @@ governing permissions and limitations under the License.
 
 require('dotenv').config()
 const { checkMissingRequestInputs } = require('../../actions/utils')
-const fetch = require('node-fetch')
-const uuid = require('uuid')
 const { getExistingProviders } = require('../../utils/adobe-events-api')
 const { addSuffix } = require('../../utils/naming')
+const fetch = require('node-fetch')
+const uuid = require('uuid')
+const fs = require('fs')
+const path = require('path')
+const envPath = path.resolve(__dirname, '../../.env')
 const providersEventsConfig = require('../onboarding/config/events.json')
 
 /**
@@ -73,6 +76,33 @@ async function createProvider (environment, accessToken, provider) {
  */
 function hasSelection (selection, clientRegistrations) {
   return Object.values(clientRegistrations).some(value => value.includes(selection))
+}
+
+/**
+ * Updates the .env file with provider id.
+ *
+ * @param {Array} providers - list of providers
+ */
+function writeToEnvFile (providers) {
+  // Read the existing .env content
+  let envContent = fs.readFileSync(envPath, 'utf8')
+  envContent = envContent.replace(/\r\n/g, '\n').replace(/\s+$/, '')
+
+  providers.forEach(provider => {
+    const providerType = provider.key.toUpperCase()
+    const providerIdEnv = `${providerType}_PROVIDER_ID=${provider.id}`
+    const providerIdEnvRegex = new RegExp(`^${providerType}_PROVIDER_ID=.*$`, 'm')
+
+    console.log(`Defining the ${provider.key} provider id as : ${provider.id} having instance id : ${provider.instanceId}`)
+    if (providerIdEnvRegex.test(envContent)) {
+      envContent = envContent.replace(providerIdEnvRegex, providerIdEnv)
+    } else {
+      envContent += `\n${providerIdEnv}`
+    }
+  })
+  // Write back to the .env file
+  fs.writeFileSync(envPath, envContent.trim() + '\n', 'utf8')
+  console.log('Successfully updated .env file with provider id\'s')
 }
 
 /**
@@ -152,7 +182,8 @@ async function main (clientRegistrations, environment, accessToken) {
       }
     }
 
-    result.forEach(provider => console.log(`Defining the ${provider.key} provider id as : ${provider.id} having instance id : ${provider.instanceId}`))
+    // update the env file with provider ID
+    writeToEnvFile(result)
 
     const response = {
       code: 200,

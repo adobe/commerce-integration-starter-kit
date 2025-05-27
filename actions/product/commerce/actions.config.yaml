@@ -4,6 +4,7 @@ consumer:
   runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
+    PROJECT_NAME: $PROJECT_NAME
   annotations:
     require-adobe-auth: true
     final: true

@@ -74,8 +74,33 @@ function getProviderName (params, providerKey) {
   return addSuffix(backofficeProvider.label, params)
 }
 
+/**
+ * Add suffix project name defined in .env file to event name.
+ *
+ * @param {string} eventName event name
+ * @param {object} environment - environment params
+ * @returns {string} returns the event name
+ */
+function getEventName (eventName, environment) {
+  const projectName = environment.PROJECT_NAME
+  const prefixes = ['com.adobe.commerce.']
+
+  if (projectName) {
+    for (const prefix of prefixes) {
+      if (eventName.startsWith(prefix)) {
+        return prefix + projectName + '.' + eventName.slice(prefix.length)
+      }
+    }
+    // If no known prefix matches, prepend the projectName
+    return projectName + '.' + eventName
+  }
+
+  return eventName
+}
+
 module.exports = {
   addSuffix,
   getRegistrationName,
-  getProviderName
+  getProviderName,
+  getEventName
 }

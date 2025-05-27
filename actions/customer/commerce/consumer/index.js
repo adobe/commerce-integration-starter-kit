@@ -44,7 +44,7 @@ async function main (params) {
     logger.info('Params type: ' + params.type)
 
     switch (params.type) {
-      case 'com.adobe.commerce.observer.customer_save_commit_after': {
+      case `com.adobe.commerce.${params.PROJECT_NAME}.observer.customer_save_commit_after`: {
         const requiredParams = [
           'data.value.created_at',
           'data.value.updated_at']
@@ -72,7 +72,7 @@ async function main (params) {
         }
         break
       }
-      case 'com.adobe.commerce.observer.customer_delete_commit_after': {
+      case `com.adobe.commerce.${params.PROJECT_NAME}.observer.customer_delete_commit_after`: {
         logger.info('Invoking delete customer')
         const res = await openwhiskClient.invokeAction(
           'customer-commerce/deleted', params.data.value)
@@ -80,7 +80,7 @@ async function main (params) {
         statusCode = res?.response?.result?.statusCode
         break
       }
-      case 'com.adobe.commerce.observer.customer_group_save_commit_after': {
+      case `com.adobe.commerce.${params.PROJECT_NAME}.observer.customer_group_save_commit_after`: {
         logger.info('Invoking update customer group')
         const updateRes = await openwhiskClient.invokeAction(
           'customer-commerce/group-updated', params.data.value)
@@ -88,7 +88,7 @@ async function main (params) {
         statusCode = updateRes?.response?.result?.statusCode
         break
       }
-      case 'com.adobe.commerce.observer.customer_group_delete_commit_after': {
+      case `com.adobe.commerce.${params.PROJECT_NAME}.observer.customer_group_delete_commit_after`: {
         const requiredParams = [
           'data.value.customer_group_code']
         const errorMessage = checkMissingRequestInputs(params, requiredParams,
