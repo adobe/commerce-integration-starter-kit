@@ -10,7 +10,7 @@
   governing permissions and limitations under the License.
 */
 
-import { getRuntimeActionMetadata } from "~/core/runtime";
+import { getRuntimeActionMetadata } from "~/api/runtime";
 import type {
   ApplicationMonitorConfig,
   MetricTypes,

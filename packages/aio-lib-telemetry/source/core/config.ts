@@ -10,65 +10,7 @@
   governing permissions and limitations under the License.
 */
 
-import type { TelemetryConfig, EntrypointInstrumentationConfig } from "~/types";
-
-import { getPresetInstrumentations } from "~/core/presets";
-import {
-  inferTelemetryAttributesFromRuntimeMetadata,
-  getRuntimeActionMetadata,
-} from "~/core/runtime";
-
-import type { NodeSDKConfiguration } from "@opentelemetry/sdk-node";
-
-import { resourceFromAttributes } from "@opentelemetry/resources";
-import {
-  ATTR_SERVICE_NAME,
-  ATTR_SERVICE_VERSION,
-} from "@opentelemetry/semantic-conventions";
-
-/** Infers a basic configuration from the environment. */
-function inferConfigFromEnv(): Required<TelemetryConfig> {
-  const { isDevelopment } = getRuntimeActionMetadata();
-  const {
-    [ATTR_SERVICE_NAME]: serviceName,
-    [ATTR_SERVICE_VERSION]: serviceVersion,
-    ...telemetryAttributes
-  } = inferTelemetryAttributesFromRuntimeMetadata();
-
-  return {
-    serviceName,
-    serviceVersion,
-
-    instrumentations: isDevelopment ? "full" : "simple",
-    resource: telemetryAttributes,
-  };
-}
-
-/**
- * Translates the given telemetry config into an actual NodeSDK open telemetry config.
- * @param config - The telemetry config to translate.
- */
-export function makeNodeSdkConfig(config: TelemetryConfig) {
-  // Use the environment inferred config as the default.
-  const defaultConfig = inferConfigFromEnv();
-  const { instrumentations = defaultConfig.instrumentations, resource } =
-    config;
-
-  return {
-    instrumentations: Array.isArray(instrumentations)
-      ? instrumentations
-      : getPresetInstrumentations(instrumentations),
-
-    resource: resourceFromAttributes({
-      ...defaultConfig.resource,
-      ...resource,
-
-      [ATTR_SERVICE_NAME]: config.serviceName ?? defaultConfig.serviceName,
-      [ATTR_SERVICE_VERSION]:
-        config.serviceVersion ?? defaultConfig.serviceVersion,
-    }),
-  } satisfies Partial<NodeSDKConfiguration>;
-}
+import type { EntrypointInstrumentationConfig } from "~/types";
 
 /**
  * Helper to define the telemetry config for an entrypoint (with type safety).

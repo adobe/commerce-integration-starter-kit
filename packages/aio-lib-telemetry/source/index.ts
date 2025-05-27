@@ -12,11 +12,15 @@ export {
   serializeContextIntoCarrier,
   deserializeContextFromCarrier,
 } from "./api/propagation";
+
 export {
   getActiveSpan,
   tryGetActiveSpan,
   addEventToActiveSpan,
 } from "./api/global";
 
-export { makeNodeSdkConfig, defineTelemetryConfig } from "./core/config";
+export { defineTelemetryConfig } from "./core/config";
+export { getPresetInstrumentations } from "./api/presets";
+export { getAioRuntimeAttributes } from "./api/runtime";
+
 export * from "./types";

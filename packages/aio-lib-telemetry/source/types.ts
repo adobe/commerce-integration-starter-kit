@@ -38,24 +38,6 @@ import type {
 /** The preset to use for the telemetry module setup. */
 export type TelemetryPreset = "simple" | "full";
 
-/** The configuration allowed by the telemetry module. */
-export interface TelemetryConfig {
-  /**
-   * Which instrumentations to use. You can pass a list of instrumentations or a preset.
-   * Defaults to `simple` in production, `full` in development.
-   */
-  instrumentations?: "simple" | "full" | Instrumentation[];
-
-  /** The service name to use for the telemetry module. */
-  serviceName?: string;
-
-  /** The service version to use for the telemetry module. */
-  serviceVersion?: string;
-
-  /** The resource attributes used in the telemetry module. */
-  resource?: Record<string, string>;
-}
-
 /** Defines events that can automatically be recorded on a span. */
 export type AutomaticSpanEvents = "success" | "error" | "parameters";
 
@@ -112,7 +94,7 @@ export type EntrypointInstrumentationConfig<
   propagation?: TelemetryPropagationConfig<T>;
 
   /** This function will be called at the very beginning of the action. */
-  initializeTelemetry: (params: RecursiveStringRecord) => {
+  initializeTelemetry: (params: RecursiveStringRecord, isDevelopment: boolean) => {
     sdkConfig: Partial<NodeSDKConfiguration>;
     monitorConfig: Partial<
       ApplicationMonitorConfig & {
