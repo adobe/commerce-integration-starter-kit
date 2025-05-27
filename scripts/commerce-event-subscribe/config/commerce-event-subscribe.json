@@ -1,8 +1,7 @@
 [
   {
     "event": {
-      "name": "starter_kit_application.observer.catalog_product_save_after",
-      "parent": "observer.catalog_product_save_after",
+      "name": "observer.catalog_product_delete_commit_after",
       "fields": [
         {
           "name": "id"
@@ -22,13 +21,12 @@
         {
           "name": "description"
         }
-      ],
-      "provider_id": "Please enter the provider id"
+      ]
     }
   },
   {
     "event": {
-      "name": "observer.catalog_product_save_after",
+      "name": "observer.catalog_product_save_commit_after",
       "fields": [
         {
           "name": "id"
