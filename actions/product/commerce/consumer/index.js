@@ -62,7 +62,7 @@ async function main (params) {
         }
         break
       }
-      case `com.adobe.commerce.${params.PROJECT_NAME}observer.catalog_product_delete_commit_after`: {
+      case `com.adobe.commerce.${params.PROJECT_NAME}.observer.catalog_product_delete_commit_after`: {
         logger.info('Invoking delete product')
         const res = await openwhiskClient.invokeAction('product-commerce/deleted', params.data.value)
         response = res?.response?.result?.body

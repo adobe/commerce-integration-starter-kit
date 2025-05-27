@@ -30,7 +30,8 @@ describe('Given stock commerce consumer', () => {
   describe('When a valid stock item updated event is received', () => {
     test('Then returns success response', async () => {
       const params = {
-        type: 'com.adobe.commerce.observer.cataloginventory_stock_item_save_commit_after',
+        PROJECT_NAME: 'test_app',
+        type: 'com.adobe.commerce.test_app.observer.cataloginventory_stock_item_save_commit_after',
         data: {
           value: {
             item_id: '1',
@@ -66,7 +67,7 @@ describe('Given stock commerce consumer', () => {
             action: 'updated',
             success: true
           },
-          type: 'com.adobe.commerce.observer.cataloginventory_stock_item_save_commit_after'
+          type: 'com.adobe.commerce.test_app.observer.cataloginventory_stock_item_save_commit_after'
         }
       })
     })
@@ -103,7 +104,7 @@ describe('Given stock commerce consumer', () => {
       [HTTP_INTERNAL_ERROR, { success: false, error: 'Internal error' }]
     ]
     )('Then returns the status code %p and response', async (statusCode, response) => {
-      const type = 'com.adobe.commerce.observer.cataloginventory_stock_item_save_commit_after'
+      const type = 'com.adobe.commerce.test_app.observer.cataloginventory_stock_item_save_commit_after'
       const ACTION_RESPONSE = {
         response: {
           result: {
@@ -120,7 +121,7 @@ describe('Given stock commerce consumer', () => {
           }
         }
       }
-      const params = { type, data: { value: { customer_group_code: 'xxx' } } }
+      const params = { type, PROJECT_NAME: 'test_app', data: { value: { customer_group_code: 'xxx' } } }
       Openwhisk.prototype.invokeAction = jest.fn().mockResolvedValue(ACTION_RESPONSE)
       expect(await action.main(params)).toMatchObject(CONSUMER_RESPONSE)
     })

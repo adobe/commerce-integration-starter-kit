@@ -32,7 +32,8 @@ describe('Given customer commerce consumer', () => {
       const params = {
         API_HOST: 'API_HOST',
         API_AUTH: 'API_AUTH',
-        type: 'com.adobe.commerce.observer.customer_save_commit_after',
+        PROJECT_NAME: 'test_app',
+        type: 'com.adobe.commerce.test_app.observer.customer_save_commit_after',
         data: {
           value: {
             sku: 'SKU',
@@ -69,7 +70,7 @@ describe('Given customer commerce consumer', () => {
             action: 'created',
             success: true
           },
-          type: 'com.adobe.commerce.observer.customer_save_commit_after'
+          type: 'com.adobe.commerce.test_app.observer.customer_save_commit_after'
         }
       })
     })
@@ -79,7 +80,8 @@ describe('Given customer commerce consumer', () => {
       'Then returns success response',
       async () => {
         const params = {
-          type: 'com.adobe.commerce.observer.customer_save_commit_after',
+          PROJECT_NAME: 'test_app',
+          type: 'com.adobe.commerce.test_app.observer.customer_save_commit_after',
           data: {
             value: {
               sku: 'SKU',
@@ -116,7 +118,7 @@ describe('Given customer commerce consumer', () => {
               action: 'updated',
               success: true
             },
-            type: 'com.adobe.commerce.observer.customer_save_commit_after'
+            type: 'com.adobe.commerce.test_app.observer.customer_save_commit_after'
           }
         })
       })
@@ -124,7 +126,8 @@ describe('Given customer commerce consumer', () => {
   describe('When a valid customer deleted event is received', () => {
     test('Then returns success response', async () => {
       const params = {
-        type: 'com.adobe.commerce.observer.customer_delete_commit_after',
+        PROJECT_NAME: 'test_app',
+        type: 'com.adobe.commerce.test_app.observer.customer_delete_commit_after',
         data: {
           value: {
             sku: 'SKU',
@@ -161,7 +164,7 @@ describe('Given customer commerce consumer', () => {
             action: 'deleted',
             success: true
           },
-          type: 'com.adobe.commerce.observer.customer_delete_commit_after'
+          type: 'com.adobe.commerce.test_app.observer.customer_delete_commit_after'
         }
       })
     })
@@ -169,7 +172,8 @@ describe('Given customer commerce consumer', () => {
   describe('When a valid customer group updated event is received', () => {
     test('Then returns success response', async () => {
       const params = {
-        type: 'com.adobe.commerce.observer.customer_group_save_commit_after',
+        PROJECT_NAME: 'test_app',
+        type: 'com.adobe.commerce.test_app.observer.customer_group_save_commit_after',
         data: {
           value: {
             customer_group_id: 1,
@@ -208,7 +212,7 @@ describe('Given customer commerce consumer', () => {
             action: 'updated',
             success: true
           },
-          type: 'com.adobe.commerce.observer.customer_group_save_commit_after'
+          type: 'com.adobe.commerce.test_app.observer.customer_group_save_commit_after'
         }
       })
     })
@@ -216,7 +220,8 @@ describe('Given customer commerce consumer', () => {
   describe('When a valid customer group deleted event is received', () => {
     test('Then returns success response', async () => {
       const params = {
-        type: 'com.adobe.commerce.observer.customer_group_delete_commit_after',
+        PROJECT_NAME: 'test_app',
+        type: 'com.adobe.commerce.test_app.observer.customer_group_delete_commit_after',
         data: {
           value: {
             customer_group_id: 1,
@@ -255,7 +260,7 @@ describe('Given customer commerce consumer', () => {
             action: 'deleted',
             success: true
           },
-          type: 'com.adobe.commerce.observer.customer_group_delete_commit_after'
+          type: 'com.adobe.commerce.test_app.observer.customer_group_delete_commit_after'
         }
       })
     })
@@ -263,6 +268,7 @@ describe('Given customer commerce consumer', () => {
   describe('When customer event type received is not supported', () => {
     test('Then returns error response', async () => {
       const params = {
+        PROJECT_NAME: 'test_app',
         type: 'NOT_SUPPORTED_TYPE',
         data: {
           value: {
@@ -294,7 +300,7 @@ describe('Given customer commerce consumer', () => {
     ]
     )('Then returns the status code %p and response',
       async (statusCode, response) => {
-        const type = 'com.adobe.commerce.observer.customer_group_delete_commit_after'
+        const type = 'com.adobe.commerce.test_app.observer.customer_group_delete_commit_after'
         const ACTION_RESPONSE = {
           response: {
             result: {
@@ -311,7 +317,7 @@ describe('Given customer commerce consumer', () => {
             }
           }
         }
-        const params = { type, data: { value: { customer_group_code: 'xxx' } } }
+        const params = { type, PROJECT_NAME: 'test_app', data: { value: { customer_group_code: 'xxx' } } }
         Openwhisk.prototype.invokeAction = jest.fn()
           .mockResolvedValue(ACTION_RESPONSE)
         expect(await action.main(params)).toMatchObject(CONSUMER_RESPONSE)

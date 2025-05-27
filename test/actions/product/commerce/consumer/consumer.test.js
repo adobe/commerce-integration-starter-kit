@@ -32,7 +32,8 @@ describe('Given product commerce consumer', () => {
       const params = {
         API_HOST: 'API_HOST',
         API_AUTH: 'API_AUTH',
-        type: 'com.adobe.commerce.observer.catalog_product_save_commit_after',
+        PROJECT_NAME: 'test_app',
+        type: 'com.adobe.commerce.test_app.observer.catalog_product_save_commit_after',
         data: {
           value: {
             sku: 'SKU',
@@ -67,7 +68,7 @@ describe('Given product commerce consumer', () => {
           response: {
             success: true
           },
-          type: 'com.adobe.commerce.observer.catalog_product_save_commit_after'
+          type: 'com.adobe.commerce.test_app.observer.catalog_product_save_commit_after'
         }
       })
     })
@@ -75,7 +76,8 @@ describe('Given product commerce consumer', () => {
   describe('When a valid product updated event is received', () => {
     test('Then returns success response', async () => {
       const params = {
-        type: 'com.adobe.commerce.observer.catalog_product_save_commit_after',
+        PROJECT_NAME: 'test_app',
+        type: 'com.adobe.commerce.test_app.observer.catalog_product_save_commit_after',
         data: {
           value: {
             sku: 'SKU',
@@ -110,7 +112,7 @@ describe('Given product commerce consumer', () => {
           response: {
             success: true
           },
-          type: 'com.adobe.commerce.observer.catalog_product_save_commit_after'
+          type: 'com.adobe.commerce.test_app.observer.catalog_product_save_commit_after'
         }
       })
     })
@@ -118,7 +120,8 @@ describe('Given product commerce consumer', () => {
   describe('When a valid product deleted event is received', () => {
     test('Then returns success response', async () => {
       const params = {
-        type: 'com.adobe.commerce.observer.catalog_product_delete_commit_after',
+        PROJECT_NAME: 'test_app',
+        type: 'com.adobe.commerce.test_app.observer.catalog_product_delete_commit_after',
         data: {
           value: {
             sku: 'SKU',
@@ -153,7 +156,7 @@ describe('Given product commerce consumer', () => {
           response: {
             success: true
           },
-          type: 'com.adobe.commerce.observer.catalog_product_delete_commit_after'
+          type: 'com.adobe.commerce.test_app.observer.catalog_product_delete_commit_after'
         }
       })
     })
@@ -176,6 +179,7 @@ describe('Given product commerce consumer', () => {
   describe('When product event type received is not supported', () => {
     test('Then returns error response', async () => {
       const params = {
+        PROJECT_NAME: 'test_app',
         type: 'NOT_SUPPORTED_TYPE',
         data: {
           value: {
@@ -208,7 +212,8 @@ describe('Given product commerce consumer', () => {
     )('Then returns the status code %p and response',
       async (statusCode, response) => {
         const params = {
-          type: 'com.adobe.commerce.observer.catalog_product_save_commit_after',
+          PROJECT_NAME: 'test_app',
+          type: 'com.adobe.commerce.test_app.observer.catalog_product_save_commit_after',
           data: {
             value: {
               sku: 'SKU',
