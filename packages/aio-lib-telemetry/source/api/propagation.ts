@@ -22,7 +22,7 @@ export function serializeContextIntoCarrier<
 >(carrier?: Carrier, ctx = context.active()) {
   const carrierObject = carrier ?? {};
   propagation.inject(ctx, carrierObject);
-  
+
   return carrierObject as Carrier;
 }
 

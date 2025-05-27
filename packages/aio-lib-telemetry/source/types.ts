@@ -22,7 +22,6 @@ import type { NodeSDKConfiguration } from "@opentelemetry/sdk-node";
 import type {
   Span,
   SpanOptions,
-  SpanKind,
   Context,
   Counter,
   Gauge,
@@ -64,29 +63,15 @@ export type AutomaticSpanEvents = "success" | "error" | "parameters";
 export type InstrumentationConfig<T extends AnyFunction> = {
   meta?: {
     spanName?: string;
-    spanOptions?: SpanOptions
+    spanOptions?: SpanOptions;
+
+    /** The base context to use for the instrumentation. */
+    getBaseContext?: (...args: Parameters<T>) => Context;
   };
 
   /** Whether to automatically record events on the span. */
   automaticSpanEvents?: {
     [key in AutomaticSpanEvents]?: boolean;
-  };
-
-  /** Configuration related to context propagation (for distributed tracing). */
-  propagation?: {
-    /** Whether to skip the propagation of the context. */
-    skip?: boolean;
-
-    /**
-     * A function that receives the arguments of the instrumented function and returns the carrier for the current context.
-     *
-     * By default, it will try to read the headers received by the action.
-     * More specifically, it will read the `x-telemetry-context` header.
-     */
-    getContextCarrier?: (...args: Parameters<T>) => {
-      carrier: Record<string, string>;
-      baseCtx?: Context;
-    };
   };
 
   /** Hooks that can be used to act on a span depending on the result of the function. */
@@ -103,11 +88,28 @@ export type TelemetryDiagnosticsConfig = {
   exportLogs?: boolean;
 };
 
+/** Configuration related to context propagation (for distributed tracing). */
+type TelemetryPropagationConfig<T extends AnyFunction> = {
+  /** Whether to skip the propagation of the context. */
+  skip?: boolean;
+
+  /**
+   * A function that receives the arguments of the instrumented function and returns the carrier for the current context.
+   *
+   * By default, it will try to read the headers received by the action.
+   * More specifically, it will read the `x-telemetry-context` header.
+   */
+  getContextCarrier?: (...args: Parameters<T>) => {
+    carrier: Record<string, string>;
+    baseCtx?: Context;
+  };
+};
+
 /** The configuration for entrypoint instrumentation. */
 export type EntrypointInstrumentationConfig<
   T extends AnyFunction = AnyFunction,
-> = {
-  instrumentationConfig?: InstrumentationConfig<T>;
+> = InstrumentationConfig<T> & {
+  propagation?: TelemetryPropagationConfig<T>;
 
   /** This function will be called at the very beginning of the action. */
   initializeTelemetry: (params: RecursiveStringRecord) => {

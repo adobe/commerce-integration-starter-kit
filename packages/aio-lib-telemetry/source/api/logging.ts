@@ -85,7 +85,7 @@ export function getLogger(name: string, config?: AioLoggerConfig) {
 export function setOtelDiagLogger({
   logLevel: level,
   loggerName,
-  exportLogs,
+  exportLogs = true,
 }: TelemetryDiagnosticsConfig) {
   // AioLogger and DiagLogger use different names for some log levels.
   const aioLogLevel =
@@ -99,7 +99,7 @@ export function setOtelDiagLogger({
       logSourceAction: false,
     },
     false,
-    exportLogs ?? true,
+    exportLogs,
     // Only use the OpenTelemetry transport (i.e. export diagnostic logs) if the log level is
     // set to info, warn or error. The other levels are too verbose to be exported and may expose
     // irrelevant/sensitive information. All logs will still be visible via `aio rt activation logs <id>`.

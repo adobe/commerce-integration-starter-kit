@@ -56,7 +56,7 @@ export function initializeDiagnostics(config: TelemetryDiagnosticsConfig) {
 }
 
 /** Initialize the telemetry module. */
-export function initializeTelemetry(config?: Partial<NodeSDKConfiguration>) {
+export function initializeSdk(config?: Partial<NodeSDKConfiguration>) {
   if (getGlobalSdk()) {
     diag.warn(
       "Telemetry SDK already initialized, skipping telemetry initialization",
@@ -83,14 +83,14 @@ export function initializeTelemetry(config?: Partial<NodeSDKConfiguration>) {
       // We always try to shutdown the SDK after the runtime action finishes.
       // But just in case something goes wrong, we have this fallback.
       if (getGlobalSdk()) {
-        await shutdownTelemetry();
+        await shutdownSdk();
       }
     });
   }
 }
 
 /** Shutdown the telemetry module. */
-export async function shutdownTelemetry(reason?: string) {
+export async function shutdownSdk(reason?: string) {
   const sdk = getGlobalSdk();
 
   if (!sdk) {

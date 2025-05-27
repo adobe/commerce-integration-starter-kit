@@ -11,17 +11,17 @@
 */
 
 import { AsyncLocalStorage } from "node:async_hooks";
-
 import {
   getRuntimeActionMetadata,
   isDevelopment,
   isTelemetryEnabled,
 } from "~/core/runtime";
+
 import {
   ensureSdkInitialized,
   initializeDiagnostics,
-  initializeTelemetry,
-  shutdownTelemetry,
+  initializeSdk,
+  shutdownSdk,
 } from "~/core/sdk";
 
 import type {
@@ -41,13 +41,7 @@ import {
   deserializeContextFromCarrier,
 } from "~/api/propagation";
 
-import {
-  trace,
-  SpanKind,
-  type Span,
-  SpanStatusCode,
-  context,
-} from "@opentelemetry/api";
+import { trace, type Span, SpanStatusCode, context } from "@opentelemetry/api";
 
 /** Wildcard signature for a function. */
 // biome-ignore lint/suspicious/noExplicitAny: generic wrapper.
@@ -60,14 +54,6 @@ export type RecursiveStringRecord = {
 
 /** AsyncLocalStorage for helpers context. */
 const helpersStorage = new AsyncLocalStorage<InstrumentationHelpers>();
-
-/** Returns the carrier for the current context from the environment. */
-function getContextCarrierFromEnvironment() {
-  return {
-    carrier: JSON.parse(process.env.__TELEMETRY_CONTEXT ?? "{}"),
-    baseCtx: context.active(),
-  };
-}
 
 /** Access helpers for the current instrumented operation. */
 export function getInstrumentationHelpers(): InstrumentationHelpers {
@@ -89,12 +75,9 @@ export function getInstrumentationHelpers(): InstrumentationHelpers {
  */
 export function instrument<T extends AnyFunction>(
   fn: T,
-  { meta, hooks, propagation, ...config }: InstrumentationConfig<T> = {},
+  { meta, hooks, ...config }: InstrumentationConfig<T> = {},
 ): (...args: Parameters<T>) => ReturnType<T> {
-  const {
-    spanName = fn.name,
-    spanOptions = {},
-  } = meta ?? {};
+  const { spanName = fn.name, spanOptions = {}, getBaseContext } = meta ?? {};
 
   if (!spanName) {
     throw new Error(
@@ -103,10 +86,6 @@ export function instrument<T extends AnyFunction>(
   }
 
   const { onSuccess, onError } = hooks ?? {};
-  const {
-    skip: skipPropagation = false,
-    getContextCarrier = getContextCarrierFromEnvironment,
-  } = propagation ?? {};
 
   /** Handles a (potentially) successful result within the given span. */
   function handleResult(result: Awaited<ReturnType<T>>, span: Span) {
@@ -186,15 +165,7 @@ export function instrument<T extends AnyFunction>(
   function setupSpanData(...args: Parameters<T>) {
     const { actionName, actionVersion } = getRuntimeActionMetadata();
     const tracer = trace.getTracer(actionName, actionVersion);
-    let currentCtx = context.active();
-
-    if (!skipPropagation) {
-      const { carrier, baseCtx } = getContextCarrier(...args);
-
-      if (carrier) {
-        currentCtx = deserializeContextFromCarrier(carrier, baseCtx ?? currentCtx);
-      }
-    }
+    const currentCtx = getBaseContext?.(...args) ?? context.active();
 
     const spanConfig = {
       ...spanOptions,
@@ -279,16 +250,6 @@ export function instrumentEntrypoint<
       // This is due to to webpack automatic env inline replacement.
       __ENABLE_TELEMETRY: enableTelemetry,
     };
-
-    const headers = (params.__ow_headers as Record<string, string>) ?? {};
-
-    // If we have a context we also set it globally, this way we can automatically read it.
-    if (headers?.["x-telemetry-context"]) {
-      process.env = {
-        ...process.env,
-        __TELEMETRY_CONTEXT: headers["x-telemetry-context"],
-      };
-    }
   }
 
   /** Cleans up the resources of the Telemetry SDK. */
@@ -300,13 +261,56 @@ export function instrumentEntrypoint<
       return;
     }
 
-    await shutdownTelemetry(shutdownReason);
+    await shutdownSdk(shutdownReason);
+  }
+
+  /** Callback that will be used to retrieve the base context for the entrypoint. */
+  function getPropagatedContext(params: RecursiveStringRecord) {
+    function inferContextCarrier() {
+      // Try to infer the parent context from the following (in order):
+      // 1. A `x-telemetry-context` header.
+      // 2. A `__telemetryContext` input parameter.
+      // 3. A `__telemetryContext` property in `params.data`.
+      const headers = (params.__ow_headers as Record<string, string>) ?? {};
+      const telemetryContext =
+        headers["x-telemetry-context"] ??
+        params.__telemetryContext ??
+        (params.data as RecursiveStringRecord)?.__telemetryContext ??
+        null;
+
+      return {
+        baseCtx: context.active(),
+        carrier:
+          typeof telemetryContext === "string"
+            ? JSON.parse(telemetryContext)
+            : telemetryContext,
+      };
+    }
+
+    const {
+      skip: skipPropagation = false,
+      getContextCarrier = inferContextCarrier,
+    } = config.propagation ?? {};
+
+    if (skipPropagation) {
+      return context.active();
+    }
+
+    const { carrier, baseCtx } = getContextCarrier();
+    let currentCtx = baseCtx ?? context.active();
+
+    if (carrier) {
+      currentCtx = deserializeContextFromCarrier(carrier, currentCtx);
+    }
+
+    return currentCtx;
   }
 
   /** Initializes the Telemetry SDK and Application Monitor. */
   function setupTelemetry(params: RecursiveStringRecord) {
+    const { initializeTelemetry, ...instrumentationConfig } = config;
     const { sdkConfig, monitorConfig, diagnostics } =
-      config.initializeTelemetry(params);
+      initializeTelemetry(params);
 
     if (diagnostics) {
       // Diagnostics only work if initialized before the telemetry SDK.
@@ -314,10 +318,16 @@ export function instrumentEntrypoint<
     }
 
     // Internal calls to initialize the Telemetry SDK.
-    initializeTelemetry(sdkConfig);
+    initializeSdk(sdkConfig);
     initializeApplicationMonitor(monitorConfig?.createMetrics, monitorConfig);
 
-    return config.instrumentationConfig ?? {};
+    return {
+      ...instrumentationConfig,
+      meta: {
+        ...instrumentationConfig.meta,
+        baseContext: getPropagatedContext,
+      },
+    };
   }
 
   /** Instruments the given entrypoint handler. */

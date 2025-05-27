@@ -51,10 +51,8 @@ function inferConfigFromEnv(): Required<TelemetryConfig> {
 export function makeNodeSdkConfig(config: TelemetryConfig) {
   // Use the environment inferred config as the default.
   const defaultConfig = inferConfigFromEnv();
-  const {
-    instrumentations = defaultConfig.instrumentations,
-    resource,
-  } = config;
+  const { instrumentations = defaultConfig.instrumentations, resource } =
+    config;
 
   return {
     instrumentations: Array.isArray(instrumentations)
@@ -69,7 +67,6 @@ export function makeNodeSdkConfig(config: TelemetryConfig) {
       [ATTR_SERVICE_VERSION]:
         config.serviceVersion ?? defaultConfig.serviceVersion,
     }),
-
   } satisfies Partial<NodeSDKConfiguration>;
 }
 
