@@ -11,7 +11,6 @@
 */
 
 import type { Instrumentation } from "@opentelemetry/instrumentation";
-import type { TelemetryProvider } from "~/providers/types";
 
 import type { DiagnosticsLogLevel, getLogger } from "~/api/logging";
 import type {
@@ -56,9 +55,6 @@ export interface TelemetryConfig {
 
   /** The resource attributes used in the telemetry module. */
   resource?: Record<string, string>;
-
-  /** Which out of the box providers to use. */
-  providers?: TelemetryProvider[];
 }
 
 /** Defines events that can automatically be recorded on a span. */

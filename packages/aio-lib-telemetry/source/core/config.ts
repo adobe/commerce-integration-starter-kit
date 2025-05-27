@@ -39,7 +39,6 @@ function inferConfigFromEnv(): Required<TelemetryConfig> {
   return {
     serviceName,
     serviceVersion,
-    providers: [],
 
     instrumentations: isDevelopment ? "full" : "simple",
     resource: telemetryAttributes,
@@ -55,25 +54,8 @@ export function makeNodeSdkConfig(config: TelemetryConfig) {
   const defaultConfig = inferConfigFromEnv();
   const {
     instrumentations = defaultConfig.instrumentations,
-    providers = defaultConfig.providers,
     resource,
   } = config;
-
-  const spanProcessors = [];
-  const logRecordProcessors = [];
-
-  let metricReader: MetricReader | null = null;
-
-  for (const provider of providers) {
-    spanProcessors.push(...provider.spanProcessors);
-    logRecordProcessors.push(...provider.logRecordProcessors);
-
-    if (provider.metricReader) {
-      // This is a limitation of the current implementation of the OpenTelemetry Node SDK.
-      // Only one metric reader/exporter can be used at a time. The last will prevail.
-      metricReader = provider.metricReader;
-    }
-  }
 
   return {
     instrumentations: Array.isArray(instrumentations)
@@ -89,9 +71,6 @@ export function makeNodeSdkConfig(config: TelemetryConfig) {
         config.serviceVersion ?? defaultConfig.serviceVersion,
     }),
 
-    spanProcessors,
-    logRecordProcessors,
-    metricReader: metricReader ? metricReader : undefined,
   } satisfies Partial<NodeSDKConfiguration>;
 }
 
