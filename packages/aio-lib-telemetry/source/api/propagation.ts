@@ -10,29 +10,7 @@
   governing permissions and limitations under the License.
 */
 
-import { propagation, context, SpanKind } from "@opentelemetry/api";
-
-/**
- * Determines if the context should be propagated for a given span kind.
- * @param spanKind - The span kind to check.
- */
-export function shouldSerializeContext(spanKind: SpanKind) {
-  // PRODUCER is used when a service is sending an event
-  // CLIENT is used when a service is sending a request to another service
-  // In both cases, we'd normally want to propagate the context of the span
-  return spanKind === SpanKind.PRODUCER || spanKind === SpanKind.CLIENT;
-}
-
-/**
- * Determines if the context should be read for a given span kind.
- * @param spanKind - The span kind to check.
- */
-export function shouldDeserializeContext(spanKind: SpanKind) {
-  // CONSUMER is used when a service is receiving an event
-  // SERVER is used when a service is handling a request
-  // In both cases, we'd normally want to read the context of the span
-  return spanKind === SpanKind.CONSUMER || spanKind === SpanKind.SERVER;
-}
+import { propagation, context } from "@opentelemetry/api";
 
 /**
  * Serializes the current context into a carrier.
@@ -42,8 +20,10 @@ export function shouldDeserializeContext(spanKind: SpanKind) {
 export function serializeContextIntoCarrier<
   Carrier extends Record<string, string>,
 >(carrier?: Carrier, ctx = context.active()) {
-  propagation.inject(ctx, carrier ?? {});
-  return carrier;
+  const carrierObject = carrier ?? {};
+  propagation.inject(ctx, carrierObject);
+  
+  return carrierObject as Carrier;
 }
 
 /**

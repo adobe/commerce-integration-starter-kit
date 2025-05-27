@@ -37,8 +37,6 @@ import {
 } from "~/core/monitor";
 
 import {
-  shouldSerializeContext,
-  shouldDeserializeContext,
   serializeContextIntoCarrier,
   deserializeContextFromCarrier,
 } from "~/api/propagation";
@@ -96,7 +94,6 @@ export function instrument<T extends AnyFunction>(
   const {
     spanName = fn.name,
     spanOptions = {},
-    spanKind = SpanKind.INTERNAL,
   } = meta ?? {};
 
   if (!spanName) {
@@ -107,8 +104,7 @@ export function instrument<T extends AnyFunction>(
 
   const { onSuccess, onError } = hooks ?? {};
   const {
-    serializeContext = shouldSerializeContext(spanKind),
-    deserializeContext = shouldDeserializeContext(spanKind),
+    skip: skipPropagation = false,
     getContextCarrier = getContextCarrierFromEnvironment,
   } = propagation ?? {};
 
@@ -163,12 +159,8 @@ export function instrument<T extends AnyFunction>(
 
   /** Sets up the context for the current operation. */
   function setupContextHelpers(span: Span) {
-    const carrier = {};
-
-    if (serializeContext) {
-      // Serialize the current context into the carrier.
-      serializeContextIntoCarrier(carrier);
-    }
+    // Serialize the current context into a carrier.
+    const carrier = serializeContextIntoCarrier();
 
     const { actionName } = getRuntimeActionMetadata();
     const monitor = getApplicationMonitor();
@@ -196,14 +188,11 @@ export function instrument<T extends AnyFunction>(
     const tracer = trace.getTracer(actionName, actionVersion);
     let currentCtx = context.active();
 
-    if (deserializeContext) {
+    if (!skipPropagation) {
       const { carrier, baseCtx } = getContextCarrier(...args);
 
       if (carrier) {
-        currentCtx = deserializeContextFromCarrier(
-          carrier,
-          baseCtx ?? currentCtx,
-        );
+        currentCtx = deserializeContextFromCarrier(carrier, baseCtx ?? currentCtx);
       }
     }
 
@@ -213,8 +202,6 @@ export function instrument<T extends AnyFunction>(
         ...spanOptions.attributes,
         "action.name": actionName,
       },
-
-      kind: spanKind,
     };
 
     return {

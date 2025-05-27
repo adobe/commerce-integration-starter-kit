@@ -19,7 +19,6 @@ import {
 } from "~/core/runtime";
 
 import type { NodeSDKConfiguration } from "@opentelemetry/sdk-node";
-import type { MetricReader } from "@opentelemetry/sdk-metrics";
 
 import { resourceFromAttributes } from "@opentelemetry/resources";
 import {

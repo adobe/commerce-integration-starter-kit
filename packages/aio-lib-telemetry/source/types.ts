@@ -64,9 +64,7 @@ export type AutomaticSpanEvents = "success" | "error" | "parameters";
 export type InstrumentationConfig<T extends AnyFunction> = {
   meta?: {
     spanName?: string;
-    spanKind?: SpanKind;
-    spanOptions?: Omit<SpanOptions, "kind">;
-    includePackageNameInSpanName?: boolean;
+    spanOptions?: SpanOptions
   };
 
   /** Whether to automatically record events on the span. */
@@ -76,19 +74,9 @@ export type InstrumentationConfig<T extends AnyFunction> = {
 
   /** Configuration related to context propagation (for distributed tracing). */
   propagation?: {
-    /**
-     * Whether to try to read the context from the environment.
-     * Defaults to `true` if `meta.spanKind` is `SpanKind.CLIENT` or `SpanKind.CONSUMER`
-     */
-    deserializeContext?: boolean;
+    /** Whether to skip the propagation of the context. */
+    skip?: boolean;
 
-    /**
-     * Whether to try to serialize the context into a carrier.
-     * Defaults to `true` if `meta.spanKind` is `SpanKind.SERVER` or `SpanKind.PRODUCER`
-     */
-    serializeContext?: boolean;
-
-    /**
     /**
      * A function that receives the arguments of the instrumented function and returns the carrier for the current context.
      *
