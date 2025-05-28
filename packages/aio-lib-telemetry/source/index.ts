@@ -1,18 +1,13 @@
 // This file collects and exports all the public API of the telemetry module.
 
+export { getAioRuntimeAttributes } from "./api/attributes";
 export { getLogger } from "./api/logging";
-export { getApplicationMonitor } from "./core/monitor";
-export {
-  instrument,
-  instrumentEntrypoint,
-  getInstrumentationHelpers,
-} from "./core/instrumentation";
-
 export {
   serializeContextIntoCarrier,
   deserializeContextFromCarrier,
 } from "./api/propagation";
 
+export { getPresetInstrumentations } from "./api/presets";
 export {
   getActiveSpan,
   tryGetActiveSpan,
@@ -20,7 +15,11 @@ export {
 } from "./api/global";
 
 export { defineTelemetryConfig } from "./core/config";
-export { getPresetInstrumentations } from "./api/presets";
-export { getAioRuntimeAttributes } from "./api/runtime";
+export { getApplicationMonitor } from "./core/monitor";
+export {
+  instrument,
+  instrumentEntrypoint,
+  getInstrumentationHelpers,
+} from "./core/instrumentation";
 
 export * from "./types";

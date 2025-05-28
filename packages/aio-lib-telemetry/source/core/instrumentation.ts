@@ -15,7 +15,7 @@ import {
   getRuntimeActionMetadata,
   isDevelopment,
   isTelemetryEnabled,
-} from "~/api/runtime";
+} from "~/helpers/runtime";
 
 import {
   ensureSdkInitialized,
@@ -311,8 +311,10 @@ export function instrumentEntrypoint<
     const { initializeTelemetry, ...instrumentationConfig } = config;
 
     const { isDevelopment } = getRuntimeActionMetadata();
-    const { sdkConfig, monitorConfig, diagnostics } =
-      initializeTelemetry(params, isDevelopment);
+    const { sdkConfig, monitorConfig, diagnostics } = initializeTelemetry(
+      params,
+      isDevelopment,
+    );
 
     if (diagnostics) {
       // Diagnostics only work if initialized before the telemetry SDK.

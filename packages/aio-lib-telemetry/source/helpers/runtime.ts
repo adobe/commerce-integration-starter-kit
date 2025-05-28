@@ -135,7 +135,10 @@ export function inferTelemetryAttributesFromRuntimeMetadata() {
  * @param serviceName - The service name to use.
  * @param serviceVersion - The service version to use.
  */
-export function getAioRuntimeAttributes(serviceName?: string, serviceVersion?: string) {
+export function getAioRuntimeAttributes(
+  serviceName?: string,
+  serviceVersion?: string,
+) {
   const {
     [ATTR_SERVICE_NAME]: defaultServiceName,
     [ATTR_SERVICE_VERSION]: defaultServiceVersion,

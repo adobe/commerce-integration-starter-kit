@@ -15,7 +15,7 @@ import type Transport from "winston-transport";
 import { diag, type DiagLogger, DiagLogLevel } from "@opentelemetry/api";
 
 import { ensureSdkInitialized } from "~/core/sdk";
-import { getRuntimeActionMetadata } from "~/api/runtime";
+import { getRuntimeActionMetadata } from "~/helpers/runtime";
 import type { TelemetryDiagnosticsConfig } from "~/types";
 
 import type WinstonLogger from "@adobe/aio-lib-core-logging/types/WinstonLogger";
