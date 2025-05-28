@@ -10,7 +10,10 @@
   governing permissions and limitations under the License.
 */
 
-import type { EntrypointInstrumentationConfig } from "~/types";
+import type { Meter } from "@opentelemetry/api";
+
+import type { EntrypointInstrumentationConfig, MetricTypes } from "~/types";
+import { createMetricsProxy } from "~/core/metrics";
 
 /**
  * Helper to define the telemetry config for an entrypoint (with type safety).
@@ -22,4 +25,17 @@ export function defineTelemetryConfig(
   return {
     initializeTelemetry: init,
   };
+}
+
+/**
+ * Helper to define application metrics with deferred initialization.
+ * Returns a proxy object that behaves like the actual metrics but initializes them lazily.
+ *
+ * @param createMetrics - The function to create the metrics when a meter becomes available.
+ * @returns A proxy that acts as the metrics object.
+ */
+export function defineMetrics<T extends Record<string, MetricTypes>>(
+  createMetrics: (meter: Meter) => T,
+): T {
+  return createMetricsProxy(createMetrics);
 }

@@ -323,7 +323,7 @@ export function instrumentEntrypoint<
 
     // Internal calls to initialize the Telemetry SDK.
     initializeSdk(sdkConfig);
-    initializeApplicationMonitor(monitorConfig?.createMetrics, monitorConfig);
+    initializeApplicationMonitor(monitorConfig);
 
     return {
       ...instrumentationConfig,

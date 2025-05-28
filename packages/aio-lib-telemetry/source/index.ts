@@ -14,7 +14,7 @@ export {
   addEventToActiveSpan,
 } from "./api/global";
 
-export { defineTelemetryConfig } from "./core/config";
+export { defineTelemetryConfig, defineMetrics } from "./core/config";
 export { getApplicationMonitor } from "./core/monitor";
 export {
   instrument,

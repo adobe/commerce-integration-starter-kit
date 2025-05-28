@@ -96,12 +96,7 @@ export type EntrypointInstrumentationConfig<
     isDevelopment: boolean,
   ) => {
     sdkConfig: Partial<NodeSDKConfiguration>;
-    monitorConfig: Partial<
-      ApplicationMonitorConfig & {
-        createMetrics?: (meter: Meter) => Record<string, MetricTypes>;
-      }
-    >;
-
+    monitorConfig?: Partial<ApplicationMonitorConfig>;
     diagnostics?: false | TelemetryDiagnosticsConfig;
   };
 };
@@ -117,12 +112,9 @@ export type MetricTypes =
   | ObservableGauge<Attributes>;
 
 /** Defines the state of the global telemetry API. These items should be set once per-application. */
-export type ApplicationMonitor<
-  T extends Record<string, MetricTypes> = Record<string, MetricTypes>,
-> = {
+export type ApplicationMonitor = {
   tracer: Tracer;
   meter: Meter;
-  metrics: T;
 };
 
 /** The configuration for the application monitor. */
@@ -134,14 +126,12 @@ export type ApplicationMonitorConfig = {
 };
 
 /** The context for the current operation. */
-export type InstrumentationContext<
-  T extends Record<string, MetricTypes> = Record<string, MetricTypes>,
-> = {
+export type InstrumentationContext = {
   /** The span of the current operation. */
   currentSpan: Span;
 
   /** The global application monitor. */
-  monitor: ApplicationMonitor<T>;
+  monitor: ApplicationMonitor;
 
   /** The logger for the current operation. */
   logger: ReturnType<typeof getLogger>;

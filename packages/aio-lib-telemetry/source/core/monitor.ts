@@ -11,13 +11,9 @@
 */
 
 import { getRuntimeActionMetadata } from "~/helpers/runtime";
-import type {
-  ApplicationMonitorConfig,
-  MetricTypes,
-  ApplicationMonitor,
-} from "~/types";
+import type { ApplicationMonitorConfig, ApplicationMonitor } from "~/types";
 
-import { diag, metrics, trace, type Meter } from "@opentelemetry/api";
+import { diag, metrics, trace } from "@opentelemetry/api";
 
 /**
  * Ensures the application monitor is initialized.
@@ -31,16 +27,16 @@ function ensureApplicationMonitorInitialized() {
 
 /**
  * Initializes the application monitor (if not already initialized).
- * @param createMetrics - A function that creates the metrics for the application.
  * @param config - The configuration for the application monitor.
  */
-export function initializeApplicationMonitor<
-  T extends Record<string, MetricTypes>,
->(createMetrics?: (meter: Meter) => T, config: ApplicationMonitorConfig = {}) {
+export function initializeApplicationMonitor(
+  config: ApplicationMonitorConfig = {},
+) {
   if (global.__OTEL_APPLICATION_MONITOR__) {
     diag.warn(
       "Application monitor already initialized. Skipping initialization.",
     );
+    return;
   }
 
   const { actionName, actionVersion } = getRuntimeActionMetadata();
@@ -53,18 +49,18 @@ export function initializeApplicationMonitor<
 
   const tracer = trace.getTracer(tracerName, tracerVersion);
   const meter = metrics.getMeter(meterName, meterVersion);
-  const userMetrics = createMetrics?.(meter) ?? {};
 
-  global.__OTEL_APPLICATION_MONITOR__ = { tracer, meter, metrics: userMetrics };
+  // Monitor only manages tracer and meter
+  global.__OTEL_APPLICATION_MONITOR__ = { tracer, meter };
 }
 
 /**
  * Gets the global application monitor.
  * @throws {Error} If the application monitor is not initialized.
  */
-export function getApplicationMonitor<T extends Record<string, MetricTypes>>() {
+export function getApplicationMonitor() {
   ensureApplicationMonitorInitialized();
-  return global.__OTEL_APPLICATION_MONITOR__ as ApplicationMonitor<T>;
+  return global.__OTEL_APPLICATION_MONITOR__ as ApplicationMonitor;
 }
 
 /**
