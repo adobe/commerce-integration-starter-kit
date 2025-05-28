@@ -19,14 +19,23 @@ const { HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR } = require('../../../con
 const Openwhisk = require('../../../openwhisk')
 const { errorResponse, successResponse } = require('../../../responses')
 
+const stateLib = require('@adobe/aio-lib-state')
+const { isAPotentialInfiniteLoop, storeFingerPrint } = require('../../../infiniteLoopBreaker')
+
 /**
  * This is the consumer of the events coming from Adobe Commerce related to product entity.
  *
  * @returns {object} returns response object with status code, request data received and response of the invoked action
  * @param {object} params - includes the env params, type and the data of the event
  */
-async function main (params) {
+async function main(params) {
   const logger = Core.Logger('product-commerce-consumer', { level: params.LOG_LEVEL || 'info' })
+
+  logger.info('Start processing request')
+  logger.debug(`Consumer main params: ${stringParameters(params)}`)
+
+  // Create a state instance
+  const state = await stateLib.init()
 
   try {
     const openwhiskClient = new Openwhisk(params.API_HOST, params.API_AUTH)
@@ -34,18 +43,32 @@ async function main (params) {
     let response = {}
     let statusCode = HTTP_OK
 
-    logger.info('Start processing request')
-    logger.debug(`Consumer main params: ${stringParameters(params)}`)
-
-    const requiredParams = ['type', 'data.value.created_at', 'data.value.updated_at']
+    // check for missing request input parameters and headers
+    const requiredParams = ['type', 'data']
     const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
 
     if (errorMessage) {
-      logger.error(`Invalid request parameters: ${stringParameters(params)}`)
+      logger.error(`Invalid request parameters: ${errorMessage}`)
       return errorResponse(HTTP_BAD_REQUEST, `Invalid request parameters: ${errorMessage}`)
     }
 
     logger.info('Params type: ' + params.type)
+
+    // Detect infinite loop and break it
+    const infiniteLoopEventTypes = [
+      'com.adobe.commerce.observer.catalog_product_save_commit_after',
+      'com.adobe.commerce.observer.catalog_product_delete_commit_after',
+    ]
+
+    if (await isAPotentialInfiniteLoop(
+        state,
+        fnInfiniteLoopKey(params),
+        fnFingerPrintInfiniteLoopKey(params),
+        infiniteLoopEventTypes,
+        params.type)) {
+      logger.info(`Infinite loop break for event ${params.type}`)
+      return successResponse(params.type, `event discarded to prevent infinite loop(${infiniteLoopKey}, ${params.type})`)
+    }
 
     switch (params.type) {
       case 'com.adobe.commerce.observer.catalog_product_save_commit_after': {
@@ -87,6 +110,14 @@ async function main (params) {
   } catch (error) {
     logger.error(`Server error: ${error.message}`)
     return errorResponse(HTTP_INTERNAL_ERROR, error.message)
+  }
+
+  function fnFingerPrintInfiniteLoopKey(params) {
+    return () => { return { product: params.data.value.sku, description: params.data.value.description } }
+  }
+
+  function fnInfiniteLoopKey(params) {
+    return () => { return `ilk_${params.sku}` }
   }
 }
 

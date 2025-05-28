@@ -10,19 +10,46 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+jest.mock('@adobe/aio-lib-state', () => {
+  // Mock AdobeState class
+  class AdobeStateMock {
+    constructor() {}
+    async get() { return undefined; } // or return { expiration: '', value: '' } if needed
+    async put() { return 'mock-key'; }
+    async delete() { return null; }
+    async deleteAll() { return { keys: 0 }; }
+    async any() { return false; }
+    async stats() { return { bytesKeys: 0, bytesValues: 0, keys: 0 }; }
+    async *list() { yield { keys: [] }; }
+  }
+  // The module exports both init and AdobeState
+  return {
+    init: jest.fn().mockResolvedValue(new AdobeStateMock()),
+    AdobeState: AdobeStateMock
+  }
+})
+const stateLib = require('@adobe/aio-lib-state')
+
 const Openwhisk = require('../../../../../actions/openwhisk')
 const consumer = require('../../../../../actions/product/external/consumer')
 const { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_INTERNAL_ERROR } = require('../../../../../actions/constants')
 
+const { Core } = require('@adobe/aio-sdk')
+const logger = Core.Logger( "infiniteLoopBreaker", { level: 'debug' })
+
 jest.mock('../../../../../actions/openwhisk')
 
 describe('Given product external consumer', () => {
+
   describe('When method main is defined', () => {
+    logger.debug('When method main is defined')
     test('Then is an instance of Function', () => {
       expect(consumer.main).toBeInstanceOf(Function)
     })
   })
+
   describe('When required params are missing', () => {
+    logger.debug('When required params are missing')
     it.each([
       {},
       { data: {} },
@@ -39,7 +66,9 @@ describe('Given product external consumer', () => {
       expect(await consumer.main(params)).toMatchObject(INVALID_REQUEST_PARAMS_RESPONSE)
     })
   })
+
   describe('When product event type received is not supported', () => {
+    logger.debug('When product event type received is not supported')
     test('Then returns error response', async () => {
       const UNSUPPORTED_TYPE = 'foo'
       const TYPE_NOT_FOUND_RESPONSE = {
@@ -54,20 +83,25 @@ describe('Given product external consumer', () => {
       expect(await consumer.main(params)).toMatchObject(TYPE_NOT_FOUND_RESPONSE)
     })
   })
-  describe('When customer event received is valid', () => {
+
+  describe('When product event received is valid', () => {
+
     it.each([
-      ['created', 'be-observer.catalog_product_create', 'product-backoffice/created', {}],
-      ['update', 'be-observer.catalog_product_update', 'product-backoffice/updated', 'data'],
+      ['created', 'be-observer.catalog_product_create', 'product-backoffice/created', { value: { sku: 'SKU',  description: 'description' }}],
+      ['update', 'be-observer.catalog_product_update', 'product-backoffice/updated', { value: { sku: 'SKU',  description: 'description' }}],
       ['deleted', 'be-observer.catalog_product_delete', 'product-backoffice/deleted', { one: 'one', two: 'two' }]
     ]
     )('Then returns success response for %p action', async (name, type, action, data) => {
+      logger.debug('When product event received is valid')
       const params = { type, data }
       const invocation = Openwhisk.prototype.invokeAction = jest.fn()
       await consumer.main(params)
       expect(invocation).toHaveBeenCalledWith(action, data)
     })
   })
+
   describe('When downstream throw an exception', () => {
+    logger.debug('When downstream throw an exception')
     test('Then returns error response', async () => {
       const ERROR_MESSAGE = 'Unexpected Error'
       const INTERNAL_SERVER_ERROR_RESPONSE = {
@@ -79,12 +113,25 @@ describe('Given product external consumer', () => {
         }
       }
       const type = 'be-observer.catalog_product_create'
-      const params = { type, data: {} }
+      const params = {
+        type,
+        data: {
+          value: {
+            sku: 'SKU',
+            name: 'PRODUCT',
+            description: 'Product description',
+            created_at: '2000-01-01',
+            updated_at: '2000-01-01'
+          }
+        }
+      }
       Openwhisk.prototype.invokeAction = jest.fn().mockRejectedValue(new Error(ERROR_MESSAGE))
       expect(await consumer.main(params)).toMatchObject(INTERNAL_SERVER_ERROR_RESPONSE)
     })
   })
+
   describe('When downstream returns an error', () => {
+    logger.debug('When downstream returns an error')
     it.each([
       [HTTP_BAD_REQUEST, { success: false, error: 'Invalid data' }],
       [HTTP_NOT_FOUND, { success: false, error: 'Entity not found' }],
@@ -108,12 +155,25 @@ describe('Given product external consumer', () => {
           }
         }
       }
-      const params = { type, data: {} }
+      const params = {
+        type,
+        data: {
+          value: {
+            sku: 'SKU',
+            name: 'PRODUCT',
+            description: 'Product description',
+            created_at: '2000-01-01',
+            updated_at: '2000-01-01'
+          }
+        }
+      }
       Openwhisk.prototype.invokeAction = jest.fn().mockResolvedValue(ACTION_RESPONSE)
       expect(await consumer.main(params)).toMatchObject(CONSUMER_RESPONSE)
     })
   })
+
   describe('When downstream returns a success response', () => {
+    logger.debug('When downstream returns a success response')
     test('Then returns success response', async () => {
       const type = 'be-observer.catalog_product_create'
       const ACTION_RESPONSE = {
@@ -137,7 +197,18 @@ describe('Given product external consumer', () => {
           }
         }
       }
-      const params = { type, data: {} }
+      const params = {
+        type: 'be-observer.catalog_product_create',
+        data: {
+          value: {
+            sku: 'SKU',
+            name: 'PRODUCT',
+            description: 'Product description',
+            created_at: '2000-01-01',
+            updated_at: '2000-01-01'
+          }
+        }
+      }
       Openwhisk.prototype.invokeAction = jest.fn().mockResolvedValue(ACTION_RESPONSE)
       expect(await consumer.main(params)).toMatchObject(CONSUMER_RESPONSE)
     })

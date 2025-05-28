@@ -15,6 +15,9 @@ const { stringParameters, checkMissingRequestInputs } = require('../../../utils'
 const { HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST, HTTP_OK } = require('../../../constants')
 const Openwhisk = require('../../../openwhisk')
 const { errorResponse, successResponse } = require('../../../responses')
+const stateLib = require('@adobe/aio-lib-state')
+const { storeFingerPrint, isAPotentialInfiniteLoop } = require('../../../infiniteLoopBreaker')
+const { validateData } = require('./validator')
 
 /**
  * This is the consumer of the events coming from External back-office applications related to product entity.
@@ -25,14 +28,18 @@ const { errorResponse, successResponse } = require('../../../responses')
 async function main (params) {
   const logger = Core.Logger('product-external-consumer', { level: params.LOG_LEVEL || 'info' })
 
+  logger.info('Start processing request')
+  logger.debug(`Consumer main params: ${stringParameters(params)}`)
+
+  // Create a state instance
+  const state = await stateLib.init()
+
   try {
     const openwhiskClient = new Openwhisk(params.API_HOST, params.API_AUTH)
 
     let response = {}
     let statusCode = HTTP_OK
 
-    logger.info('Start processing request')
-    logger.debug(`Consumer main params: ${stringParameters(params)}`)
 
     // check for missing request input parameters and headers
     const requiredParams = ['type', 'data']
@@ -44,6 +51,23 @@ async function main (params) {
     }
 
     logger.info(`Params type: ${params.type}`)
+
+    // Detect infinite loop and break it
+    const infiniteLoopEventTypes = [
+      'be-observer.catalog_product_create',
+      'be-observer.catalog_product_update'
+    ]
+
+    if (await isAPotentialInfiniteLoop(
+        state,
+        fnInfiniteLoopKey(params),
+        fnFingerPrintInfiniteLoopKey(params),
+        infiniteLoopEventTypes,
+        params.type)) {
+      logger.info(`Infinite loop break for event ${params.type}`)
+      return successResponse(params.type, `event discarded to prevent infinite loop(${infiniteLoopKey}, ${params.type})`)
+    }
+
     switch (params.type) {
       case 'be-observer.catalog_product_create': {
         logger.info('Invoking product create')
@@ -82,6 +106,14 @@ async function main (params) {
   } catch (error) {
     logger.error(`Server error: ${error.message}`)
     return errorResponse(HTTP_INTERNAL_ERROR, error.message)
+  }
+
+  function fnFingerPrintInfiniteLoopKey(params) {
+    return () => { return { product: params.data.value.sku, description: params.data.value.description } }
+  }
+
+  function fnInfiniteLoopKey(params) {
+    return () => { return `ilk_${params.sku}` }
   }
 }
 
