@@ -10,6 +10,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const { instrument, getInstrumentationHelpers } = require('@adobe/aio-sk-lib-telemetry')
+
 /**
  * This function transform the received customer data from Adobe commerce to external back-office application
  *
@@ -18,11 +20,13 @@ governing permissions and limitations under the License.
  */
 function transformData (data) {
   // @Todo Here transform the data as needed for external back-office application API
-  const transformedData = data
+  const { currentSpan } = getInstrumentationHelpers()
+  currentSpan.addEvent('created.phase', { value: 'transformData' })
 
+  const transformedData = data
   return transformedData
 }
 
 module.exports = {
-  transformData
+  transformData: instrument(transformData)
 }

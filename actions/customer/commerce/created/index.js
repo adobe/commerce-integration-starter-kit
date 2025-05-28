@@ -10,7 +10,9 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { Core } = require('@adobe/aio-sdk')
+const { telemetryConfig } = require('../../../telemetry')
+const { instrumentEntrypoint, getInstrumentationHelpers } = require('@adobe/aio-sk-lib-telemetry')
+
 const { stringParameters } = require('../../../utils')
 const { transformData } = require('./transformer')
 const { sendData } = require('./sender')
@@ -27,7 +29,7 @@ const { actionSuccessResponse, actionErrorResponse } = require('../../../respons
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main (params) {
-  const logger = Core.Logger('customer-commerce-created', { level: params.LOG_LEVEL || 'info' })
+  const { logger } = getInstrumentationHelpers()
 
   logger.info('Start processing request')
   logger.debug(`Received params: ${stringParameters(params)}`)
@@ -64,4 +66,4 @@ async function main (params) {
   }
 }
 
-exports.main = main
+exports.main = instrumentEntrypoint(main, telemetryConfig)

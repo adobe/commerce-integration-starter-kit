@@ -10,6 +10,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const { instrument, getInstrumentationHelpers } = require('@adobe/aio-sk-lib-telemetry')
+
 /**
  * This function hold any logic needed post sending information to external backoffice application
  *
@@ -20,8 +22,10 @@ governing permissions and limitations under the License.
  */
 function postProcess (data, transformed, preProcessed, result) {
   // @TODO Here implement any preprocessing needed
+  const { currentSpan } = getInstrumentationHelpers()
+  currentSpan.addEvent('created.phase', { value: 'postProcess' })
 }
 
 module.exports = {
-  postProcess
+  postProcess: instrument(postProcess)
 }
