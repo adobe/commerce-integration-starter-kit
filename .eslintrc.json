@@ -7,7 +7,10 @@
     {
       "files": ["test/**/*.js"],
       "rules": {
-        "node/no-unpublished-require": "off"
+        "node/no-unpublished-require": "off",
+        "node/no-missing-require": ["error", {
+          "allowModules": ["@adobe/aio-sk-lib-telemetry"]
+        }]
       }
     }
   ]
