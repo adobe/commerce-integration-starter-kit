@@ -10,7 +10,7 @@
   governing permissions and limitations under the License.
 */
 
-import type { DiagnosticsLogLevel, getLogger } from "~/core/logging";
+import type { getLogger } from "~/core/logging";
 import type {
   AnyFunction,
   RecursiveStringRecord,
@@ -23,10 +23,18 @@ import type {
   Context,
   Meter,
   Tracer,
+  DiagLogLevel,
 } from "@opentelemetry/api";
 
+
+/** Available log levels for the OpenTelemetry DiagLogger. */
+export type DiagnosticsLogLevel = Lowercase<keyof typeof DiagLogLevel>;
+
+/** The preset to use for the telemetry module setup. */
+export type TelemetryPreset = "simple" | "full";
+
 /** The configuration for the telemetry diagnostics. */
-export type TelemetryDiagnosticsConfig = {
+export interface TelemetryDiagnosticsConfig {
   /** The log level for the diagnostics. */
   logLevel: DiagnosticsLogLevel;
 
@@ -44,7 +52,7 @@ export type TelemetryDiagnosticsConfig = {
 };
 
 /** Configuration related to context propagation (for distributed tracing). */
-type TelemetryPropagationConfig<T extends AnyFunction> = {
+export interface TelemetryPropagationConfig<T extends AnyFunction> {
   /**
    * Whether to skip the propagation of the context.
    * @default false
@@ -65,7 +73,7 @@ type TelemetryPropagationConfig<T extends AnyFunction> = {
 export type AutomaticSpanEvents = "success" | "error" | "parameters";
 
 /** The configuration for instrumentation. */
-export type InstrumentationConfig<T extends AnyFunction> = {
+export interface InstrumentationConfig<T extends AnyFunction> {
   traceConfig?: {
     /**
      * The name of the span.
@@ -95,9 +103,9 @@ export type InstrumentationConfig<T extends AnyFunction> = {
 };
 
 /** The configuration for entrypoint instrumentation. */
-export type EntrypointInstrumentationConfig<
+export interface EntrypointInstrumentationConfig<
   T extends AnyFunction = AnyFunction,
-> = InstrumentationConfig<T> & {
+> extends InstrumentationConfig<T> {
   propagation?: TelemetryPropagationConfig<T>;
 
   /** This function will be called at the very beginning of the action. */
@@ -111,13 +119,13 @@ export type EntrypointInstrumentationConfig<
 };
 
 /** Defines the state of the global telemetry API. These items should be set once per-application. */
-export type TelemetryApi = {
+export interface TelemetryApi {
   tracer: Tracer;
   meter: Meter;
 };
 
 /** The context for the current operation. */
-export type InstrumentationContext = {
+export interface InstrumentationContext {
   /** The tracer used to create the spans. */
   tracer: Tracer;
 

@@ -22,6 +22,7 @@
     }
   },
   "scripts": {
+    "docs": "typedoc",
     "build": "tsdown",
     "format": "biome format --write --no-errors-on-unmatched",
     "format:check": "biome check --linter-enabled=false --no-errors-on-unmatched",
@@ -60,8 +61,11 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "prettier": "^3.5.3",
     "tsdown": "^0.11.1",
-    "type-fest": "^4.41.0"
+    "type-fest": "^4.41.0",
+    "typedoc": "^0.28.5",
+    "typedoc-plugin-markdown": "^4.6.3"
   },
   "sideEffects": false
 }

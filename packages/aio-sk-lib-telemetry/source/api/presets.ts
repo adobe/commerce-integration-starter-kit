@@ -10,6 +10,8 @@
   governing permissions and limitations under the License.
 */
 
+import type { TelemetryPreset } from "~/types";
+
 import {
   HttpInstrumentation,
   type HttpInstrumentationConfig,
@@ -23,9 +25,6 @@ import {
 import { WinstonInstrumentation } from "@opentelemetry/instrumentation-winston";
 import { GraphQLInstrumentation } from "@opentelemetry/instrumentation-graphql";
 import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
-
-/** The preset to use for the telemetry module setup. */
-type TelemetryPreset = "simple" | "full";
 
 const httpInstrumentationConfig = {
   // Prevent traces from being created by the un-managed logic of `aio app dev`.

@@ -27,9 +27,7 @@ import type {
 // If no log level is given, use [INFO].
 const DEFAULT_LOG_LEVEL = "info";
 
-/** Available log levels for the OpenTelemetry DiagLogger. */
-export type DiagnosticsLogLevel = Lowercase<keyof typeof DiagLogLevel>;
-
+/** @internal */
 function __getLoggerInternal(
   name: string,
   config?: AioLoggerConfig,
