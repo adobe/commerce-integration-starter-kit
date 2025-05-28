@@ -10,7 +10,10 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { Core } = require('@adobe/aio-sdk')
+const { commerceCustomerMetrics } = require('../metrics')
+const { telemetryConfig } = require('../../../telemetry')
+const { instrumentEntrypoint, getInstrumentationHelpers } = require('@adobe/aio-sk-lib-telemetry')
+
 const { stringParameters, checkMissingRequestInputs } = require('../../../utils')
 const { errorResponse, successResponse } = require('../../../responses')
 const { HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR } = require('../../../constants')
@@ -23,7 +26,10 @@ const Openwhisk = require('../../../openwhisk')
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main (params) {
-  const logger = Core.Logger('customer-commerce-consumer', { level: params.LOG_LEVEL || 'info' })
+  const { logger, currentSpan } = getInstrumentationHelpers()
+  currentSpan.addEvent('event.type', { value: params.type })
+  commerceCustomerMetrics.consumerTotalCounter.add(1)
+
   try {
     const openwhiskClient = new Openwhisk(params.API_HOST, params.API_AUTH)
 
@@ -115,6 +121,8 @@ async function main (params) {
     }
 
     logger.info(`Successful request: ${statusCode}`)
+    commerceCustomerMetrics.consumerSuccessCounter.add(1)
+
     return successResponse(params.type, response)
   } catch (error) {
     logger.error(`Server error: ${error.message}`)
@@ -122,4 +130,4 @@ async function main (params) {
   }
 }
 
-exports.main = main
+exports.main = instrumentEntrypoint(main, telemetryConfig)
