@@ -3,6 +3,13 @@
   "parserOptions": {
     "ecmaVersion": "latest"
   },
+
+  "rules": {
+    "node/no-missing-require": ["error", {
+      "allowModules": ["@adobe/aio-sk-lib-telemetry"]    
+    }]
+  },
+
   "overrides": [
     {
       "files": ["test/**/*.js"],
