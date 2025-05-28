@@ -1,7 +1,7 @@
 // This file collects and exports all the public API of the telemetry module.
 
 export { getAioRuntimeAttributes } from "./api/attributes";
-export { getLogger } from "./api/logging";
+export { getLogger } from "./core/logging";
 export {
   serializeContextIntoCarrier,
   deserializeContextFromCarrier,

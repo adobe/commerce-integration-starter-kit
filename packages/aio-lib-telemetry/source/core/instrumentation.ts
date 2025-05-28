@@ -30,7 +30,7 @@ import type {
   EntrypointInstrumentationConfig,
 } from "~/types";
 
-import { getLogger } from "~/api/logging";
+import { getLogger } from "~/core/logging";
 import {
   getGlobalTelemetryApi,
   initializeGlobalTelemetryApi,
@@ -75,9 +75,9 @@ export function getInstrumentationHelpers(): InstrumentationHelpers {
  */
 export function instrument<T extends AnyFunction>(
   fn: T,
-  { meta, hooks, ...config }: InstrumentationConfig<T> = {},
+  { traceConfig, hooks, ...config }: InstrumentationConfig<T> = {},
 ): (...args: Parameters<T>) => ReturnType<T> {
-  const { spanName = fn.name, spanOptions = {}, getBaseContext } = meta ?? {};
+  const { spanName = fn.name, spanOptions = {}, getBaseContext, automaticSpanEvents = [] } = traceConfig ?? {};
 
   if (!spanName) {
     throw new Error(
@@ -86,10 +86,11 @@ export function instrument<T extends AnyFunction>(
   }
 
   const { onSuccess, onError } = hooks ?? {};
+  const autoEventSet = new Set(automaticSpanEvents);
 
   /** Handles a (potentially) successful result within the given span. */
   function handleResult(result: Awaited<ReturnType<T>>, span: Span) {
-    if (config.automaticSpanEvents?.success) {
+    if (autoEventSet.has("success")) {
       span.addEvent(`${fn.name ?? spanName}.success`, {
         result: JSON.stringify(result),
       });
@@ -111,7 +112,7 @@ export function instrument<T extends AnyFunction>(
 
   /** Handles an error result within the given span. */
   function handleError(error: unknown, span: Span) {
-    if (config.automaticSpanEvents?.error) {
+    if (autoEventSet.has("error")) {
       span.addEvent(`${fn.name ?? spanName}.error`, {
         error: JSON.stringify(error),
       });
@@ -183,7 +184,7 @@ export function instrument<T extends AnyFunction>(
   /** Invokes the wrapped function and handles the result or error. */
   function runHandler(span: Span, ...args: Parameters<T>) {
     try {
-      if (config.automaticSpanEvents?.parameters) {
+      if (autoEventSet.has("parameters")) {
         span.addEvent(`${fn.name ?? spanName}.parameters`, {
           args: JSON.stringify(args),
         });
@@ -325,8 +326,8 @@ export function instrumentEntrypoint<
 
     return {
       ...instrumentationConfig,
-      meta: {
-        ...instrumentationConfig.meta,
+      traceConfig: {
+        ...instrumentationConfig.traceConfig,
         baseContext: getPropagatedContext,
       },
     };
@@ -335,14 +336,14 @@ export function instrumentEntrypoint<
   /** Instruments the given entrypoint handler. */
   async function instrumentHandler(
     handler: T,
-    { meta, ...instrumentationConfig }: InstrumentationConfig<T> = {},
+    { traceConfig, ...instrumentationConfig }: InstrumentationConfig<T> = {},
   ) {
     try {
       const { actionName } = getRuntimeActionMetadata();
       return instrument(handler, {
         ...instrumentationConfig,
-        meta: {
-          ...meta,
+        traceConfig: {
+          ...traceConfig,
           spanName: `${actionName}/${fn.name}`,
         },
       }) as T;

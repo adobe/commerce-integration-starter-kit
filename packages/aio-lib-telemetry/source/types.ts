@@ -10,7 +10,7 @@
   governing permissions and limitations under the License.
 */
 
-import type { DiagnosticsLogLevel, getLogger } from "~/api/logging";
+import type { DiagnosticsLogLevel, getLogger } from "~/core/logging";
 import type {
   AnyFunction,
   RecursiveStringRecord,
@@ -38,17 +38,24 @@ export type AutomaticSpanEvents = "success" | "error" | "parameters";
 
 /** The configuration for instrumentation. */
 export type InstrumentationConfig<T extends AnyFunction> = {
-  meta?: {
+  traceConfig?: {
+    /** 
+     * The name of the span. 
+     * @default The name of the function.
+     */
     spanName?: string;
+
+    /** The options for the span. */
     spanOptions?: SpanOptions;
 
-    /** The base context to use for the instrumentation. */
-    getBaseContext?: (...args: Parameters<T>) => Context;
-  };
+    /** 
+     * The events that should be automatically recorded on the span.
+     * @default []
+     */
+    automaticSpanEvents?: AutomaticSpanEvents[];
 
-  /** Whether to automatically record events on the span. */
-  automaticSpanEvents?: {
-    [key in AutomaticSpanEvents]?: boolean;
+    /** The base context to use for the started span. */
+    getBaseContext?: (...args: Parameters<T>) => Context;
   };
 
   /** Hooks that can be used to act on a span depending on the result of the function. */
@@ -61,21 +68,33 @@ export type InstrumentationConfig<T extends AnyFunction> = {
 
 /** The configuration for the telemetry diagnostics. */
 export type TelemetryDiagnosticsConfig = {
+  /** The log level for the diagnostics. */
   logLevel: DiagnosticsLogLevel;
+
+  /**
+   * The name of the logger to use for the diagnostics.
+   * @default `${actionName}/otel-diagnostics`
+   */
   loggerName?: string;
+
+  /** 
+   * Whether to export the logs to the console.
+   * @default true
+   */
   exportLogs?: boolean;
 };
 
 /** Configuration related to context propagation (for distributed tracing). */
 type TelemetryPropagationConfig<T extends AnyFunction> = {
-  /** Whether to skip the propagation of the context. */
+  /** 
+   * Whether to skip the propagation of the context.
+   * @default false
+   */
   skip?: boolean;
 
   /**
-   * A function that receives the arguments of the instrumented function and returns the carrier for the current context.
-   *
-   * By default, it will try to read the headers received by the action.
-   * More specifically, it will read the `x-telemetry-context` header.
+   * A function that returns the carrier for the current context.
+   * @param args - The arguments of the instrumented function.
    */
   getContextCarrier?: (...args: Parameters<T>) => {
     carrier: Record<string, string>;
