@@ -1,27 +1,25 @@
+import { resourceFromAttributes } from "@opentelemetry/resources";
 import { inferTelemetryAttributesFromRuntimeMetadata } from "~/helpers/runtime";
-import {
-  ATTR_SERVICE_NAME,
-  ATTR_SERVICE_VERSION,
-} from "@opentelemetry/semantic-conventions";
+
+/** Infers some useful attributes for the current action from the Adobe I/O Runtime. */
+export function getAioRuntimeAttributes() {
+  return inferTelemetryAttributesFromRuntimeMetadata();
+}
+
+/** Creates a resource from the attributes inferred from the Adobe I/O Runtime. */
+export function getAioRuntimeResource() {
+  return resourceFromAttributes(getAioRuntimeAttributes());
+}
 
 /**
- * Infers some useful attributes for the current action from the Adobe I/O Runtime.
- * @param serviceName - The service name to use.
- * @param serviceVersion - The service version to use.
+ * Combines the attributes inferred from the Adobe I/O Runtime with the provided attributes.
+ * @param attributes - The attributes to combine with the attributes inferred from the Adobe I/O Runtime.
  */
-export function getAioRuntimeAttributes(
-  serviceName?: string,
-  serviceVersion?: string,
+export function getAioRuntimeResourceWithAttributes(
+  attributes: Record<string, string>,
 ) {
-  const {
-    [ATTR_SERVICE_NAME]: defaultServiceName,
-    [ATTR_SERVICE_VERSION]: defaultServiceVersion,
-    ...telemetryAttributes
-  } = inferTelemetryAttributesFromRuntimeMetadata();
-
-  return {
-    [ATTR_SERVICE_NAME]: serviceName ?? defaultServiceName,
-    [ATTR_SERVICE_VERSION]: serviceVersion ?? defaultServiceVersion,
-    ...telemetryAttributes,
-  };
+  return resourceFromAttributes({
+    ...getAioRuntimeAttributes(),
+    ...attributes,
+  });
 }

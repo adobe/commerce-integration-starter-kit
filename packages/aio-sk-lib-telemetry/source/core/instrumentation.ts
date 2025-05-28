@@ -77,7 +77,12 @@ export function instrument<T extends AnyFunction>(
   fn: T,
   { traceConfig, hooks, ...config }: InstrumentationConfig<T> = {},
 ): (...args: Parameters<T>) => ReturnType<T> {
-  const { spanName = fn.name, spanOptions = {}, getBaseContext, automaticSpanEvents = [] } = traceConfig ?? {};
+  const {
+    spanName = fn.name,
+    spanOptions = {},
+    getBaseContext,
+    automaticSpanEvents = [],
+  } = traceConfig ?? {};
 
   if (!spanName) {
     throw new Error(

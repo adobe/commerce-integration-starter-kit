@@ -1,4 +1,4 @@
- /*
+/*
   Copyright 2025 Adobe. All rights reserved.
   This file is licensed to you under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License. You may obtain a copy
@@ -14,7 +14,6 @@ import { diag, metrics, trace } from "@opentelemetry/api";
 
 import { getRuntimeActionMetadata } from "~/helpers/runtime";
 import type { TelemetryApi } from "~/types";
-
 
 /**
  * Gets the global telemetry API.
@@ -47,11 +46,11 @@ function ensureTelemetryApiInitialized() {
  * Initializes the telemetry API (if not already initialized).
  * @param config - The configuration for the telemetry API.
  */
-export function initializeGlobalTelemetryApi(config: Partial<TelemetryApi> = {}) {
+export function initializeGlobalTelemetryApi(
+  config: Partial<TelemetryApi> = {},
+) {
   if (global.__OTEL_TELEMETRY_API__) {
-    diag.warn(
-      "Telemetry API already initialized. Skipping initialization.",
-    );
+    diag.warn("Telemetry API already initialized. Skipping initialization.");
 
     return;
   }

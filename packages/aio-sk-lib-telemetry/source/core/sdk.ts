@@ -10,8 +10,6 @@
   governing permissions and limitations under the License.
 */
 
-
-
 import { NodeSDK, type NodeSDKConfiguration } from "@opentelemetry/sdk-node";
 import { diag } from "@opentelemetry/api";
 

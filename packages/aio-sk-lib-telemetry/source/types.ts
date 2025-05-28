@@ -39,8 +39,8 @@ export type AutomaticSpanEvents = "success" | "error" | "parameters";
 /** The configuration for instrumentation. */
 export type InstrumentationConfig<T extends AnyFunction> = {
   traceConfig?: {
-    /** 
-     * The name of the span. 
+    /**
+     * The name of the span.
      * @default The name of the function.
      */
     spanName?: string;
@@ -48,7 +48,7 @@ export type InstrumentationConfig<T extends AnyFunction> = {
     /** The options for the span. */
     spanOptions?: SpanOptions;
 
-    /** 
+    /**
      * The events that should be automatically recorded on the span.
      * @default []
      */
@@ -77,7 +77,7 @@ export type TelemetryDiagnosticsConfig = {
    */
   loggerName?: string;
 
-  /** 
+  /**
    * Whether to export the logs to the console.
    * @default true
    */
@@ -86,7 +86,7 @@ export type TelemetryDiagnosticsConfig = {
 
 /** Configuration related to context propagation (for distributed tracing). */
 type TelemetryPropagationConfig<T extends AnyFunction> = {
-  /** 
+  /**
    * Whether to skip the propagation of the context.
    * @default false
    */
