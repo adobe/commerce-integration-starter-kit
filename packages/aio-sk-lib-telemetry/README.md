@@ -36,7 +36,6 @@ This module contains a set of utilities for integrating observability into App B
       - [Receiving a Trace Context](#receiving-a-trace-context)
       - [Automatic Propagation](#automatic-propagation)
     - [Instrumentation Helpers](#instrumentation-helpers)
-  - [⭐ Exporting Telemetry Signals](#-exporting-telemetry-signals)
   - [❓ Next Up](#-next-up)
   - [🩺 Troubleshooting](#-troubleshooting)
     - [Hot Reloading and `aio app dev`](#hot-reloading-and-aio-app-dev)
@@ -627,10 +626,6 @@ This function receives the following helpers:
   - `carrier`: A pre-serialized carrier object that you can use to propagate the trace context.
 - `monitor`: The managed instance of the application monitor.
 - `logger`: A logger instance created for the current operation.
-
-## ⭐ Exporting Telemetry Signals
-
-See the [providers documentation](./docs/providers.md) for more information on how to configure and use telemetry providers, such as New Relic, Grafana, or Betterstack. We have also prepared [a guide on how to configure the OpenTelemetry collector](./docs/otel-collector.md), which is probably the easiest and most powerful way to export telemetry signals.
 
 ## ❓ Next Up
 
