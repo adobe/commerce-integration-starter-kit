@@ -15,7 +15,7 @@ import { context, trace, type Attributes } from "@opentelemetry/api";
 /**
  * Gets the active span from the given context.
  * @param ctx - The context to get the span from.
- * @throws An error if no span is found.
+ * @throws {Error} An error if no span is found.
  */
 export function getActiveSpan(ctx = context.active()) {
   const span = trace.getSpan(ctx);

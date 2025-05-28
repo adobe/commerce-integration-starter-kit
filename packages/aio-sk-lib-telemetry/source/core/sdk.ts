@@ -17,25 +17,37 @@ import type { TelemetryDiagnosticsConfig } from "~/types";
 import { setOtelDiagLogger } from "~/core/logging";
 import { setGlobalTelemetryApi } from "~/core/telemetry-api";
 
-/** Get the global SDK instance. */
+/**
+ * Get the global SDK instance.
+ * @throws {Error} An error if the telemetry SDK is not initialized.
+ */
 function getGlobalSdk() {
   ensureSdkInitialized();
   return global.__OTEL_SDK__;
 }
 
-/** Set the global SDK instance. */
+/** 
+ * Set the global SDK instance.
+ * @param sdkInstance - The SDK instance to set.
+ */
 function setGlobalSdk(sdkInstance: NodeSDK | null) {
   global.__OTEL_SDK__ = sdkInstance;
 }
 
-/** Ensure the telemetry module is initialized. */
+/**
+ * Ensure the telemetry SDK is initialized.
+ * @throws {Error} An error if the telemetry SDK is not initialized.
+ */
 export function ensureSdkInitialized() {
   if (!getGlobalSdk()) {
-    throw new Error("Telemetry module not initialized");
+    throw new Error("Telemetry SDK not initialized");
   }
 }
 
-/** Initialize the diagnostics logger. */
+/**
+ * Initialize the diagnostics logger.
+ * @param config - The configuration for the diagnostics logger.
+ */
 export function initializeDiagnostics(config: TelemetryDiagnosticsConfig) {
   if (getGlobalSdk()) {
     // Diagnostics can only be initialized before the telemetry SDK (otherwise they won't work).
@@ -50,7 +62,10 @@ export function initializeDiagnostics(config: TelemetryDiagnosticsConfig) {
   setOtelDiagLogger(config);
 }
 
-/** Initialize the telemetry module. */
+/**
+ * Initialize the telemetry SDK.
+ * @param config - The configuration for the telemetry SDK.
+ */
 export function initializeSdk(config?: Partial<NodeSDKConfiguration>) {
   if (getGlobalSdk()) {
     diag.warn(
@@ -84,7 +99,10 @@ export function initializeSdk(config?: Partial<NodeSDKConfiguration>) {
   }
 }
 
-/** Shutdown the telemetry module. */
+/**
+ * Shutdown the telemetry SDK.
+ * @param reason - The reason for the shutdown.
+ */
 export async function shutdownSdk(reason?: string) {
   const sdk = getGlobalSdk();
 
