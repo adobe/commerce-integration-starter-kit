@@ -5,12 +5,20 @@
   "type": "module",
   "license": "ISC",
   "description": "A utility module for easy instrumentation of Adobe I/O Runtime actions for Starter Kits via OpenTelemetry.",
-  "files": ["dist", "*.d.ts"],
+  "files": [
+    "dist",
+    "*.d.ts"
+  ],
   "exports": {
     ".": {
       "import": "./dist/es/index.js",
       "types": "./dist/es/index.d.ts",
       "require": "./dist/cjs/index.cjs"
+    },
+    "./otel-api": {
+      "import": "./dist/es/otel-api.js",
+      "types": "./dist/es/otel-api.d.ts",
+      "require": "./dist/cjs/otel-api.cjs"
     }
   },
   "scripts": {
@@ -20,7 +28,6 @@
     "lint": "biome check --formatter-enabled=false --no-errors-on-unmatched",
     "lint:fix": "biome lint --write --no-errors-on-unmatched"
   },
-
   "dependencies": {
     "@adobe/aio-lib-core-logging": "^3.0.2",
     "@grpc/grpc-js": "^1.13.3",
@@ -51,12 +58,10 @@
     "@opentelemetry/semantic-conventions": "^1.33.0",
     "@opentelemetry/winston-transport": "^0.11.0"
   },
-
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "tsdown": "^0.11.1",
     "type-fest": "^4.41.0"
   },
-
   "sideEffects": false
 }
