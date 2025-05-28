@@ -19,7 +19,6 @@ const { Core } = require('@adobe/aio-sdk')
  * @returns {object} - returns the result of validation object
  */
 function validateData (data) {
-
   const logger = Core.Logger('validator', { level: process.env.LOG_LEVEL || 'info' })
 
   const requiredParams = [
@@ -34,7 +33,7 @@ function validateData (data) {
   if (errorMessage) {
     logger.error(`Invalid request parameters: ${stringParameters(data)}`)
     return {
-      success:false,
+      success: false,
       message: `Invalid request parameters: ${errorMessage}`
     }
   }

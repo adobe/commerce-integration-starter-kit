@@ -20,7 +20,7 @@ const Openwhisk = require('../../../openwhisk')
 const { errorResponse, successResponse } = require('../../../responses')
 
 const stateLib = require('@adobe/aio-lib-state')
-const { isAPotentialInfiniteLoop, storeFingerPrint } = require('../../../infiniteLoopBreaker')
+const { isAPotentialInfiniteLoop } = require('../../../infiniteLoopBreaker')
 
 /**
  * This is the consumer of the events coming from Adobe Commerce related to product entity.
@@ -28,7 +28,7 @@ const { isAPotentialInfiniteLoop, storeFingerPrint } = require('../../../infinit
  * @returns {object} returns response object with status code, request data received and response of the invoked action
  * @param {object} params - includes the env params, type and the data of the event
  */
-async function main(params) {
+async function main (params) {
   const logger = Core.Logger('product-commerce-consumer', { level: params.LOG_LEVEL || 'info' })
 
   logger.info('Start processing request')
@@ -57,17 +57,17 @@ async function main(params) {
     // Detect infinite loop and break it
     const infiniteLoopEventTypes = [
       'com.adobe.commerce.observer.catalog_product_save_commit_after',
-      'com.adobe.commerce.observer.catalog_product_delete_commit_after',
+      'com.adobe.commerce.observer.catalog_product_delete_commit_after'
     ]
 
     if (await isAPotentialInfiniteLoop(
-        state,
-        fnInfiniteLoopKey(params),
-        fnFingerPrintInfiniteLoopKey(params),
-        infiniteLoopEventTypes,
-        params.type)) {
+      state,
+      fnInfiniteLoopKey(params),
+      fnFingerPrintInfiniteLoopKey(params),
+      infiniteLoopEventTypes,
+      params.type)) {
       logger.info(`Infinite loop break for event ${params.type}`)
-      return successResponse(params.type, `event discarded to prevent infinite loop(${infiniteLoopKey}, ${params.type})`)
+      return successResponse(params.type, `event discarded to prevent infinite loop(${params.type})`)
     }
 
     switch (params.type) {
@@ -112,11 +112,21 @@ async function main(params) {
     return errorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 
-  function fnFingerPrintInfiniteLoopKey(params) {
+  /**
+   * This function generates afunction to genereate fingerprint for the data to be used in infinite loop detection based on params.
+   * @param {object} params Data received from the event
+   * @returns {Function} the function that generates the fingerprint
+   */
+  function fnFingerPrintInfiniteLoopKey (params) {
     return () => { return { product: params.data.value.sku, description: params.data.value.description } }
   }
 
-  function fnInfiniteLoopKey(params) {
+  /**
+   * This function generates a function to create a key for the infinite loop detection based on params.
+   * @param {object} params Data received from the event
+   * @returns {Function} the function that generates the keu
+   */
+  function fnInfiniteLoopKey (params) {
     return () => { return `ilk_${params.sku}` }
   }
 }

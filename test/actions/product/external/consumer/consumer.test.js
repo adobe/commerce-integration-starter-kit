@@ -13,14 +13,13 @@ governing permissions and limitations under the License.
 jest.mock('@adobe/aio-lib-state', () => {
   // Mock AdobeState class
   class AdobeStateMock {
-    constructor() {}
-    async get() { return undefined; } // or return { expiration: '', value: '' } if needed
-    async put() { return 'mock-key'; }
-    async delete() { return null; }
-    async deleteAll() { return { keys: 0 }; }
-    async any() { return false; }
-    async stats() { return { bytesKeys: 0, bytesValues: 0, keys: 0 }; }
-    async *list() { yield { keys: [] }; }
+    async get () { return undefined } // or return { expiration: '', value: '' } if needed
+    async put () { return 'mock-key' }
+    async delete () { return null }
+    async deleteAll () { return { keys: 0 } }
+    async any () { return false }
+    async stats () { return { bytesKeys: 0, bytesValues: 0, keys: 0 } }
+    async * list () { yield { keys: [] } }
   }
   // The module exports both init and AdobeState
   return {
@@ -28,19 +27,17 @@ jest.mock('@adobe/aio-lib-state', () => {
     AdobeState: AdobeStateMock
   }
 })
-const stateLib = require('@adobe/aio-lib-state')
 
 const Openwhisk = require('../../../../../actions/openwhisk')
 const consumer = require('../../../../../actions/product/external/consumer')
 const { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_INTERNAL_ERROR } = require('../../../../../actions/constants')
 
 const { Core } = require('@adobe/aio-sdk')
-const logger = Core.Logger( "infiniteLoopBreaker", { level: 'debug' })
+const logger = Core.Logger('infiniteLoopBreaker', { level: 'debug' })
 
 jest.mock('../../../../../actions/openwhisk')
 
 describe('Given product external consumer', () => {
-
   describe('When method main is defined', () => {
     logger.debug('When method main is defined')
     test('Then is an instance of Function', () => {
@@ -85,10 +82,9 @@ describe('Given product external consumer', () => {
   })
 
   describe('When product event received is valid', () => {
-
     it.each([
-      ['created', 'be-observer.catalog_product_create', 'product-backoffice/created', { value: { sku: 'SKU',  description: 'description' }}],
-      ['update', 'be-observer.catalog_product_update', 'product-backoffice/updated', { value: { sku: 'SKU',  description: 'description' }}],
+      ['created', 'be-observer.catalog_product_create', 'product-backoffice/created', { value: { sku: 'SKU', description: 'description' } }],
+      ['update', 'be-observer.catalog_product_update', 'product-backoffice/updated', { value: { sku: 'SKU', description: 'description' } }],
       ['deleted', 'be-observer.catalog_product_delete', 'product-backoffice/deleted', { one: 'one', two: 'two' }]
     ]
     )('Then returns success response for %p action', async (name, type, action, data) => {

@@ -17,14 +17,13 @@ const openwhisk = require('openwhisk')
 jest.mock('@adobe/aio-lib-state', () => {
   // Mock AdobeState class
   class AdobeStateMock {
-    constructor() {}
-    async get() { return undefined; } // or return { expiration: '', value: '' } if needed
-    async put() { return 'mock-key'; }
-    async delete() { return null; }
-    async deleteAll() { return { keys: 0 }; }
-    async any() { return false; }
-    async stats() { return { bytesKeys: 0, bytesValues: 0, keys: 0 }; }
-    async *list() { yield { keys: [] }; }
+    async get () { return undefined } // or return { expiration: '', value: '' } if needed
+    async put () { return 'mock-key' }
+    async delete () { return null }
+    async deleteAll () { return { keys: 0 } }
+    async any () { return false }
+    async stats () { return { bytesKeys: 0, bytesValues: 0, keys: 0 } }
+    async * list () { yield { keys: [] } }
   }
   // The module exports both init and AdobeState
   return {
@@ -32,10 +31,6 @@ jest.mock('@adobe/aio-lib-state', () => {
     AdobeState: AdobeStateMock
   }
 })
-const stateLib = require('@adobe/aio-lib-state')
-
-const { HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_INTERNAL_ERROR } = require('../../../../../actions/constants')
-const Openwhisk = require('../../../../../actions/openwhisk')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -93,5 +88,4 @@ describe('Given product commerce consumer', () => {
       })
     })
   })
-
 })
