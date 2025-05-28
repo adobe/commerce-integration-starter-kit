@@ -10,8 +10,6 @@
   governing permissions and limitations under the License.
 */
 
-import type { Instrumentation } from "@opentelemetry/instrumentation";
-
 import type { DiagnosticsLogLevel, getLogger } from "~/api/logging";
 import type {
   AnyFunction,
@@ -61,6 +59,7 @@ export type InstrumentationConfig<T extends AnyFunction> = {
   };
 };
 
+/** The configuration for the telemetry diagnostics. */
 export type TelemetryDiagnosticsConfig = {
   logLevel: DiagnosticsLogLevel;
   loggerName?: string;
@@ -94,9 +93,8 @@ export type EntrypointInstrumentationConfig<
   initializeTelemetry: (
     params: RecursiveStringRecord,
     isDevelopment: boolean,
-  ) => {
+  ) => Partial<TelemetryApi> & {
     sdkConfig: Partial<NodeSDKConfiguration>;
-    monitorConfig?: Partial<ApplicationMonitorConfig>;
     diagnostics?: false | TelemetryDiagnosticsConfig;
   };
 };
@@ -112,33 +110,25 @@ export type MetricTypes =
   | ObservableGauge<Attributes>;
 
 /** Defines the state of the global telemetry API. These items should be set once per-application. */
-export type ApplicationMonitor = {
+export type TelemetryApi = {
   tracer: Tracer;
   meter: Meter;
 };
 
-/** The configuration for the application monitor. */
-export type ApplicationMonitorConfig = {
-  tracerName?: string;
-  tracerVersion?: string;
-  meterName?: string;
-  meterVersion?: string;
-};
-
 /** The context for the current operation. */
 export type InstrumentationContext = {
-  /** The span of the current operation. */
-  currentSpan: Span;
+  /** The tracer used to create the spans. */
+  tracer: Tracer;
 
-  /** The global application monitor. */
-  monitor: ApplicationMonitor;
+  /** The meter used to create the metrics. */
+  meter: Meter;
 
   /** The logger for the current operation. */
   logger: ReturnType<typeof getLogger>;
 
-  /** Holds the current telemetry context and it's carrier (for propagation). */
-  context: {
-    current: Context;
-    carrier: Record<string, string>;
-  };
+  /** The span of the current operation. */
+  currentSpan: Span;
+
+  /** Holds a carrier that can be used to propagate the active context. */
+  contextCarrier: Record<string, string>;
 };

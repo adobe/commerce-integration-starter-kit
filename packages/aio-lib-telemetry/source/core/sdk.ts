@@ -10,12 +10,14 @@
   governing permissions and limitations under the License.
 */
 
-import { setOtelDiagLogger } from "~/api/logging";
-import type { TelemetryDiagnosticsConfig } from "~/types";
+
 
 import { NodeSDK, type NodeSDKConfiguration } from "@opentelemetry/sdk-node";
 import { diag } from "@opentelemetry/api";
-import { setGlobalApplicationMonitor } from "./monitor";
+
+import type { TelemetryDiagnosticsConfig } from "~/types";
+import { setOtelDiagLogger } from "~/api/logging";
+import { setGlobalTelemetryApi } from "~/core/telemetry-api";
 
 /** Get the global SDK instance. */
 function getGlobalSdk() {
@@ -109,7 +111,7 @@ export async function shutdownSdk(reason?: string) {
 
     await sdk.shutdown();
     setGlobalSdk(null);
-    setGlobalApplicationMonitor(null);
+    setGlobalTelemetryApi(null);
 
     diag.info("OpenTelemetry automatic instrumentation shutdown successful");
   } catch (error) {

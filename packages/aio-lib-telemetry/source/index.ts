@@ -15,7 +15,7 @@ export {
 } from "./api/global";
 
 export { defineTelemetryConfig, defineMetrics } from "./core/config";
-export { getApplicationMonitor } from "./core/monitor";
+export { getGlobalTelemetryApi } from "./core/telemetry-api";
 export {
   instrument,
   instrumentEntrypoint,

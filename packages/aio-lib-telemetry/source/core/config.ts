@@ -28,11 +28,8 @@ export function defineTelemetryConfig(
 }
 
 /**
- * Helper to define application metrics with deferred initialization.
- * Returns a proxy object that behaves like the actual metrics but initializes them lazily.
- *
- * @param createMetrics - The function to create the metrics when a meter becomes available.
- * @returns A proxy that acts as the metrics object.
+ * Helper to define a record of metrics.
+ * @param createMetrics - A function that receives a meter which can be used to create the metrics.
  */
 export function defineMetrics<T extends Record<string, MetricTypes>>(
   createMetrics: (meter: Meter) => T,

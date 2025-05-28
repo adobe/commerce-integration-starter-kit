@@ -32,9 +32,9 @@ import type {
 
 import { getLogger } from "~/api/logging";
 import {
-  getApplicationMonitor,
-  initializeApplicationMonitor,
-} from "~/core/monitor";
+  getGlobalTelemetryApi,
+  initializeGlobalTelemetryApi,
+} from "~/core/telemetry-api";
 
 import {
   serializeContextIntoCarrier,
@@ -142,7 +142,7 @@ export function instrument<T extends AnyFunction>(
     const carrier = serializeContextIntoCarrier();
 
     const { actionName } = getRuntimeActionMetadata();
-    const monitor = getApplicationMonitor();
+    const { tracer, meter } = getGlobalTelemetryApi();
     const logger = getLogger(
       `${fn.name ? `${actionName}/${fn.name}` : spanName}`,
       {
@@ -153,11 +153,9 @@ export function instrument<T extends AnyFunction>(
     return {
       currentSpan: span,
       logger,
-      monitor,
-      context: {
-        current: context.active(),
-        carrier: carrier,
-      },
+      tracer,
+      meter,
+      contextCarrier: carrier,
     } satisfies InstrumentationHelpers;
   }
 
@@ -306,12 +304,12 @@ export function instrumentEntrypoint<
     return currentCtx;
   }
 
-  /** Initializes the Telemetry SDK and Application Monitor. */
+  /** Initializes the Telemetry SDK and API. */
   function setupTelemetry(params: RecursiveStringRecord) {
     const { initializeTelemetry, ...instrumentationConfig } = config;
 
     const { isDevelopment } = getRuntimeActionMetadata();
-    const { sdkConfig, monitorConfig, diagnostics } = initializeTelemetry(
+    const { sdkConfig, tracer, meter, diagnostics } = initializeTelemetry(
       params,
       isDevelopment,
     );
@@ -323,7 +321,7 @@ export function instrumentEntrypoint<
 
     // Internal calls to initialize the Telemetry SDK.
     initializeSdk(sdkConfig);
-    initializeApplicationMonitor(monitorConfig);
+    initializeGlobalTelemetryApi({ tracer, meter });
 
     return {
       ...instrumentationConfig,

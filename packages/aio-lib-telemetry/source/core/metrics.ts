@@ -13,11 +13,11 @@
 import type { Meter } from "@opentelemetry/api";
 
 import type { MetricTypes } from "~/types";
-import { getApplicationMonitor } from "~/core/monitor";
+import { getGlobalTelemetryApi } from "~/core/telemetry-api";
 
 /**
- * Creates a metrics proxy that lazily initializes metrics when accessed.
- * @param createMetrics - Function to create metrics when meter becomes available
+ * Creates a metrics proxy that lazily initializes metrics when accessed for the first time.
+ * @param createMetrics - A factory function that receives an initialized meter and returns a metric record.
  */
 export function createMetricsProxy<T extends Record<string, MetricTypes>>(
   createMetrics: (meter: Meter) => T,
@@ -26,7 +26,7 @@ export function createMetricsProxy<T extends Record<string, MetricTypes>>(
   let isInitializing = false;
 
   // Return a proxy that will lazy-initialize the metrics when accessed.
-  // This way we can defer the initialization of the metrics until the application monitor is initialized.
+  // This way we can defer the initialization of the metrics until the telemetry API (meter) is initialized.
   return new Proxy({} as T, {
     get(_, prop: string | symbol) {
       if (typeof prop === "symbol") {
@@ -45,9 +45,8 @@ export function createMetricsProxy<T extends Record<string, MetricTypes>>(
         return initializedMetrics[prop as keyof T];
       }
 
-      // Lazy initialization from global monitor
       try {
-        const { meter } = getApplicationMonitor();
+        const { meter } = getGlobalTelemetryApi();
 
         isInitializing = true;
         initializedMetrics = createMetrics(meter) as T;
