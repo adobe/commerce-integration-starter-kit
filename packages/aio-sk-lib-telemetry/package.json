@@ -1,21 +1,16 @@
 {
-  "name": "@adobe/aio-lib-telemetry",
+  "name": "@adobe/aio-sk-lib-telemetry",
   "version": "1.0.0",
   "author": "Adobe Inc.",
   "type": "module",
   "license": "ISC",
-  "description": "A utility module for easy instrumentation of Adobe I/O Runtime applications via OpenTelemetry.",
+  "description": "A utility module for easy instrumentation of Adobe I/O Runtime actions for Starter Kits via OpenTelemetry.",
   "files": ["dist", "*.d.ts"],
   "exports": {
     ".": {
       "import": "./dist/es/index.js",
       "types": "./dist/es/index.d.ts",
       "require": "./dist/cjs/index.cjs"
-    },
-    "./providers": {
-      "import": "./dist/es/providers/index.js",
-      "types": "./dist/es/providers/index.d.ts",
-      "require": "./dist/cjs/providers/index.cjs"
     }
   },
   "scripts": {
