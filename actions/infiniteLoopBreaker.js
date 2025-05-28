@@ -34,7 +34,7 @@ const DEFAULT_INFINITE_LOOP_BREAKER_TTL = 60 // seconds
  * @returns {boolean} - Returns true if the event is a potential infinite loop
  */
 async function isAPotentialInfiniteLoop (state, keyFn, fingerPrintFn, eventTypes, event) {
-  const logLevel = process.env.LOG_LEVEL || 'info'
+  const logLevel = process.env.LOG_LEVEL || 'debug'
 
   const logger = Core.Logger('infiniteLoopBreaker', { level: logLevel })
 

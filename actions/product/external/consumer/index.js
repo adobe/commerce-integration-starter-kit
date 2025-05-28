@@ -121,7 +121,7 @@ async function main (params) {
    * @returns {Function} the function that generates the keu
    */
   function fnInfiniteLoopKey (params) {
-    return () => { return `ilk_${params.sku}` }
+    return () => { return `ilk_${params.data.value.sku}` }
   }
 }
 
