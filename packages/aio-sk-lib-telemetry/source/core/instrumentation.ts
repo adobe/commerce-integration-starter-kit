@@ -75,7 +75,7 @@ export function getInstrumentationHelpers(): InstrumentationHelpers {
  */
 export function instrument<T extends AnyFunction>(
   fn: T,
-  { traceConfig, hooks, ...config }: InstrumentationConfig<T> = {},
+  { traceConfig, hooks }: InstrumentationConfig<T> = {},
 ): (...args: Parameters<T>) => ReturnType<T> {
   const {
     spanName = fn.name,
@@ -153,6 +153,7 @@ export function instrument<T extends AnyFunction>(
       `${fn.name ? `${actionName}/${fn.name}` : spanName}`,
       {
         logSourceAction: false,
+        level: process.env.__LOG_LEVEL,
       },
     );
 
@@ -174,8 +175,8 @@ export function instrument<T extends AnyFunction>(
     const spanConfig = {
       ...spanOptions,
       attributes: {
-        ...spanOptions.attributes,
         "action.name": actionName,
+        ...spanOptions.attributes,
       },
     };
 
@@ -253,6 +254,7 @@ export function instrumentEntrypoint<
       // Setting process.env.ENABLE_TELEMETRY directly won't work.
       // This is due to to webpack automatic env inline replacement.
       __ENABLE_TELEMETRY: enableTelemetry,
+      __LOG_LEVEL: `${params.LOG_LEVEL ?? (isDevelopment() ? "debug" : "info")}`,
     };
   }
 
@@ -332,8 +334,8 @@ export function instrumentEntrypoint<
     return {
       ...instrumentationConfig,
       traceConfig: {
+        getBaseContext: getPropagatedContext,
         ...instrumentationConfig.traceConfig,
-        baseContext: getPropagatedContext,
       },
     };
   }
@@ -348,8 +350,8 @@ export function instrumentEntrypoint<
       return instrument(handler, {
         ...instrumentationConfig,
         traceConfig: {
-          ...traceConfig,
           spanName: `${actionName}/${fn.name}`,
+          ...traceConfig,
         },
       }) as T;
     } catch (error) {
