@@ -65,3 +65,6 @@ export {
   createDenyListAttributesProcessor,
   TimeoutError,
 } from "@opentelemetry/sdk-metrics";
+
+export * from "@opentelemetry/otlp-exporter-base";
+export * from "@opentelemetry/otlp-grpc-exporter-base";
