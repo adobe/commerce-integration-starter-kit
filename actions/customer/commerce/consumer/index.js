@@ -26,7 +26,7 @@ const Openwhisk = require('../../../openwhisk')
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main (params) {
-  const { logger, currentSpan } = getInstrumentationHelpers()
+  const { logger, currentSpan, contextCarrier } = getInstrumentationHelpers()
   currentSpan.addEvent('event.type', { value: params.type })
   commerceCustomerMetrics.consumerTotalCounter.add(1)
 
@@ -66,7 +66,10 @@ async function main (params) {
         if (createdAt === updatedAt) {
           logger.info('Invoking created customer')
           const res = await openwhiskClient.invokeAction(
-            'customer-commerce/created', params.data.value)
+            'customer-commerce/created', {
+              ...params.data.value,
+              __telemetryContext: contextCarrier
+            })
           response = res?.response?.result?.body
           statusCode = res?.response?.result?.statusCode
         } else {
