@@ -21,50 +21,9 @@ import type {
   Span,
   SpanOptions,
   Context,
-  Counter,
-  Gauge,
-  Histogram,
   Meter,
-  ObservableCounter,
-  ObservableGauge,
-  ObservableUpDownCounter,
   Tracer,
-  UpDownCounter,
-  Attributes,
 } from "@opentelemetry/api";
-
-/** Defines events that can automatically be recorded on a span. */
-export type AutomaticSpanEvents = "success" | "error" | "parameters";
-
-/** The configuration for instrumentation. */
-export type InstrumentationConfig<T extends AnyFunction> = {
-  traceConfig?: {
-    /**
-     * The name of the span.
-     * @default The name of the function.
-     */
-    spanName?: string;
-
-    /** The options for the span. */
-    spanOptions?: SpanOptions;
-
-    /**
-     * The events that should be automatically recorded on the span.
-     * @default []
-     */
-    automaticSpanEvents?: AutomaticSpanEvents[];
-
-    /** The base context to use for the started span. */
-    getBaseContext?: (...args: Parameters<T>) => Context;
-  };
-
-  /** Hooks that can be used to act on a span depending on the result of the function. */
-  hooks?: {
-    // Result hooks.
-    onSuccess?: (result: ReturnType<T>, span: Span) => void;
-    onError?: (error: unknown, span: Span) => Error | undefined;
-  };
-};
 
 /** The configuration for the telemetry diagnostics. */
 export type TelemetryDiagnosticsConfig = {
@@ -102,6 +61,39 @@ type TelemetryPropagationConfig<T extends AnyFunction> = {
   };
 };
 
+/** Defines events that can automatically be recorded on a span. */
+export type AutomaticSpanEvents = "success" | "error" | "parameters";
+
+/** The configuration for instrumentation. */
+export type InstrumentationConfig<T extends AnyFunction> = {
+  traceConfig?: {
+    /**
+     * The name of the span.
+     * @default The name of the function.
+     */
+    spanName?: string;
+
+    /** The options for the span. */
+    spanOptions?: SpanOptions;
+
+    /**
+     * The events that should be automatically recorded on the span.
+     * @default []
+     */
+    automaticSpanEvents?: AutomaticSpanEvents[];
+
+    /** The base context to use for the started span. */
+    getBaseContext?: (...args: Parameters<T>) => Context;
+  };
+
+  /** Hooks that can be used to act on a span depending on the result of the function. */
+  hooks?: {
+    // Result hooks.
+    onSuccess?: (result: ReturnType<T>, span: Span) => void;
+    onError?: (error: unknown, span: Span) => Error | undefined;
+  };
+};
+
 /** The configuration for entrypoint instrumentation. */
 export type EntrypointInstrumentationConfig<
   T extends AnyFunction = AnyFunction,
@@ -117,16 +109,6 @@ export type EntrypointInstrumentationConfig<
     diagnostics?: false | TelemetryDiagnosticsConfig;
   };
 };
-
-/** The different types of metrics you can create with the OpenTelemetry API. */
-export type MetricTypes =
-  | Counter<Attributes>
-  | UpDownCounter<Attributes>
-  | Gauge<Attributes>
-  | Histogram<Attributes>
-  | ObservableCounter<Attributes>
-  | ObservableUpDownCounter<Attributes>
-  | ObservableGauge<Attributes>;
 
 /** Defines the state of the global telemetry API. These items should be set once per-application. */
 export type TelemetryApi = {

@@ -12,8 +12,8 @@
 
 import type { Meter } from "@opentelemetry/api";
 
-import type { EntrypointInstrumentationConfig, MetricTypes } from "~/types";
-import { createMetricsProxy } from "~/core/metrics";
+import type { EntrypointInstrumentationConfig } from "~/types";
+import { createMetricsProxy, type MetricTypes } from "~/core/metrics";
 
 /**
  * Helper to define the telemetry config for an entrypoint (with type safety).

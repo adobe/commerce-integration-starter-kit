@@ -10,10 +10,28 @@
   governing permissions and limitations under the License.
 */
 
-import type { Meter } from "@opentelemetry/api";
-
-import type { MetricTypes } from "~/types";
 import { getGlobalTelemetryApi } from "~/core/telemetry-api";
+import type {
+  Counter,
+  Gauge,
+  Histogram,
+  Meter,
+  ObservableCounter,
+  ObservableGauge,
+  ObservableUpDownCounter,
+  UpDownCounter,
+  Attributes,
+} from "@opentelemetry/api";
+
+/** The different types of metrics you can create with the OpenTelemetry API. */
+export type MetricTypes =
+  | Counter<Attributes>
+  | UpDownCounter<Attributes>
+  | Gauge<Attributes>
+  | Histogram<Attributes>
+  | ObservableCounter<Attributes>
+  | ObservableUpDownCounter<Attributes>
+  | ObservableGauge<Attributes>;
 
 /**
  * Creates a metrics proxy that lazily initializes metrics when accessed for the first time.
