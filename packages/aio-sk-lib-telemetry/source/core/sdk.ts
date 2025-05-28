@@ -19,7 +19,8 @@ import { setGlobalTelemetryApi } from "~/core/telemetry-api";
 
 /** Get the global SDK instance. */
 function getGlobalSdk() {
-  return global.__OTEL_SDK__ ?? null;
+  ensureSdkInitialized();
+  return global.__OTEL_SDK__;
 }
 
 /** Set the global SDK instance. */
@@ -32,12 +33,6 @@ export function ensureSdkInitialized() {
   if (!getGlobalSdk()) {
     throw new Error("Telemetry module not initialized");
   }
-}
-
-/** Get the SDK instance. */
-export function getSDK() {
-  ensureSdkInitialized();
-  return getGlobalSdk() as NodeSDK;
 }
 
 /** Initialize the diagnostics logger. */

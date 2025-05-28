@@ -51,7 +51,6 @@ export function initializeGlobalTelemetryApi(
 ) {
   if (global.__OTEL_TELEMETRY_API__) {
     diag.warn("Telemetry API already initialized. Skipping initialization.");
-
     return;
   }
 
