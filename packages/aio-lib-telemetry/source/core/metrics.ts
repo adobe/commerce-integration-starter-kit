@@ -11,7 +11,9 @@
 */
 
 import type { Meter } from "@opentelemetry/api";
+
 import type { MetricTypes } from "~/types";
+import { getApplicationMonitor } from "~/core/monitor";
 
 /**
  * Creates a metrics proxy that lazily initializes metrics when accessed.
@@ -23,46 +25,40 @@ export function createMetricsProxy<T extends Record<string, MetricTypes>>(
   let initializedMetrics: T | null = null;
   let isInitializing = false;
 
+  // Return a proxy that will lazy-initialize the metrics when accessed.
+  // This way we can defer the initialization of the metrics until the application monitor is initialized.
   return new Proxy({} as T, {
-    get(target, prop: string | symbol) {
+    get(_, prop: string | symbol) {
       if (typeof prop === "symbol") {
         return undefined;
       }
 
-      // Prevent circular dependencies
       if (isInitializing) {
+        // Would happen if using a metric inside the `defineMetrics` function.
         throw new Error(
           `Circular dependency detected: Do not access metrics inside the defineMetrics function. Only create and return metrics objects. Attempted to access "${String(prop)}"`,
         );
       }
 
-      // Return cached metrics if available
+      // The proxy has already been initialized, just return the asked metric.
       if (initializedMetrics) {
         return initializedMetrics[prop as keyof T];
       }
 
       // Lazy initialization from global monitor
       try {
-        const monitor = global.__OTEL_APPLICATION_MONITOR__;
-        if (!monitor?.meter) {
-          throw new Error(
-            `Cannot access metric "${String(prop)}": Application monitor not initialized`,
-          );
-        }
+        const { meter } = getApplicationMonitor();
 
         isInitializing = true;
-        try {
-          // Create the metrics
-          initializedMetrics = createMetrics(monitor.meter) as T;
-        } finally {
-          isInitializing = false;
-        }
+        initializedMetrics = createMetrics(meter) as T;
 
         return initializedMetrics[prop as keyof T];
       } catch (error) {
         throw new Error(
           `Failed to initialize metrics: ${error instanceof Error ? error.message : error}`,
         );
+      } finally {
+        isInitializing = false;
       }
     },
   });
