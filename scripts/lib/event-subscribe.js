@@ -20,7 +20,11 @@ const { getEventName } = require('../../utils/naming')
  * @returns {object} - returns response object
  */
 async function main (eventSpec, environment) {
-  if (environment.PROJECT_NAME && environment.COMMERCE_PROVIDER_ID) {
+  if (!environment.PROJECT_NAME) {
+    throw new Error('PROJECT_NAME is required but is missing or empty.')
+  }
+
+  if (environment.COMMERCE_PROVIDER_ID) {
     eventSpec.event.parent = eventSpec.event.name
     eventSpec.event.provider_id = environment.COMMERCE_PROVIDER_ID
     eventSpec.event.name = getEventName(eventSpec.event.name, environment)

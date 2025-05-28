@@ -34,7 +34,9 @@ const DEFAULT_PROVIDERS = [
 ]
 
 const ACCESS_TOKEN = 'token'
-const EMPTY_ENVIRONMENT = {}
+const ENVIRONMENT = {
+  PROJECT_NAME: 'test-project'
+}
 
 describe('Given on-boarding registrations file', () => {
   describe('When method main is defined', () => {
@@ -249,7 +251,7 @@ describe('Given on-boarding registrations file', () => {
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
 
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
         code: 200,
@@ -442,7 +444,7 @@ describe('Given on-boarding registrations file', () => {
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_only_commerce_registrations.json')
 
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
         code: 200,
@@ -629,7 +631,7 @@ describe('Given on-boarding registrations file', () => {
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_only_backoffice_registrations.json')
 
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
         code: 200,
@@ -816,7 +818,7 @@ describe('Given on-boarding registrations file', () => {
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
 
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
         code: 200,
@@ -842,7 +844,7 @@ describe('Given on-boarding registrations file', () => {
     test('Then returns error response', async () => {
       const fakeError = new Error('fake')
       fetch.mockRejectedValue(fakeError)
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
       expect(response).toEqual({
         code: 500,
         success: false,
@@ -864,7 +866,7 @@ describe('Given on-boarding registrations file', () => {
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
 
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
         code: 500,
