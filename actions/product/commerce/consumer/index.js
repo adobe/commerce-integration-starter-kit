@@ -45,6 +45,8 @@ async function main (params) {
       return errorResponse(HTTP_BAD_REQUEST, `Invalid request parameters: ${errorMessage}`)
     }
 
+    logger.info('Params type: ' + params.type)
+
     switch (params.type) {
       case `com.adobe.commerce.${params.PROJECT_NAME}.observer.catalog_product_save_commit_after`: {
         const createdAt = Date.parse(params.data.value.created_at)
