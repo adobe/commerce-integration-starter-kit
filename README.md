@@ -1,8 +1,16 @@
-# Commerce  Integration Starter Kit
+# Commerce Integration Starter Kit
 
 [![Node.js CI](https://github.com/adobe/commerce-integration-starter-kit/actions/workflows/deploy_node_stage.yml/badge.svg)](https://github.com/adobe/commerce-integration-starter-kit/actions/workflows/deploy_node_stage.yml)
 
-_Table of contents_: **[Prerequisites](#prerequisites)** | **[Supported Auth types](#supported-auth-types)** | **[Starter Kit first deploy & onboarding](#starter-kit-first-deploy--onboarding)** | **[Development](#development)** | **[Included actions documentation](#included-actions-documentation)** | **[References](#references)**
+_Table of contents_:
+- [**Commerce Integration Starter Kit**](#commerce--integration-starter-kit)
+  - [**Prerequisites**](#prerequisites)
+  - [**Starter Kit first deploy \& onboarding**](#starter-kit-first-deploy--onboarding)
+  - [**Development**](#development)
+  - [**Integrating OpenTelemetry**](#integrating-opentelemetry)
+  - [**Included actions documentation**](#included-actions-documentation)
+  - [**References**](#references)
+
 
 Welcome to Adobe Commerce Integration Starter Kit.
 
@@ -710,6 +718,27 @@ If you want to change an existing event, make the changes in the same places:
 - Make changes to the operation action invoked by the consumer switch case.
 - Deploy your changes
 
+## Integrating OpenTelemetry
+
+The starter kit includes the `@adobe/aio-sk-lib-telemetry` package by default, which currently resides as a local, non-published package in the `packages` folder. This package enables easy instrumentation of your actions with OpenTelemetry to collect comprehensive telemetry data:
+
+- Traces (with distributed tracing capabilities)
+- Metrics (for monitoring)
+- Logs (for debugging)
+
+For detailed information, consult the [package README](packages/aio-sk-lib-telemetry/README.md), which provides complete documentation along with guides and examples for instrumenting your Adobe App Builder actions.
+
+### Usage Example
+
+> [!NOTE]
+> Refer to the [How To Use](packages/aio-sk-lib-telemetry/README.md#how-to-use) section in the `@adobe/aio-sk-lib-telemetry` README for comprehensive integration instructions.
+
+The starter kit includes a sample implementation in the `actions/customer/commerce` workflow, specifically within the `consumer` and `created` actions. These examples utilize the telemetry configuration in `actions/telemetry.js` and the metrics definitions in `actions/customer/commerce/metrics.js`. 
+
+The instrumentation is designed to be minimally invasive and won't disrupt existing functionality. However, telemetry requires explicit opt-in configuration: you must instrument each runtime action individually, configure exporters in the `telemetry.js` file, and set the `ENABLE_TELEMETRY` environment variable to `true` in each action's `inputs` section. While we've implemented this setup for the aforementioned actions, to fully enable telemetry, you need to complete your configuration in the `telemetry.js` file. 
+
+The integration we've made in the `customer/commerce` workflow enables the three main signals: **traces**, **metrics** and **logs**, and comes with automatic context propagation. This means that, triggering your `consumer` action will create a unified trace spanning the entire execution flow, including any invoked (but instrumented) actions like `created`.
+
 ## Included actions documentation
 ### External back-office ingestion webhook
 - [Ingestion webhook consumer](actions/ingestion/webhook/docs/README.md)
@@ -757,7 +786,7 @@ If you want to change an existing event, make the changes in the same places:
 #### Third party to Commerce
 - [Stock updated in third party](actions/stock/external/updated/docs/README.md)
 
-# References
+## References
 - [Adobe Commerce Extensibility](https://developer.adobe.com/commerce/extensibility/) 
 - [Adobe developer console](https://developer.adobe.com/developer-console/docs/guides/)
 - [Adobe App Builder](https://developer.adobe.com/app-builder/docs/overview/)
@@ -766,6 +795,6 @@ If you want to change an existing event, make the changes in the same places:
 - [Adobe I/O Runtime](https://developer.adobe.com/runtime/docs/)
 - [Commerce Web APIs](https://developer.adobe.com/commerce/webapi/)
 
-## Contributing
+### Contributing
 
 Contributions are welcomed! Read the [Contributing Guide](./.github/CONTRIBUTING.md) for more information.
