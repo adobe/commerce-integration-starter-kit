@@ -4,7 +4,7 @@ const {
   getPresetInstrumentations
 } = require('@adobe/aio-sk-lib-telemetry')
 
-/** The telemetry configuration used across all actions */
+/** The telemetry configuration to be used across all actions */
 const telemetryConfig = defineTelemetryConfig((params, isDev) => {
   return {
     sdkConfig: {
@@ -20,7 +20,7 @@ const telemetryConfig = defineTelemetryConfig((params, isDev) => {
     },
 
     diagnostics: {
-      logLevel: isDev ? 'debug' : 'error'
+      logLevel: isDev ? 'debug' : 'info'
     }
   }
 })
