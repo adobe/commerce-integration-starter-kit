@@ -28,8 +28,8 @@ export function getAioRuntimeAttributes() {
 }
 
 /** 
- * Creates a resource from the attributes inferred from the Adobe I/O Runtime,
- * and returns it as an OpenTelemetry Resource object.
+ * Creates a [resource](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_sdk-node.resources.Resource.html) 
+ * from the attributes inferred from the Adobe I/O Runtime and returns it as an OpenTelemetry Resource object.
  * 
  * @see https://opentelemetry.io/docs/languages/js/resources/
  * @example
@@ -43,7 +43,8 @@ export function getAioRuntimeResource() {
 }
 
 /**
- * Combines the attributes inferred from the Adobe I/O Runtime with the provided attributes.
+ * Creates a [resource](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_sdk-node.resources.Resource.html) 
+ * that combines the attributes inferred from the Adobe I/O Runtime with the provided attributes.
  * @param attributes - The attributes to combine with the attributes inferred from the Adobe I/O Runtime.
  * 
  * @see https://opentelemetry.io/docs/languages/js/resources/

@@ -1,6 +1,6 @@
 # `InstrumentationConfig\<T\>`
 
-Defined in: [types.ts:88](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/types.ts#L88)
+Defined in: [types.ts:88](https://github.com/adobe/commerce-integration-starter-kit/blob/7bab865cdac63499cf83c46b58de1aec6528b17f/packages/aio-sk-lib-telemetry/source/types.ts#L88)
 
 The configuration for instrumentation.
 
@@ -25,7 +25,7 @@ optional hooks: {
 };
 ```
 
-Defined in: [types.ts:121](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/types.ts#L121)
+Defined in: [types.ts:118](https://github.com/adobe/commerce-integration-starter-kit/blob/7bab865cdac63499cf83c46b58de1aec6528b17f/packages/aio-sk-lib-telemetry/source/types.ts#L118)
 
 Hooks that can be used to act on a span depending on the result of the function.
 
@@ -82,7 +82,7 @@ optional spanConfig: {
 };
 ```
 
-Defined in: [types.ts:90](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/types.ts#L90)
+Defined in: [types.ts:90](https://github.com/adobe/commerce-integration-starter-kit/blob/7bab865cdac63499cf83c46b58de1aec6528b17f/packages/aio-sk-lib-telemetry/source/types.ts#L90)
 
 Configuration options related to the span started by the instrumented function.
 
@@ -137,8 +137,4 @@ You must use a named function or a provide a name here.
 optional spanOptions: SpanOptions;
 ```
 
-The options for the span.
-
-##### See
-
-https://opentelemetry.io/docs/concepts/signals/traces/#spans
+The [options](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.SpanOptions.html) for the span.

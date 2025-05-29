@@ -94,10 +94,7 @@ export interface InstrumentationConfig<T extends AnyFunction> {
      */
     spanName?: string;
 
-    /** 
-     * The options for the span. 
-     * @see https://opentelemetry.io/docs/concepts/signals/traces/#spans
-     */
+    /** The [options](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.SpanOptions.html) for the span. */
     spanOptions?: SpanOptions;
 
     /**
@@ -143,7 +140,7 @@ export interface InstrumentationConfig<T extends AnyFunction> {
 export interface TelemetryConfig extends Partial<TelemetryApi> {
   /** 
    * The configuration options for the OpenTelemetry SDK.
-   * See: {@link https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_sdk-node.NodeSDKConfiguration.html} for the interface.
+   * See the [NodeSDKConfiguration](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_sdk-node.NodeSDKConfiguration.html) interface.
    */
   sdkConfig: Partial<NodeSDKConfiguration>;
 
@@ -158,7 +155,7 @@ export interface EntrypointInstrumentationConfig<
 
   /**
    * Configuration options related to context propagation.
-   * See: {@link TelemetryPropagationConfig} for the interface.
+   * See the {@link TelemetryPropagationConfig} for the interface.
    */
   propagation?: TelemetryPropagationConfig<T>;
 
