@@ -150,5 +150,6 @@ Check for infinite loop this way.
       }
 ```
 
+Fingerprints have a default TTL of 60s seconds.
 
 Infinite loops can be initiated from commerce updates or third party updates. So this mechanism should be implemented in both agents receiving updates.
