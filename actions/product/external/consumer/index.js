@@ -59,7 +59,7 @@ async function main (params) {
     if (await isAPotentialInfiniteLoop(
       state,
       fnInfiniteLoopKey(params),
-      fnFingerPrintInfiniteLoopKey(params),
+      fnFingerprint(params),
       infiniteLoopEventTypes,
       params.type)) {
       logger.info(`Infinite loop break for event ${params.type}`)
@@ -111,7 +111,7 @@ async function main (params) {
    * @param {object} params Data received from the event
    * @returns {Function} the function that generates the fingerprint
    */
-  function fnFingerPrintInfiniteLoopKey (params) {
+  function fnFingerprint (params) {
     return () => { return { product: params.data.value.sku, description: params.data.value.description } }
   }
 
