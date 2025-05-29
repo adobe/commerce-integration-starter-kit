@@ -16,7 +16,7 @@ const { HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR } = require('../../../con
 const Openwhisk = require('../../../openwhisk')
 const { errorResponse, successResponse } = require('../../../responses')
 const stateLib = require('@adobe/aio-lib-state')
-const { storeFingerPrint, isAPotentialInfiniteLoop } = require('../../../infiniteLoopBreaker')
+const { storeFingerPrint, isAPotentialInfiniteLoop } = require('../../../infinite-loop-breaker')
 
 /**
  * This is the consumer of the events coming from Adobe Commerce related to product entity.
@@ -40,7 +40,7 @@ async function main (params) {
     let statusCode = HTTP_OK
 
     // check for missing request input parameters and headers
-    const requiredParams = ['type', 'data']
+    const requiredParams = ['type', 'data.value.created_at', 'data.value.updated_at', 'data.value.sku', 'data.value.description']
     const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
 
     if (errorMessage) {

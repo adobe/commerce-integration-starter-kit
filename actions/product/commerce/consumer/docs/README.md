@@ -2,10 +2,10 @@
 
 ## Infinite Loop Breaker
 
-This action implement a Infinite Loop Breaker for Adobe Commerce product events with a third party backoffice.
+This action implements an Infinite Loop Breaker for Adobe Commerce product events with a third party backoffice.
 
-Infinite Loop occurs for when a entity is updated in Adobe Commerce, this update is propagated to a 3rd party backoffice,
-which send a new event about the update. This event is again prograpated to Adobe Commerce, where the process starts againg
+An Infinite Loop occurs when an entity is updated in Adobe Commerce, this update is propagated to a 3rd party backoffice,
+which send a new event about the update. This event is again propagated to Adobe Commerce, where the process starts again
 
 ```mermaid
 ---
@@ -36,15 +36,15 @@ Note over Adobe Commerce: Infinite loop in progress
 
 ## How to avoid the infinite loop
 
-To avoid the infinite loop we should track which changes in a product entity have been caused a product update event. To do this:
+To avoid the infinite loop, we should track which changes in a product entity have caused a product update event. To do this:
 
-1. Define a key for indentifying an entity.
+1. Define a key for identifying an entity.
 2. Define a fingerprint to check when there is a change in an entity.
-3. When an update for an entity arrives to our app, calculate the key and the fingerprint
-4. We check if we have tracked this entity check, buy searching the key in our app.
-   1. If the key does not exists we prograpage the update
-   2. If the key exists compare the received figerprint compare with the stored one.
-      1. If fingerprints are the same --> discard the event, as it's already processed
+3. When an update for an entity arrives at our app, calculate the key and the fingerprint
+4. We check if we have tracked this entity check, by searching the key in our app.
+   1. If the key does not exists we propagate the update
+   2. If the key exists, compare the received fingerprint with the stored one.
+      1. If fingerprints are the same --> discard the event, as it has already been processed
       2. If different propagate the event.
 
 
@@ -93,7 +93,7 @@ Implementation uses ```@adobe/aio-lib-state``` to maintain events that have been
 
 // Import lib-state and infinite loop breaker
 const stateLib = require('@adobe/aio-lib-state')
-const { isAPotentialInfiniteLoop } = require('../../../infiniteLoopBreaker')
+const { storeFingerPrint, isAPotentialInfiniteLoop } = require('../../../infinite-loop-breaker')
 
 ```
 
@@ -140,14 +140,22 @@ Check for infinite loop this way.
 
 ```javascript
 
-    if (await isAPotentialInfiniteLoop(
-      state,
-      fnInfiniteLoopKey(params),
-      fnFingerprint(params),
-      infiniteLoopEventTypes,
-      params.type)) {
-      logger.info(`Infinite loop break for event ${params.type}`)
-      }
+    const infiniteLoopData = {
+      fingerprintFn: fnFingerprint(params),
+      keyFn: fnInfiniteLoopKey(params),
+      event: params.type,
+      eventTypes: infiniteLoopEventTypes
+    }
+
+    if (await isAPotentialInfiniteLoop(state, infiniteLoopData)) {
+      ...
+    }
+```
+
+If the event is processed, store the finger print
+
+```javascript
+await storeFingerPrint(state, fnInfiniteLoopKey(params), fnFingerprint(params))
 ```
 
 Fingerprints have a default TTL of 60s seconds.

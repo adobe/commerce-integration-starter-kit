@@ -34,7 +34,7 @@ const DEFAULT_INFINITE_LOOP_BREAKER_TTL = 60 // seconds
  * @returns {boolean} - Returns true if the event is a potential infinite loop
  */
 async function isAPotentialInfiniteLoop (state, { keyFn, fingerprintFn, eventTypes, event }) {
-  const logLevel = process.env.LOG_LEVEL || 'debug'
+  const logLevel = process.env.LOG_LEVEL || 'info'
 
   const logger = Core.Logger('infiniteLoopBreaker', { level: logLevel })
 
@@ -53,8 +53,8 @@ async function isAPotentialInfiniteLoop (state, { keyFn, fingerprintFn, eventTyp
     logger.debug(`No persisted fingerprint found for key ${key}`)
     return false
   }
-  logger.debug(`Persisted fingerprint found for key ${key}: ${persistedFingerPrint.value}`)
-  logger.debug(`Generated fingerprint: ${fingerPrint(data)}`)
+  logger.debug(`Persisted fingerprint found for key ${key}: ${persistedFingerPrint.value},` +
+    ` Generated fingerprint: ${fingerPrint(data)}`)
 
   return persistedFingerPrint && persistedFingerPrint.value === fingerPrint(data)
 }
