@@ -26,6 +26,7 @@
     "core-js": "^3.37.1",
     "dotenv": "^16.4.5",
     "got": "^11.8.5",
+    "graphql-request": "^7.1.2",
     "node-fetch": "^2.7.0",
     "oauth-1.0a": "^2.2.6",
     "openwhisk": "^3.21.8",
