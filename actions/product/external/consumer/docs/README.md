@@ -7,14 +7,13 @@ This action implement a Infinite Loop Breaker for Adobe Commerce product events 
 Infinite Loop occurs for when a entity is updated in Adobe Commerce, this update is propagated to a 3rd party backoffice,
 which send a new event about the update. This event is again prograpated to Adobe Commerce, where the process starts againg
 
-
 ```mermaid
 ---
 title: Infinite Loop
 ---
 sequenceDiagram
 participant Adobe Commerce
-box Orange Runtime AppBuilder
+box rgb(234, 240, 247) Runtime AppBuilder
 participant commerce/consumer
 participant external/consumer
 end
@@ -55,7 +54,7 @@ title: Infinite Loop 2
 ---
 sequenceDiagram
 participant Adobe Commerce
-box Orange Runtime AppBuilder
+box rgb(234, 240, 247) Runtime AppBuilder Runtime AppBuilder
 participant commerce/consumer
 participant LibState
 participant external/consumer
@@ -150,6 +149,7 @@ Check for infinite loop this way.
       logger.info(`Infinite loop break for event ${params.type}`)
       }
 ```
+
 Fingerprints have a default TTL of 60s seconds.
 
 Infinite loops can be initiated from commerce updates or third party updates. So this mechanism should be implemented in both agents receiving updates.
