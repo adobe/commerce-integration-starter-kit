@@ -33,7 +33,7 @@ const consumer = require('../../../../../actions/product/external/consumer')
 const { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_INTERNAL_ERROR } = require('../../../../../actions/constants')
 
 const { Core } = require('@adobe/aio-sdk')
-const logger = Core.Logger('infiniteLoopBreaker', { level: 'debug' })
+const logger = Core.Logger('infiniteLoopBreaker', { level: 'info' })
 
 jest.mock('../../../../../actions/openwhisk')
 
