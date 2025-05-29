@@ -16,7 +16,7 @@ const { HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST, HTTP_OK } = require('../../../con
 const Openwhisk = require('../../../openwhisk')
 const { errorResponse, successResponse } = require('../../../responses')
 const stateLib = require('@adobe/aio-lib-state')
-const { isAPotentialInfiniteLoop } = require('../../../infiniteLoopBreaker')
+const { storeFingerPrint, isAPotentialInfiniteLoop } = require('../../../infiniteLoopBreaker')
 
 /**
  * This is the consumer of the events coming from External back-office applications related to product entity.
@@ -56,12 +56,14 @@ async function main (params) {
       'be-observer.catalog_product_update'
     ]
 
-    if (await isAPotentialInfiniteLoop(
-      state,
-      fnInfiniteLoopKey(params),
-      fnFingerprint(params),
-      infiniteLoopEventTypes,
-      params.type)) {
+    const infiniteLoopData = {
+      fingerprintFn: fnFingerprint(params),
+      keyFn: fnInfiniteLoopKey(params),
+      event: params.type,
+      eventTypes: infiniteLoopEventTypes
+    }
+
+    if (await isAPotentialInfiniteLoop(state, infiniteLoopData)) {
       logger.info(`Infinite loop break for event ${params.type}`)
       return successResponse(params.type, `event discarded to prevent infinite loop  ${params.type})`)
     }
@@ -99,6 +101,9 @@ async function main (params) {
       return errorResponse(statusCode, response.error)
     }
 
+    // Prepare to detect infinite loop on subsequent events
+    await storeFingerPrint(state, fnInfiniteLoopKey(params), fnFingerprint(params))
+
     logger.info(`Successful request: ${statusCode}`)
     return successResponse(params.type, response)
   } catch (error) {
@@ -107,7 +112,7 @@ async function main (params) {
   }
 
   /**
-   * This function generates a function to genereate fingerprint for the data to be used in infinite loop detection based on params.
+   * This function generates a function to generate fingerprint for the data to be used in infinite loop detection based on params.
    * @param {object} params Data received from the event
    * @returns {Function} the function that generates the fingerprint
    */

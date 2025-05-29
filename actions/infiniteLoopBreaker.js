@@ -11,7 +11,6 @@ governing permissions and limitations under the License.
 */
 
 const crypto = require('crypto')
-
 const { Core } = require('@adobe/aio-sdk')
 
 /** @constant {string} FINGERPRINT_ALGORITHM - The algorithm used to generate the fingerprint */
@@ -27,13 +26,14 @@ const DEFAULT_INFINITE_LOOP_BREAKER_TTL = 60 // seconds
  * This function checks if there is a potential infinite loop
  *
  * @param {object} state - The state object
- * @param {Function} keyFn - Funtion to generate the key for the fingerprint
- * @param {Function} fingerprintFn - Function to generate the fingerprint
- * @param {Array} eventTypes - The event types to include in the infinite loop check
- * @param {string} event - The event to check for potential infinite loops
+ * @param {object} infiniteLoopData - The event data containing the key and fingerprint functions, event types, and event name
+ * @param {string | Function} infiniteLoopData.keyFn - Funtion to generate the key for the fingerprint
+ * @param {string | Function} infiniteLoopData.fingerprintFn - Function to generate the fingerprint
+ * @param {Array} infiniteLoopData.eventTypes - The event types to include in the infinite loop check
+ * @param {string} infiniteLoopData.event - The event to check for potential infinite loops
  * @returns {boolean} - Returns true if the event is a potential infinite loop
  */
-async function isAPotentialInfiniteLoop (state, keyFn, fingerprintFn, eventTypes, event) {
+async function isAPotentialInfiniteLoop (state, { keyFn, fingerprintFn, eventTypes, event }) {
   const logLevel = process.env.LOG_LEVEL || 'debug'
 
   const logger = Core.Logger('infiniteLoopBreaker', { level: logLevel })
@@ -63,11 +63,14 @@ async function isAPotentialInfiniteLoop (state, keyFn, fingerprintFn, eventTypes
  * This function stores the fingerprint in the state
  *
  * @param {object} state - The state object
- * @param {string} key - The key to store the fingerprint
- * @param {object} data - The data to generate the fingerprint
+ * @param {string | Function} keyFn - Funtion to generate the key for the fingerprint
+ * @param {string | Function} fingerprintFn - Function to generate the fingerprint
  * @param {number} [ttl] - The time to live for the fingerprint in the lib state
  */
-async function storeFingerPrint (state, key, data, ttl) {
+async function storeFingerPrint (state, keyFn, fingerprintFn, ttl) {
+  const key = typeof keyFn === 'function' ? keyFn() : keyFn
+  const data = typeof fingerprintFn === 'function' ? fingerprintFn() : fingerprintFn
+
   await state.put(key, fingerPrint(data), { ttl: ttl || DEFAULT_INFINITE_LOOP_BREAKER_TTL })
 }
 
