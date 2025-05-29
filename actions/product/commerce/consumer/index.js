@@ -113,7 +113,7 @@ async function main (params) {
   }
 
   /**
-   * This function generates afunction to genereate fingerprint for the data to be used in infinite loop detection based on params.
+   * This function generates a function to genereate fingerprint for the data to be used in infinite loop detection based on params.
    * @param {object} params Data received from the event
    * @returns {Function} the function that generates the fingerprint
    */
