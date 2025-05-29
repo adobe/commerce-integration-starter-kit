@@ -20,9 +20,9 @@ function defineTelemetryConfig(
 };
 ```
 
-Defined in: [core/config.ts:22](https://github.com/adobe/commerce-integration-starter-kit/blob/fe75c4bc3a72d4e1427ca0ca82f37e4da289ae29/packages/aio-sk-lib-telemetry/source/core/config.ts#L22)
+Defined in: [core/config.ts:22](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/core/config.ts#L22)
 
-Helper to define the telemetry config for an entrypoint (with type safety).
+Helper to define the telemetry config for an entrypoint.
 
 ## Parameters
 

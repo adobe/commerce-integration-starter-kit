@@ -1,6 +1,6 @@
 # `EntrypointInstrumentationConfig\<T\>`
 
-Defined in: [types.ts:106](https://github.com/adobe/commerce-integration-starter-kit/blob/fe75c4bc3a72d4e1427ca0ca82f37e4da289ae29/packages/aio-sk-lib-telemetry/source/types.ts#L106)
+Defined in: [types.ts:106](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L106)
 
 The configuration for entrypoint instrumentation.
 
@@ -25,7 +25,7 @@ optional hooks: {
 };
 ```
 
-Defined in: [types.ts:98](https://github.com/adobe/commerce-integration-starter-kit/blob/fe75c4bc3a72d4e1427ca0ca82f37e4da289ae29/packages/aio-sk-lib-telemetry/source/types.ts#L98)
+Defined in: [types.ts:98](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L98)
 
 Hooks that can be used to act on a span depending on the result of the function.
 
@@ -78,7 +78,7 @@ initializeTelemetry: (params: RecursiveStringRecord, isDevelopment: boolean) => 
 };
 ```
 
-Defined in: [types.ts:112](https://github.com/adobe/commerce-integration-starter-kit/blob/fe75c4bc3a72d4e1427ca0ca82f37e4da289ae29/packages/aio-sk-lib-telemetry/source/types.ts#L112)
+Defined in: [types.ts:112](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L112)
 
 This function will be called at the very beginning of the action.
 
@@ -104,7 +104,7 @@ This function will be called at the very beginning of the action.
 optional propagation: TelemetryPropagationConfig<T>;
 ```
 
-Defined in: [types.ts:109](https://github.com/adobe/commerce-integration-starter-kit/blob/fe75c4bc3a72d4e1427ca0ca82f37e4da289ae29/packages/aio-sk-lib-telemetry/source/types.ts#L109)
+Defined in: [types.ts:109](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L109)
 
 ---
 
@@ -119,7 +119,7 @@ optional traceConfig: {
 };
 ```
 
-Defined in: [types.ts:77](https://github.com/adobe/commerce-integration-starter-kit/blob/fe75c4bc3a72d4e1427ca0ca82f37e4da289ae29/packages/aio-sk-lib-telemetry/source/types.ts#L77)
+Defined in: [types.ts:77](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L77)
 
 #### automaticSpanEvents?
 

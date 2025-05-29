@@ -15,9 +15,10 @@ function getAioRuntimeAttributes(): {
 };
 ```
 
-Defined in: [api/attributes.ts:17](https://github.com/adobe/commerce-integration-starter-kit/blob/fe75c4bc3a72d4e1427ca0ca82f37e4da289ae29/packages/aio-sk-lib-telemetry/source/api/attributes.ts#L17)
+Defined in: [api/attributes.ts:26](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/api/attributes.ts#L26)
 
-Infers some useful attributes for the current action from the Adobe I/O Runtime.
+Infers some useful attributes for the current action from the Adobe I/O Runtime
+and returns them as a record of key-value pairs.
 
 ## Returns
 
@@ -94,4 +95,11 @@ name: string = serviceName;
 
 ```ts
 version: string = meta.actionVersion;
+```
+
+## Example
+
+```ts
+const attributes = getAioRuntimeAttributes();
+// attributes = { action.namespace: "my-namespace", action.name: "my-action", ... }
 ```

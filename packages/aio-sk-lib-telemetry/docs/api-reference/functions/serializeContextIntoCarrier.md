@@ -7,7 +7,7 @@ function serializeContextIntoCarrier<Carrier>(
 ): Carrier;
 ```
 
-Defined in: [api/propagation.ts:20](https://github.com/adobe/commerce-integration-starter-kit/blob/fe75c4bc3a72d4e1427ca0ca82f37e4da289ae29/packages/aio-sk-lib-telemetry/source/api/propagation.ts#L20)
+Defined in: [api/propagation.ts:34](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/api/propagation.ts#L34)
 
 Serializes the current context into a carrier.
 
@@ -27,3 +27,17 @@ Serializes the current context into a carrier.
 ## Returns
 
 `Carrier`
+
+## Examples
+
+```ts
+const carrier = serializeContextIntoCarrier();
+// carrier is now a record with the context data
+```
+
+```ts
+const myCarrier = { more: "data" };
+const carrier = serializeContextIntoCarrier(myCarrier);
+// carrier now contains both the existing data and the context data
+// carrier = { more: 'data', ...contextData }
+```

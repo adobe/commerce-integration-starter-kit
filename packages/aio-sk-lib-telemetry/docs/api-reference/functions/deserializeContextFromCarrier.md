@@ -7,7 +7,7 @@ function deserializeContextFromCarrier<Carrier>(
 ): Context;
 ```
 
-Defined in: [api/propagation.ts:34](https://github.com/adobe/commerce-integration-starter-kit/blob/fe75c4bc3a72d4e1427ca0ca82f37e4da289ae29/packages/aio-sk-lib-telemetry/source/api/propagation.ts#L34)
+Defined in: [api/propagation.ts:55](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/api/propagation.ts#L55)
 
 Deserializes the context from a carrier and augments the given base context with it.
 
@@ -27,3 +27,11 @@ Deserializes the context from a carrier and augments the given base context with
 ## Returns
 
 `Context`
+
+## Example
+
+```ts
+const carrier = { traceparent: "...00-069ea333a3d430..." };
+const ctx = deserializeContextFromCarrier(carrier);
+// ctx now contains the context data from the carrier
+```

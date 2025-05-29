@@ -1,6 +1,6 @@
 # `TelemetryPropagationConfig\<T\>`
 
-Defined in: [types.ts:55](https://github.com/adobe/commerce-integration-starter-kit/blob/fe75c4bc3a72d4e1427ca0ca82f37e4da289ae29/packages/aio-sk-lib-telemetry/source/types.ts#L55)
+Defined in: [types.ts:55](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L55)
 
 Configuration related to context propagation (for distributed tracing).
 
@@ -21,7 +21,7 @@ optional getContextCarrier: (...args: Parameters<T>) => {
 };
 ```
 
-Defined in: [types.ts:66](https://github.com/adobe/commerce-integration-starter-kit/blob/fe75c4bc3a72d4e1427ca0ca82f37e4da289ae29/packages/aio-sk-lib-telemetry/source/types.ts#L66)
+Defined in: [types.ts:66](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L66)
 
 A function that returns the carrier for the current context.
 
@@ -60,7 +60,7 @@ carrier: Record<string, string>;
 optional skip: boolean;
 ```
 
-Defined in: [types.ts:60](https://github.com/adobe/commerce-integration-starter-kit/blob/fe75c4bc3a72d4e1427ca0ca82f37e4da289ae29/packages/aio-sk-lib-telemetry/source/types.ts#L60)
+Defined in: [types.ts:60](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L60)
 
 Whether to skip the propagation of the context.
 

@@ -4,7 +4,7 @@
 function tryGetActiveSpan(ctx: Context): null | Span;
 ```
 
-Defined in: [api/global.ts:33](https://github.com/adobe/commerce-integration-starter-kit/blob/fe75c4bc3a72d4e1427ca0ca82f37e4da289ae29/packages/aio-sk-lib-telemetry/source/api/global.ts#L33)
+Defined in: [api/global.ts:47](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/api/global.ts#L47)
 
 Tries to get the active span from the given context.
 
@@ -17,3 +17,12 @@ Tries to get the active span from the given context.
 ## Returns
 
 `null` \| `Span`
+
+## Example
+
+```ts
+const span = tryGetActiveSpan();
+if (span) {
+  span.addEvent("my-event", { foo: "bar" });
+}
+```
