@@ -48,7 +48,7 @@ async function isAPotentialInfiniteLoop (state, { keyFn, fingerprintFn, eventTyp
   const key = typeof keyFn === 'function' ? keyFn() : keyFn
   const data = typeof fingerprintFn === 'function' ? fingerprintFn() : fingerprintFn
 
-  const persistedFingerPrint = await state.get(key) // { value, expiration }
+  const persistedFingerPrint = await state.get(key)
   if (!persistedFingerPrint) {
     logger.debug(`No persisted fingerprint found for key ${key}`)
     return false
