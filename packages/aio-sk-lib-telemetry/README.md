@@ -37,6 +37,7 @@ This module contains a set of utilities for integrating observability into App B
     - [Instrumentation Helpers](#instrumentation-helpers)
     - [API Reference](#api-reference)
   - [❓ Next Up](#-next-up)
+    - [Guides](#guides)
   - [🩺 Troubleshooting](#-troubleshooting)
     - [Hot Reloading and `aio app dev`](#hot-reloading-and-aio-app-dev)
     - [Telemetry Signals Not Being Exported](#telemetry-signals-not-being-exported)
@@ -484,6 +485,10 @@ This module is a thin wrapper around the OpenTelemetry SDK for Node.js. For more
 > It's not intended to be a full-fledged observability solution, but rather a tool to help you get started with OpenTelemetry and collect telemetry data in the context of Adobe App Builder runtime actions. It doesn't cover all the features of OpenTelemetry, but rather provides a simple and easy to use interface to get you started. 
 >
 > For advanced use cases you'll need to use the configuration options provided by this module to directly configure the underlying OpenTelemetry SDK, or use the OpenTelemetry SDK directly.
+
+### Guides
+
+We have prepared some guides to help you get started with OpenTelemetry in your App Builder apps. See the [README](./docs/guides/README.md) in the [docs/guides](./docs/guides) folder.
 
 ## 🩺 Troubleshooting
 
