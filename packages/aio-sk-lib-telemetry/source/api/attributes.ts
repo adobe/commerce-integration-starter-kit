@@ -13,12 +13,31 @@
 import { resourceFromAttributes } from "@opentelemetry/resources";
 import { inferTelemetryAttributesFromRuntimeMetadata } from "~/helpers/runtime";
 
-/** Infers some useful attributes for the current action from the Adobe I/O Runtime. */
+/** 
+ * Infers some useful attributes for the current action from the Adobe I/O Runtime 
+ * and returns them as a record of key-value pairs.
+ * 
+ * @example
+ * ```ts
+ * const attributes = getAioRuntimeAttributes();
+ * // attributes = { action.namespace: "my-namespace", action.name: "my-action", ... }
+ * ```
+ */
 export function getAioRuntimeAttributes() {
   return inferTelemetryAttributesFromRuntimeMetadata();
 }
 
-/** Creates a resource from the attributes inferred from the Adobe I/O Runtime. */
+/** 
+ * Creates a resource from the attributes inferred from the Adobe I/O Runtime,
+ * and returns it as an OpenTelemetry Resource object.
+ * 
+ * @see https://opentelemetry.io/docs/languages/js/resources/
+ * @example
+ * ```ts
+ * const resource = getAioRuntimeResource();
+ * // use this resource in your OpenTelemetry configuration
+ * ```
+ */
 export function getAioRuntimeResource() {
   return resourceFromAttributes(getAioRuntimeAttributes());
 }
@@ -26,6 +45,14 @@ export function getAioRuntimeResource() {
 /**
  * Combines the attributes inferred from the Adobe I/O Runtime with the provided attributes.
  * @param attributes - The attributes to combine with the attributes inferred from the Adobe I/O Runtime.
+ * 
+ * @see https://opentelemetry.io/docs/languages/js/resources/
+ * @example
+ * ```ts
+ * const resource = getAioRuntimeResourceWithAttributes({ foo: "bar" });
+ * // resource = { action.namespace: "my-namespace", action.name: "my-action", foo: "bar", ... }
+ * // use this resource in your OpenTelemetry configuration
+ * ```
  */
 export function getAioRuntimeResourceWithAttributes(
   attributes: Record<string, string>,

@@ -469,8 +469,8 @@ This function receives the following helpers:
 
 - `currentSpan`: The active span for the current operation.
 - `contextCarrier`: A pre-serialized carrier object for propagating trace context.
-- `tracer`: The global tracer instance for creating spans. For accessing the tracer outside instrumented contexts, see [`getTelemetryApi`](./docs/api-reference/functions/getTelemetryApi.md).
-- `meter`: The global meter instance for creating metrics. For accessing the meter outside instrumented contexts, see [`getTelemetryApi`](./docs/api-reference/functions/getTelemetryApi.md).
+- `tracer`: The global tracer instance for creating spans. For accessing the tracer outside instrumented contexts, see [`getGlobalTelemetryApi`](./docs/api-reference/functions/getGlobalTelemetryApi.md).
+- `meter`: The global meter instance for creating metrics. For accessing the meter outside instrumented contexts, see [`getGlobalTelemetryApi`](./docs/api-reference/functions/getGlobalTelemetryApi.md).
 - `logger`: An auto-configured logger for the current operation. Uses the `LOG_LEVEL` environment variable when available, defaulting to `debug` in development and `info` in production. For custom logger configuration, see the [logs section](#logs) on using the `getLogger` helper.
 
 ### API Reference

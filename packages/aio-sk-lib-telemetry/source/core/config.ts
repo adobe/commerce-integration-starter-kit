@@ -16,7 +16,7 @@ import type { EntrypointInstrumentationConfig } from "~/types";
 import { createMetricsProxy, type MetricTypes } from "~/core/metrics";
 
 /**
- * Helper to define the telemetry config for an entrypoint (with type safety).
+ * Helper to define the telemetry config for an entrypoint.
  * @param init - The function to initialize the telemetry.
  */
 export function defineTelemetryConfig(
@@ -29,6 +29,16 @@ export function defineTelemetryConfig(
 
 /**
  * Helper to define a record of metrics.
+ * 
+ * @see https://opentelemetry.io/docs/concepts/signals/metrics/
+ * @example
+ * ```ts
+ * const metrics = defineMetrics((meter) => {
+ *   return {
+ *     myMetric: meter.createCounter("my-metric", { description: "My metric" }),
+ *   };
+ * });
+ * ```
  * @param createMetrics - A function that receives a meter which can be used to create the metrics.
  */
 export function defineMetrics<T extends Record<string, MetricTypes>>(
