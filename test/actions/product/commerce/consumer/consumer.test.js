@@ -186,7 +186,7 @@ describe('Given product commerce consumer', () => {
         error: {
           statusCode: 400,
           body: {
-            error: "Invalid request parameters: missing parameter(s) 'type,data'"
+            error: "Invalid request parameters: missing parameter(s) 'type,data.value.created_at,data.value.updated_at,data.value.sku,data.value.description'"
           }
         }
       })
