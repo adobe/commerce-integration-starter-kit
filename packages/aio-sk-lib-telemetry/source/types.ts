@@ -30,12 +30,12 @@ import type {
 /** Available log levels for the OpenTelemetry DiagLogger. */
 export type DiagnosticsLogLevel = Lowercase<keyof typeof DiagLogLevel>;
 
-/** The preset to use for the telemetry module setup. */
-export type TelemetryPreset = "simple" | "full";
+/** Defines the names of available instrumentation presets. */
+export type TelemetryInstrumentationPreset = "simple" | "full";
 
 /** The configuration for the telemetry diagnostics. */
 export interface TelemetryDiagnosticsConfig {
-  /** The log level for the diagnostics. */
+  /** The log level to use for the diagnostics. */
   logLevel: DiagnosticsLogLevel;
 
   /**
@@ -45,7 +45,8 @@ export interface TelemetryDiagnosticsConfig {
   loggerName?: string;
 
   /**
-   * Whether to export the logs to the console.
+   * Whether to make OpenTelemetry also export the diagnostic logs to the configured exporters.
+   * Set to `false` if you don't want to see diagnostic logs in your observability platform.
    * @default true
    */
   exportLogs?: boolean;
@@ -54,14 +55,19 @@ export interface TelemetryDiagnosticsConfig {
 /** Configuration related to context propagation (for distributed tracing). */
 export interface TelemetryPropagationConfig<T extends AnyFunction> {
   /**
-   * Whether to skip the propagation of the context.
+   * By default, an instrumented entrypoint will try to automatically read (and use) the context from the incoming request.
+   * Set to `true` if you want to skip this automatic context propagation.
+   * 
    * @default false
    */
   skip?: boolean;
 
   /**
    * A function that returns the carrier for the current context.
+   * Use it to specify where your carrier is located in the incoming parameters, when it's not one of the defaults.
+   * 
    * @param args - The arguments of the instrumented function.
+   * @returns The carrier of the context to retrieve and an optional base context to use for the started span (defaults to the active context).
    */
   getContextCarrier?: (...args: Parameters<T>) => {
     carrier: Record<string, string>;
@@ -69,58 +75,112 @@ export interface TelemetryPropagationConfig<T extends AnyFunction> {
   };
 };
 
-/** Defines events that can automatically be recorded on a span. */
+/** 
+ * Defines a set of events that can automatically be attached to an span.
+ * 
+ * - `success`: Adds an event if the instrumented function succeeds, with the result as the payload.
+ * - `error`: Adds an event if the instrumented function fails, with the error as the payload.
+ * - `parameters`: Adds an event with the parameters received by the instrumented function.
+ */
 export type AutomaticSpanEvents = "success" | "error" | "parameters";
 
 /** The configuration for instrumentation. */
 export interface InstrumentationConfig<T extends AnyFunction> {
-  traceConfig?: {
+  /** Configuration options related to the span started by the instrumented function. */
+  spanConfig?: {
     /**
-     * The name of the span.
-     * @default The name of the function.
+     * The name of the span. Defaults to the name of given function.
+     * You must use a named function or a provide a name here.
      */
     spanName?: string;
 
-    /** The options for the span. */
+    /** 
+     * The options for the span. 
+     * @see https://opentelemetry.io/docs/concepts/signals/traces/#spans
+     */
     spanOptions?: SpanOptions;
 
     /**
      * The events that should be automatically recorded on the span.
+     * 
+     * BE CAREFUL about how you use this, as you may end up exposing sensitive data in your observability platform.
      * @default []
      */
     automaticSpanEvents?: AutomaticSpanEvents[];
 
-    /** The base context to use for the started span. */
+    /** 
+     * The base context to use for the started span. 
+     * 
+     * @param args - The arguments of the instrumented function.
+     * @returns The base context to use for the started span.
+     */
     getBaseContext?: (...args: Parameters<T>) => Context;
   };
 
   /** Hooks that can be used to act on a span depending on the result of the function. */
   hooks?: {
-    // Result hooks.
+    /**
+     * A function that will be called when the instrumented function succeeds.
+     * You can use it to do something with the Span.
+     * 
+     * @param result - The result of the instrumented function.
+     * @param span - The span of the instrumented function.
+     */
     onSuccess?: (result: ReturnType<T>, span: Span) => void;
+
+    /**
+     * A function that will be called when the instrumented function fails.
+     * You can use it to do something with the Span.
+     * 
+     * @param error - The error produced by the instrumented function.
+     * @param span - The span of the instrumented function.
+     */
     onError?: (error: unknown, span: Span) => Error | undefined;
   };
 };
+
+/** The configuration options for the telemetry module. */
+export interface TelemetryConfig extends Partial<TelemetryApi> {
+  /** 
+   * The configuration options for the OpenTelemetry SDK.
+   * See: {@link https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_sdk-node.NodeSDKConfiguration.html} for the interface.
+   */
+  sdkConfig: Partial<NodeSDKConfiguration>;
+
+  /** The configuration options for the telemetry diagnostics. */
+  diagnostics?: false | TelemetryDiagnosticsConfig;
+}
 
 /** The configuration for entrypoint instrumentation. */
 export interface EntrypointInstrumentationConfig<
   T extends AnyFunction = AnyFunction,
 > extends InstrumentationConfig<T> {
+
+  /**
+   * Configuration options related to context propagation.
+   * See: {@link TelemetryPropagationConfig} for the interface.
+   */
   propagation?: TelemetryPropagationConfig<T>;
 
-  /** This function will be called at the very beginning of the action. */
+  /** 
+   * This function will be called at the very beginning of the action.
+   * 
+   * @param params - The parameters of the action.
+   * @param isDevelopment - Whether the action is running in development mode.
+   * @returns The telemetry configuration to use for the action.
+   */
   initializeTelemetry: (
     params: RecursiveStringRecord,
     isDevelopment: boolean,
-  ) => Partial<TelemetryApi> & {
-    sdkConfig: Partial<NodeSDKConfiguration>;
-    diagnostics?: false | TelemetryDiagnosticsConfig;
-  };
+  ) => TelemetryConfig;
 };
 
-/** Defines the state of the global telemetry API. These items should be set once per-application. */
+/** Defines the global telemetry API. These items should be set once per-application. */
 export interface TelemetryApi {
+  /** The tracer used to create spans. */
   tracer: Tracer;
+
+  /** The meter used to create metrics. */
   meter: Meter;
 };
 

@@ -69,20 +69,35 @@ export function getInstrumentationHelpers(): InstrumentationHelpers {
 }
 
 /**
- * Instrument a function.
+ * Instruments a function.
  * @param fn - The function to instrument.
  * @param config - The configuration for the instrumentation.
+ * @returns A wrapped function with the same signature as the original function, but with telemetry instrumentation.
+ * 
+ * @example
+ * ```ts
+ * const instrumentedFn = instrument(someFunction, {
+ *   // Optional configuration
+ *   spanConfig: {
+ *     spanName: "some-span",
+ *     spanOptions: {
+ *       attributes: {
+ *         "some-attribute": "some-value",
+ *       },
+ *     },
+ *   },
+ * });
  */
 export function instrument<T extends AnyFunction>(
   fn: T,
-  { traceConfig, hooks }: InstrumentationConfig<T> = {},
+  { spanConfig, hooks }: InstrumentationConfig<T> = {},
 ): (...args: Parameters<T>) => ReturnType<T> {
   const {
     spanName = fn.name,
     spanOptions = {},
     getBaseContext,
     automaticSpanEvents = [],
-  } = traceConfig ?? {};
+  } = spanConfig ?? {};
 
   if (!spanName) {
     throw new Error(
@@ -236,9 +251,18 @@ export function instrument<T extends AnyFunction>(
 }
 
 /**
- * Instruments the entrypoint of a runtime action.
+ * Instruments the entrypoint of a runtime action. 
+ * Needs to be used ONLY with the `main` function of a runtime action.
  * @param fn - The entrypoint function to instrument.
  * @param config - The configuration for the entrypoint instrumentation.
+ * @returns A wrapped function with the same signature as the original function, but with telemetry instrumentation.
+ * 
+ * @example
+ * ```ts
+ * const instrumentedEntrypoint = instrumentEntrypoint(main, {
+ *   // Optional configuration
+ * });
+ * ```
  */
 export function instrumentEntrypoint<
   // biome-ignore lint/suspicious/noExplicitAny: generic wrapper.
@@ -333,9 +357,9 @@ export function instrumentEntrypoint<
 
     return {
       ...instrumentationConfig,
-      traceConfig: {
+      spanConfig: {
         getBaseContext: getPropagatedContext,
-        ...instrumentationConfig.traceConfig,
+        ...instrumentationConfig.spanConfig,
       },
     };
   }
@@ -343,15 +367,15 @@ export function instrumentEntrypoint<
   /** Instruments the given entrypoint handler. */
   async function instrumentHandler(
     handler: T,
-    { traceConfig, ...instrumentationConfig }: InstrumentationConfig<T> = {},
+    { spanConfig, ...instrumentationConfig }: InstrumentationConfig<T> = {},
   ) {
     try {
       const { actionName } = getRuntimeActionMetadata();
       return instrument(handler, {
         ...instrumentationConfig,
-        traceConfig: {
+        spanConfig: {
           spanName: `${actionName}/${fn.name}`,
-          ...traceConfig,
+          ...spanConfig,
         },
       }) as T;
     } catch (error) {

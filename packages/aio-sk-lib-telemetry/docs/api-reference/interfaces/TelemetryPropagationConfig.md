@@ -1,6 +1,6 @@
 # `TelemetryPropagationConfig\<T\>`
 
-Defined in: [types.ts:55](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L55)
+Defined in: [types.ts:56](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/types.ts#L56)
 
 Configuration related to context propagation (for distributed tracing).
 
@@ -21,9 +21,10 @@ optional getContextCarrier: (...args: Parameters<T>) => {
 };
 ```
 
-Defined in: [types.ts:66](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L66)
+Defined in: [types.ts:72](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/types.ts#L72)
 
 A function that returns the carrier for the current context.
+Use it to specify where your carrier is located in the incoming parameters, when it's not one of the defaults.
 
 #### Parameters
 
@@ -39,6 +40,8 @@ A function that returns the carrier for the current context.
   carrier: Record<string, string>;
 }
 ```
+
+The carrier of the context to retrieve and an optional base context to use for the started span (defaults to the active context).
 
 ##### baseCtx?
 
@@ -60,9 +63,10 @@ carrier: Record<string, string>;
 optional skip: boolean;
 ```
 
-Defined in: [types.ts:60](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L60)
+Defined in: [types.ts:63](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/types.ts#L63)
 
-Whether to skip the propagation of the context.
+By default, an instrumented entrypoint will try to automatically read (and use) the context from the incoming request.
+Set to `true` if you want to skip this automatic context propagation.
 
 #### Default
 

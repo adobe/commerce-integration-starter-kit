@@ -4,7 +4,7 @@
 function tryGetActiveSpan(ctx: Context): null | Span;
 ```
 
-Defined in: [api/global.ts:47](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/api/global.ts#L47)
+Defined in: [api/global.ts:47](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/api/global.ts#L47)
 
 Tries to get the active span from the given context.
 

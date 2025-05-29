@@ -1,6 +1,6 @@
 # `EntrypointInstrumentationConfig\<T\>`
 
-Defined in: [types.ts:106](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L106)
+Defined in: [types.ts:155](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/types.ts#L155)
 
 The configuration for entrypoint instrumentation.
 
@@ -25,7 +25,7 @@ optional hooks: {
 };
 ```
 
-Defined in: [types.ts:98](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L98)
+Defined in: [types.ts:121](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/types.ts#L121)
 
 Hooks that can be used to act on a span depending on the result of the function.
 
@@ -35,12 +35,15 @@ Hooks that can be used to act on a span depending on the result of the function.
 optional onError: (error: unknown, span: Span) => undefined | Error;
 ```
 
+A function that will be called when the instrumented function fails.
+You can use it to do something with the Span.
+
 ##### Parameters
 
-| Parameter | Type      |
-| --------- | --------- |
-| `error`   | `unknown` |
-| `span`    | `Span`    |
+| Parameter | Type      | Description                                      |
+| --------- | --------- | ------------------------------------------------ |
+| `error`   | `unknown` | The error produced by the instrumented function. |
+| `span`    | `Span`    | The span of the instrumented function.           |
 
 ##### Returns
 
@@ -52,12 +55,15 @@ optional onError: (error: unknown, span: Span) => undefined | Error;
 optional onSuccess: (result: ReturnType<T>, span: Span) => void;
 ```
 
+A function that will be called when the instrumented function succeeds.
+You can use it to do something with the Span.
+
 ##### Parameters
 
-| Parameter | Type                |
-| --------- | ------------------- |
-| `result`  | `ReturnType`\<`T`\> |
-| `span`    | `Span`              |
+| Parameter | Type                | Description                              |
+| --------- | ------------------- | ---------------------------------------- |
+| `result`  | `ReturnType`\<`T`\> | The result of the instrumented function. |
+| `span`    | `Span`              | The span of the instrumented function.   |
 
 ##### Returns
 
@@ -72,29 +78,26 @@ optional onSuccess: (result: ReturnType<T>, span: Span) => void;
 ### initializeTelemetry()
 
 ```ts
-initializeTelemetry: (params: RecursiveStringRecord, isDevelopment: boolean) => Partial<TelemetryApi> & {
-  diagnostics?: false | TelemetryDiagnosticsConfig;
-  sdkConfig: Partial<NodeSDKConfiguration>;
-};
+initializeTelemetry: (params: RecursiveStringRecord, isDevelopment: boolean) =>
+  TelemetryConfig;
 ```
 
-Defined in: [types.ts:112](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L112)
+Defined in: [types.ts:172](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/types.ts#L172)
 
 This function will be called at the very beginning of the action.
 
 #### Parameters
 
-| Parameter       | Type                    |
-| --------------- | ----------------------- |
-| `params`        | `RecursiveStringRecord` |
-| `isDevelopment` | `boolean`               |
+| Parameter       | Type                    | Description                                        |
+| --------------- | ----------------------- | -------------------------------------------------- |
+| `params`        | `RecursiveStringRecord` | The parameters of the action.                      |
+| `isDevelopment` | `boolean`               | Whether the action is running in development mode. |
 
 #### Returns
 
-`Partial`\<[`TelemetryApi`](TelemetryApi.md)\> & \{
-`diagnostics?`: `false` \| [`TelemetryDiagnosticsConfig`](TelemetryDiagnosticsConfig.md);
-`sdkConfig`: `Partial`\<`NodeSDKConfiguration`\>;
-\}
+[`TelemetryConfig`](TelemetryConfig.md)
+
+The telemetry configuration to use for the action.
 
 ---
 
@@ -104,14 +107,17 @@ This function will be called at the very beginning of the action.
 optional propagation: TelemetryPropagationConfig<T>;
 ```
 
-Defined in: [types.ts:109](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L109)
+Defined in: [types.ts:163](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/types.ts#L163)
+
+Configuration options related to context propagation.
+See: [TelemetryPropagationConfig](TelemetryPropagationConfig.md) for the interface.
 
 ---
 
-### traceConfig?
+### spanConfig?
 
 ```ts
-optional traceConfig: {
+optional spanConfig: {
   automaticSpanEvents?: AutomaticSpanEvents[];
   getBaseContext?: (...args: Parameters<T>) => Context;
   spanName?: string;
@@ -119,7 +125,9 @@ optional traceConfig: {
 };
 ```
 
-Defined in: [types.ts:77](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/types.ts#L77)
+Defined in: [types.ts:90](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/types.ts#L90)
+
+Configuration options related to the span started by the instrumented function.
 
 #### automaticSpanEvents?
 
@@ -128,6 +136,8 @@ optional automaticSpanEvents: AutomaticSpanEvents[];
 ```
 
 The events that should be automatically recorded on the span.
+
+BE CAREFUL about how you use this, as you may end up exposing sensitive data in your observability platform.
 
 ##### Default
 
@@ -145,13 +155,15 @@ The base context to use for the started span.
 
 ##### Parameters
 
-| Parameter | Type                |
-| --------- | ------------------- |
-| ...`args` | `Parameters`\<`T`\> |
+| Parameter | Type                | Description                                 |
+| --------- | ------------------- | ------------------------------------------- |
+| ...`args` | `Parameters`\<`T`\> | The arguments of the instrumented function. |
 
 ##### Returns
 
 `Context`
+
+The base context to use for the started span.
 
 #### spanName?
 
@@ -159,13 +171,8 @@ The base context to use for the started span.
 optional spanName: string;
 ```
 
-The name of the span.
-
-##### Default
-
-```ts
-The name of the function.
-```
+The name of the span. Defaults to the name of given function.
+You must use a named function or a provide a name here.
 
 #### spanOptions?
 
@@ -175,6 +182,10 @@ optional spanOptions: SpanOptions;
 
 The options for the span.
 
+##### See
+
+https://opentelemetry.io/docs/concepts/signals/traces/#spans
+
 #### Inherited from
 
-[`InstrumentationConfig`](InstrumentationConfig.md).[`traceConfig`](InstrumentationConfig.md#traceconfig)
+[`InstrumentationConfig`](InstrumentationConfig.md).[`spanConfig`](InstrumentationConfig.md#spanconfig)

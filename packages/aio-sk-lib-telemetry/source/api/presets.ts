@@ -10,7 +10,7 @@
   governing permissions and limitations under the License.
 */
 
-import type { TelemetryPreset } from "~/types";
+import type { TelemetryInstrumentationPreset } from "~/types";
 
 import {
   HttpInstrumentation,
@@ -38,9 +38,23 @@ const undiciInstrumentationConfig = {
 
 /**
  * Get the instrumentations for a given preset.
+ * 
  * @param preset - The preset to get the instrumentations for.
+ * @returns The instrumentations for the given preset:
+ * - `full`: All the Node.js [auto-instrumentations](https://www.npmjs.com/package/@opentelemetry/auto-instrumentations-node)
+ * - `simple`: Instrumentations for:
+ *   [Http](https://www.npmjs.com/package/@opentelemetry/instrumentation-http),
+ *   [GraphQL](https://www.npmjs.com/package/@opentelemetry/instrumentation-graphql),
+ *   [Undici](https://www.npmjs.com/package/@opentelemetry/instrumentation-undici), and
+ *   [Winston](https://www.npmjs.com/package/@opentelemetry/instrumentation-winston)
+ * 
+ * @example
+ * ```ts
+ * const instrumentations = getPresetInstrumentations("simple");
+ * // instrumentations = [HttpInstrumentation, GraphQLInstrumentation, UndiciInstrumentation, WinstonInstrumentation]
+ * ```
  */
-export function getPresetInstrumentations(preset: TelemetryPreset) {
+export function getPresetInstrumentations(preset: TelemetryInstrumentationPreset) {
   switch (preset) {
     case "simple": {
       return [

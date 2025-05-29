@@ -2,7 +2,7 @@
 
 ```ts
 function getPresetInstrumentations(
-  preset: TelemetryPreset,
+  preset: TelemetryInstrumentationPreset,
 ):
   | (
       | HttpInstrumentation
@@ -13,15 +13,15 @@ function getPresetInstrumentations(
   | Instrumentation<InstrumentationConfig>[];
 ```
 
-Defined in: [api/presets.ts:43](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/api/presets.ts#L43)
+Defined in: [api/presets.ts:57](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/api/presets.ts#L57)
 
 Get the instrumentations for a given preset.
 
 ## Parameters
 
-| Parameter | Type                                                    | Description                                 |
-| --------- | ------------------------------------------------------- | ------------------------------------------- |
-| `preset`  | [`TelemetryPreset`](../type-aliases/TelemetryPreset.md) | The preset to get the instrumentations for. |
+| Parameter | Type                                                                                  | Description                                 |
+| --------- | ------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `preset`  | [`TelemetryInstrumentationPreset`](../type-aliases/TelemetryInstrumentationPreset.md) | The preset to get the instrumentations for. |
 
 ## Returns
 
@@ -31,3 +31,19 @@ Get the instrumentations for a given preset.
 \| `UndiciInstrumentation`
 \| `WinstonInstrumentation`)[]
 \| `Instrumentation`\<`InstrumentationConfig`\>[]
+
+The instrumentations for the given preset:
+
+- `full`: All the Node.js [auto-instrumentations](https://www.npmjs.com/package/@opentelemetry/auto-instrumentations-node)
+- `simple`: Instrumentations for:
+  [Http](https://www.npmjs.com/package/@opentelemetry/instrumentation-http),
+  [GraphQL](https://www.npmjs.com/package/@opentelemetry/instrumentation-graphql),
+  [Undici](https://www.npmjs.com/package/@opentelemetry/instrumentation-undici), and
+  [Winston](https://www.npmjs.com/package/@opentelemetry/instrumentation-winston)
+
+## Example
+
+```ts
+const instrumentations = getPresetInstrumentations("simple");
+// instrumentations = [HttpInstrumentation, GraphQLInstrumentation, UndiciInstrumentation, WinstonInstrumentation]
+```

@@ -7,9 +7,9 @@ function instrument<T>(
 ): (...args: Parameters<T>) => ReturnType<T>;
 ```
 
-Defined in: [core/instrumentation.ts:76](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/core/instrumentation.ts#L76)
+Defined in: [core/instrumentation.ts:91](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/core/instrumentation.ts#L91)
 
-Instrument a function.
+Instruments a function.
 
 ## Type Parameters
 
@@ -26,6 +26,8 @@ Instrument a function.
 
 ## Returns
 
+A wrapped function with the same signature as the original function, but with telemetry instrumentation.
+
 ```ts
 (...args: Parameters<T>): ReturnType<T>;
 ```
@@ -39,3 +41,19 @@ Instrument a function.
 ### Returns
 
 `ReturnType`\<`T`\>
+
+## Example
+
+```ts
+const instrumentedFn = instrument(someFunction, {
+  // Optional configuration
+  spanConfig: {
+    spanName: "some-span",
+    spanOptions: {
+      attributes: {
+        "some-attribute": "some-value",
+      },
+    },
+  },
+});
+```

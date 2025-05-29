@@ -7,9 +7,10 @@ function instrumentEntrypoint<T>(
 ): (params: RecursiveStringRecord) => Promise<Awaited<ReturnType<T>>>;
 ```
 
-Defined in: [core/instrumentation.ts:243](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/core/instrumentation.ts#L243)
+Defined in: [core/instrumentation.ts:267](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/core/instrumentation.ts#L267)
 
 Instruments the entrypoint of a runtime action.
+Needs to be used ONLY with the `main` function of a runtime action.
 
 ## Type Parameters
 
@@ -26,6 +27,8 @@ Instruments the entrypoint of a runtime action.
 
 ## Returns
 
+A wrapped function with the same signature as the original function, but with telemetry instrumentation.
+
 ```ts
 (params: RecursiveStringRecord): Promise<Awaited<ReturnType<T>>>;
 ```
@@ -39,3 +42,11 @@ Instruments the entrypoint of a runtime action.
 ### Returns
 
 `Promise`\<`Awaited`\<`ReturnType`\<`T`\>\>\>
+
+## Example
+
+```ts
+const instrumentedEntrypoint = instrumentEntrypoint(main, {
+  // Optional configuration
+});
+```

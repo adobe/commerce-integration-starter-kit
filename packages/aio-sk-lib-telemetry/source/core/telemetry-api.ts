@@ -18,6 +18,16 @@ import type { TelemetryApi } from "~/types";
 /**
  * Gets the global telemetry API.
  * @throws {Error} If the telemetry API is not initialized.
+ * 
+ * @example
+ * ```ts
+ * function someNonAutoInstrumentedFunction() {
+ *   const { tracer } = getGlobalTelemetryApi();
+ *   return tracer.startActiveSpan("some-span", (span) => {
+ *     // ...
+ *   });
+ * }
+ * ```
  */
 export function getGlobalTelemetryApi() {
   ensureTelemetryApiInitialized();

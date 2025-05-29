@@ -71,22 +71,23 @@ import {
 
 ## Interfaces
 
-| Interface                                                                        | Description                                                                                    |
-| -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| [EntrypointInstrumentationConfig](interfaces/EntrypointInstrumentationConfig.md) | The configuration for entrypoint instrumentation.                                              |
-| [InstrumentationConfig](interfaces/InstrumentationConfig.md)                     | The configuration for instrumentation.                                                         |
-| [InstrumentationContext](interfaces/InstrumentationContext.md)                   | The context for the current operation.                                                         |
-| [TelemetryApi](interfaces/TelemetryApi.md)                                       | Defines the state of the global telemetry API. These items should be set once per-application. |
-| [TelemetryDiagnosticsConfig](interfaces/TelemetryDiagnosticsConfig.md)           | The configuration for the telemetry diagnostics.                                               |
-| [TelemetryPropagationConfig](interfaces/TelemetryPropagationConfig.md)           | Configuration related to context propagation (for distributed tracing).                        |
+| Interface                                                                        | Description                                                                       |
+| -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [EntrypointInstrumentationConfig](interfaces/EntrypointInstrumentationConfig.md) | The configuration for entrypoint instrumentation.                                 |
+| [InstrumentationConfig](interfaces/InstrumentationConfig.md)                     | The configuration for instrumentation.                                            |
+| [InstrumentationContext](interfaces/InstrumentationContext.md)                   | The context for the current operation.                                            |
+| [TelemetryApi](interfaces/TelemetryApi.md)                                       | Defines the global telemetry API. These items should be set once per-application. |
+| [TelemetryConfig](interfaces/TelemetryConfig.md)                                 | The configuration options for the telemetry module.                               |
+| [TelemetryDiagnosticsConfig](interfaces/TelemetryDiagnosticsConfig.md)           | The configuration for the telemetry diagnostics.                                  |
+| [TelemetryPropagationConfig](interfaces/TelemetryPropagationConfig.md)           | Configuration related to context propagation (for distributed tracing).           |
 
 ## Type Aliases
 
-| Type Alias                                                 | Description                                                  |
-| ---------------------------------------------------------- | ------------------------------------------------------------ |
-| [AutomaticSpanEvents](type-aliases/AutomaticSpanEvents.md) | Defines events that can automatically be recorded on a span. |
-| [DiagnosticsLogLevel](type-aliases/DiagnosticsLogLevel.md) | Available log levels for the OpenTelemetry DiagLogger.       |
-| [TelemetryPreset](type-aliases/TelemetryPreset.md)         | The preset to use for the telemetry module setup.            |
+| Type Alias                                                                       | Description                                                            |
+| -------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| [AutomaticSpanEvents](type-aliases/AutomaticSpanEvents.md)                       | Defines a set of events that can automatically be attached to an span. |
+| [DiagnosticsLogLevel](type-aliases/DiagnosticsLogLevel.md)                       | Available log levels for the OpenTelemetry DiagLogger.                 |
+| [TelemetryInstrumentationPreset](type-aliases/TelemetryInstrumentationPreset.md) | Defines the names of available instrumentation presets.                |
 
 ## Functions
 
@@ -104,7 +105,7 @@ import {
 | [getInstrumentationHelpers](functions/getInstrumentationHelpers.md)                     | Access helpers for the current instrumented operation.                                                                           |
 | [getLogger](functions/getLogger.md)                                                     | Get a logger instance.                                                                                                           |
 | [getPresetInstrumentations](functions/getPresetInstrumentations.md)                     | Get the instrumentations for a given preset.                                                                                     |
-| [instrument](functions/instrument.md)                                                   | Instrument a function.                                                                                                           |
-| [instrumentEntrypoint](functions/instrumentEntrypoint.md)                               | Instruments the entrypoint of a runtime action.                                                                                  |
+| [instrument](functions/instrument.md)                                                   | Instruments a function.                                                                                                          |
+| [instrumentEntrypoint](functions/instrumentEntrypoint.md)                               | Instruments the entrypoint of a runtime action. Needs to be used ONLY with the `main` function of a runtime action.              |
 | [serializeContextIntoCarrier](functions/serializeContextIntoCarrier.md)                 | Serializes the current context into a carrier.                                                                                   |
 | [tryGetActiveSpan](functions/tryGetActiveSpan.md)                                       | Tries to get the active span from the given context.                                                                             |

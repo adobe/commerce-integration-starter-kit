@@ -6,7 +6,7 @@ function getAioRuntimeResourceWithAttributes(
 ): Resource;
 ```
 
-Defined in: [api/attributes.ts:57](https://github.com/adobe/commerce-integration-starter-kit/blob/d616b93af2f8c2e2024d489ade1c7b27c609acd4/packages/aio-sk-lib-telemetry/source/api/attributes.ts#L57)
+Defined in: [api/attributes.ts:57](https://github.com/adobe/commerce-integration-starter-kit/blob/10ddba8a9c7717ad0f94121f8c82f9de10856848/packages/aio-sk-lib-telemetry/source/api/attributes.ts#L57)
 
 Combines the attributes inferred from the Adobe I/O Runtime with the provided attributes.
 
