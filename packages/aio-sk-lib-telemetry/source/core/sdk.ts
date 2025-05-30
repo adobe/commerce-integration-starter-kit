@@ -39,7 +39,7 @@ function setGlobalSdk(sdkInstance: NodeSDK | null) {
  * @throws {Error} An error if the telemetry SDK is not initialized.
  */
 export function ensureSdkInitialized() {
-  if (!getGlobalSdk()) {
+  if (!global.__OTEL_SDK__) {
     throw new Error("Telemetry SDK not initialized");
   }
 }
@@ -49,7 +49,7 @@ export function ensureSdkInitialized() {
  * @param config - The configuration for the diagnostics logger.
  */
 export function initializeDiagnostics(config: TelemetryDiagnosticsConfig) {
-  if (getGlobalSdk()) {
+  if (global.__OTEL_SDK__) {
     // Diagnostics can only be initialized before the telemetry SDK (otherwise they won't work).
     // If it's already initialized, we skip it.
     diag.warn(
@@ -67,7 +67,7 @@ export function initializeDiagnostics(config: TelemetryDiagnosticsConfig) {
  * @param config - The configuration for the telemetry SDK.
  */
 export function initializeSdk(config?: Partial<NodeSDKConfiguration>) {
-  if (getGlobalSdk()) {
+  if (global.__OTEL_SDK__) {
     diag.warn(
       "Telemetry SDK already initialized, skipping telemetry initialization",
     );
@@ -92,7 +92,7 @@ export function initializeSdk(config?: Partial<NodeSDKConfiguration>) {
     process.on(signal, async () => {
       // We always try to shutdown the SDK after the runtime action finishes.
       // But just in case something goes wrong, we have this fallback.
-      if (getGlobalSdk()) {
+      if (global.__OTEL_SDK__) {
         await shutdownSdk();
       }
     });
