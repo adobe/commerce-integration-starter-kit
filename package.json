@@ -12,8 +12,8 @@
   "private": true,
   "dependencies": {
     "@adobe/aio-lib-ims": "^7.0.1",
-    "@adobe/aio-lib-state": "^3.0.2",
-    "@adobe/aio-sdk": "^5.0.1",
+    "@adobe/aio-lib-state": "^5.1.0",
+    "@adobe/aio-sdk": "^6.0.0",
     "@adobe/commerce-sdk-auth": "^0.1.0",
     "@adobe/exc-app": "^1.4.1",
     "@adobe/generator-add-action-generic": "^1.0.1",

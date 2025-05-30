@@ -28,7 +28,7 @@ const { postProcess } = require('./post')
  * @returns {object} returns response object with status code and result
  */
 async function main (params) {
-  const logger = Core.Logger('product-commerce-full-sync', { level: params.LOG_LEVEL || 'debug' })
+  const logger = Core.Logger('product-commerce-full-sync', { level: params.LOG_LEVEL || 'info' })
 
   logger.info('Start processing product full sync')
 
