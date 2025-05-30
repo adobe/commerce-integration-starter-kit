@@ -5,7 +5,7 @@
 This action implements an Infinite Loop Breaker for Adobe Commerce product events with a third party backoffice.
 
 An Infinite Loop occurs when an entity is updated in Adobe Commerce, this update is propagated to a 3rd party backoffice,
-which send a new event about the update. This event is again propagated to Adobe Commerce, where the process starts again
+which sends a new event about the update. This event is again propagated to Adobe Commerce, where the process starts again
 
 ```mermaid
 ---
@@ -97,7 +97,7 @@ const { storeFingerPrint, isAPotentialInfiniteLoop } = require('../../../infinit
 
 ```
 
-The consumer add the list of events we want to avoid infinite loops.
+The consumer defines the list of events we want to avoid infinite loops.
 
 ```javascript
 
@@ -109,9 +109,9 @@ The consumer add the list of events we want to avoid infinite loops.
 ```
 
 Define two functions:
-1. fnInfiniteLoopKey: Define a function to generate a key to identify that the event its related to an entity.
+1. ```fnInfiniteLoopKey```: Returns a function to generate a key to identify that the event its related to an entity.
 
-2. fnFingerprint: Define a function to generate an object that would be used as fingerprint. It should includes data that may change.
+2. ```fnFingerprint```: Returns a function to generate an object that would be used as fingerprint. It should includes data that may change.
 
 ```javascript
   /**
