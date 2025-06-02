@@ -1,6 +1,6 @@
 # API Reference
 
-This document provides a comprehensive reference for the public API exported by the `@aio-sk-lib-telemetry` library.
+A comprehensive reference for the public API provided by the `@aio-sk-lib-telemetry` library.
 
 ## Available Imports
 
@@ -40,9 +40,9 @@ import {
 
 ### OpenTelemetry API
 
-OpenTelemetry's modular architecture spans 25+ packages, which can make importing specific APIs a bit cumbersome. To simplify this, our library provides a convenient "meta-package" import path that lets you import all the OpenTelemetry APIs you need from a single source of truth.
+OpenTelemetry features a modular architecture consisting of over 25 packages, which can make importing specific APIs rather complex. To streamline this process, our library offers a convenient "meta-package" import path. This allows you to import all the necessary OpenTelemetry APIs from a single source, simplifying the setup.
 
-While this doesn't include every OpenTelemetry API, it covers the most common ones you'll need in your code. If you find any essential APIs missing, feel free to open an issue or submit a PR. You can also import the APIs you need from the individual OpenTelemetry packages, but this is a convenient way to import all the APIs you need in a single import.
+While this does not include every OpenTelemetry API, it covers the most common ones you will need in your code. If you find any essential APIs missing, feel free to open an issue or submit a PR. You can also import the APIs you need from the individual OpenTelemetry packages, but this is a convenient way to import all the APIs you need in a single import.
 
 > [!TIP]
 > When working with OpenTelemetry exporters, you have three protocols to choose from:

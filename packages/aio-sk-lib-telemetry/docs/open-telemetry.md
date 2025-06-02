@@ -1,6 +1,6 @@
 # 🔭 Introduction to OpenTelemetry
 
-This overview is intended as a curated collection of the most important concepts and patterns from the (extensive) official OpenTelemetry documentation. For topics not covered here, you'll find links throughout the guide pointing directly to relevant sections of the official docs. Use these links to dive deeper or clarify details as you explore OpenTelemetry in practice.
+This overview serves as a curated collection of the most important concepts and patterns from the extensive official OpenTelemetry documentation. For any topics not included here, you will find links throughout the guide that direct you to the relevant sections of the official documentation. Use these links to explore further or clarify details as you work with OpenTelemetry in practice.
 
 <br />
 <div align="center">

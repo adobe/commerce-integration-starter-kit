@@ -99,8 +99,10 @@ export interface InstrumentationConfig<T extends AnyFunction> {
 
     /**
      * The events that should be automatically recorded on the span.
+     * See the {@link AutomaticSpanEvents} type for the available options.
      * 
-     * BE CAREFUL about how you use this, as you may end up exposing sensitive data in your observability platform.
+     * > [!WARNING]
+     * > BE CAREFUL about how you use this, as you may end up exposing sensitive data in your observability platform.
      * @default []
      */
     automaticSpanEvents?: AutomaticSpanEvents[];
@@ -160,7 +162,7 @@ export interface EntrypointInstrumentationConfig<
   propagation?: TelemetryPropagationConfig<T>;
 
   /** 
-   * This function will be called at the very beginning of the action.
+   * This function is called at the start of the action.
    * 
    * @param params - The parameters of the action.
    * @param isDevelopment - Whether the action is running in development mode.
