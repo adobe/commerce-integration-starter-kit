@@ -726,18 +726,18 @@ The starter kit includes the `@adobe/aio-sk-lib-telemetry` package by default, w
 - Metrics (for monitoring)
 - Logs (for debugging)
 
-For detailed information, consult the [package README](packages/aio-sk-lib-telemetry/README.md), which provides complete documentation along with guides and examples for instrumenting your Adobe App Builder actions.
+See the [package README](packages/aio-sk-lib-telemetry/README.md) for more information about guides and examples for instrumenting your Adobe App Builder actions.
 
 ### Usage Example
 
 > [!NOTE]
-> Refer to the [How To Use](packages/aio-sk-lib-telemetry/README.md#how-to-use) section in the `@adobe/aio-sk-lib-telemetry` README for comprehensive integration instructions.
+> Check the [How To Use](packages/aio-sk-lib-telemetry/README.md#how-to-use) section in the `@adobe/aio-sk-lib-telemetry` README for comprehensive integration instructions.
 
 The starter kit includes a sample implementation in the `actions/customer/commerce` workflow, specifically within the `consumer` and `created` actions. These examples utilize the telemetry configuration in `actions/telemetry.js` and the metrics definitions in `actions/customer/commerce/metrics.js`. 
 
 The instrumentation is designed to be minimally invasive and won't disrupt existing functionality. However, telemetry requires explicit opt-in configuration: you must instrument each runtime action individually, configure exporters in the `telemetry.js` file, and set the `ENABLE_TELEMETRY` environment variable to `true` in each action's `inputs` section. While we've implemented this setup for the aforementioned actions, to fully enable telemetry, you need to complete your configuration in the `telemetry.js` file. 
 
-The integration we've made in the `customer/commerce` workflow enables the three main signals: **traces**, **metrics** and **logs**, and comes with automatic context propagation. This means that, triggering your `consumer` action will create a unified trace spanning the entire execution flow, including any invoked (but instrumented) actions like `created`.
+The integration within the `customer/commerce` workflow facilitates three key signals: **traces**, **metrics**, and **logs**, while also adding automatic context propagation. This means that when you trigger your `consumer` action, it will generate a unified trace that spans the entire execution flow, including any invoked (but instrumented) actions such as `created`.
 
 ## Included actions documentation
 ### External back-office ingestion webhook
