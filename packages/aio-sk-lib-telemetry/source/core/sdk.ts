@@ -93,7 +93,7 @@ export function initializeSdk(config?: Partial<NodeSDKConfiguration>) {
       // We always try to shutdown the SDK after the runtime action finishes.
       // But just in case something goes wrong, we have this fallback.
       if (global.__OTEL_SDK__) {
-        await shutdownSdk();
+        await shutdownSdk(`Terminating process: ${signal}`);
       }
     });
   }

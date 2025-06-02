@@ -21,7 +21,6 @@ import {
   ensureSdkInitialized,
   initializeDiagnostics,
   initializeSdk,
-  shutdownSdk,
 } from "~/core/sdk";
 
 import type {
@@ -282,18 +281,6 @@ export function instrumentEntrypoint<
     };
   }
 
-  /** Cleans up the resources of the Telemetry SDK. */
-  async function cleanup(shutdownReason?: string) {
-    if (isDevelopment()) {
-      // OpenTelemetry uses a global context that does not play nice
-      // with hot-reloading of `aio app dev`. Shutdown will be done
-      // internally by the library when closing the dev server.
-      return;
-    }
-
-    await shutdownSdk(shutdownReason);
-  }
-
   /** Callback that will be used to retrieve the base context for the entrypoint. */
   function getPropagatedContext(params: RecursiveStringRecord) {
     function inferContextCarrier() {
@@ -379,30 +366,24 @@ export function instrumentEntrypoint<
         },
       }) as T;
     } catch (error) {
-      await cleanup(`Failed to instrument entrypoint: ${error}`);
-      throw error;
+      throw new Error(`Failed to instrument entrypoint: ${error}`, {
+        cause: error
+      });
     }
   }
 
   /** Runs the entrypoint and shuts down the Telemetry SDK. */
-  async function runEntrypointAndCleanup(
+  async function runEntrypoint(
     instrumentedHandler: T,
     params: RecursiveStringRecord,
   ) {
     try {
       const result = instrumentedHandler(params);
-
-      if (result instanceof Promise) {
-        return result.finally(async () => {
-          await cleanup();
-        });
-      }
-
-      await cleanup();
       return result;
     } catch (error) {
-      await cleanup(`Failed to run entrypoint: ${error}`);
-      throw error;
+      throw new Error(`Failed to run entrypoint: ${error}`, {
+        cause: error,
+      });
     }
   }
 
@@ -421,6 +402,6 @@ export function instrumentEntrypoint<
     const instrumentConfig = setupTelemetry(params);
     const instrumentedHandler = await instrumentHandler(fn, instrumentConfig);
 
-    return runEntrypointAndCleanup(instrumentedHandler, params);
+    return runEntrypoint(instrumentedHandler, params);
   };
 }
