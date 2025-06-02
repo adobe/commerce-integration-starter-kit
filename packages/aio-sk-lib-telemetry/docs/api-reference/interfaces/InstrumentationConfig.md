@@ -1,6 +1,6 @@
 # `InstrumentationConfig\<T\>`
 
-Defined in: [types.ts:88](https://github.com/adobe/commerce-integration-starter-kit/blob/7bab865cdac63499cf83c46b58de1aec6528b17f/packages/aio-sk-lib-telemetry/source/types.ts#L88)
+Defined in: [types.ts:88](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L88)
 
 The configuration for instrumentation.
 
@@ -25,7 +25,7 @@ optional hooks: {
 };
 ```
 
-Defined in: [types.ts:118](https://github.com/adobe/commerce-integration-starter-kit/blob/7bab865cdac63499cf83c46b58de1aec6528b17f/packages/aio-sk-lib-telemetry/source/types.ts#L118)
+Defined in: [types.ts:120](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L120)
 
 Hooks that can be used to act on a span depending on the result of the function.
 
@@ -82,7 +82,7 @@ optional spanConfig: {
 };
 ```
 
-Defined in: [types.ts:90](https://github.com/adobe/commerce-integration-starter-kit/blob/7bab865cdac63499cf83c46b58de1aec6528b17f/packages/aio-sk-lib-telemetry/source/types.ts#L90)
+Defined in: [types.ts:90](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L90)
 
 Configuration options related to the span started by the instrumented function.
 
@@ -93,8 +93,10 @@ optional automaticSpanEvents: AutomaticSpanEvents[];
 ```
 
 The events that should be automatically recorded on the span.
+See the [AutomaticSpanEvents](../type-aliases/AutomaticSpanEvents.md) type for the available options.
 
-BE CAREFUL about how you use this, as you may end up exposing sensitive data in your observability platform.
+> [!WARNING]
+> BE CAREFUL about how you use this, as you may end up exposing sensitive data in your observability platform.
 
 ##### Default
 

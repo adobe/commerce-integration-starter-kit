@@ -1,6 +1,6 @@
 # `TelemetryDiagnosticsConfig`
 
-Defined in: [types.ts:37](https://github.com/adobe/commerce-integration-starter-kit/blob/7bab865cdac63499cf83c46b58de1aec6528b17f/packages/aio-sk-lib-telemetry/source/types.ts#L37)
+Defined in: [types.ts:37](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L37)
 
 The configuration for the telemetry diagnostics.
 
@@ -12,7 +12,7 @@ The configuration for the telemetry diagnostics.
 optional exportLogs: boolean;
 ```
 
-Defined in: [types.ts:52](https://github.com/adobe/commerce-integration-starter-kit/blob/7bab865cdac63499cf83c46b58de1aec6528b17f/packages/aio-sk-lib-telemetry/source/types.ts#L52)
+Defined in: [types.ts:52](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L52)
 
 Whether to make OpenTelemetry also export the diagnostic logs to the configured exporters.
 Set to `false` if you don't want to see diagnostic logs in your observability platform.
@@ -31,7 +31,7 @@ true;
 optional loggerName: string;
 ```
 
-Defined in: [types.ts:45](https://github.com/adobe/commerce-integration-starter-kit/blob/7bab865cdac63499cf83c46b58de1aec6528b17f/packages/aio-sk-lib-telemetry/source/types.ts#L45)
+Defined in: [types.ts:45](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L45)
 
 The name of the logger to use for the diagnostics.
 
@@ -47,6 +47,6 @@ The name of the logger to use for the diagnostics.
 logLevel: "info" | "error" | "none" | "warn" | "debug" | "verbose" | "all";
 ```
 
-Defined in: [types.ts:39](https://github.com/adobe/commerce-integration-starter-kit/blob/7bab865cdac63499cf83c46b58de1aec6528b17f/packages/aio-sk-lib-telemetry/source/types.ts#L39)
+Defined in: [types.ts:39](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L39)
 
 The log level to use for the diagnostics.
