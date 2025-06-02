@@ -121,9 +121,6 @@ export async function shutdownSdk(reason?: string) {
     }
 
     await sdk.shutdown();
-    setGlobalSdk(null);
-    setGlobalTelemetryApi(null);
-
     diag.info("OpenTelemetry automatic instrumentation shutdown successful");
   } catch (error) {
     diag.error(
