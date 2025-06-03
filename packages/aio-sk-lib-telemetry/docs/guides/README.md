@@ -4,6 +4,37 @@ This documentation provides guides for instrumenting your App Builder apps with 
 
 ## Available Guides
 
-- [**Local Development (with Grafana)**](./local-development.md): Learn how to configure, instrument, export and visualize telemetry signals from your App Builder apps when running them locally via `aio app dev`.
-  
-- [**Deployed Runtime Actions (with New Relic)**](./deployed-runtime-actions.md): Learn how to configure, instrument, export and visualize telemetry signals from your App Builder apps when running them in a deployed runtime environment, after `aio app deploy`.
+Find below a list of guides for instrumenting your App Builder apps with OpenTelemetry using different observability backends.
+
+<table>
+  <thead>
+    <tr>
+        <th>Guide</th>
+        <th>Signals</th>
+        <th>Local Development</th>
+        <th>App Builder</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+        <td>
+            <a href="./grafana.md">
+                <strong>Grafana (Tempo, Loki, Prometheus)</strong>
+            </a>
+        </td>
+        <td align="center">Traces, Metrics, Logs</td>
+        <td align="center">Suitable ✅</td>
+        <td align="center">Suitable ✅</td>
+    </tr>
+    <tr>
+        <td>
+            <a href="./new-relic.md">
+                <strong>New Relic</strong>
+            </a>
+        </td>
+        <td align="center">Traces, Metrics, Logs</td>
+        <td align="center">Suitable ✅</td>
+        <td align="center">Suitable ✅</td>
+    </tr>
+  </tbody>
+</table>

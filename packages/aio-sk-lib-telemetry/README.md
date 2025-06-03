@@ -101,7 +101,7 @@ There are 2 different ways to configure Open Telemetry in Node.js:
 
 When searching for OpenTelemetry usage examples, you'll find numerous tutorials demonstrating how to configure the SDK using environment variables. These variables are automatically processed by the SDK to configure its behavior. 
 
-However, these variables need to be present in `process.env`, and due to how App Builder handles environment variables (fed via `params`), this configuration method is currently not supported. It's technically feasible to implement, so we may add support for it in the future.
+However, these variables need to be present in `process.env`, and due to how App Builder handles environment variables (fed via `params`), this configuration method is currently not supported.
 
 ### Node SDK Configuration
 
@@ -181,7 +181,7 @@ See more about the `otel-api` import path in the API Reference: [OpenTelemetry R
 OpenTelemetry includes an internal diagnostic logging API for troubleshooting configuration and instrumentation issues. When your OpenTelemetry setup isn't behaving as expected, you can enable these `diagnostics` (which are disabled by default) through your telemetry configuration.
 
 > [!NOTE]
-> This module configures the diagnostics logger to use `winston` as the logging provider. For more details about exporting logs, see the [logs section](#logs). By default, logs are exported to any configured observability backends that support them. You can control this behavior using the `exportLogs` boolean option. Only logs with a `logLevel` of `info` and above will be exported. Other types of logging are too verbose and may contain irrelevant/sensitive data. 
+> This module configures the diagnostics logger to use `winston` as the logging provider. For more details about exporting logs, see the [logs section](#logs). By default, logs are exported to any configured observability backends that support them. You can control this behavior using the `exportLogs` boolean option. For these **OpenTelemetry internal diagnostic logs**, only those with a `logLevel` of `info` and above will be exported. Other types of logging are too verbose and may contain irrelevant/sensitive data. 
 
 ```ts
 import { defineTelemetryConfig } from "@adobe/aio-lib-telemetry"
@@ -274,7 +274,8 @@ export {
 > ```ts
 > export const externalApiRequest = instrument(
 >   // Important: use a NAMED function. Avoid arrow or anonymous functions.
->   // Functions without names will throw at runtime.
+>   // Or use the `spanConfig.spanName` option in the instrumentation config.
+>   // Functions without names and without a `spanConfig.spanName` will throw at runtime.
 >   function apiRequest() {
 >     // ... fetch("https://someapi.com")
 >   }
@@ -297,7 +298,7 @@ instrument(externalApiRequest, {
   // Place instrumentation options here.
 });
 ```
-See the API reference for the configuration options available: [`InstrumentationConfig`](./docs/api-reference/interfaces/InstrumentationConfig.md)
+See the API reference for the configuration options available: [`InstrumentationConfig`](./docs/api-reference/interfaces/InstrumentationConfig.md).
 
 > [!NOTE]
 > The `instrumentEntrypoint` helper also supports instrumentation options, but since its second parameter is also used for the telemetry configuration, you must merge both (see below). Find the entrypoint configuration reference in: [`EntrypointInstrumentationConfig`](./docs/api-reference/interfaces/EntrypointInstrumentationConfig.md)
