@@ -11,12 +11,6 @@ const telemetryConfig = defineTelemetryConfig((params, isDev) => {
       serviceName: 'commerce-integration-starter-kit',
       resource: getAioRuntimeResource(),
       instrumentations: getPresetInstrumentations('simple')
-
-      // Configure where to export the telemetry signals.
-      // Use `params` if you need to access some secret values.
-      // spanProcessors: [],
-      // logRecordProcessors: [],
-      // metricReader: null
     },
 
     diagnostics: {
