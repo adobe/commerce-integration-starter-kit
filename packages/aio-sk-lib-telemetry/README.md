@@ -498,11 +498,11 @@ We are aware of a couple of (occasional) issues, which you can find workarounds 
 ### Hot Reloading and `aio app dev`
 
 > [!NOTE]
-> This problem may also occur when your runtime action runs in a warm container, as the situation is the same (the process is recycled).
+> This behavior is similar to what happens when your runtime action runs in a warm container, where the process is recycled.
 
-OpenTelemetry relies on global state to manage its internal components. When developing locally with `aio app dev`, your code is hot-reloaded as you make changes. Since the process remains alive during these reloads, the global state persists without being reset. This creates conflicts with the OpenTelemetry SDK, which expects to be initialized only once per process along with all its components. 
+OpenTelemetry uses global state to manage its internal components. When developing locally with `aio app dev`, your code is hot-reloaded as you make changes. Since the process remains alive during these reloads, the global state persists without being reset. While this module handles the underlying OpenTelemetry SDK to work smoothly with hot-reloading, there might be some edge cases we haven't encountered or tested yet.
 
-While this module attempts to manage the underlying OpenTelemetry SDK to minimize hot-reloading conflicts, some edge cases may still occur. If you encounter any issues, please file a GitHub issue with reproduction steps so we can address it. As a workaround, you can restart the development server to start fresh.
+If you notice any unexpected behavior, please file a GitHub issue with reproduction steps so we can investigate and improve the module. As a temporary solution, you can restart the development server to start fresh.
 
 ### Telemetry Signals Not Being Exported
 
