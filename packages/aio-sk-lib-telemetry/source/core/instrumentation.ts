@@ -79,11 +79,9 @@ export function getInstrumentationHelpers(): InstrumentationHelpers {
  *   // Optional configuration
  *   spanConfig: {
  *     spanName: "some-span",
- *     spanOptions: {
- *       attributes: {
- *         "some-attribute": "some-value",
- *       },
- *     },
+*       attributes: {
+*         "some-attribute": "some-value",
+*       },
  *   },
  * });
  */
@@ -93,9 +91,9 @@ export function instrument<T extends AnyFunction>(
 ): (...args: Parameters<T>) => ReturnType<T> {
   const {
     spanName = fn.name,
-    spanOptions = {},
     getBaseContext,
     automaticSpanEvents = [],
+    ...spanOptions
   } = spanConfig ?? {};
 
   if (!spanName) {
@@ -258,7 +256,10 @@ export function instrument<T extends AnyFunction>(
  * 
  * @example
  * ```ts
+ * import { telemetryConfig } from "../telemetry";
+ * 
  * const instrumentedEntrypoint = instrumentEntrypoint(main, {
+ *   ...telemetryConfig,
  *   // Optional configuration
  * });
  * ```

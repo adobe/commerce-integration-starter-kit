@@ -1,6 +1,6 @@
 # `TelemetryPropagationConfig\<T\>`
 
-Defined in: [types.ts:56](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L56)
+Defined in: [types.ts:56](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/types.ts#L56)
 
 Configuration related to context propagation (for distributed tracing).
 
@@ -21,7 +21,7 @@ optional getContextCarrier: (...args: Parameters<T>) => {
 };
 ```
 
-Defined in: [types.ts:72](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L72)
+Defined in: [types.ts:72](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/types.ts#L72)
 
 A function that returns the carrier for the current context.
 Use it to specify where your carrier is located in the incoming parameters, when it's not one of the defaults.
@@ -63,7 +63,7 @@ carrier: Record<string, string>;
 optional skip: boolean;
 ```
 
-Defined in: [types.ts:63](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L63)
+Defined in: [types.ts:63](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/types.ts#L63)
 
 By default, an instrumented entrypoint will try to automatically read (and use) the context from the incoming request.
 Set to `true` if you want to skip this automatic context propagation.

@@ -86,16 +86,16 @@ export type AutomaticSpanEvents = "success" | "error" | "parameters";
 
 /** The configuration for instrumentation. */
 export interface InstrumentationConfig<T extends AnyFunction> {
-  /** Configuration options related to the span started by the instrumented function. */
-  spanConfig?: {
+  /** 
+   * Configuration options related to the span started by the instrumented function.
+   * See also the [SpanOptions](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.SpanOptions.html) interface.
+  */
+  spanConfig?: SpanOptions & {
     /**
      * The name of the span. Defaults to the name of given function.
      * You must use a named function or a provide a name here.
      */
     spanName?: string;
-
-    /** The [options](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.SpanOptions.html) for the span. */
-    spanOptions?: SpanOptions;
 
     /**
      * The events that should be automatically recorded on the span.

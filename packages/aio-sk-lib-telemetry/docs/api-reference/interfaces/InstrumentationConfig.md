@@ -1,6 +1,6 @@
 # `InstrumentationConfig\<T\>`
 
-Defined in: [types.ts:88](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L88)
+Defined in: [types.ts:88](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/types.ts#L88)
 
 The configuration for instrumentation.
 
@@ -25,7 +25,7 @@ optional hooks: {
 };
 ```
 
-Defined in: [types.ts:120](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L120)
+Defined in: [types.ts:120](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/types.ts#L120)
 
 Hooks that can be used to act on a span depending on the result of the function.
 
@@ -74,19 +74,21 @@ You can use it to do something with the Span.
 ### spanConfig?
 
 ```ts
-optional spanConfig: {
+optional spanConfig: SpanOptions & {
   automaticSpanEvents?: AutomaticSpanEvents[];
   getBaseContext?: (...args: Parameters<T>) => Context;
   spanName?: string;
-  spanOptions?: SpanOptions;
 };
 ```
 
-Defined in: [types.ts:90](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L90)
+Defined in: [types.ts:93](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/types.ts#L93)
 
 Configuration options related to the span started by the instrumented function.
+See also the [SpanOptions](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.SpanOptions.html) interface.
 
-#### automaticSpanEvents?
+#### Type declaration
+
+##### automaticSpanEvents?
 
 ```ts
 optional automaticSpanEvents: AutomaticSpanEvents[];
@@ -98,13 +100,13 @@ See the [AutomaticSpanEvents](../type-aliases/AutomaticSpanEvents.md) type for t
 > [!WARNING]
 > BE CAREFUL about how you use this, as you may end up exposing sensitive data in your observability platform.
 
-##### Default
+###### Default
 
 ```ts
 [];
 ```
 
-#### getBaseContext()?
+##### getBaseContext()?
 
 ```ts
 optional getBaseContext: (...args: Parameters<T>) => Context;
@@ -112,19 +114,19 @@ optional getBaseContext: (...args: Parameters<T>) => Context;
 
 The base context to use for the started span.
 
-##### Parameters
+###### Parameters
 
 | Parameter | Type                | Description                                 |
 | --------- | ------------------- | ------------------------------------------- |
 | ...`args` | `Parameters`\<`T`\> | The arguments of the instrumented function. |
 
-##### Returns
+###### Returns
 
 `Context`
 
 The base context to use for the started span.
 
-#### spanName?
+##### spanName?
 
 ```ts
 optional spanName: string;
@@ -132,11 +134,3 @@ optional spanName: string;
 
 The name of the span. Defaults to the name of given function.
 You must use a named function or a provide a name here.
-
-#### spanOptions?
-
-```ts
-optional spanOptions: SpanOptions;
-```
-
-The [options](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.SpanOptions.html) for the span.

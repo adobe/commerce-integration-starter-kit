@@ -1,6 +1,6 @@
 # `InstrumentationContext`
 
-Defined in: [types.ts:187](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L187)
+Defined in: [types.ts:187](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/types.ts#L187)
 
 The context for the current operation.
 
@@ -12,7 +12,7 @@ The context for the current operation.
 contextCarrier: Record<string, string>;
 ```
 
-Defined in: [types.ts:201](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L201)
+Defined in: [types.ts:201](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/types.ts#L201)
 
 Holds a carrier that can be used to propagate the active context.
 
@@ -24,7 +24,7 @@ Holds a carrier that can be used to propagate the active context.
 currentSpan: Span;
 ```
 
-Defined in: [types.ts:198](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L198)
+Defined in: [types.ts:198](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/types.ts#L198)
 
 The span of the current operation.
 
@@ -36,7 +36,7 @@ The span of the current operation.
 logger: AioLogger;
 ```
 
-Defined in: [types.ts:195](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L195)
+Defined in: [types.ts:195](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/types.ts#L195)
 
 The logger for the current operation.
 
@@ -48,7 +48,7 @@ The logger for the current operation.
 meter: Meter;
 ```
 
-Defined in: [types.ts:192](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L192)
+Defined in: [types.ts:192](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/types.ts#L192)
 
 The meter used to create the metrics.
 
@@ -60,6 +60,6 @@ The meter used to create the metrics.
 tracer: Tracer;
 ```
 
-Defined in: [types.ts:189](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L189)
+Defined in: [types.ts:189](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/types.ts#L189)
 
 The tracer used to create the spans.

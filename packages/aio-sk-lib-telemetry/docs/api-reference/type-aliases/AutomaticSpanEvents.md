@@ -4,7 +4,7 @@
 type AutomaticSpanEvents = "success" | "error" | "parameters";
 ```
 
-Defined in: [types.ts:85](https://github.com/adobe/commerce-integration-starter-kit/blob/b6f5b383edc83f7aedbb27a8160882f8ad6b4ea9/packages/aio-sk-lib-telemetry/source/types.ts#L85)
+Defined in: [types.ts:85](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/types.ts#L85)
 
 Defines a set of events that can automatically be attached to an span.
 
