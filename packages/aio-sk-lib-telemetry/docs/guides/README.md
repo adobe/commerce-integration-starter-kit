@@ -6,6 +6,9 @@ This documentation provides guides for instrumenting your App Builder apps with 
 
 Find below a list of guides for instrumenting your App Builder apps with OpenTelemetry using different observability backends.
 
+> [!TIP]
+> Feel free to explore multiple guides and combine their approaches to create a solution that best fits your observability needs, backend preferences, and use case requirements.
+
 <table>
   <thead>
     <tr>
