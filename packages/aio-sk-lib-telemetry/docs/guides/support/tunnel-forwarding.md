@@ -134,43 +134,7 @@ my-action:
 
 OpenTelemetry supports both HTTP and gRPC protocols for OTLP (OpenTelemetry Protocol). While HTTP works with all tunneling tools, **gRPC requires TCP tunneling support**, which is only available with ngrok. For gRPC tunneling use just the base endpoint without path suffixes:
 
-```ts
-// gRPC configuration example
-const grpcEndpoint = "tcp://0.tcp.ngrok.io:12345";
-
-import { credentials } from "@grpc/grpc-js";
-import { OTLPTraceExporterGrpc } from "@adobe/aio-lib-telemetry/otel-api";
-
-traceExporter: new OTLPTraceExporterGrpc({
-  url: grpcEndpoint, // No /v1/traces suffix needed
-  credentials: credentials.createInsecure(),
-})
-```
-
-> [!IMPORTANT]
-> **gRPC vs HTTP path differences:**
-> - **HTTP**: Requires path suffixes like `/v1/traces`, `/v1/metrics`, `/v1/logs`
-> - **gRPC**: Uses only the base endpoint - service definitions are built into the protocol
->
-> Do **NOT** add `/v1/traces` etc. to gRPC endpoints!
->
-> **About insecure credentials:** When tunneling gRPC traffic, you may need to use `credentials.createInsecure()` since tunnel connections don't typically provide proper TLS certificates. This is acceptable for development/testing scenarios.
-
-#### When to Use gRPC vs HTTP
-
-| **Aspect**           | **HTTP**                                   | **gRPC**                            |
-|----------------------|--------------------------------------------|-------------------------------------|
-| **Tunnel Support**   | All tools (ngrok, Cloudflare, LocalTunnel) | ngrok TCP only                      |
-| **Setup Complexity** | Simple                                     | More complex                        |
-| **Performance**      | Good                                       | Better (lower latency, compression) |
-| **Debugging**        | Easy to inspect/debug                      | Harder to debug                     |
-| **Configuration**    | Requires path suffixes (`/v1/traces`)      | Base endpoint only                  |
-| **Firewall/Proxy**   | Better compatibility                       | May have issues                     |
-| **Use Cases**        | Most development scenarios                 | High-performance requirements       |
-
 #### Setting Up gRPC Tunneling with ngrok
-
-If you need gRPC support for better performance, use ngrok's TCP tunneling:
 
 ```bash
 # Tunnel the gRPC port (4317)
@@ -199,6 +163,27 @@ traceExporter: new OTLPTraceExporterGrpc({
   credentials: credentials.createInsecure()
 })
 ```
+
+> [!IMPORTANT]
+> **gRPC vs HTTP path differences:**
+> - **HTTP**: Requires path suffixes like `/v1/traces`, `/v1/metrics`, `/v1/logs`
+> - **gRPC**: Uses only the base endpoint - service definitions are built into the protocol
+>
+> Do **NOT** add `/v1/traces` etc. to gRPC endpoints!
+>
+> **About insecure credentials:** When tunneling gRPC traffic, you may need to use `credentials.createInsecure()` since tunnel connections don't typically provide proper TLS certificates. This is acceptable for development/testing scenarios.
+
+#### When to Use gRPC vs HTTP
+
+| **Aspect**           | **HTTP**                                   | **gRPC**                            |
+|----------------------|--------------------------------------------|-------------------------------------|
+| **Tunnel Support**   | All tools (ngrok, Cloudflare, LocalTunnel) | ngrok TCP only                      |
+| **Setup Complexity** | Simple                                     | More complex                        |
+| **Performance**      | Good                                       | Better (lower latency, compression) |
+| **Debugging**        | Easy to inspect/debug                      | Harder to debug                     |
+| **Configuration**    | Requires path suffixes (`/v1/traces`)      | Base endpoint only                  |
+| **Firewall/Proxy**   | Better compatibility                       | May have issues                     |
+| **Use Cases**        | Most development scenarios                 | High-performance requirements       |
 
 ## Important Considerations
 
