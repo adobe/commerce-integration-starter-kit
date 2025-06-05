@@ -45,16 +45,39 @@ brew install ngrok
 ```
 
 **Docker Usage:**
+
+For advanced usage, see [Ngrok's documentation](https://ngrok.com/docs/using-ngrok-with/docker/).
+
+> [!IMPORTANT]
+> You need to set the `NGROK_AUTHTOKEN` environment variable. DON'T write the auth token raw, otherwise it will be visible in the shell history.
+
+<details open>
+<summary>MacOS/Windows</summary>
+
+In MacOS/Windows, the `--net=host` flag is not supported. You need to use the `host.docker.internal` hostname to access the host network.
+
 ```bash
-# Run ngrok in Docker (HTTP)
-docker run --rm -it --net=host ngrok/ngrok:latest http 4318
+# Run ngrok with HTTP.
+docker run -it -e NGROK_AUTHTOKEN=$NGROK_AUTH_TOKEN ngrok/ngrok:latest http host.docker.internal:4318
 
 # Run ngrok with TCP for gRPC support
-docker run --rm -it --net=host ngrok/ngrok:latest tcp 4317
-
-# Or with custom domain (paid accounts)
-docker run --rm -it --net=host ngrok/ngrok:latest http --domain=your-custom-domain.ngrok.io 4318
+docker run -it -e NGROK_AUTHTOKEN=$NGROK_AUTH_TOKEN ngrok/ngrok:latest tcp host.docker.internal:4317
 ```
+</details>
+
+
+<details>
+<summary>Linux</summary>
+
+For Linux, you can use the `--net=host` flag to access the host network.
+```bash
+# Run ngrok with HTTP.
+docker run --net=host -it -e NGROK_AUTHTOKEN=xyz ngrok/ngrok:latest http 4318
+
+# Run ngrok with TCP for gRPC support
+docker run --net=host -it -e NGROK_AUTHTOKEN=xyz ngrok/ngrok:latest tcp 4317
+```
+</details>
 
 ### Cloudflare Tunnel (cloudflared)
 
