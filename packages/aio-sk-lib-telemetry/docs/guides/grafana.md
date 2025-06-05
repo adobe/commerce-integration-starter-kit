@@ -325,8 +325,11 @@ The key steps are:
 
 2. **Choose and start a tunnel** pointing to your OpenTelemetry Collector:
    ```bash
-   # Example with Cloudflare Tunnel (recommended)
+   # Example with Cloudflare Tunnel (Linux only)
    docker run --rm -it --net=host cloudflare/cloudflared:latest tunnel --url http://localhost:4318
+
+   # Example with Cloudflare Tunnel (MacOS/Windows)
+   docker run --rm -it cloudflare/cloudflared:latest tunnel --url http://host.docker.internal:4318
    ```
 
 3. **Note the tunnel URL** that gets generated (e.g. `https://abc123-def456-ghi789.trycloudflare.com`)

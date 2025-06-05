@@ -92,18 +92,34 @@ docker run --net=host -it -e NGROK_AUTHTOKEN=xyz ngrok/ngrok:latest tcp 4317
 ```bash
 # Via Homebrew (macOS)
 brew install cloudflared
-
-# Or download from https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/
 ```
 
 **Docker Usage:**
+
+<details open>
+<summary>MacOS/Windows</summary>
+
+In MacOS/Windows, the `--net=host` flag is not supported. You need to use the `host.docker.internal` hostname to access the host network.
+
+```bash
+# Quick temporary tunnel (HTTP only)
+docker run --rm -it cloudflare/cloudflared:latest tunnel --url http://host.docker.internal:4318
+
+# For persistent tunnels, you'll need to login, best to use the Cloudflare CLI.
+```
+</details>
+
+<details>
+<summary>Linux</summary>
+
+For Linux, you can use the `--net=host` flag to access the host network.
 ```bash
 # Quick temporary tunnel (HTTP only)
 docker run --rm -it --net=host cloudflare/cloudflared:latest tunnel --url http://localhost:4318
 
-# For persistent tunnels, mount config directory
-docker run --rm -it --net=host -v ~/.cloudflared:/etc/cloudflared cloudflare/cloudflared:latest tunnel run my-tunnel
+# For persistent tunnels, you'll need to login, best to use the Cloudflare CLI.
 ```
+</details>
 
 ### LocalTunnel
 
@@ -119,14 +135,8 @@ docker run --rm -it --net=host -v ~/.cloudflared:/etc/cloudflared cloudflare/clo
 npm install -g localtunnel
 ```
 
-**Docker Usage:**
-```bash
-# Run LocalTunnel in Docker (HTTP only)
-docker run --rm -it --net=host efrecon/localtunnel --port 4318
-
-# With custom subdomain
-docker run --rm -it --net=host efrecon/localtunnel --port 4318 --subdomain my-otel-collector
-```
+> [!NOTE]
+> LocalTunnel does not have official Docker images, and community images have not been maintained since a while ago.
 
 ## Configuration
 
