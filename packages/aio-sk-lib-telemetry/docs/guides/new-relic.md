@@ -180,4 +180,5 @@ Access your service logs through the **Logs** tab in the service UI (located und
 > [!TIP]
 > When logging within a trace, the trace ID is automatically included, enabling log-trace correlation. New Relic simplifies this further by automatically linking logs to their corresponding traces. To view logs for a specific trace, click on the trace in the **Distributed Tracing** tab and navigate to the **Logs** tab (see the green square in the [traces section](#traces) second image).
 
-![Logs Visualization](../images/new-relic/logs-view.png)
+![Logs](../images/new-relic/logs-view.png)
+

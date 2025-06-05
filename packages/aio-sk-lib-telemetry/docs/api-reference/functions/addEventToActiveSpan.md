@@ -4,7 +4,7 @@
 function addEventToActiveSpan(event: string, attributes?: Attributes): void;
 ```
 
-Defined in: [api/global.ts:66](https://github.com/adobe/commerce-integration-starter-kit/blob/96134280d686a55b5d5697e994fb1c049a995efa/packages/aio-sk-lib-telemetry/source/api/global.ts#L66)
+Defined in: [api/global.ts:66](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/api/global.ts#L66)
 
 Adds an event to the given span.
 

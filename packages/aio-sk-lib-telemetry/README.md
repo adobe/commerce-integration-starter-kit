@@ -21,19 +21,11 @@ This module contains a set of utilities for integrating observability into App B
     - [Writing your Telemetry Configuration](#writing-your-telemetry-configuration)
       - [Configuring a Custom Tracer and Meter](#configuring-a-custom-tracer-and-meter)
       - [Enabling OpenTelemetry Diagnostics](#enabling-opentelemetry-diagnostics)
-      - [Examples](#examples)
     - [Instrumenting Your Code](#instrumenting-your-code)
       - [Entrypoint Instrumentation](#entrypoint-instrumentation)
       - [Traces](#traces)
-        - [Instrumentation Configuration](#instrumentation-configuration)
-        - [Distributed Tracing and Context Propagation](#distributed-tracing-and-context-propagation)
-          - [Automatic Propagation](#automatic-propagation)
-          - [Manual Propagation](#manual-propagation)
       - [Logs](#logs)
-        - [Exporting Log Data](#exporting-log-data)
       - [Metrics](#metrics)
-        - [Creating Metrics](#creating-metrics)
-        - [Considerations](#considerations)
     - [Instrumentation Helpers](#instrumentation-helpers)
     - [API Reference](#api-reference)
   - [❓ Next Up](#-next-up)
@@ -41,7 +33,6 @@ This module contains a set of utilities for integrating observability into App B
   - [🩺 Troubleshooting](#-troubleshooting)
     - [Hot Reloading and `aio app dev`](#hot-reloading-and-aio-app-dev)
     - [Telemetry Signals Not Being Exported](#telemetry-signals-not-being-exported)
-
 
 ## 👋🏻 Introduction
 
@@ -112,6 +103,9 @@ This is the currently supported method for configuring OpenTelemetry with this l
 This section provides a comprehensive guide for instrumenting App Builder Runtime Actions and demonstrates how to leverage this module's API for streamlined telemetry implementation.
 
 ### Writing your Telemetry Configuration
+
+> [!NOTE]
+> This section focuses on general telemetry configuration rather than backend-specific setup. Since observability backends require different configurations, we've created dedicated guides for popular options. See the [Guides](#guides) section for links to detailed backend setup instructions.
 
 Begin by creating a `telemetry.js` file (or `telemetry.ts` if using TypeScript). This file will export your global telemetry configuration, which will be shared across all instrumented runtime actions. If a single configuration doesn't meet your requirements, you can export multiple configurations from this file (or create separate configuration files) and use them as needed.
 
@@ -202,13 +196,6 @@ const telemetryConfig = defineTelemetryConfig((params, isDev) => {
 export { telemetryConfig }
 ```
 See the API reference for the `diagnostics` property: [`TelemetryDiagnosticsConfig`](./docs/api-reference/interfaces/TelemetryDiagnosticsConfig.md)
-
-#### Examples
-
-We have prepared some configuration examples for you to easily get started:
-
-- [Local OpenTelemetry Collector](./docs/examples/config/local-otel-collector.md)
-- [New Relic](./docs/examples/config/new-relic.md)
 
 ### Instrumenting Your Code
 
@@ -489,7 +476,7 @@ This module is a thin wrapper around the OpenTelemetry SDK for Node.js. For more
 
 ### Guides
 
-We have prepared some guides to help you get started with OpenTelemetry in your App Builder apps. See the [README](./docs/guides/README.md) in the [docs/guides](./docs/guides) folder.
+To help you get started, we've created [comprehensive guides](./docs/guides/README.md) for integrating with popular observability platforms. Find them in the [docs/guides](./docs/guides) folder.
 
 ## 🩺 Troubleshooting
 
