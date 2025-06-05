@@ -21,8 +21,7 @@ This guide demonstrates how to configure runtime actions to send telemetry signa
 ## Prerequisites
 
 - A [New Relic](https://newrelic.com/) account with a [license key](https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/).
-- An App Builder project with the `aio-sk-lib-telemetry` package installed.
-  - See the [package README](../../README.md) for instructions on how to install/use it.
+- An App Builder project with OpenTelemetry instrumentation.
 
 ## Setup
 
@@ -57,7 +56,6 @@ This configuration uses the HTTP/Protobuf exporter, as per New Relic's [document
 
 > [!IMPORTANT]
 > If you want to use gRPC exporters, make sure you switch the imported exporters to their gRPC counterparts. Also, ensure your ingestion endpoint points to the 4317 port, which is the default port for gRPC.
-
 
 ```ts
 // telemetry.ts
@@ -158,7 +156,7 @@ Navigate to your instrumented service's UI (`my-app-builder-app` in this example
 > [!TIP]
 > You can configure span attributes at two levels: globally for all signals via the `resource` property in `sdkConfig`, or individually per span using the optional `attributes` property in the `spanConfig` object passed to `instrument` function helpers.
 
-![Trace Details](../images/new-relic/trace-view-new-relic.png) 
+![Trace Details](../images/new-relic/trace-span-view.png) 
 
 The example trace above begins with an Adobe App Builder `consumer` runtime action serving as a router. This action then triggers another runtime action that handles customer creation, with its workflow steps (`validate`, `transform`, etc.) clearly visible in the trace.
 

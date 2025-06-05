@@ -329,7 +329,7 @@ The key steps are:
    docker run --rm -it --net=host cloudflare/cloudflared:latest tunnel --url http://localhost:4318
    ```
 
-3. **Note the tunnel URL** that gets generated (e.g., `https://abc123-def456-ghi789.trycloudflare.com`)
+3. **Note the tunnel URL** that gets generated (e.g. `https://abc123-def456-ghi789.trycloudflare.com`)
 
 #### Alternative: Add Tunneling to Docker Compose
 
@@ -354,7 +354,7 @@ Then start the new container:
 docker compose up
 ```
 
-Then, check the `cloudflared` container logs to get your tunnel URL:
+Check the `cloudflared` container logs to get your tunnel URL:
 ```bash
 docker logs cloudflared
 ```
@@ -365,7 +365,7 @@ Look for a line like: `https://abc123-def456-ghi789.trycloudflare.com` - this is
 Replace the default localhost collector configuration with the tunnel URL in your telemetry setup:
 
 ```ts
-// telemetry-appbuilder.ts
+// telemetry.ts
 import {
   defineTelemetryConfig,
   getAioRuntimeResource,
