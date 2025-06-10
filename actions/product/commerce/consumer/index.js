@@ -10,14 +10,13 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-/**
- * This is the consumer of the events coming from Adobe Commerce related to product entity.
- */
 const { Core } = require('@adobe/aio-sdk')
 const { stringParameters, checkMissingRequestInputs } = require('../../../utils')
 const { HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR } = require('../../../constants')
 const Openwhisk = require('../../../openwhisk')
 const { errorResponse, successResponse } = require('../../../responses')
+const stateLib = require('@adobe/aio-lib-state')
+const { storeFingerPrint, isAPotentialInfiniteLoop } = require('../../../infinite-loop-breaker')
 
 /**
  * This is the consumer of the events coming from Adobe Commerce related to product entity.
@@ -28,24 +27,46 @@ const { errorResponse, successResponse } = require('../../../responses')
 async function main (params) {
   const logger = Core.Logger('product-commerce-consumer', { level: params.LOG_LEVEL || 'info' })
 
+  logger.info('Start processing request')
+  logger.debug(`Consumer main params: ${stringParameters(params)}`)
+
+  // Create a state instance
+  const state = await stateLib.init()
+
   try {
     const openwhiskClient = new Openwhisk(params.API_HOST, params.API_AUTH)
 
     let response = {}
     let statusCode = HTTP_OK
 
-    logger.info('Start processing request')
-    logger.debug(`Consumer main params: ${stringParameters(params)}`)
-
-    const requiredParams = ['type', 'data.value.created_at', 'data.value.updated_at']
+    // check for missing request input parameters and headers
+    const requiredParams = ['type', 'data.value.created_at', 'data.value.updated_at', 'data.value.sku', 'data.value.description']
     const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
 
     if (errorMessage) {
-      logger.error(`Invalid request parameters: ${stringParameters(params)}`)
+      logger.error(`Invalid request parameters: ${errorMessage}`)
       return errorResponse(HTTP_BAD_REQUEST, `Invalid request parameters: ${errorMessage}`)
     }
 
     logger.info('Params type: ' + params.type)
+
+    // Detect infinite loop and break it
+    const infiniteLoopEventTypes = [
+      'com.adobe.commerce.observer.catalog_product_save_commit_after',
+      'com.adobe.commerce.observer.catalog_product_delete_commit_after'
+    ]
+
+    const infiniteLoopData = {
+      fingerprintFn: fnFingerprint(params),
+      keyFn: fnInfiniteLoopKey(params),
+      event: params.type,
+      eventTypes: infiniteLoopEventTypes
+    }
+
+    if (await isAPotentialInfiniteLoop(state, infiniteLoopData)) {
+      logger.info(`Infinite loop break for event ${params.type}`)
+      return successResponse(params.type, `event discarded to prevent infinite loop(${params.type})`)
+    }
 
     switch (params.type) {
       case `com.adobe.commerce.${params.PROJECT_NAME}.observer.catalog_product_save_commit_after`: {
@@ -82,11 +103,32 @@ async function main (params) {
       return errorResponse(statusCode, response.error)
     }
 
+    // Prepare to detect infinite loop on subsequent events
+    await storeFingerPrint(state, fnInfiniteLoopKey(params), fnFingerprint(params))
+
     logger.info(`Successful request: ${statusCode}`)
     return successResponse(params.type, response)
   } catch (error) {
     logger.error(`Server error: ${error.message}`)
     return errorResponse(HTTP_INTERNAL_ERROR, error.message)
+  }
+
+  /**
+   * This function generates a function to generate fingerprint for the data to be used in infinite loop detection based on params.
+   * @param {object} params Data received from the event
+   * @returns {Function} the function that generates the fingerprint
+   */
+  function fnFingerprint (params) {
+    return () => { return { product: params.data.value.sku, description: params.data.value.description } }
+  }
+
+  /**
+   * This function generates a function to create a key for the infinite loop detection based on params.
+   * @param {object} params Data received from the event
+   * @returns {Function} the function that generates the keu
+   */
+  function fnInfiniteLoopKey (params) {
+    return () => { return `ilk_${params.data.value.sku}` }
   }
 }
 

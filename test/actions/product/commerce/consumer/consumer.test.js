@@ -16,6 +16,24 @@ const openwhisk = require('openwhisk')
 const { HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_INTERNAL_ERROR } = require('../../../../../actions/constants')
 const Openwhisk = require('../../../../../actions/openwhisk')
 
+jest.mock('@adobe/aio-lib-state', () => {
+  // Mock AdobeState class
+  class AdobeStateMock {
+    async get () { return undefined } // or return { expiration: '', value: '' } if needed
+    async put () { return 'mock-key' }
+    async delete () { return null }
+    async deleteAll () { return { keys: 0 } }
+    async any () { return false }
+    async stats () { return { bytesKeys: 0, bytesValues: 0, keys: 0 } }
+    async * list () { yield { keys: [] } }
+  }
+  // The module exports both init and AdobeState
+  return {
+    init: jest.fn().mockResolvedValue(new AdobeStateMock()),
+    AdobeState: AdobeStateMock
+  }
+})
+
 afterEach(() => {
   jest.clearAllMocks()
   jest.resetModules()
@@ -73,6 +91,7 @@ describe('Given product commerce consumer', () => {
       })
     })
   })
+
   describe('When a valid product updated event is received', () => {
     test('Then returns success response', async () => {
       const params = {
@@ -170,7 +189,7 @@ describe('Given product commerce consumer', () => {
         error: {
           statusCode: 400,
           body: {
-            error: "Invalid request parameters: missing parameter(s) 'type,data.value.created_at,data.value.updated_at'"
+            error: "Invalid request parameters: missing parameter(s) 'type,data.value.created_at,data.value.updated_at,data.value.sku,data.value.description'"
           }
         }
       })
