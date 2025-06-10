@@ -73,11 +73,11 @@ export interface TelemetryPropagationConfig<T extends AnyFunction> {
     carrier: Record<string, string>;
     baseCtx?: Context;
   };
-};
+}
 
-/** 
- * Defines a set of events that can automatically be attached to an span.
- * 
+/**
+ * Defines a set of events that can automatically be attached to a span.
+ *
  * - `success`: Adds an event if the instrumented function succeeds, with the result as the payload.
  * - `error`: Adds an event if the instrumented function fails, with the error as the payload.
  * - `parameters`: Adds an event with the parameters received by the instrumented function.

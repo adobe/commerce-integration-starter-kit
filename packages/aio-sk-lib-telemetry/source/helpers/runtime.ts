@@ -38,9 +38,12 @@ let runtimeMetadata: RuntimeMetadata | null = null;
 
 /** Checks if the runtime is in development mode. */
 export function isDevelopment() {
-  // The action version is only set in production
-  // Watch: https://jira.corp.adobe.com/browse/ACNA-3825
-  return process.env.__OW_ACTION_VERSION === undefined;
+  // Principal way to check is using AIO_DEV, but this is only available in latest versions of the AIO CLI.
+  // As a fallback, check the action version, which is (as of now) only set in production.
+  return (
+    process.env.AIO_DEV !== undefined ||
+    process.env.__OW_ACTION_VERSION === undefined
+  );
 }
 
 /** Checks if telemetry is enabled. */
@@ -92,8 +95,8 @@ export function getRuntimeActionMetadata(): RuntimeMetadata {
     runtimeMetadata = {
       ...meta,
 
-      // Old installations of AIO CLI, might use a version `aio app dev` where ACTION_NAME doesn't include a package name.
-      // See: https://jira.corp.adobe.com/browse/ACNA-3824
+      // Old installations of AIO CLI, might use a version `aio app dev`
+      // where ACTION_NAME doesn't include a package name.
       packageName: "unknown",
       actionName: process.env.__OW_ACTION_NAME as string,
     };
