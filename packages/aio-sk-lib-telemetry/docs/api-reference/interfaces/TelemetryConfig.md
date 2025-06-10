@@ -1,6 +1,6 @@
 # `TelemetryConfig`
 
-Defined in: [types.ts:142](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/types.ts#L142)
+Defined in: [types.ts:141](https://github.com/adobe/commerce-integration-starter-kit/blob/86a7b96f6f56ae964aa8997541d4360d7dfdd7b9/packages/aio-sk-lib-telemetry/source/types.ts#L141)
 
 The configuration options for the telemetry module.
 
@@ -16,7 +16,7 @@ The configuration options for the telemetry module.
 optional diagnostics: false | TelemetryDiagnosticsConfig;
 ```
 
-Defined in: [types.ts:150](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/types.ts#L150)
+Defined in: [types.ts:149](https://github.com/adobe/commerce-integration-starter-kit/blob/86a7b96f6f56ae964aa8997541d4360d7dfdd7b9/packages/aio-sk-lib-telemetry/source/types.ts#L149)
 
 The configuration options for the telemetry diagnostics.
 
@@ -28,7 +28,7 @@ The configuration options for the telemetry diagnostics.
 optional meter: Meter;
 ```
 
-Defined in: [types.ts:183](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/types.ts#L183)
+Defined in: [types.ts:181](https://github.com/adobe/commerce-integration-starter-kit/blob/86a7b96f6f56ae964aa8997541d4360d7dfdd7b9/packages/aio-sk-lib-telemetry/source/types.ts#L181)
 
 The meter used to create metrics.
 
@@ -46,7 +46,7 @@ Partial.meter;
 sdkConfig: Partial<NodeSDKConfiguration>;
 ```
 
-Defined in: [types.ts:147](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/types.ts#L147)
+Defined in: [types.ts:146](https://github.com/adobe/commerce-integration-starter-kit/blob/86a7b96f6f56ae964aa8997541d4360d7dfdd7b9/packages/aio-sk-lib-telemetry/source/types.ts#L146)
 
 The configuration options for the OpenTelemetry SDK.
 See the [NodeSDKConfiguration](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_sdk-node.NodeSDKConfiguration.html) interface.
@@ -59,7 +59,7 @@ See the [NodeSDKConfiguration](https://open-telemetry.github.io/opentelemetry-js
 optional tracer: Tracer;
 ```
 
-Defined in: [types.ts:180](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/types.ts#L180)
+Defined in: [types.ts:178](https://github.com/adobe/commerce-integration-starter-kit/blob/86a7b96f6f56ae964aa8997541d4360d7dfdd7b9/packages/aio-sk-lib-telemetry/source/types.ts#L178)
 
 The tracer used to create spans.
 

@@ -1,6 +1,6 @@
 # `EntrypointInstrumentationConfig\<T\>`
 
-Defined in: [types.ts:154](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/types.ts#L154)
+Defined in: [types.ts:153](https://github.com/adobe/commerce-integration-starter-kit/blob/86a7b96f6f56ae964aa8997541d4360d7dfdd7b9/packages/aio-sk-lib-telemetry/source/types.ts#L153)
 
 The configuration for entrypoint instrumentation.
 
@@ -25,7 +25,7 @@ optional hooks: {
 };
 ```
 
-Defined in: [types.ts:120](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/types.ts#L120)
+Defined in: [types.ts:119](https://github.com/adobe/commerce-integration-starter-kit/blob/86a7b96f6f56ae964aa8997541d4360d7dfdd7b9/packages/aio-sk-lib-telemetry/source/types.ts#L119)
 
 Hooks that can be used to act on a span depending on the result of the function.
 
@@ -82,7 +82,7 @@ initializeTelemetry: (params: RecursiveStringRecord, isDevelopment: boolean) =>
   TelemetryConfig;
 ```
 
-Defined in: [types.ts:171](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/types.ts#L171)
+Defined in: [types.ts:169](https://github.com/adobe/commerce-integration-starter-kit/blob/86a7b96f6f56ae964aa8997541d4360d7dfdd7b9/packages/aio-sk-lib-telemetry/source/types.ts#L169)
 
 This function is called at the start of the action.
 
@@ -107,7 +107,7 @@ The telemetry configuration to use for the action.
 optional propagation: TelemetryPropagationConfig<T>;
 ```
 
-Defined in: [types.ts:162](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/types.ts#L162)
+Defined in: [types.ts:160](https://github.com/adobe/commerce-integration-starter-kit/blob/86a7b96f6f56ae964aa8997541d4360d7dfdd7b9/packages/aio-sk-lib-telemetry/source/types.ts#L160)
 
 Configuration options related to context propagation.
 See the [TelemetryPropagationConfig](TelemetryPropagationConfig.md) for the interface.
@@ -124,7 +124,7 @@ optional spanConfig: SpanOptions & {
 };
 ```
 
-Defined in: [types.ts:93](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/types.ts#L93)
+Defined in: [types.ts:92](https://github.com/adobe/commerce-integration-starter-kit/blob/86a7b96f6f56ae964aa8997541d4360d7dfdd7b9/packages/aio-sk-lib-telemetry/source/types.ts#L92)
 
 Configuration options related to the span started by the instrumented function.
 See also the [SpanOptions](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.SpanOptions.html) interface.

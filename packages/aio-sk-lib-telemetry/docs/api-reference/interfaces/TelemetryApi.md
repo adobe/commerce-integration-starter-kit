@@ -1,6 +1,6 @@
 # `TelemetryApi`
 
-Defined in: [types.ts:178](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/types.ts#L178)
+Defined in: [types.ts:176](https://github.com/adobe/commerce-integration-starter-kit/blob/86a7b96f6f56ae964aa8997541d4360d7dfdd7b9/packages/aio-sk-lib-telemetry/source/types.ts#L176)
 
 Defines the global telemetry API. These items should be set once per-application.
 
@@ -12,7 +12,7 @@ Defines the global telemetry API. These items should be set once per-application
 meter: Meter;
 ```
 
-Defined in: [types.ts:183](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/types.ts#L183)
+Defined in: [types.ts:181](https://github.com/adobe/commerce-integration-starter-kit/blob/86a7b96f6f56ae964aa8997541d4360d7dfdd7b9/packages/aio-sk-lib-telemetry/source/types.ts#L181)
 
 The meter used to create metrics.
 
@@ -24,6 +24,6 @@ The meter used to create metrics.
 tracer: Tracer;
 ```
 
-Defined in: [types.ts:180](https://github.com/adobe/commerce-integration-starter-kit/blob/dc8e8d16862bde414fa630722c6f5b2fafb02d6d/packages/aio-sk-lib-telemetry/source/types.ts#L180)
+Defined in: [types.ts:178](https://github.com/adobe/commerce-integration-starter-kit/blob/86a7b96f6f56ae964aa8997541d4360d7dfdd7b9/packages/aio-sk-lib-telemetry/source/types.ts#L178)
 
 The tracer used to create spans.
