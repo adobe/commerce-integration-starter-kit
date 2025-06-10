@@ -38,7 +38,7 @@ const undiciInstrumentationConfig = {
 
 /**
  * Get the instrumentations for a given preset.
- * 
+ *
  * @param preset - The preset to get the instrumentations for.
  * @returns The instrumentations for the given preset:
  * - `full`: All the Node.js [auto-instrumentations](https://www.npmjs.com/package/@opentelemetry/auto-instrumentations-node)
@@ -47,14 +47,16 @@ const undiciInstrumentationConfig = {
  *   [GraphQL](https://www.npmjs.com/package/@opentelemetry/instrumentation-graphql),
  *   [Undici](https://www.npmjs.com/package/@opentelemetry/instrumentation-undici), and
  *   [Winston](https://www.npmjs.com/package/@opentelemetry/instrumentation-winston)
- * 
+ *
  * @example
  * ```ts
  * const instrumentations = getPresetInstrumentations("simple");
  * // instrumentations = [HttpInstrumentation, GraphQLInstrumentation, UndiciInstrumentation, WinstonInstrumentation]
  * ```
  */
-export function getPresetInstrumentations(preset: TelemetryInstrumentationPreset) {
+export function getPresetInstrumentations(
+  preset: TelemetryInstrumentationPreset,
+) {
   switch (preset) {
     case "simple": {
       return [

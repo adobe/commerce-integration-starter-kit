@@ -25,7 +25,7 @@ function getGlobalSdk() {
   return global.__OTEL_SDK__;
 }
 
-/** 
+/**
  * Set the global SDK instance.
  * @param sdkInstance - The SDK instance to set.
  */

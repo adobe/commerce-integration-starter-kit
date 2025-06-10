@@ -72,16 +72,16 @@ export function getInstrumentationHelpers(): InstrumentationHelpers {
  * @param fn - The function to instrument.
  * @param config - The configuration for the instrumentation.
  * @returns A wrapped function with the same signature as the original function, but with telemetry instrumentation.
- * 
+ *
  * @example
  * ```ts
  * const instrumentedFn = instrument(someFunction, {
  *   // Optional configuration
  *   spanConfig: {
  *     spanName: "some-span",
-*       attributes: {
-*         "some-attribute": "some-value",
-*       },
+ *       attributes: {
+ *         "some-attribute": "some-value",
+ *       },
  *   },
  * });
  */
@@ -248,16 +248,16 @@ export function instrument<T extends AnyFunction>(
 }
 
 /**
- * Instruments the entrypoint of a runtime action. 
+ * Instruments the entrypoint of a runtime action.
  * Needs to be used ONLY with the `main` function of a runtime action.
  * @param fn - The entrypoint function to instrument.
  * @param config - The configuration for the entrypoint instrumentation.
  * @returns A wrapped function with the same signature as the original function, but with telemetry instrumentation.
- * 
+ *
  * @example
  * ```ts
  * import { telemetryConfig } from "../telemetry";
- * 
+ *
  * const instrumentedEntrypoint = instrumentEntrypoint(main, {
  *   ...telemetryConfig,
  *   // Optional configuration
@@ -368,7 +368,7 @@ export function instrumentEntrypoint<
       }) as T;
     } catch (error) {
       throw new Error(`Failed to instrument entrypoint: ${error}`, {
-        cause: error
+        cause: error,
       });
     }
   }

@@ -29,7 +29,7 @@ export function defineTelemetryConfig(
 
 /**
  * Helper to define a record of metrics.
- * 
+ *
  * @see https://opentelemetry.io/docs/concepts/signals/metrics/
  * @example
  * ```ts

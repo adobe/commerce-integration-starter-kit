@@ -16,7 +16,7 @@ import { context, trace, type Attributes } from "@opentelemetry/api";
  * Gets the active span from the given context.
  * @param ctx - The context to get the span from.
  * @throws {Error} An error if no span is found.
- * 
+ *
  * @example
  * ```ts
  * const span = getActiveSpan();
@@ -35,7 +35,7 @@ export function getActiveSpan(ctx = context.active()) {
 /**
  * Tries to get the active span from the given context.
  * @param ctx - The context to get the span from.
- * 
+ *
  * @example
  * ```ts
  * const span = tryGetActiveSpan();
@@ -57,7 +57,7 @@ export function tryGetActiveSpan(ctx = context.active()) {
  * Adds an event to the given span.
  * @param event - The event name to add.
  * @param attributes - The attributes to add to the event.
- * 
+ *
  * @example
  * ```ts
  * addEventToActiveSpan("my-event", { foo: "bar" });
@@ -72,7 +72,7 @@ export function addEventToActiveSpan(event: string, attributes?: Attributes) {
  * Tries to add an event to the active span.
  * @param event - The event name to add.
  * @param attributes - The attributes to add to the event.
- * 
+ *
  * @example
  * ```ts
  * const successfullyAdded = tryAddEventToActiveSpan("my-event", { foo: "bar" });

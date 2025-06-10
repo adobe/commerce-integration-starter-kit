@@ -13,10 +13,10 @@
 import { resourceFromAttributes } from "@opentelemetry/resources";
 import { inferTelemetryAttributesFromRuntimeMetadata } from "~/helpers/runtime";
 
-/** 
- * Infers some useful attributes for the current action from the Adobe I/O Runtime 
+/**
+ * Infers some useful attributes for the current action from the Adobe I/O Runtime
  * and returns them as a record of key-value pairs.
- * 
+ *
  * @example
  * ```ts
  * const attributes = getAioRuntimeAttributes();
@@ -27,10 +27,10 @@ export function getAioRuntimeAttributes() {
   return inferTelemetryAttributesFromRuntimeMetadata();
 }
 
-/** 
- * Creates a [resource](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_sdk-node.resources.Resource.html) 
+/**
+ * Creates a [resource](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_sdk-node.resources.Resource.html)
  * from the attributes inferred from the Adobe I/O Runtime and returns it as an OpenTelemetry Resource object.
- * 
+ *
  * @see https://opentelemetry.io/docs/languages/js/resources/
  * @example
  * ```ts
@@ -43,10 +43,10 @@ export function getAioRuntimeResource() {
 }
 
 /**
- * Creates a [resource](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_sdk-node.resources.Resource.html) 
+ * Creates a [resource](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_sdk-node.resources.Resource.html)
  * that combines the attributes inferred from the Adobe I/O Runtime with the provided attributes.
  * @param attributes - The attributes to combine with the attributes inferred from the Adobe I/O Runtime.
- * 
+ *
  * @see https://opentelemetry.io/docs/languages/js/resources/
  * @example
  * ```ts

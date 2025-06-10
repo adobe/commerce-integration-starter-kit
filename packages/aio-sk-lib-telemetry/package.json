@@ -5,10 +5,7 @@
   "type": "module",
   "license": "ISC",
   "description": "A utility module for easy instrumentation of Adobe I/O Runtime actions for Starter Kits via OpenTelemetry.",
-  "files": [
-    "dist",
-    "*.d.ts"
-  ],
+  "files": ["dist", "*.d.ts"],
   "exports": {
     ".": {
       "import": "./dist/es/index.js",

@@ -6,9 +6,7 @@
   "cleanOutputDir": true,
   "includeVersion": true,
 
-  "entryPoints": [
-    "./source/index.ts"
-  ],
+  "entryPoints": ["./source/index.ts"],
 
   "out": "./docs/api-reference",
   "plugin": ["typedoc-plugin-markdown"],
@@ -23,7 +21,7 @@
   "useCodeBlocks": true,
   "mergeReadme": true,
   "formatWithPrettier": true,
-  
+
   "indexFormat": "table",
   "parametersFormat": "table",
   "pageTitleTemplates": {
