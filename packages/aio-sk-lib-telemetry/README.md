@@ -49,21 +49,25 @@ Find it here: [OpenTelemetry General Overview](./docs/open-telemetry.md)
 
 ## 🛠️ Installation and Setup
 
+This library is written in TypeScript and distributed as a JavaScript bundle compatible with both ESM and CJS.
+
 ### Prerequisites
 
-This library is designed for use within an Adobe App Builder runtime action, as it expects to find relevant information in the environment. It is written in TypeScript and distributed as a JavaScript bundle compatible with both ESM and CJS. You'll need:
+This library is designed for use within an [Adobe App Builder](https://developer.adobe.com/app-builder/docs/intro_and_overview/) runtime action, as it expects to find relevant information in the environment. You'll need:
 
-- An `aio` scaffolded project
+- An [Adobe App Builder](https://developer.adobe.com/app-builder/docs/intro_and_overview/) project
 - A package manager of your choice (we'll use `npm` in our code examples)
 - A destination for your telemetry signals (we'll guide you through available options and setup)
   
 > [!NOTE]
-> Throughout this guide, we will occasionally distinguish between `development` and `production` environments. For context, deployed App Builder runtime actions do not differentiate between these environments (a deployed runtime action is always considered to be in `production`, regardless of the namespace). When we refer to the `development` environment, we are specifically referring to when you're running your runtime actions locally via `aio app dev`.
+> Throughout this guide, we will occasionally distinguish between `development` and `production` environments. For context, deployed App Builder runtime actions do not differentiate between these environments (a deployed runtime action is always considered to be in `production`, regardless of the namespace). When we refer to the `development` environment, we are specifically referring to when you're **running your runtime actions locally** via `aio app dev`.
 
 ### Installing the Module
 
 > [!WARNING]
-> This package still hasn't been published to the NPM Registry, for now you can only install it by either building it manually (copying, and pasting) or as a workspace package in a monorepo setup.
+> This package is not yet published to the NPM Registry. After running `npm run build`, you can either:
+> - Copy the minified files from `dist/` and import them directly in your project
+> - Install it as a workspace package in a monorepo using `npm install` with the local path
 
 ```sh
 npm install @adobe/aio-lib-telemetry
