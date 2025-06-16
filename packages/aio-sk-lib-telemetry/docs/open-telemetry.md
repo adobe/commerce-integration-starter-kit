@@ -56,9 +56,6 @@ OTLP supports multiple transmission protocols and encodings to accommodate diffe
 
 The simplest pattern is to export your telemetry signals directly to an observability backend. This is usually done via a language-specific OpenTelemetry SDK. It's the easiest to setup and requires no intermediate infrastructure, which makes it suitable for development/test environments, but not for production use cases.
 
-> [!NOTE]
-> When exporting telemetry directly from the application, the pipeline model described above does not fully apply. There are no receivers involved; the SDK sends data directly to the backend using an exporter (with optional, in-code processing).
-
 <br />
 <div align="center">
   <img alt="OpenTelemetry Logo" src="./images/no-collector.png">
@@ -77,6 +74,9 @@ Collectors are commonly deployed in two patterns:
 - **Gateway:** Runs as a remote service, aggregating telemetry from multiple sources before exporting to observability platforms. ([Learn more](https://opentelemetry.io/docs/collector/deployment/gateway/))
 
 This approach is recommended for production environments, as it enables advanced features like multi-destination export, data enrichment, and dynamic configuration without modifying application code. ([Learn more](https://opentelemetry.io/docs/collector/))
+
+> [!NOTE]
+> When exporting [telemetry directly from the application](#application-level-export), the pipeline model described above does not fully apply. There are no receivers involved; the SDK sends data directly to the backend using an exporter (with optional, in-code processing).
 
 <br />
 <div align="center">
@@ -102,7 +102,7 @@ OpenTelemetry is highly versatile and is rapidly becoming the standard for obser
 
 ## What does _instrumentation_ mean?
 
-For a system to be [observable](https://opentelemetry.io/docs/concepts/observability-primer/#what-is-observability), it must be instrumented: that is, code from the system's components must emit [signals](https://opentelemetry.io/docs/concepts/signals/), such as [traces](https://opentelemetry.io/docs/concepts/signals/), [metrics](https://opentelemetry.io/docs/concepts/signals/metrics/), and [logs](https://opentelemetry.io/docs/concepts/signals/logs/). Using OpenTelemetry, you can instrument your code in two primary ways:
+For a system to be [observable](https://opentelemetry.io/docs/concepts/observability-primer/#what-is-observability), it must be instrumented: that is, code from the system's components must emit [signals](https://opentelemetry.io/docs/concepts/signals/traces/), such as [traces](https://opentelemetry.io/docs/concepts/signals/), [metrics](https://opentelemetry.io/docs/concepts/signals/metrics/), and [logs](https://opentelemetry.io/docs/concepts/signals/logs/). Using OpenTelemetry, you can instrument your code in two primary ways:
 
 ### Automatic Instrumentation
 
