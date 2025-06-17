@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 const fetch = require('node-fetch')
 const providersEventsConfig = require('../onboarding/config/events.json')
+const { getEventName } = require('../../utils/naming')
 
 /**
  * This method build an array of provider events
@@ -175,6 +176,7 @@ async function getExistingMetadata (providerId, environment, accessToken, next =
 async function main (clientRegistrations, providers, environment, accessToken) {
   try {
     let providersEvents = {}
+    let eventName
 
     const result = []
     for (const provider of providers) {
@@ -184,13 +186,14 @@ async function main (clientRegistrations, providers, environment, accessToken) {
         if (options !== undefined && options.includes(provider.key)) {
           if (providersEventsConfig[entityName]) {
             for (const [event, eventProps] of Object.entries(providersEventsConfig[entityName][provider.key])) {
-              if (existingMetadata[event]) {
-                console.log(`Skipping, Metadata event code ${event} already exists!`)
+              eventName = getEventName(event, environment)
+              if (existingMetadata[eventName]) {
+                console.log(`Skipping, Metadata event code ${eventName} already exists!`)
                 continue
               }
               providersEvents = {
                 ...providersEvents,
-                [event]: eventProps
+                [eventName]: eventProps
               }
             }
             result.push({
