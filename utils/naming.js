@@ -75,29 +75,29 @@ function getProviderName (params, providerKey) {
 }
 
 /**
- * Add prefix project name defined in .env file to event name.
+ * Add event prefix defined in .env file to event name.
  *
  * @param {string} eventName event name
  * @param {object} environment - environment params
  * @returns {string} returns the event name
  */
 function getEventName (eventName, environment) {
-  const projectName = environment.PROJECT_NAME
+  const eventPrefix = environment.EVENT_PREFIX
   const prefix = 'com.adobe.commerce.'
 
-  if (!projectName) {
-    throw new Error('PROJECT_NAME is required but was not provided in .env file.')
+  if (!eventPrefix) {
+    throw new Error('EVENT_PREFIX is required but was not provided in .env file.')
   }
 
   if (eventName.startsWith(prefix)) {
-    return prefix + projectName + '.' + eventName.slice(prefix.length)
+    return prefix + eventPrefix + '.' + eventName.slice(prefix.length)
   }
 
   if (eventName.startsWith('be-observer')) {
     return eventName
   }
 
-  return projectName + '.' + eventName
+  return eventPrefix + '.' + eventName
 }
 
 module.exports = {

@@ -15,7 +15,7 @@ const fetch = require('node-fetch')
 const action = require('../../../scripts/lib/metadata.js')
 const ACCESS_TOKEN = 'token'
 const ENVIRONMENT = {
-  PROJECT_NAME: 'test-project'
+  EVENT_PREFIX: 'test-project'
 }
 
 afterEach(() => {

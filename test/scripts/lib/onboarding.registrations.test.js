@@ -35,7 +35,7 @@ const DEFAULT_PROVIDERS = [
 
 const ACCESS_TOKEN = 'token'
 const ENVIRONMENT = {
-  PROJECT_NAME: 'test-project'
+  EVENT_PREFIX: 'test-project'
 }
 
 describe('Given on-boarding registrations file', () => {

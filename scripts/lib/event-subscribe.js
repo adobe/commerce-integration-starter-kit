@@ -20,15 +20,17 @@ const { getEventName } = require('../../utils/naming')
  * @returns {object} - returns response object
  */
 async function main (eventSpec, environment) {
-  if (!environment.PROJECT_NAME) {
-    throw new Error('PROJECT_NAME is required but is missing or empty.')
+  if (!environment.EVENT_PREFIX) {
+    throw new Error('EVENT_PREFIX is required but is missing or empty from the .env file.')
   }
 
-  if (environment.COMMERCE_PROVIDER_ID) {
-    eventSpec.event.parent = eventSpec.event.name
-    eventSpec.event.provider_id = environment.COMMERCE_PROVIDER_ID
-    eventSpec.event.name = getEventName(eventSpec.event.name, environment)
+  if (!environment.COMMERCE_PROVIDER_ID) {
+    throw new Error('COMMERCE_PROVIDER_ID is required but is missing or empty from the .env file. Please run "npm run onboard".')
   }
+
+  eventSpec.event.parent = eventSpec.event.name
+  eventSpec.event.provider_id = environment.COMMERCE_PROVIDER_ID
+  eventSpec.event.name = getEventName(eventSpec.event.name, environment)
 
   try {
     await eventSubscribe(

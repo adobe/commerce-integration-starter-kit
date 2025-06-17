@@ -32,7 +32,7 @@ describe('Given customer commerce consumer', () => {
       const params = {
         API_HOST: 'API_HOST',
         API_AUTH: 'API_AUTH',
-        PROJECT_NAME: 'test_app',
+        EVENT_PREFIX: 'test_app',
         type: 'com.adobe.commerce.test_app.observer.customer_save_commit_after',
         data: {
           value: {
@@ -80,7 +80,7 @@ describe('Given customer commerce consumer', () => {
       'Then returns success response',
       async () => {
         const params = {
-          PROJECT_NAME: 'test_app',
+          EVENT_PREFIX: 'test_app',
           type: 'com.adobe.commerce.test_app.observer.customer_save_commit_after',
           data: {
             value: {
@@ -126,7 +126,7 @@ describe('Given customer commerce consumer', () => {
   describe('When a valid customer deleted event is received', () => {
     test('Then returns success response', async () => {
       const params = {
-        PROJECT_NAME: 'test_app',
+        EVENT_PREFIX: 'test_app',
         type: 'com.adobe.commerce.test_app.observer.customer_delete_commit_after',
         data: {
           value: {
@@ -172,7 +172,7 @@ describe('Given customer commerce consumer', () => {
   describe('When a valid customer group updated event is received', () => {
     test('Then returns success response', async () => {
       const params = {
-        PROJECT_NAME: 'test_app',
+        EVENT_PREFIX: 'test_app',
         type: 'com.adobe.commerce.test_app.observer.customer_group_save_commit_after',
         data: {
           value: {
@@ -220,7 +220,7 @@ describe('Given customer commerce consumer', () => {
   describe('When a valid customer group deleted event is received', () => {
     test('Then returns success response', async () => {
       const params = {
-        PROJECT_NAME: 'test_app',
+        EVENT_PREFIX: 'test_app',
         type: 'com.adobe.commerce.test_app.observer.customer_group_delete_commit_after',
         data: {
           value: {
@@ -268,7 +268,7 @@ describe('Given customer commerce consumer', () => {
   describe('When customer event type received is not supported', () => {
     test('Then returns error response', async () => {
       const params = {
-        PROJECT_NAME: 'test_app',
+        EVENT_PREFIX: 'test_app',
         type: 'NOT_SUPPORTED_TYPE',
         data: {
           value: {
@@ -317,7 +317,7 @@ describe('Given customer commerce consumer', () => {
             }
           }
         }
-        const params = { type, PROJECT_NAME: 'test_app', data: { value: { customer_group_code: 'xxx' } } }
+        const params = { type, EVENT_PREFIX: 'test_app', data: { value: { customer_group_code: 'xxx' } } }
         Openwhisk.prototype.invokeAction = jest.fn()
           .mockResolvedValue(ACTION_RESPONSE)
         expect(await action.main(params)).toMatchObject(CONSUMER_RESPONSE)

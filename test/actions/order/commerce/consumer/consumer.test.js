@@ -31,7 +31,7 @@ describe('Given order commerce consumer', () => {
       const params = {
         API_HOST: 'API_HOST',
         API_AUTH: 'API_AUTH',
-        PROJECT_NAME: 'test_app',
+        EVENT_PREFIX: 'test_app',
         type: 'com.adobe.commerce.test_app.observer.sales_order_save_commit_after',
         data: {
           value: {
@@ -79,7 +79,7 @@ describe('Given order commerce consumer', () => {
   describe('When a valid order updated event is received', () => {
     test('Then returns success response', async () => {
       const params = {
-        PROJECT_NAME: 'test_app',
+        EVENT_PREFIX: 'test_app',
         type: 'com.adobe.commerce.test_app.observer.sales_order_save_commit_after',
         data: {
           value: {
@@ -143,7 +143,7 @@ describe('Given order commerce consumer', () => {
     test('Then returns error response',
       async () => {
         const params = {
-          PROJECT_NAME: 'test_app',
+          EVENT_PREFIX: 'test_app',
           type: 'NOT_SUPPORTED_TYPE',
           data: {
             value: {
