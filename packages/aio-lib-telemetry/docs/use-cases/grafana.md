@@ -8,6 +8,9 @@
 
 This guide demonstrates how to configure Grafana with App Builder runtime actions for both local development and deployed scenarios. We'll use a complete observability stack with Tempo (traces), Prometheus (metrics), and Loki (logs), all integrated through an OpenTelemetry Collector.
 
+> [!IMPORTANT]
+> This guide showcases how to leverage tunneling to forward telemetry data from a remote/deployed App Builder action to a local observability stack. This is **not recommended for production environments**, and is only intended for local development, while you're testing your App Builder actions.
+
 - [OpenTelemetry Instrumentation with Grafana](#opentelemetry-instrumentation-with-grafana)
   - [Prerequisites](#prerequisites)
   - [Local Development](#local-development)
@@ -143,7 +146,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp/tempo]
+      exporters: [otlphttp/tempo]
     
     metrics:
       receivers: [otlp]
@@ -383,9 +386,9 @@ import {
   SimpleLogRecordProcessor
 } from "@adobe/aio-lib-telemetry/otel-api";
 
-function tunnelCollectorConfig(tunnelUrl: string) {
+function localCollectorConfig(exportUrl: string) {
   const makeExporterConfig = (path: string) => ({
-    url: `${tunnelUrl}/${path}`,
+    url: `${exportUrl}/${path}`,
   });
 
   return {
@@ -403,7 +406,7 @@ function tunnelCollectorConfig(tunnelUrl: string) {
 
 export const telemetryConfig = defineTelemetryConfig((params, isDev) => {
   // Use the tunnel URL instead of localhost
-  const tunnelUrl = "https://abc123-def456-ghi789.trycloudflare.com";
+  const exportUrl = "https://abc123-def456-ghi789.trycloudflare.com";
 
   return {
     sdkConfig: {
@@ -411,7 +414,7 @@ export const telemetryConfig = defineTelemetryConfig((params, isDev) => {
       instrumentations: getPresetInstrumentations("simple"),
       resource: getAioRuntimeResource(),
       
-      ...tunnelCollectorConfig(tunnelUrl),
+      ...localCollectorConfig(exportUrl),
     },
   };
 });

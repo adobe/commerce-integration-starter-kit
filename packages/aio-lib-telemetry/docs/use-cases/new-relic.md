@@ -30,7 +30,7 @@ In order for our runtime actions to send telemetry signals to New Relic, we need
 > [!NOTE]
 > The OTLP endpoint URL varies based on your New Relic account's region. Additionally, New Relic requires or recommends specific configuration parameters for optimal signal ingestion. 
 > 
-> For detailed configuration requirements, refer to the "**Config**" sections in the OTLP ingestion endpoint documentation linked above. The below conifiguration will not set any of those parameters, as it's intended to be a starting point for your own configuration.
+> For detailed configuration requirements, refer to the "**Config**" sections in the OTLP ingestion endpoint documentation linked above. The below configuration will not set any of those parameters, as it's intended to be a starting point for your own configuration.
 
 ### Configuration
 
