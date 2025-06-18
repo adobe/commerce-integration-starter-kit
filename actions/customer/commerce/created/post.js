@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { instrument, getInstrumentationHelpers } = require('@adobe/aio-sk-lib-telemetry')
+const { instrument, getInstrumentationHelpers } = require('@adobe/aio-lib-telemetry')
 
 /**
  * This function hold any logic needed post sending information to external backoffice application

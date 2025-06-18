@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const { telemetryConfig } = require('../../../telemetry')
-const { instrumentEntrypoint, getInstrumentationHelpers } = require('@adobe/aio-sk-lib-telemetry')
+const { instrumentEntrypoint, getInstrumentationHelpers } = require('@adobe/aio-lib-telemetry')
 
 const { stringParameters } = require('../../../utils')
 const { transformData } = require('./transformer')
@@ -20,7 +20,7 @@ const { HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../constants')
 const { validateData } = require('./validator')
 const { preProcess } = require('./pre')
 const { postProcess } = require('./post')
-const { actionSuccessResponse, actionErrorResponse } = require('../../../responses')
+const { actionSuccessResponse, actionErrorResponse, isActionSuccessful } = require('../../../responses')
 
 /**
  * This action is on charge of sending created customer information in Adobe commerce to external back-office application
@@ -66,4 +66,7 @@ async function main (params) {
   }
 }
 
-exports.main = instrumentEntrypoint(main, telemetryConfig)
+exports.main = instrumentEntrypoint(main, {
+  ...telemetryConfig,
+  isSuccessful: isActionSuccessful
+})

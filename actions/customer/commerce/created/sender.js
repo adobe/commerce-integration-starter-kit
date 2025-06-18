@@ -10,7 +10,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { instrument, getInstrumentationHelpers } = require('@adobe/aio-sk-lib-telemetry')
+const { instrument, getInstrumentationHelpers } = require('@adobe/aio-lib-telemetry')
+const { isOperationSuccessful } = require('../../../telemetry')
 
 /**
  * This function send the customer created dara to the external back-office application
@@ -33,5 +34,7 @@ async function sendData (params, data, preProcessed) {
 }
 
 module.exports = {
-  sendData: instrument(sendData)
+  sendData: instrument(sendData, {
+    isSuccessful: isOperationSuccessful
+  })
 }

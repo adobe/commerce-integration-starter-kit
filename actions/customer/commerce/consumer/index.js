@@ -12,10 +12,10 @@ governing permissions and limitations under the License.
 
 const { commerceCustomerMetrics } = require('../metrics')
 const { telemetryConfig } = require('../../../telemetry')
-const { instrumentEntrypoint, getInstrumentationHelpers } = require('@adobe/aio-sk-lib-telemetry')
+const { instrumentEntrypoint, getInstrumentationHelpers } = require('@adobe/aio-lib-telemetry')
 
 const { stringParameters, checkMissingRequestInputs } = require('../../../utils')
-const { errorResponse, successResponse } = require('../../../responses')
+const { errorResponse, successResponse, isConsumerSuccessful } = require('../../../responses')
 const { HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR } = require('../../../constants')
 const Openwhisk = require('../../../openwhisk')
 
@@ -133,4 +133,7 @@ async function main (params) {
   }
 }
 
-exports.main = instrumentEntrypoint(main, telemetryConfig)
+exports.main = instrumentEntrypoint(main, {
+  ...telemetryConfig,
+  isSuccessful: isConsumerSuccessful
+})

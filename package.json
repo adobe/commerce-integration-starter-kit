@@ -15,7 +15,7 @@
     "@adobe/aio-lib-state": "^3.0.2",
     "@adobe/aio-sdk": "^5.0.1",
     "@adobe/commerce-sdk-auth": "^0.1.0",
-    "@adobe/aio-sk-lib-telemetry": "^1.0.0",
+    "@adobe/aio-lib-telemetry": "^1.0.0",
     "@adobe/exc-app": "^1.4.1",
     "@adobe/generator-add-action-generic": "^1.0.1",
     "@adobe/generator-add-web-assets-exc-react": "^1.0.2",
@@ -60,8 +60,7 @@
     "onboard": "node --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
     "commerce-event-subscribe": "node --no-warnings -e 'require(\"./scripts/commerce-event-subscribe/index.js\").main()'",
     "code-check": "npx eslint 'actions/**/*.js' 'scripts/**/*.js' 'test/**/*.js' 'utils/**/*.js'",
-    "prebuild": "npm install --workspace=@adobe/commerce-sdk-auth && npm run build --workspace=@adobe/commerce-sdk-auth",
-    "build": "npm run build --workspaces",
+    "postinstall": "npm run build --if-present --workspaces",
     "clean": "rimraf ./packages/*/dist-* ./packages/*/*.tsbuildinfo"
   },
   "engines": {

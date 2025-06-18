@@ -1,5 +1,5 @@
-const { defineMetrics } = require('@adobe/aio-sk-lib-telemetry')
-const { ValueType } = require('@adobe/aio-sk-lib-telemetry/otel-api')
+const { defineMetrics } = require('@adobe/aio-lib-telemetry')
+const { ValueType } = require('@adobe/aio-lib-telemetry/otel-api')
 
 /** Metrics used across all actions. */
 const commerceCustomerMetrics = defineMetrics((meter) => {

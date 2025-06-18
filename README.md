@@ -720,18 +720,18 @@ If you want to change an existing event, make the changes in the same places:
 
 ## Integrating OpenTelemetry
 
-The starter kit includes the `@adobe/aio-sk-lib-telemetry` package by default, which currently resides as a local, non-published package in the `packages` folder. This package enables easy instrumentation of your actions with OpenTelemetry to collect comprehensive telemetry data:
+The starter kit includes the `@adobe/aio-lib-telemetry` package by default, which currently resides as a local, non-published package in the `packages` folder. This package enables easy instrumentation of your actions with OpenTelemetry to collect comprehensive telemetry data:
 
 - Traces (with distributed tracing capabilities)
 - Metrics (for monitoring)
 - Logs (for debugging)
 
-See the [package README](packages/aio-sk-lib-telemetry/README.md) for more information about guides and examples for instrumenting your Adobe App Builder actions.
+See the [package README](packages/aio-lib-telemetry/README.md) for more information about guides and examples for instrumenting your Adobe App Builder actions.
 
 ### Usage Example
 
 > [!NOTE]
-> Check the [How To Use](packages/aio-sk-lib-telemetry/README.md#how-to-use) section in the `@adobe/aio-sk-lib-telemetry` README for comprehensive integration instructions.
+> Check the [How To Use](packages/aio-lib-telemetry/README.md#how-to-use) section in the `@adobe/aio-lib-telemetry` README for comprehensive integration instructions.
 
 The starter kit includes a sample implementation in the `actions/customer/commerce` workflow, specifically within the `consumer` and `created` actions. These examples utilize the telemetry configuration in `actions/telemetry.js` and the metrics definitions in `actions/customer/commerce/metrics.js`. 
 
