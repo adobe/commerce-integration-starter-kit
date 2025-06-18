@@ -108,12 +108,14 @@ export function instrument<T extends AnyFunction>(
 
   /** Handles a (potentially) successful result within the given span. */
   function handleResult(result: Awaited<ReturnType<T>>, span: Span) {
-    if (isSuccessful?.(result)) {
-      onResult?.(result, span);
+    // If `isSuccessful` predicate is not provided, we assume the result is successful.
+    // Because if it reached this point, it didn't throw.
+    if (isSuccessful === undefined || isSuccessful(result)) {
       span.setStatus({ code: SpanStatusCode.OK });
-    } else {
       onResult?.(result, span);
+    } else {
       span.setStatus({ code: SpanStatusCode.ERROR });
+      onResult?.(result, span);
     }
 
     return result;
