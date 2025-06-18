@@ -90,7 +90,7 @@ export function getInstrumentationHelpers(): InstrumentationHelpers {
  */
 export function instrument<T extends AnyFunction>(
   fn: T,
-  { spanConfig, hooks }: InstrumentationConfig<T> = {},
+  { spanConfig, isSuccessful, hooks }: InstrumentationConfig<T> = {},
 ): (...args: Parameters<T>) => ReturnType<T> {
   const {
     spanName = fn.name,
@@ -104,19 +104,16 @@ export function instrument<T extends AnyFunction>(
     );
   }
 
-  const { onSuccess, onError } = hooks ?? {};
+  const { onResult, onError } = hooks ?? {};
 
   /** Handles a (potentially) successful result within the given span. */
   function handleResult(result: Awaited<ReturnType<T>>, span: Span) {
-    // Temporal, handle pattern when we don't throw/error but instead return a "success" status.
-    if (result && typeof result === "object" && "success" in result) {
-      if (typeof result.success === "boolean" && result.success) {
-        onSuccess?.(result, span);
-        span.setStatus({ code: SpanStatusCode.OK });
-      } else {
-        onError?.(result, span);
-        span.setStatus({ code: SpanStatusCode.ERROR });
-      }
+    if (isSuccessful?.(result)) {
+      onResult?.(result, span);
+      span.setStatus({ code: SpanStatusCode.OK });
+    } else {
+      onResult?.(result, span);
+      span.setStatus({ code: SpanStatusCode.ERROR });
     }
 
     return result;

@@ -96,16 +96,25 @@ export interface InstrumentationConfig<T extends AnyFunction> {
     getBaseContext?: (...args: Parameters<T>) => Context;
   };
 
+  /**
+   * A function that will be called to determine if the instrumented function was successful.
+   * By default, the function is considered successful if it doesn't throw an error.
+   *
+   * @param result - The result of the instrumented function.
+   * @returns Whether the instrumented function was successful.
+   */
+  isSuccessful?: (result: ReturnType<T>) => boolean;
+
   /** Hooks that can be used to act on a span depending on the result of the function. */
   hooks?: {
     /**
-     * A function that will be called when the instrumented function succeeds.
+     * A function that will be called with the result of the instrumented function (if any, and no error was thrown).
      * You can use it to do something with the Span.
      *
      * @param result - The result of the instrumented function.
      * @param span - The span of the instrumented function.
      */
-    onSuccess?: (result: ReturnType<T>, span: Span) => void;
+    onResult?: (result: ReturnType<T>, span: Span) => void;
 
     /**
      * A function that will be called when the instrumented function fails.
