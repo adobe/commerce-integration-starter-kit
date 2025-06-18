@@ -1,4 +1,4 @@
-# 👁️ Telemetry Module for App Builder Actions
+# Telemetry Module for App Builder Actions
 
 <br />
 <div align="center">
@@ -8,33 +8,31 @@
 
 This module contains a set of utilities for integrating observability into App Builder actions. It leverages OpenTelemetry to enable developers to capture, export, and analyze traces, metrics and logs. You can use these tools to monitor action performance, diagnose issues, and gain insights into application behavior, without significant changes to your codebase.
 
-- [👁️ Telemetry Module for App Builder Actions](#️-telemetry-module-for-app-builder-actions)
-  - [👋🏻 Introduction](#-introduction)
-  - [🛠️ Installation and Setup](#️-installation-and-setup)
+- [Telemetry Module for App Builder Actions](#telemetry-module-for-app-builder-actions)
+  - [Introduction](#introduction)
+  - [Installation and Setup](#installation-and-setup)
     - [Prerequisites](#prerequisites)
     - [Installing the Module](#installing-the-module)
-  - [⚙️ Configuration](#️-configuration)
+  - [Configuration](#configuration)
     - [Open Telemetry Configuration](#open-telemetry-configuration)
-    - [Environment Variables](#environment-variables)
-    - [Node SDK Configuration](#node-sdk-configuration)
-  - [📚 How to Use](#-how-to-use)
     - [Writing your Telemetry Configuration](#writing-your-telemetry-configuration)
-      - [Configuring a Custom Tracer and Meter](#configuring-a-custom-tracer-and-meter)
-      - [Enabling OpenTelemetry Diagnostics](#enabling-opentelemetry-diagnostics)
-    - [Instrumenting Your Code](#instrumenting-your-code)
-      - [Entrypoint Instrumentation](#entrypoint-instrumentation)
-      - [Traces](#traces)
-      - [Logs](#logs)
-      - [Metrics](#metrics)
+  - [How to Use](#how-to-use)
+    - [Entrypoint Instrumentation](#entrypoint-instrumentation)
+    - [Traces](#traces)
+    - [Logs](#logs)
+    - [Metrics](#metrics)
     - [Instrumentation Helpers](#instrumentation-helpers)
     - [API Reference](#api-reference)
-  - [❓ Next Up](#-next-up)
+  - [Advanced Usage](#advanced-usage)
+    - [Configuring a Custom Tracer and Meter](#configuring-a-custom-tracer-and-meter)
+  - [Next Up](#next-up)
     - [Guides](#guides)
-  - [🩺 Troubleshooting](#-troubleshooting)
-    - [Hot Reloading and `aio app dev`](#hot-reloading-and-aio-app-dev)
-    - [Telemetry Signals Not Being Exported](#telemetry-signals-not-being-exported)
+  - [Troubleshooting](#troubleshooting)
+    - [Enabling OpenTelemetry Diagnostics](#enabling-opentelemetry-diagnostics)
+    - [Known Issues](#known-issues)
+    
 
-## 👋🏻 Introduction
+## Introduction
 
 This guide assumes you have a basic understanding of OpenTelemetry and are familiar with its core concepts, as we will be referencing them throughout this document without detailed explanation.
 
@@ -47,7 +45,7 @@ Find it here: [OpenTelemetry General Overview](./docs/open-telemetry.md)
 > [!IMPORTANT]
 > To understand how this library works (and the reasoning behind some of its design decisions) it's important to first grasp the core concepts of OpenTelemetry. If you're new to the framework, we highly recommend reading the overview before continuing. 
 
-## 🛠️ Installation and Setup
+## Installation and Setup
 
 This library is written in TypeScript and distributed as a JavaScript bundle compatible with both ESM and CJS.
 
@@ -73,7 +71,7 @@ This library is designed for use within an [Adobe App Builder](https://developer
 npm install @adobe/aio-lib-telemetry
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 This library uses the [Open Telemetry Node SDK](https://github.com/open-telemetry/opentelemetry-js/tree/main/experimental/packages/opentelemetry-sdk-node).
 
@@ -89,24 +87,22 @@ There are 2 different ways to configure Open Telemetry in Node.js:
 - [Using environment variables](https://opentelemetry.io/docs/languages/sdk-configuration/) (currently not supported)
 - At runtime, via the [Node SDK configuration](https://open-telemetry.github.io/opentelemetry-js/modules/_opentelemetry_sdk-node.html#configuration) object
 
-### Environment Variables
+#### Environment Variables
 
 > [!WARNING]
 > This method is currently not supported.
 
-When searching for OpenTelemetry usage examples, you'll find numerous tutorials demonstrating how to configure the SDK using environment variables. These variables are automatically processed by the SDK to configure its behavior. 
+When searching for OpenTelemetry usage examples, you'll find numerous tutorials demonstrating how to configure the SDK using environment variables. These variables are automatically processed by the SDK to configure its behavior.
 
 However, these variables need to be present in `process.env`, and due to how App Builder handles environment variables (fed via `params`), this configuration method is currently not supported.
 
-### Node SDK Configuration
+#### Node SDK Configuration
 
 This is the currently supported method for configuring OpenTelemetry with this library. You'll need to provide a NodeSDK configuration object that will be passed directly to the `NodeSDK` constructor. For detailed information about each configuration option, please refer to the [official OpenTelemetry documentation](https://opentelemetry.io/docs/languages/js/instrumentation/#initialize-the-sdk).
 
-## 📚 How to Use
-
-This section provides a comprehensive guide for instrumenting App Builder Runtime Actions and demonstrates how to leverage this module's API for streamlined telemetry implementation.
-
 ### Writing your Telemetry Configuration
+
+Before you start using this library you need to configure it.
 
 > [!NOTE]
 > This section focuses on general telemetry configuration rather than backend-specific setup. Since observability backends require different configurations, we've created dedicated guides for popular options. See the [Guides](#guides) section for links to detailed backend setup instructions.
@@ -145,65 +141,14 @@ Refer to the API reference documentation of this library for more information ab
 | --------------------------- | ---------------------------------------------------------------------------- |
 | `defineTelemetryConfig`     | [API reference](./docs/api-reference/functions/defineTelemetryConfig.md)     |
 | `getPresetInstrumentations` | [API reference](./docs/api-reference/functions/getPresetInstrumentations.md) |
-| `getAioRuntimeResource`     | [API reference](./docs/api-reference/functions/defineTelemetryConfig.md)     |
- 
-#### Configuring a Custom Tracer and Meter
+| `getAioRuntimeResource`     | [API reference](./docs/api-reference/functions/getAioRuntimeResource.md)     |
 
-The library automatically creates a default tracer and meter if none are provided alongside the `sdkConfig`. However, you can supply your own custom implementations if you need more specific functionality.
 
-```ts
-// telemetry.{js|ts}
+## How to Use
 
-import { defineTelemetryConfig } from "@adobe/aio-lib-telemetry"
-import { trace, metrics } from "@adobe/aio-lib-telemetry/otel-api"
+This section provides a comprehensive guide for instrumenting App Builder Runtime Actions and demonstrates how to leverage this module's API for streamlined telemetry implementation.
 
-const telemetryConfig = defineTelemetryConfig((params, isDev) => {
-  const tracer = trace.getTracer("my-custom-tracer");
-  const meter = metrics.getMeter("my-custom-meter");
-
-  return {
-    sdkConfig: { /* SDK Configuration */ }
-
-    tracer,
-    meter
-  }
-});
-
-export { telemetryConfig }
-```
-
-See more about the `otel-api` import path in the API Reference: [OpenTelemetry Re-Exports](./docs/api-reference/README.md#opentelemetry-api).
-
-#### Enabling OpenTelemetry Diagnostics
-
-OpenTelemetry includes an internal diagnostic logging API for troubleshooting configuration and instrumentation issues. When your OpenTelemetry setup isn't behaving as expected, you can enable these `diagnostics` (which are disabled by default) through your telemetry configuration.
-
-> [!NOTE]
-> This module configures the diagnostics logger to use `winston` as the logging provider. For more details about exporting logs, see the [logs section](#logs). By default, logs are exported to any configured observability backends that support them. You can control this behavior using the `exportLogs` boolean option. For these **OpenTelemetry internal diagnostic logs**, only those with a `logLevel` of `info` and above will be exported. Other types of logging are too verbose and may contain irrelevant/sensitive data. 
-
-```ts
-import { defineTelemetryConfig } from "@adobe/aio-lib-telemetry"
-
-const telemetryConfig = defineTelemetryConfig((params, isDev) => {
-  return {
-    sdkConfig: { /* SDK Configuration */ },
-    diagnostics: {
-      logLevel: "debug",
-
-      // Optional properties.
-      exportLogs: false, // Defaults to `true`
-      loggerName: "otel-diag-logger" // Defaults to `${actionName}/otel-diagnostics`
-    }
-  }
-});
-
-export { telemetryConfig }
-```
-See the API reference for the `diagnostics` property: [`TelemetryDiagnosticsConfig`](./docs/api-reference/interfaces/TelemetryDiagnosticsConfig.md)
-
-### Instrumenting Your Code
-
-#### Entrypoint Instrumentation
+### Entrypoint Instrumentation
 
 > [!IMPORTANT]
 > This step is essential for telemetry to function correctly. Without proper entrypoint instrumentation, telemetry will not work and no signals will be exported. The entrypoint serves as the root span for trace exports and handles critical initialization processes.
@@ -230,7 +175,7 @@ export {
 ```
 With this setup, your entrypoint is now instrumented and will automatically emit trace data. However, this creates only a single root span, which provides limited visibility. Let's explore how to instrument additional functions throughout your codebase for deeper insights.
 
-#### Traces
+### Traces
 
 > [!NOTE]
 > Keep in mind that the exported trace data includes both manually configured traces and automatic instrumentation defined in the configuration's `instrumentations` property. These automatic instrumentations generate telemetry signals seamlessly as your code executes the targeted libraries.
@@ -273,7 +218,7 @@ export {
 > )
 > ```
 
-##### Instrumentation Configuration
+#### Instrumentation Configuration
 
 In most cases, instrumenting your functions works seamlessly without additional configuration. However, certain scenarios, such as customizing the span name, configuring automatic span events or reacting to the result of a wrapped function, may require further customization.
 
@@ -304,7 +249,7 @@ See the API reference for the configuration options available: [`Instrumentation
 > })
 > ```
 
-##### Distributed Tracing and Context Propagation
+#### Distributed Tracing and Context Propagation
 
 In distributed systems, maintaining trace continuity across service boundaries is crucial for effective observability. This process, known as context propagation, enables distributed tracing by sharing trace context between services. For comprehensive details on this concept, refer to the [OpenTelemetry documentation](https://opentelemetry.io/docs/languages/js/propagation/).
 
@@ -323,7 +268,7 @@ function callExternalInstrumentedService() {
 }
 ```
 
-###### Automatic Propagation
+##### Automatic Propagation
 
 When invoking an external service instrumented with this module (such as another runtime action), you can include the context carrier in your request or event. Upon receiving the request, the library will automatically attempt to deserialize the context by checking these locations in order:
 
@@ -368,7 +313,7 @@ instrumentEntrypoint(main, {
 ```
 With this setup, your carrier object will be deserialized and the resulting context will be set for you.
 
-#### Logs
+### Logs
 
 > [!WARNING]
 > Log processing and exporting [is currently in development](https://opentelemetry.io/docs/languages/js/) in the OpenTelemetry SDK for Node.js. While we haven't encountered any issues or limitations, occasional problems or API changes may occur.
@@ -377,7 +322,7 @@ OpenTelemetry simplifies log exporting by handling the heavy lifting automatical
 
 To export [logs](https://opentelemetry.io/docs/concepts/signals/logs/), ensure the Winston instrumentation is enabled. This comes configured by default in both `simple` and `full` presets when using the [`getPresetInstrumentations`](./docs/api-reference/functions/getPresetInstrumentations.md) helper. If you're using a custom instrumentation array, make sure to include it.
 
-##### Exporting Log Data
+#### Exporting Log Data
 
 > [!TIP]
 > When logging within an instrumented function (i.e., one that is traced), OpenTelemetry will automatically associate log entries with the corresponding trace, allowing you to correlate logs with specific trace executions.
@@ -399,11 +344,11 @@ function someFunctionInYourCodebase() {
 }
 ```
 
-#### Metrics
+### Metrics
 
 [Metrics](https://opentelemetry.io/docs/concepts/signals/metrics/) capture quantitative measurements of your service's behavior at runtime. Each measurement creates a metric event which consists not only of the measurement itself, but also the time at which it was captured and associated metadata. This section demonstrates how to implement metrics in your runtime actions using this module.
 
-##### Creating Metrics
+#### Creating Metrics
 
 The `defineMetrics` helper allows you to create and manage metrics throughout your runtime actions. You can define metrics anywhere in your codebase using this helper, then export and import them as needed. For global metrics, consider placing them in your `telemetry.{js|ts}` configuration file. For more scoped metrics, define them closer to where they're used. See the OpenTelemetry [metrics documentation](https://opentelemetry.io/docs/concepts/signals/metrics/) for details on available metric types.
 
@@ -426,7 +371,7 @@ import { myMetrics } from "./metrics"
 myMetrics.counter.add(1)
 ```
 
-##### Considerations
+#### Considerations
 
 - **Metrics are per-process, not global**: A common misconception is that metrics behave like global state. They're tied to individual processes, meaning they reset whenever a runtime action ends and starts again. This reset only happens during **cold starts** when a new process spins up. During warm starts, the process is recycled and metrics persist. Your observability backend is responsible for aggregating these values over time, so make sure to configure your metrics carefully to avoid losing data or getting duplicate reports.
   
@@ -469,7 +414,36 @@ This function receives the following helpers:
 
 Find the full API reference in: [docs/api-reference](./docs/api-reference/README.md). You can find there documentation for all the helpers and interfaces provided by this module.
 
-## ❓ Next Up
+## Advanced Usage
+
+### Configuring a Custom Tracer and Meter
+
+The library automatically creates a default tracer and meter if none are provided alongside the `sdkConfig`. However, you can supply your own custom implementations if you need more specific functionality.
+
+```ts
+// telemetry.{js|ts}
+
+import { defineTelemetryConfig } from "@adobe/aio-lib-telemetry"
+import { trace, metrics } from "@adobe/aio-lib-telemetry/otel-api"
+
+const telemetryConfig = defineTelemetryConfig((params, isDev) => {
+  const tracer = trace.getTracer("my-custom-tracer");
+  const meter = metrics.getMeter("my-custom-meter");
+
+  return {
+    sdkConfig: { /* SDK Configuration */ }
+
+    tracer,
+    meter
+  }
+});
+
+export { telemetryConfig }
+```
+
+See more about the `otel-api` import path in the API Reference: [OpenTelemetry Re-Exports](./docs/api-reference/README.md#opentelemetry-api).
+
+## Next Up
 
 This module is a thin wrapper around the OpenTelemetry SDK for Node.js. For more information on the OpenTelemetry SDK, see the [OpenTelemetry documentation](https://opentelemetry.io/docs/languages/js/). 
 
@@ -482,20 +456,50 @@ This module is a thin wrapper around the OpenTelemetry SDK for Node.js. For more
 
 To help you get started, we've created [comprehensive guides](./docs/guides/README.md) for integrating with popular observability platforms. Find them in the [docs/guides](./docs/guides) folder.
 
-## 🩺 Troubleshooting
+## Troubleshooting
+
+### Enabling OpenTelemetry Diagnostics
+
+OpenTelemetry includes an internal diagnostic logging API for troubleshooting configuration and instrumentation issues. When your OpenTelemetry setup isn't behaving as expected, you can enable these `diagnostics` (which are disabled by default) through your telemetry configuration.
+
+> [!NOTE]
+> This module configures the diagnostics logger to use `winston` as the logging provider. For more details about exporting logs, see the [logs section](#logs). By default, logs are exported to any configured observability backends that support them. You can control this behavior using the `exportLogs` boolean option. 
+> 
+> For these **OpenTelemetry internal diagnostic logs**, only those with a `logLevel` of `info` and above will be exported. Other types of logging are too verbose and may contain irrelevant/sensitive data. 
+
+```ts
+import { defineTelemetryConfig } from "@adobe/aio-lib-telemetry"
+
+const telemetryConfig = defineTelemetryConfig((params, isDev) => {
+  return {
+    sdkConfig: { /* SDK Configuration */ },
+    diagnostics: {
+      logLevel: "debug",
+
+      // Optional properties.
+      exportLogs: false, // Defaults to `true`
+      loggerName: "otel-diag-logger" // Defaults to `${actionName}/otel-diagnostics`
+    }
+  }
+});
+
+export { telemetryConfig }
+```
+See the API reference for the `diagnostics` property: [`TelemetryDiagnosticsConfig`](./docs/api-reference/interfaces/TelemetryDiagnosticsConfig.md)
+
+### Known Issues
 
 We are aware of a couple of (occasional) issues, which you can find workarounds for below. If you encounter any other problems, please file a GitHub issue.
 
-### Hot Reloading and `aio app dev`
+#### Hot Reloading
 
-> [!NOTE]
-> This behavior is similar to what happens when your runtime action runs in a warm container, where the process is recycled.
+OpenTelemetry uses global state to manage its internal components. When developing locally with `aio app dev`, your code is hot-reloaded as you make changes. This behavior is similar to what happens when your runtime action runs in a warm container, where the process is recycled. 
 
-OpenTelemetry uses global state to manage its internal components. When developing locally with `aio app dev`, your code is hot-reloaded as you make changes. Since the process remains alive during these reloads, the global state persists without being reset. While this module handles the underlying OpenTelemetry SDK to work smoothly with hot-reloading, there might be some edge cases we haven't encountered or tested yet.
+Since the process remains alive during these reloads, the global state persists without being reset. While this module handles the underlying OpenTelemetry SDK to work smoothly with hot-reloading, there might be some edge cases we haven't encountered or tested yet.
 
 If you notice any unexpected behavior, please file a GitHub issue with reproduction steps so we can investigate and improve the module. As a temporary solution, you can restart the development server to start fresh.
 
-### Telemetry Signals Not Being Exported
+#### Telemetry Signals Not Being Exported
 
 Due to the ephemeral nature of runtime actions, telemetry signals may occasionally fail to export before the container shuts down. While the module attempts to flush all signals when an action completes, certain edge cases can prevent this from occurring. If you experience this issue, please file a GitHub issue with reproduction steps so we can address it.
 
