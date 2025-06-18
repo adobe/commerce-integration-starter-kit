@@ -7,7 +7,7 @@ function instrument<T>(
 ): (...args: Parameters<T>) => ReturnType<T>;
 ```
 
-Defined in: [core/instrumentation.ts:88](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/core/instrumentation.ts#L88)
+Defined in: [core/instrumentation.ts:91](https://github.com/adobe/commerce-integration-starter-kit/blob/ee21c0d99f4f907fa0cc3bc14f4f86e941a1c9f2/packages/aio-lib-telemetry/source/core/instrumentation.ts#L91)
 
 Instruments a function.
 

@@ -7,7 +7,7 @@ function serializeContextIntoCarrier<Carrier>(
 ): Carrier;
 ```
 
-Defined in: [api/propagation.ts:34](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/api/propagation.ts#L34)
+Defined in: [api/propagation.ts:34](https://github.com/adobe/commerce-integration-starter-kit/blob/ee21c0d99f4f907fa0cc3bc14f4f86e941a1c9f2/packages/aio-lib-telemetry/source/api/propagation.ts#L34)
 
 Serializes the current context into a carrier.
 

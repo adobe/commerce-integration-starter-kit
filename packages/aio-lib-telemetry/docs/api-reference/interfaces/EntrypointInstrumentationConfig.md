@@ -1,6 +1,6 @@
 # `EntrypointInstrumentationConfig\<T\>`
 
-Defined in: [types.ts:134](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/types.ts#L134)
+Defined in: [types.ts:143](https://github.com/adobe/commerce-integration-starter-kit/blob/ee21c0d99f4f907fa0cc3bc14f4f86e941a1c9f2/packages/aio-lib-telemetry/source/types.ts#L143)
 
 The configuration for entrypoint instrumentation.
 
@@ -21,11 +21,11 @@ The configuration for entrypoint instrumentation.
 ```ts
 optional hooks: {
   onError?: (error: unknown, span: Span) => undefined | Error;
-  onSuccess?: (result: ReturnType<T>, span: Span) => void;
+  onResult?: (result: ReturnType<T>, span: Span) => void;
 };
 ```
 
-Defined in: [types.ts:100](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/types.ts#L100)
+Defined in: [types.ts:109](https://github.com/adobe/commerce-integration-starter-kit/blob/ee21c0d99f4f907fa0cc3bc14f4f86e941a1c9f2/packages/aio-lib-telemetry/source/types.ts#L109)
 
 Hooks that can be used to act on a span depending on the result of the function.
 
@@ -49,13 +49,13 @@ You can use it to do something with the Span.
 
 `undefined` \| `Error`
 
-#### onSuccess()?
+#### onResult()?
 
 ```ts
-optional onSuccess: (result: ReturnType<T>, span: Span) => void;
+optional onResult: (result: ReturnType<T>, span: Span) => void;
 ```
 
-A function that will be called when the instrumented function succeeds.
+A function that will be called with the result of the instrumented function (if any, and no error was thrown).
 You can use it to do something with the Span.
 
 ##### Parameters
@@ -82,7 +82,7 @@ initializeTelemetry: (params: RecursiveStringRecord, isDevelopment: boolean) =>
   TelemetryConfig;
 ```
 
-Defined in: [types.ts:150](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/types.ts#L150)
+Defined in: [types.ts:159](https://github.com/adobe/commerce-integration-starter-kit/blob/ee21c0d99f4f907fa0cc3bc14f4f86e941a1c9f2/packages/aio-lib-telemetry/source/types.ts#L159)
 
 This function is called at the start of the action.
 
@@ -101,13 +101,42 @@ The telemetry configuration to use for the action.
 
 ---
 
+### isSuccessful()?
+
+```ts
+optional isSuccessful: (result: ReturnType<T>) => boolean;
+```
+
+Defined in: [types.ts:106](https://github.com/adobe/commerce-integration-starter-kit/blob/ee21c0d99f4f907fa0cc3bc14f4f86e941a1c9f2/packages/aio-lib-telemetry/source/types.ts#L106)
+
+A function that will be called to determine if the instrumented function was successful.
+By default, the function is considered successful if it doesn't throw an error.
+
+#### Parameters
+
+| Parameter | Type                | Description                              |
+| --------- | ------------------- | ---------------------------------------- |
+| `result`  | `ReturnType`\<`T`\> | The result of the instrumented function. |
+
+#### Returns
+
+`boolean`
+
+Whether the instrumented function was successful.
+
+#### Inherited from
+
+[`InstrumentationConfig`](InstrumentationConfig.md).[`isSuccessful`](InstrumentationConfig.md#issuccessful)
+
+---
+
 ### propagation?
 
 ```ts
 optional propagation: TelemetryPropagationConfig<T>;
 ```
 
-Defined in: [types.ts:141](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/types.ts#L141)
+Defined in: [types.ts:150](https://github.com/adobe/commerce-integration-starter-kit/blob/ee21c0d99f4f907fa0cc3bc14f4f86e941a1c9f2/packages/aio-lib-telemetry/source/types.ts#L150)
 
 Configuration options related to context propagation.
 See the [TelemetryPropagationConfig](TelemetryPropagationConfig.md) for the interface.
@@ -123,7 +152,7 @@ optional spanConfig: SpanOptions & {
 };
 ```
 
-Defined in: [types.ts:83](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/types.ts#L83)
+Defined in: [types.ts:83](https://github.com/adobe/commerce-integration-starter-kit/blob/ee21c0d99f4f907fa0cc3bc14f4f86e941a1c9f2/packages/aio-lib-telemetry/source/types.ts#L83)
 
 Configuration options related to the span started by the instrumented function.
 See also the [SpanOptions](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.SpanOptions.html) interface.
