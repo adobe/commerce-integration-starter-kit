@@ -74,15 +74,6 @@ export interface TelemetryPropagationConfig<T extends AnyFunction> {
   };
 }
 
-/**
- * Defines a set of events that can automatically be attached to a span.
- *
- * - `success`: Adds an event if the instrumented function succeeds, with the result as the payload.
- * - `error`: Adds an event if the instrumented function fails, with the error as the payload.
- * - `parameters`: Adds an event with the parameters received by the instrumented function.
- */
-export type AutomaticSpanEvents = "success" | "error" | "parameters";
-
 /** The configuration for instrumentation. */
 export interface InstrumentationConfig<T extends AnyFunction> {
   /**
@@ -95,16 +86,6 @@ export interface InstrumentationConfig<T extends AnyFunction> {
      * You must use a named function or a provide a name here.
      */
     spanName?: string;
-
-    /**
-     * The events that should be automatically recorded on the span.
-     * See the {@link AutomaticSpanEvents} type for the available options.
-     *
-     * > [!WARNING]
-     * > BE CAREFUL about how you use this, as you may end up exposing sensitive data in your observability platform.
-     * @default []
-     */
-    automaticSpanEvents?: AutomaticSpanEvents[];
 
     /**
      * The base context to use for the started span.

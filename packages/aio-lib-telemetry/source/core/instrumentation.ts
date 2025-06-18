@@ -92,7 +92,6 @@ export function instrument<T extends AnyFunction>(
   const {
     spanName = fn.name,
     getBaseContext,
-    automaticSpanEvents = [],
     ...spanOptions
   } = spanConfig ?? {};
 
@@ -103,16 +102,9 @@ export function instrument<T extends AnyFunction>(
   }
 
   const { onSuccess, onError } = hooks ?? {};
-  const autoEventSet = new Set(automaticSpanEvents);
 
   /** Handles a (potentially) successful result within the given span. */
   function handleResult(result: Awaited<ReturnType<T>>, span: Span) {
-    if (autoEventSet.has("success")) {
-      span.addEvent(`${fn.name ?? spanName}.success`, {
-        result: JSON.stringify(result),
-      });
-    }
-
     // Temporal, handle pattern when we don't throw/error but instead return a "success" status.
     if (result && typeof result === "object" && "success" in result) {
       if (typeof result.success === "boolean" && result.success) {
@@ -129,12 +121,6 @@ export function instrument<T extends AnyFunction>(
 
   /** Handles an error result within the given span. */
   function handleError(error: unknown, span: Span) {
-    if (autoEventSet.has("error")) {
-      span.addEvent(`${fn.name ?? spanName}.error`, {
-        error: JSON.stringify(error),
-      });
-    }
-
     span.setStatus({ code: SpanStatusCode.ERROR });
     const givenError = onError?.(error, span);
 
@@ -202,12 +188,6 @@ export function instrument<T extends AnyFunction>(
   /** Invokes the wrapped function and handles the result or error. */
   function runHandler(span: Span, ...args: Parameters<T>) {
     try {
-      if (autoEventSet.has("parameters")) {
-        span.addEvent(`${fn.name ?? spanName}.parameters`, {
-          args: JSON.stringify(args),
-        });
-      }
-
       const context = setupContextHelpers(span);
       return helpersStorage.run(context, () => {
         const result = fn(...args);
