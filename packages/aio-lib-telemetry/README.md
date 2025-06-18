@@ -504,7 +504,7 @@ Find the full API reference in: [docs/api-reference](./docs/api-reference/README
 
 ### Use Cases
 
-To help you get started, we've written a few more documentation on different use cases for integrating with popular observability platforms. Find them in the [docs/guides](./docs/guides) folder.
+To help you get started, we've written a few more documentation on different use cases for integrating with popular observability platforms. Find them in the [docs/use-cases](./docs/use-cases) folder.
 
 ## Troubleshooting
 
