@@ -54,6 +54,9 @@ export type RecursiveStringRecord = {
 /** AsyncLocalStorage for helpers context. */
 const helpersStorage = new AsyncLocalStorage<InstrumentationHelpers>();
 
+const UNKNOWN_ERROR_CODE = -1;
+const UNKNOWN_ERROR_NAME = "Unknown Error";
+
 /** Access helpers for the current instrumented operation. */
 export function getInstrumentationHelpers(): InstrumentationHelpers {
   const context = helpersStorage.getStore();
@@ -130,8 +133,8 @@ export function instrument<T extends AnyFunction>(
       span.recordException(error);
     } else {
       const exception = {
-        code: -1,
-        name: "Unknown Error",
+        code: UNKNOWN_ERROR_CODE,
+        name: UNKNOWN_ERROR_NAME,
         message: `Unhandled error at "${fn.name ?? spanName}": ${error}`,
         stack: new Error().stack,
       };
@@ -142,7 +145,7 @@ export function instrument<T extends AnyFunction>(
 
   /** Sets up the context for the current operation. */
   function setupContextHelpers(span: Span) {
-    // Serialize the current context into a carrier.
+    // Prepare context for cross-service propagation
     const carrier = serializeContextIntoCarrier();
 
     const { actionName } = getRuntimeActionMetadata();

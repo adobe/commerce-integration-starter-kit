@@ -164,10 +164,10 @@ export interface TelemetryApi {
 
 /** The context for the current operation. */
 export interface InstrumentationContext {
-  /** The tracer used to create the spans. */
+  /** The global (managed by the library) tracer instance used to create spans. */
   tracer: Tracer;
 
-  /** The meter used to create the metrics. */
+  /** The global (managed by the library) meter instance used to create metrics. */
   meter: Meter;
 
   /** The logger for the current operation. */

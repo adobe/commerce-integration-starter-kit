@@ -56,14 +56,9 @@ export function isTelemetryEnabled() {
   return false;
 }
 
-/** Gets the runtime metadata for the currently running action. */
-export function getRuntimeActionMetadata(): RuntimeMetadata {
-  if (runtimeMetadata) {
-    // Data should not change across invocations.
-    return runtimeMetadata;
-  }
-
-  const meta = {
+/** Retrieves basic metadata from the runtime environment. */
+function retrieveBasicMetadata() {
+  return {
     activationId: process.env.__OW_ACTIVATION_ID as string,
     namespace: process.env.__OW_NAMESPACE as string,
     apiHost: process.env.__OW_API_HOST as string,
@@ -80,27 +75,39 @@ export function getRuntimeActionMetadata(): RuntimeMetadata {
       ? new Date(Number(process.env.__OW_DEADLINE) * 1000)
       : null,
   };
+}
 
+/** Parses the action name from the runtime environment. */
+function parseActionName() {
   if (process.env.__OW_ACTION_NAME?.includes("/")) {
     const [, _, packageName, ...action] =
       process.env.__OW_ACTION_NAME?.split("/") ?? [];
 
-    runtimeMetadata = {
-      ...meta,
-
+    return {
       packageName,
       actionName: action.join("/"),
     };
-  } else {
-    runtimeMetadata = {
-      ...meta,
-
-      // Old installations of AIO CLI, might use a version `aio app dev`
-      // where ACTION_NAME doesn't include a package name.
-      packageName: "unknown",
-      actionName: process.env.__OW_ACTION_NAME as string,
-    };
   }
+
+  return {
+    // Old installations of AIO CLI, might use a version `aio app dev`
+    // where ACTION_NAME doesn't include a package name.
+    packageName: "unknown",
+    actionName: process.env.__OW_ACTION_NAME as string,
+  };
+}
+
+/** Gets the runtime metadata for the currently running action. */
+export function getRuntimeActionMetadata(): RuntimeMetadata {
+  if (runtimeMetadata) {
+    // Data should not change across invocations.
+    return runtimeMetadata;
+  }
+
+  runtimeMetadata = {
+    ...retrieveBasicMetadata(),
+    ...parseActionName(),
+  };
 
   return runtimeMetadata;
 }
