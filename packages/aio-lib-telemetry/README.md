@@ -33,7 +33,6 @@ This module contains a set of utilities for integrating observability into App B
     - [Enabling OpenTelemetry Diagnostics](#enabling-opentelemetry-diagnostics)
     - [Known Issues](#known-issues)
 
-
 ## Introduction
 
 This guide assumes you have a basic understanding of OpenTelemetry and are familiar with its core concepts, as we will be referencing them throughout this document without detailed explanation.
@@ -152,14 +151,56 @@ This section provides a comprehensive guide for instrumenting App Builder Runtim
 
 ### Setup
 
+With your configuration ready, you can now instrument a runtime action. OpenTelemetry provides three core observability signals: **traces**, **metrics**, and **logs**. Each signal serves a specific purpose in understanding your application's behavior and performance. This section will guide you through implementing each signal type.
+
 > [!IMPORTANT]
 > This step is essential for telemetry to function correctly. Without proper setup, telemetry will not work and no signals will be exported. The entrypoint serves as the root span for trace exports and handles critical initialization processes.
 
+#### Setting the `ENABLE_TELEMETRY` environment variable
+
+For granular control over which actions use telemetry without modifying source code, configure the `ENABLE_TELEMETRY` environment variable in your `app.config.yaml` file. Set it to `true` either at the individual action level, or [at the package level](https://developer.adobe.com/app-builder/docs/guides/app_builder_guides/configuration/configuration#appconfigyaml-1) if you want to enable it for all actions in that package.
+
+> [!WARNING]
+> If this environment variable is not set, telemetry signals will not be emitted.
+
+```yaml
+# app.config.yaml
+
+runtimeManifest:
+  packages:
+    my-package:
+      # Set it at the action level.
+      actions:
+        my-instrumented-action:
+          function: actions/my-instrumented-action/index.js
+          inputs:
+            ENABLE_TELEMETRY: true
+        
+        my-non-instrumented-action:
+          function: actions/my-non-instrumented-action/index.js
+          inputs:
+            ENABLE_TELEMETRY: false
+
+        # Not having the `ENABLE_TELEMETRY` input will default to `false`.
+        my-other-non-instrumented-action:
+          function: actions/my-other-non-instrumented-action/index.js
+    
+    # Set it at the package level.
+    my-instrumented-package:
+      inputs:
+        ENABLE_TELEMETRY: true
+      
+      actions:
+        my-instrumented-action:
+          function: actions/my-instrumented-action/index.js
+
+        my-other-instrumented-action:
+          function: actions/my-other-instrumented-action/index.js
+```
+
 #### Entrypoint Instrumentation
 
-With your configuration ready, you can now instrument a runtime action. OpenTelemetry provides three core observability signals: **traces**, **metrics**, and **logs**. Each signal serves a specific purpose in understanding your application's behavior and performance. This section will guide you through implementing each signal type.
-
-Begin by instrumenting the entrypoint, the `main` function you need to always export when using Adobe App Builder. Navigate to the file containing the runtime action you wish to instrument, then import your configuration from the `telemetry.{js|ts}` file, along with the following function from this module: `instrumentEntrypoint`
+Once you have set the environment variable, you can instrument the entrypoint, the `main` function you need to always export when using Adobe App Builder. Navigate to the file containing the runtime action you wish to instrument, then import your configuration from the `telemetry.{js|ts}` file, along with the following function from this module: `instrumentEntrypoint`
 
 ```ts
 import { telemetryConfig } from "./telemetry" // Or wherever it is located
@@ -177,7 +218,7 @@ export {
   instrumentedMain as main
 }
 ```
-With this setup, your entrypoint is now instrumented and will automatically emit trace data. However, this creates only a single root span, which provides limited visibility. Let's explore how to instrument additional functions throughout your codebase for deeper insights.
+With this setup, your entrypoint is now instrumented and will automatically emit trace data. However, this creates only a single root span, which provides limited visibility. Let's explore how to add traces to other functions throughout your codebase for deeper insights.
 
 ### Traces
 
@@ -265,7 +306,7 @@ instrumentEntrypoint(main, {
 
 ##### Manual Propagation
 
-For cases requiring manual trace context deserialization, here's how to implement it:
+When the automatic propagation feature cannot be used (usually because the context carrier cannot be passed in the supported formats described above) manual trace context deserialization is required. Here's how to configure it:
 
 You need to specify where the `instrumentEntrypoint` (or `instrument`) helper should find the carrier object. Do this by implementing a `getContextCarrier` function in your entrypoint instrumentation configuration. This function receives your instrumented function's arguments and should return the carrier object.
 
@@ -431,8 +472,6 @@ instrument(externalApiRequest, {
   // Place instrumentation options here.
 });
 ```
-See the API reference for the configuration options available: [`InstrumentationConfig`](./docs/api-reference/interfaces/InstrumentationConfig.md).
-
 > [!NOTE]
 > The `instrumentEntrypoint` helper also supports instrumentation options, but since its second parameter is also used for the telemetry configuration, you must merge both (see below). Find the entrypoint configuration reference in: [`EntrypointInstrumentationConfig`](./docs/api-reference/interfaces/EntrypointInstrumentationConfig.md)
 > ```ts
@@ -445,6 +484,17 @@ See the API reference for the configuration options available: [`Instrumentation
 >   // Place instrumentation options here.
 > })
 > ```
+
+Example use cases on when you might want to use these options are:
+
+- **Customizing Span Names**: If you want to use a custom span name for a function, you can set the `spanConfig.spanName` option.
+- **Reacting to the Result**: If you want to react to the result of a function, you can set the `onResult` option.
+- **Handling Errors**: If you want to handle errors of a function, you can set the `onError` option.
+- **Handling Success/Failure**: By default, the library will consider a function successful if it doesn't throw an error. If you want to customize this behavior, you can set the `isSuccessful` option. It will receive the result of the function and should return a boolean indicating whether the function was successful.
+- 
+See the API reference for the configuration options available: [`InstrumentationConfig`](./docs/api-reference/interfaces/InstrumentationConfig.md). 
+
+
 
 ## Additional Resources
 
