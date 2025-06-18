@@ -15,7 +15,7 @@ function getAioRuntimeAttributes(): {
 };
 ```
 
-Defined in: api/attributes.ts:26
+Defined in: [api/attributes.ts:26](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/api/attributes.ts#L26)
 
 Infers some useful attributes for the current action from the Adobe I/O Runtime
 and returns them as a record of key-value pairs.

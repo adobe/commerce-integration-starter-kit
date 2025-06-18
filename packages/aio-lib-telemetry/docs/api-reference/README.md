@@ -83,11 +83,10 @@ import {
 
 ## Type Aliases
 
-| Type Alias                                                                       | Description                                                           |
-| -------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| [AutomaticSpanEvents](type-aliases/AutomaticSpanEvents.md)                       | Defines a set of events that can automatically be attached to a span. |
-| [DiagnosticsLogLevel](type-aliases/DiagnosticsLogLevel.md)                       | Available log levels for the OpenTelemetry DiagLogger.                |
-| [TelemetryInstrumentationPreset](type-aliases/TelemetryInstrumentationPreset.md) | Defines the names of available instrumentation presets.               |
+| Type Alias                                                                       | Description                                             |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| [DiagnosticsLogLevel](type-aliases/DiagnosticsLogLevel.md)                       | Available log levels for the OpenTelemetry DiagLogger.  |
+| [TelemetryInstrumentationPreset](type-aliases/TelemetryInstrumentationPreset.md) | Defines the names of available instrumentation presets. |
 
 ## Functions
 

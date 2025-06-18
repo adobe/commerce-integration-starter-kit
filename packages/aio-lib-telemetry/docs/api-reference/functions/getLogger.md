@@ -4,7 +4,7 @@
 function getLogger(name: string, config?: AioLoggerConfig): AioLogger;
 ```
 
-Defined in: core/logging.ts:81
+Defined in: [core/logging.ts:81](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/core/logging.ts#L81)
 
 Get a logger instance.
 

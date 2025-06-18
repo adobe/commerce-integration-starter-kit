@@ -1,6 +1,6 @@
 # `InstrumentationConfig\<T\>`
 
-Defined in: types.ts:87
+Defined in: [types.ts:78](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/types.ts#L78)
 
 The configuration for instrumentation.
 
@@ -25,7 +25,7 @@ optional hooks: {
 };
 ```
 
-Defined in: types.ts:119
+Defined in: [types.ts:100](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/types.ts#L100)
 
 Hooks that can be used to act on a span depending on the result of the function.
 
@@ -75,36 +75,17 @@ You can use it to do something with the Span.
 
 ```ts
 optional spanConfig: SpanOptions & {
-  automaticSpanEvents?: AutomaticSpanEvents[];
   getBaseContext?: (...args: Parameters<T>) => Context;
   spanName?: string;
 };
 ```
 
-Defined in: types.ts:92
+Defined in: [types.ts:83](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/types.ts#L83)
 
 Configuration options related to the span started by the instrumented function.
 See also the [SpanOptions](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.SpanOptions.html) interface.
 
 #### Type declaration
-
-##### automaticSpanEvents?
-
-```ts
-optional automaticSpanEvents: AutomaticSpanEvents[];
-```
-
-The events that should be automatically recorded on the span.
-See the [AutomaticSpanEvents](../type-aliases/AutomaticSpanEvents.md) type for the available options.
-
-> [!WARNING]
-> BE CAREFUL about how you use this, as you may end up exposing sensitive data in your observability platform.
-
-###### Default
-
-```ts
-[];
-```
 
 ##### getBaseContext()?
 

@@ -13,7 +13,7 @@ function getPresetInstrumentations(
   | Instrumentation<InstrumentationConfig>[];
 ```
 
-Defined in: api/presets.ts:57
+Defined in: [api/presets.ts:57](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/api/presets.ts#L57)
 
 Get the instrumentations for a given preset.
 

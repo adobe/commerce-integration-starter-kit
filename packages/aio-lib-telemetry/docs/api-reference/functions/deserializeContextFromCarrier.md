@@ -7,7 +7,7 @@ function deserializeContextFromCarrier<Carrier>(
 ): Context;
 ```
 
-Defined in: api/propagation.ts:55
+Defined in: [api/propagation.ts:55](https://github.com/adobe/commerce-integration-starter-kit/blob/d46a74bab8354601aa6e2e47719b09780c913f3a/packages/aio-lib-telemetry/source/api/propagation.ts#L55)
 
 Deserializes the context from a carrier and augments the given base context with it.
 
