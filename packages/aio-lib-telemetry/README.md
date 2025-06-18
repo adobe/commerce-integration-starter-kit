@@ -65,9 +65,9 @@ This library is designed for use within an [Adobe App Builder](https://developer
 ### Installing the Module
 
 > [!WARNING]
-> This package is not yet published to the NPM Registry. After running `npm run build`, you can either:
+> This package is not yet published to the NPM Registry. After running `npm run build` in it, you can either:
 > - Copy the minified files from `dist/` and import them directly in your project
-> - Install it as a workspace package in a monorepo using `npm install` with the local path
+> - Install it as a [workspace package](https://docs.npmjs.com/cli/v11/using-npm/workspaces) in a monorepo using `npm install` as you would with any other package.
 
 ```sh
 npm install @adobe/aio-lib-telemetry
