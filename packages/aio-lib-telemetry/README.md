@@ -155,6 +155,8 @@ This section provides a comprehensive guide for instrumenting App Builder Runtim
 > [!IMPORTANT]
 > This step is essential for telemetry to function correctly. Without proper setup, telemetry will not work and no signals will be exported. The entrypoint serves as the root span for trace exports and handles critical initialization processes.
 
+#### Entrypoint Instrumentation
+
 With your configuration ready, you can now instrument a runtime action. OpenTelemetry provides three core observability signals: **traces**, **metrics**, and **logs**. Each signal serves a specific purpose in understanding your application's behavior and performance. This section will guide you through implementing each signal type.
 
 Begin by instrumenting the entrypoint, the `main` function you need to always export when using Adobe App Builder. Navigate to the file containing the runtime action you wish to instrument, then import your configuration from the `telemetry.{js|ts}` file, along with the following function from this module: `instrumentEntrypoint`
