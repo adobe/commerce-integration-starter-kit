@@ -1,13 +1,14 @@
 # Telemetry Module for App Builder Actions
 
-<br />
-<div align="center">
-  <img alt="OpenTelemetry Logo" src="./docs/images/open-telemetry.png">
-</div>
-<br />
-
 This module contains a set of utilities for integrating observability into App Builder actions. It leverages OpenTelemetry to enable developers to capture, export, and analyze traces, metrics and logs. You can use these tools to monitor action performance, diagnose issues, and gain insights into application behavior, without significant changes to your codebase.
 
+> [!IMPORTANT]
+> Keep in mind that this is only a thin wrapper around the [OpenTelemetry SDK](https://opentelemetry.io/docs/languages/js/) for Node.js. 
+> 
+> It's not intended to be a full-fledged observability solution, but rather a tool to help you get started with OpenTelemetry and collect telemetry data in the context of Adobe App Builder runtime actions. It doesn't cover all the features of OpenTelemetry, but rather provides a simple and easy to use interface to get you started. 
+>
+> For advanced use cases you'll need to use the configuration options provided by this module to directly configure the underlying OpenTelemetry SDK, or use the OpenTelemetry SDK directly.
+    
 - [Telemetry Module for App Builder Actions](#telemetry-module-for-app-builder-actions)
   - [Introduction](#introduction)
   - [Installation and Setup](#installation-and-setup)
@@ -17,20 +18,21 @@ This module contains a set of utilities for integrating observability into App B
     - [Open Telemetry Configuration](#open-telemetry-configuration)
     - [Writing your Telemetry Configuration](#writing-your-telemetry-configuration)
   - [How to Use](#how-to-use)
-    - [Entrypoint Instrumentation](#entrypoint-instrumentation)
+    - [Setup](#setup)
     - [Traces](#traces)
     - [Logs](#logs)
     - [Metrics](#metrics)
     - [Instrumentation Helpers](#instrumentation-helpers)
-    - [API Reference](#api-reference)
   - [Advanced Usage](#advanced-usage)
     - [Configuring a Custom Tracer and Meter](#configuring-a-custom-tracer-and-meter)
-  - [Next Up](#next-up)
-    - [Guides](#guides)
+    - [Instrumentation Configuration](#instrumentation-configuration)
+  - [Additional Resources](#additional-resources)
+    - [API Reference](#api-reference)
+    - [Use Cases](#use-cases)
   - [Troubleshooting](#troubleshooting)
     - [Enabling OpenTelemetry Diagnostics](#enabling-opentelemetry-diagnostics)
     - [Known Issues](#known-issues)
-    
+
 
 ## Introduction
 
@@ -105,7 +107,7 @@ This is the currently supported method for configuring OpenTelemetry with this l
 Before you start using this library you need to configure it.
 
 > [!NOTE]
-> This section focuses on general telemetry configuration rather than backend-specific setup. Since observability backends require different configurations, we've created dedicated guides for popular options. See the [Guides](#guides) section for links to detailed backend setup instructions.
+> This section focuses on general telemetry configuration rather than backend-specific setup. Since observability backends require different configurations, we've created dedicated guides for popular options. See the [use cases](#use-cases) section for links to detailed backend setup instructions.
 
 Begin by creating a `telemetry.js` file (or `telemetry.ts` if using TypeScript). This file will export your global telemetry configuration, which will be shared across all instrumented runtime actions. If a single configuration doesn't meet your requirements, you can export multiple configurations from this file (or create separate configuration files) and use them as needed.
 
@@ -148,10 +150,10 @@ Refer to the API reference documentation of this library for more information ab
 
 This section provides a comprehensive guide for instrumenting App Builder Runtime Actions and demonstrates how to leverage this module's API for streamlined telemetry implementation.
 
-### Entrypoint Instrumentation
+### Setup
 
 > [!IMPORTANT]
-> This step is essential for telemetry to function correctly. Without proper entrypoint instrumentation, telemetry will not work and no signals will be exported. The entrypoint serves as the root span for trace exports and handles critical initialization processes.
+> This step is essential for telemetry to function correctly. Without proper setup, telemetry will not work and no signals will be exported. The entrypoint serves as the root span for trace exports and handles critical initialization processes.
 
 With your configuration ready, you can now instrument a runtime action. OpenTelemetry provides three core observability signals: **traces**, **metrics**, and **logs**. Each signal serves a specific purpose in understanding your application's behavior and performance. This section will guide you through implementing each signal type.
 
@@ -218,37 +220,6 @@ export {
 > )
 > ```
 
-#### Instrumentation Configuration
-
-In most cases, instrumenting your functions works seamlessly without additional configuration. However, certain scenarios, such as customizing the span name, configuring automatic span events or reacting to the result of a wrapped function, may require further customization.
-
-The `instrument` helper accepts an optional **second argument** that allows you to fine-tune the instrumentation.
-
-```ts
-// somewhere/in_your/codebase/somefile.{js|ts}
-
-import { instrument } from "@adobe/aio-lib-telemetry"
-
-function externalApiRequest() { /* ... */ }
-instrument(externalApiRequest, {
-  // Place instrumentation options here.
-});
-```
-See the API reference for the configuration options available: [`InstrumentationConfig`](./docs/api-reference/interfaces/InstrumentationConfig.md).
-
-> [!NOTE]
-> The `instrumentEntrypoint` helper also supports instrumentation options, but since its second parameter is also used for the telemetry configuration, you must merge both (see below). Find the entrypoint configuration reference in: [`EntrypointInstrumentationConfig`](./docs/api-reference/interfaces/EntrypointInstrumentationConfig.md)
-> ```ts
-> import { telemetryConfig } from "./telemetry"
->
-> // Implementation of your main function
-> function main(params) { /* ... */ }
-> instrumentEntrypoint(main, {
->   ...telemetryConfig,
->   // Place instrumentation options here.
-> })
-> ```
-
 #### Distributed Tracing and Context Propagation
 
 In distributed systems, maintaining trace continuity across service boundaries is crucial for effective observability. This process, known as context propagation, enables distributed tracing by sharing trace context between services. For comprehensive details on this concept, refer to the [OpenTelemetry documentation](https://opentelemetry.io/docs/languages/js/propagation/).
@@ -290,7 +261,7 @@ instrumentEntrypoint(main, {
 })
 ```
 
-###### Manual Propagation
+##### Manual Propagation
 
 For cases requiring manual trace context deserialization, here's how to implement it:
 
@@ -325,7 +296,7 @@ To export [logs](https://opentelemetry.io/docs/concepts/signals/logs/), ensure t
 #### Exporting Log Data
 
 > [!TIP]
-> When logging within an instrumented function (i.e., one that is traced), OpenTelemetry will automatically associate log entries with the corresponding trace, allowing you to correlate logs with specific trace executions.
+> When logging within an instrumented function (i.e. one that is traced), OpenTelemetry will automatically associate log entries with the corresponding trace, allowing you to correlate logs with specific trace executions.
 
 To export logs, use the `getLogger` helper provided by this module. Its signature matches that of `@adobe/aio-lib-core-logging`, which supports both `winston` and `debug` as logging providers. However, this helper always enforces the use of `winston` to ensure compatibility with OpenTelemetry log export. 
 
@@ -410,15 +381,14 @@ This function receives the following helpers:
 - `meter`: The global meter instance for creating metrics. For accessing the meter outside instrumented contexts, see [`getGlobalTelemetryApi`](./docs/api-reference/functions/getGlobalTelemetryApi.md).
 - `logger`: An auto-configured logger for the current operation. Uses the `LOG_LEVEL` environment variable when available, defaulting to `debug` in development and `info` in production. For custom logger configuration, see the [logs section](#logs) on using the `getLogger` helper.
 
-### API Reference
-
-Find the full API reference in: [docs/api-reference](./docs/api-reference/README.md). You can find there documentation for all the helpers and interfaces provided by this module.
-
 ## Advanced Usage
 
 ### Configuring a Custom Tracer and Meter
 
 The library automatically creates a default tracer and meter if none are provided alongside the `sdkConfig`. However, you can supply your own custom implementations if you need more specific functionality.
+
+> [!NOTE]
+> Generally you shouldn't need more than one tracer and meter per app. That's why this library only works with a single instance of both. If you want different tracer/meter names per runtime action you can use environment variables.
 
 ```ts
 // telemetry.{js|ts}
@@ -431,7 +401,7 @@ const telemetryConfig = defineTelemetryConfig((params, isDev) => {
   const meter = metrics.getMeter("my-custom-meter");
 
   return {
-    sdkConfig: { /* SDK Configuration */ }
+    sdkConfig: { /* SDK Configuration */ },
 
     tracer,
     meter
@@ -443,18 +413,46 @@ export { telemetryConfig }
 
 See more about the `otel-api` import path in the API Reference: [OpenTelemetry Re-Exports](./docs/api-reference/README.md#opentelemetry-api).
 
-## Next Up
+### Instrumentation Configuration
 
-This module is a thin wrapper around the OpenTelemetry SDK for Node.js. For more information on the OpenTelemetry SDK, see the [OpenTelemetry documentation](https://opentelemetry.io/docs/languages/js/). 
+In most cases, instrumenting your functions works seamlessly without additional configuration. However, certain scenarios, such as customizing the span name, configuring automatic span events or reacting to the result of a wrapped function, may require further customization.
 
-> [!IMPORTANT]
-> It's not intended to be a full-fledged observability solution, but rather a tool to help you get started with OpenTelemetry and collect telemetry data in the context of Adobe App Builder runtime actions. It doesn't cover all the features of OpenTelemetry, but rather provides a simple and easy to use interface to get you started. 
+The `instrument` helper accepts an optional **second argument** that allows you to fine-tune the instrumentation.
+
+```ts
+// somewhere/in_your/codebase/somefile.{js|ts}
+
+import { instrument } from "@adobe/aio-lib-telemetry"
+
+function externalApiRequest() { /* ... */ }
+instrument(externalApiRequest, {
+  // Place instrumentation options here.
+});
+```
+See the API reference for the configuration options available: [`InstrumentationConfig`](./docs/api-reference/interfaces/InstrumentationConfig.md).
+
+> [!NOTE]
+> The `instrumentEntrypoint` helper also supports instrumentation options, but since its second parameter is also used for the telemetry configuration, you must merge both (see below). Find the entrypoint configuration reference in: [`EntrypointInstrumentationConfig`](./docs/api-reference/interfaces/EntrypointInstrumentationConfig.md)
+> ```ts
+> import { telemetryConfig } from "./telemetry"
 >
-> For advanced use cases you'll need to use the configuration options provided by this module to directly configure the underlying OpenTelemetry SDK, or use the OpenTelemetry SDK directly.
+> // Implementation of your main function
+> function main(params) { /* ... */ }
+> instrumentEntrypoint(main, {
+>   ...telemetryConfig,
+>   // Place instrumentation options here.
+> })
+> ```
 
-### Guides
+## Additional Resources
 
-To help you get started, we've created [comprehensive guides](./docs/guides/README.md) for integrating with popular observability platforms. Find them in the [docs/guides](./docs/guides) folder.
+### API Reference
+
+Find the full API reference in: [docs/api-reference](./docs/api-reference/README.md). You can find there documentation for all the helpers and interfaces provided by this module.
+
+### Use Cases
+
+To help you get started, we've written a few more documentation on different use cases for integrating with popular observability platforms. Find them in the [docs/guides](./docs/guides) folder.
 
 ## Troubleshooting
 
