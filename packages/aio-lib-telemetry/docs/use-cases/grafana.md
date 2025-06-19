@@ -45,10 +45,9 @@ This section covers the complete setup for local development where both your act
 
 ### Docker Compose Configuration
 
-Create a `docker-compose.yml` file to run the complete observability stack:
+Create a `docker-compose.yaml` file to run the complete observability stack:
 
 ```yaml
-version: '3.8'
 services:
   otel-collector:
     image: otel/opentelemetry-collector-contrib:latest
@@ -77,7 +76,7 @@ services:
     container_name: prometheus
     restart: unless-stopped
     volumes: 
-      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "./prometheus.yaml:/etc/prometheus/prometheus.yaml"
     ports: 
       - "9090:9090" # Prometheus UI
     networks: [telemetry]
@@ -194,7 +193,7 @@ storage:
 
 ### Prometheus Configuration
 
-Create a `prometheus.yml` file to scrape metrics from the collector:
+Create a `prometheus.yaml` file to scrape metrics from the collector:
 
 ```yaml
 global:
@@ -339,10 +338,10 @@ The key steps are:
 
 #### Alternative: Add Tunneling to Docker Compose
 
-If you prefer to manage everything through Docker Compose, add this service to your existing `docker-compose.yml`:
+If you prefer to manage everything through Docker Compose, add this service to your existing `docker-compose.yaml`:
 
 ```yaml
-  # Add this service to your existing docker-compose.yml
+  # Add this service to your existing docker-compose.yaml
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
