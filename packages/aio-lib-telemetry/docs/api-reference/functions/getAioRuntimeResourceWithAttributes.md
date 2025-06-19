@@ -6,7 +6,7 @@ function getAioRuntimeResourceWithAttributes(
 ): Resource;
 ```
 
-Defined in: [api/attributes.ts:58](https://github.com/adobe/commerce-integration-starter-kit/blob/0491355cd9c4d5daa558197e4e07bc6e025afd47/packages/aio-lib-telemetry/source/api/attributes.ts#L58)
+Defined in: [api/attributes.ts:58](https://github.com/adobe/commerce-integration-starter-kit/blob/d331e59f0d2bdbb84c234c4a5a46f01bc1fa0c09/packages/aio-lib-telemetry/source/api/attributes.ts#L58)
 
 Creates a [resource](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_sdk-node.resources.Resource.html)
 that combines the attributes inferred from the Adobe I/O Runtime with the provided attributes.
