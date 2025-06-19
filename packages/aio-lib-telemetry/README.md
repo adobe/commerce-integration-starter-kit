@@ -487,15 +487,16 @@ instrument(externalApiRequest, {
 
 Example use cases on when you might want to use these options are:
 
-- **Customizing Span Names**: If you want to use a custom span name for a function, you can set the `spanConfig.spanName` option.
+- **Customizing Span Names**: If you want to use a custom span name for a function, you can set the [`spanConfig.spanName`](./docs/api-reference/interfaces/InstrumentationConfig.md#spanconfig) option. There are other span configuration options available, see the API reference for [`SpanConfig`](./docs/api-reference/interfaces/SpanConfig.md) for more details.
   
-- **Reacting to the Result**: If you want to react to the result of a function, you can set the `onResult` option.
+- **Reacting to the Result**: If you want to react to the result of a function, you can set the [`onResult`](./docs/api-reference/interfaces/InstrumentationConfig.md#onresult) option.
   
-- **Handling Errors**: If you want to handle errors of a function, you can set the `onError` option.
+- **Handling Errors**: If you want to handle errors of a function, you can set the [`onError`](./docs/api-reference/interfaces/InstrumentationConfig.md#onerror) option.
   
-- **Handling Success/Failure**: By default, the library considers a function successful if it doesn't throw an error. You can customize this behavior by setting the `isSuccessful` option.
+- **Handling Success/Failure**: By default, the library considers a function successful if it doesn't throw an error. You can customize this behavior by setting the [`isSuccessful`](./docs/api-reference/interfaces/InstrumentationConfig.md#issuccessful) option.
   - This option takes a function that receives the result and returns a boolean indicating whether the operation was successful.
-  - The success/failure state may not matter for your use case. Internally, it determines when to trigger the `onError` and `onResult` hooks, and whether to set the span status to `OK` or `ERROR`. Different observability backends might interpret these statuses in their own way.
+  
+  - The success/failure state may not matter for your use case. Internally, it determines when to trigger the [`onError`](./docs/api-reference/interfaces/InstrumentationConfig.md#onerror) and [`onResult`](./docs/api-reference/interfaces/InstrumentationConfig.md#onresult) hooks, and whether to [set the span status](https://opentelemetry.io/docs/concepts/signals/traces/#span-status) to `OK` or `ERROR`. Different observability backends might interpret these statuses in their own way.
 
 See the API reference for the configuration options available: [`InstrumentationConfig`](./docs/api-reference/interfaces/InstrumentationConfig.md). 
 
