@@ -487,7 +487,7 @@ instrument(externalApiRequest, {
 
 Example use cases on when you might want to use these options are:
 
-- **Customizing Span Names**: If you want to use a custom span name for a function, you can set the [`spanConfig.spanName`](./docs/api-reference/interfaces/InstrumentationConfig.md#spanconfig) option. There are other span configuration options available, see the API reference for [`SpanConfig`](./docs/api-reference/interfaces/SpanConfig.md) for more details.
+- **Customizing Span Names**: If you want to use a custom span name for a function, you can set the [`spanConfig.spanName`](./docs/api-reference/interfaces/InstrumentationConfig.md#spanname) option. There are other span configuration options available, see the API reference for [`SpanConfig`](./docs/api-reference/interfaces/InstrumentationConfig.md#spanconfig) for more details.
   
 - **Reacting to the Result**: If you want to react to the result of a function, you can set the [`onResult`](./docs/api-reference/interfaces/InstrumentationConfig.md#onresult) option.
   
