@@ -6,13 +6,13 @@ const commerceCustomerMetrics = defineMetrics((meter) => {
   return {
     consumerSuccessCounter: meter.createCounter(
       'customer.commerce.consumer.success_count', {
-        description: 'A counter for the number of successful Commerce Consumer actions.',
+        description: 'A counter for the number of successful Commerce Customer Consumer actions.',
         valueType: ValueType.INT
       }),
 
     consumerTotalCounter: meter.createCounter(
       'customer.commerce.consumer.total_count', {
-        description: 'A counter for the number of total Commerce Consumer actions.',
+        description: 'A counter for the number of total Commerce Customer Consumer actions.',
         valueType: ValueType.INT
       })
   }
