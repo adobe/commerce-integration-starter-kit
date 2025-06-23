@@ -408,7 +408,7 @@ describe('Given external backoffice events ingestion webhook', () => {
         error: {
           statusCode: 500,
           body: {
-            error: 'Adobe Auth validation failed. Invalid params: OAUTH_CLIENT_SECRET, OAUTH_TECHNICAL_ACCOUNT_ID, OAUTH_TECHNICAL_ACCOUNT_EMAIL',
+            error: 'Adobe Auth validation failed. Missing params: OAUTH_CLIENT_SECRET, OAUTH_TECHNICAL_ACCOUNT_ID, OAUTH_TECHNICAL_ACCOUNT_EMAIL',
           }
         }
       })

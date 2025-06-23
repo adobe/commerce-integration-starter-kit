@@ -42,7 +42,7 @@ function validateAdobeAuthParams(params) {
   logMissingParams(missingParams);
 
   if (missingParams.length > 0) {
-    throw new Error(`Adobe Auth validation failed. Invalid params: ${missingParams.join(', ')}`);
+    throw new Error(`Adobe Auth validation failed. Missing params: ${missingParams.join(', ')}`);
   }
 }
 
