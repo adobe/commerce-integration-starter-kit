@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const action = require('../../../../actions/ingestion/webhook');
+const action = require('../../../../actions/ingestion/webhook')
 
 jest.mock('@adobe/aio-sdk', () => ({
   Core: {
@@ -59,7 +59,7 @@ const validParams = {
   OAUTH_CLIENT_SECRET: 'OAUTH_CLIENT_SECRET',
   OAUTH_TECHNICAL_ACCOUNT_ID: 'OAUTH_TECHNICAL_ACCOUNT_ID',
   OAUTH_TECHNICAL_ACCOUNT_EMAIL: 'OAUTH_TECHNICAL_ACCOUNT_EMAIL'
-};
+}
 
 describe('Given external backoffice events ingestion webhook', () => {
   describe('When method main is defined', () => {
@@ -408,7 +408,7 @@ describe('Given external backoffice events ingestion webhook', () => {
         error: {
           statusCode: 500,
           body: {
-            error: 'Adobe Auth validation failed. Missing params: OAUTH_CLIENT_SECRET, OAUTH_TECHNICAL_ACCOUNT_ID, OAUTH_TECHNICAL_ACCOUNT_EMAIL',
+            error: 'Adobe Auth validation failed. Missing params: OAUTH_CLIENT_SECRET, OAUTH_TECHNICAL_ACCOUNT_ID, OAUTH_TECHNICAL_ACCOUNT_EMAIL'
           }
         }
       })

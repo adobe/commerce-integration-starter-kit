@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const { Core } = require('@adobe/aio-sdk')
-const {logMissingParams} = require("./utils");
+const { logMissingParams } = require('./utils')
 const logger = Core.Logger('auth', { level: 'info' })
 
 /**
@@ -24,13 +24,13 @@ const logger = Core.Logger('auth', { level: 'info' })
 function validateParams (params, requiredParams, authType) {
   // check if missing
   const missingParams = requiredParams
-      .filter(param => !params[param]);
+    .filter(param => !params[param])
 
-  logMissingParams(missingParams);
-  console.log(missingParams);
+  logMissingParams(missingParams)
+  console.log(missingParams)
 
   if (missingParams.length > 0) {
-    throw new Error(`Expected parameters for ${authType} auth are missing ${missingParams.join(', ')}`);
+    throw new Error(`Expected parameters for ${authType} auth are missing ${missingParams.join(', ')}`)
   }
 }
 
@@ -45,9 +45,9 @@ function fromParams (params) {
   if (params.COMMERCE_CONSUMER_KEY && params.COMMERCE_CONSUMER_KEY !== '$COMMERCE_CONSUMER_KEY') {
     logger.info('Commerce client is using Commerce OAuth1 authentication')
     validateParams(params,
-        ['COMMERCE_CONSUMER_KEY', 'COMMERCE_CONSUMER_SECRET', 'COMMERCE_ACCESS_TOKEN',
-          'COMMERCE_ACCESS_TOKEN_SECRET'],
-        'COMMERCE_INTEGRATION')
+      ['COMMERCE_CONSUMER_KEY', 'COMMERCE_CONSUMER_SECRET', 'COMMERCE_ACCESS_TOKEN',
+        'COMMERCE_ACCESS_TOKEN_SECRET'],
+      'COMMERCE_INTEGRATION')
     const { COMMERCE_CONSUMER_KEY: consumerKey, COMMERCE_CONSUMER_SECRET: consumerSecret, COMMERCE_ACCESS_TOKEN: accessToken, COMMERCE_ACCESS_TOKEN_SECRET: accessTokenSecret } = params
     return {
       commerceOAuth1: {

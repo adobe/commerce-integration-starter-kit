@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 /* This file exposes some common utilities for your actions */
 
-const chalk = require("chalk");
+const chalk = require('chalk')
 const hidden = [
   'secret',
   'token'
@@ -70,14 +70,18 @@ function getMissingKeys (obj, required) {
   })
 }
 
-function logMissingParams(missingParams) {
+/**
+ * Logs missing or invalid environment variables.
+ * @param {Array} missingParams - Array of missing or invalid environment variable names.
+ */
+function logMissingParams (missingParams) {
   if (missingParams.length > 0) {
-    const formattedParams = missingParams.map(param => `- ${param}`).join('\n');
+    const formattedParams = missingParams.map(param => `- ${param}`).join('\n')
     console.error(
-        chalk.bgGray.whiteBright.bold('Missing or invalid environment variables:') +
+      chalk.bgGray.whiteBright.bold('Missing or invalid environment variables:') +
         '\n' +
         chalk.bgRedBright.whiteBright(formattedParams)
-    );
+    )
   }
 }
 
@@ -108,7 +112,7 @@ function checkMissingRequestInputs (
 
   // check for missing parameters
   const missingParams = getMissingKeys(params, requiredParams)
-  logMissingParams(missingParams);
+  logMissingParams(missingParams)
   if (missingParams.length > 0) {
     if (errorMessage) {
       errorMessage += ' and '
