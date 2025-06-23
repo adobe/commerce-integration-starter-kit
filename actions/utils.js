@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 /* This file exposes some common utilities for your actions */
 
+const chalk = require("chalk");
 const hidden = [
   'secret',
   'token'
@@ -69,6 +70,17 @@ function getMissingKeys (obj, required) {
   })
 }
 
+function logMissingParams(missingParams) {
+  if (missingParams.length > 0) {
+    const formattedParams = missingParams.map(param => `- ${param}`).join('\n');
+    console.error(
+        chalk.bgGray.whiteBright.bold('Missing or invalid environment variables:') +
+        '\n' +
+        chalk.bgRedBright.whiteBright(formattedParams)
+    );
+  }
+}
+
 /**
  *
  * Returns the list of missing keys giving an object and its required keys.
@@ -96,6 +108,7 @@ function checkMissingRequestInputs (
 
   // check for missing parameters
   const missingParams = getMissingKeys(params, requiredParams)
+  logMissingParams(missingParams);
   if (missingParams.length > 0) {
     if (errorMessage) {
       errorMessage += ' and '
@@ -110,5 +123,6 @@ function checkMissingRequestInputs (
 
 module.exports = {
   stringParameters,
-  checkMissingRequestInputs
+  checkMissingRequestInputs,
+  logMissingParams
 }

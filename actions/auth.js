@@ -11,34 +11,26 @@ governing permissions and limitations under the License.
 */
 
 const { Core } = require('@adobe/aio-sdk')
+const {logMissingParams} = require("./utils");
 const logger = Core.Logger('auth', { level: 'info' })
-/**
- *
- * @param {object} params - Environment params from the IO Runtime request
- * @param {Array} expected - expected keys inside the params
- * @returns {Array} - returns the missing params
- */
-function checkIfMissing (params, expected) {
-  return expected.filter(value => !params[value]).map(key => {
-    return {
-      error: true,
-      message: `Missing ${key} in params`,
-      key
-    }
-  })
-}
 
 /**
  *
  * @param {object} params - Environment params from the IO Runtime request
- * @param {Array} expected - list of keys
+ * @param {Array} requiredParams - list of keys
+ * @param {string} authType - type of authentication, either 'IMS' or 'COMMERCE_INTEGRATION'
  * @throws {Error} - throws error if the params are missing
  */
-function validateParams (params, expected) {
+function validateParams (params, requiredParams, authType) {
   // check if missing
-  const validated = checkIfMissing(params, expected)
-  if (validated.length > 0) {
-    throw new Error(`Expected parameters are missing ${validated.map(value => value.key).join(', ')}`)
+  const missingParams = requiredParams
+      .filter(param => !params[param]);
+
+  logMissingParams(missingParams);
+  console.log(missingParams);
+
+  if (missingParams.length > 0) {
+    throw new Error(`Expected parameters for ${authType} auth are missing ${missingParams.join(', ')}`);
   }
 }
 
@@ -53,7 +45,9 @@ function fromParams (params) {
   if (params.COMMERCE_CONSUMER_KEY && params.COMMERCE_CONSUMER_KEY !== '$COMMERCE_CONSUMER_KEY') {
     logger.info('Commerce client is using Commerce OAuth1 authentication')
     validateParams(params,
-      ['COMMERCE_CONSUMER_KEY', 'COMMERCE_CONSUMER_SECRET', 'COMMERCE_ACCESS_TOKEN', 'COMMERCE_ACCESS_TOKEN_SECRET'])
+        ['COMMERCE_CONSUMER_KEY', 'COMMERCE_CONSUMER_SECRET', 'COMMERCE_ACCESS_TOKEN',
+          'COMMERCE_ACCESS_TOKEN_SECRET'],
+        'COMMERCE_INTEGRATION')
     const { COMMERCE_CONSUMER_KEY: consumerKey, COMMERCE_CONSUMER_SECRET: consumerSecret, COMMERCE_ACCESS_TOKEN: accessToken, COMMERCE_ACCESS_TOKEN_SECRET: accessTokenSecret } = params
     return {
       commerceOAuth1: {
@@ -69,7 +63,7 @@ function fromParams (params) {
   if (params.OAUTH_CLIENT_ID && params.OAUTH_CLIENT_ID !== '$OAUTH_CLIENT_ID') {
     logger.info('Commerce client is using IMS OAuth authentication')
     validateParams(params,
-      ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET', 'OAUTH_SCOPES'])
+      ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET', 'OAUTH_SCOPES'], 'IMS')
     const { OAUTH_CLIENT_ID: clientId, OAUTH_CLIENT_SECRET: clientSecret, OAUTH_SCOPES: scopes } = params
 
     const imsProps = {
