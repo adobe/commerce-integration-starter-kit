@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const action = require('../../../../actions/ingestion/webhook')
+const action = require('../../../../actions/ingestion/webhook');
 
 jest.mock('@adobe/aio-sdk', () => ({
   Core: {
@@ -53,6 +53,14 @@ afterEach(() => {
   jest.resetModules()
 })
 
+const validParams = {
+  OAUTH_ORG_ID: 'OAUTH_ORG_ID',
+  OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
+  OAUTH_CLIENT_SECRET: 'OAUTH_CLIENT_SECRET',
+  OAUTH_TECHNICAL_ACCOUNT_ID: 'OAUTH_TECHNICAL_ACCOUNT_ID',
+  OAUTH_TECHNICAL_ACCOUNT_EMAIL: 'OAUTH_TECHNICAL_ACCOUNT_EMAIL'
+};
+
 describe('Given external backoffice events ingestion webhook', () => {
   describe('When method main is defined', () => {
     test('Then is an instance of Function', () => {
@@ -62,8 +70,7 @@ describe('Given external backoffice events ingestion webhook', () => {
   describe('When received data information is valid', () => {
     test('Then returns success response', async () => {
       const params = {
-        OAUTH_ORG_ID: 'OAUTH_ORG_ID',
-        OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
+        ...validParams,
         AIO_runtime_namespace: 'eistarterkitv1',
         data: {
           uid: 'product-123',
@@ -136,8 +143,7 @@ describe('Given external backoffice events ingestion webhook', () => {
   describe('When generation of access token fail', () => {
     test('Then returns error response', async () => {
       const params = {
-        OAUTH_ORG_ID: 'OAUTH_ORG_ID',
-        OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
+        ...validParams,
         AIO_runtime_namespace: 'eistarterkitv1',
         data: {
           uid: 'product-123',
@@ -168,8 +174,7 @@ describe('Given external backoffice events ingestion webhook', () => {
   describe('When fetching existing providers fails', () => {
     test('Then returns error response', async () => {
       const params = {
-        OAUTH_ORG_ID: 'OAUTH_ORG_ID',
-        OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
+        ...validParams,
         AIO_runtime_namespace: 'eistarterkitv1',
         data: {
           uid: 'product-123',
@@ -202,8 +207,7 @@ describe('Given external backoffice events ingestion webhook', () => {
   describe('When external backoffice not found', () => {
     test('Then returns error response', async () => {
       const params = {
-        OAUTH_ORG_ID: 'OAUTH_ORG_ID',
-        OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
+        ...validParams,
         AIO_runtime_namespace: 'eistarterkitv1',
         data: {
           uid: 'product-123',
@@ -239,8 +243,7 @@ describe('Given external backoffice events ingestion webhook', () => {
   describe('When publish events fails', () => {
     test('Then returns error response', async () => {
       const params = {
-        OAUTH_ORG_ID: 'OAUTH_ORG_ID',
-        OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
+        ...validParams,
         AIO_runtime_namespace: 'eistarterkitv1',
         data: {
           uid: 'product-123',
@@ -290,8 +293,7 @@ describe('Given external backoffice events ingestion webhook', () => {
   describe('When publish events response is undefined', () => {
     test('Then returns error response', async () => {
       const params = {
-        OAUTH_ORG_ID: 'OAUTH_ORG_ID',
-        OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
+        ...validParams,
         AIO_runtime_namespace: 'eistarterkitv1',
         data: {
           uid: 'product-123',
@@ -342,8 +344,7 @@ describe('Given external backoffice events ingestion webhook', () => {
     test('Then receives credentials params in the input',
       async () => {
         const params = {
-          OAUTH_ORG_ID: 'OAUTH_ORG_ID',
-          OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
+          ...validParams,
           AIO_runtime_namespace: 'eistarterkitv1',
           data: {
             uid: 'product-123',
@@ -382,5 +383,35 @@ describe('Given external backoffice events ingestion webhook', () => {
         expect(Events.init)
           .toHaveBeenCalledWith('OAUTH_ORG_ID', 'OAUTH_CLIENT_ID', 'access token')
       })
+  })
+  describe('When received params is missing Adobe Auth credentials', () => {
+    test('Then returns error response', async () => {
+      const params = {
+        OAUTH_ORG_ID: 'OAUTH_ORG_ID',
+        OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
+        AIO_runtime_namespace: 'eistarterkitv1',
+        data: {
+          uid: 'product-123',
+          event: 'be-observer.catalog_product_create',
+          value: {
+            sku: 'TEST_WEBHOOK_2',
+            name: 'Test webhook test',
+            price: 52,
+            description: 'Test webhook description'
+          }
+        }
+      }
+
+      const response = await action.main(params)
+
+      expect(response).toEqual({
+        error: {
+          statusCode: 500,
+          body: {
+            error: 'Adobe Auth validation failed. Invalid params: OAUTH_CLIENT_SECRET, OAUTH_TECHNICAL_ACCOUNT_ID, OAUTH_TECHNICAL_ACCOUNT_EMAIL',
+          }
+        }
+      })
+    })
   })
 })

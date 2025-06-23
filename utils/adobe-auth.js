@@ -10,7 +10,41 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const chalk = require('chalk');
 const { context, getToken } = require('@adobe/aio-lib-ims')
+
+const isValidStringEnv = (arg) => typeof arg === 'string' && arg.trim().length > 0;
+
+function logMissingParams(missingParams) {
+    if (missingParams.length > 0) {
+        const formattedParams = missingParams.map(param => `- ${param}`).join('\n');
+        console.error(
+            chalk.bgGray.whiteBright.bold('Missing or invalid environment variables:') +
+            '\n' +
+            chalk.bgRedBright.whiteBright(formattedParams)
+        );
+    }
+}
+
+function validateAdobeAuthParams(params) {
+  const requiredParams = [
+    { key: 'OAUTH_CLIENT_ID', value: params.OAUTH_CLIENT_ID },
+    { key: 'OAUTH_CLIENT_SECRET', value: params.OAUTH_CLIENT_SECRET },
+    { key: 'OAUTH_TECHNICAL_ACCOUNT_ID', value: params.OAUTH_TECHNICAL_ACCOUNT_ID },
+    { key: 'OAUTH_TECHNICAL_ACCOUNT_EMAIL', value: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL },
+    { key: 'OAUTH_ORG_ID', value: params.OAUTH_ORG_ID }
+  ];
+
+  const missingParams = requiredParams
+      .filter(param => !isValidStringEnv(param.value))
+      .map(param => param.key);
+
+  logMissingParams(missingParams);
+
+  if (missingParams.length > 0) {
+    throw new Error(`Adobe Auth validation failed. Invalid params: ${missingParams.join(', ')}`);
+  }
+}
 
 /**
  * Generate access token to connect with Adobe tools (e.g. IO Events)
@@ -20,7 +54,10 @@ const { context, getToken } = require('@adobe/aio-lib-ims')
  * @throws {Error} in case of any failure
  */
 async function getAdobeAccessToken (params) {
+  validateAdobeAuthParams(params);
+
   const ioManagementAPIScopes = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets']
+
   const config = {
     client_id: params.OAUTH_CLIENT_ID,
     client_secrets: [params.OAUTH_CLIENT_SECRET],
