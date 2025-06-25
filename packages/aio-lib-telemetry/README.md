@@ -437,7 +437,7 @@ The library automatically creates a default tracer and meter if none are provide
 // telemetry.{js|ts}
 
 import { defineTelemetryConfig } from "@adobe/aio-lib-telemetry"
-import { trace, metrics } from "@adobe/aio-lib-telemetry/otel-api"
+import { trace, metrics } from "@adobe/aio-lib-telemetry/otel"
 
 const telemetryConfig = defineTelemetryConfig((params, isDev) => {
   const tracer = trace.getTracer("my-custom-tracer");
@@ -454,7 +454,7 @@ const telemetryConfig = defineTelemetryConfig((params, isDev) => {
 export { telemetryConfig }
 ```
 
-See more about the `otel-api` import path in the API Reference: [OpenTelemetry Re-Exports](./docs/api-reference/README.md#opentelemetry-api).
+See more about the `otel` import path in the API Reference: [OpenTelemetry Re-Exports](./docs/api-reference/README.md#opentelemetry-api).
 
 ### Instrumentation Configuration
 

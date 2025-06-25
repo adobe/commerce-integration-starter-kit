@@ -223,7 +223,7 @@ import {
   OTLPMetricExporterProto,
   PeriodicExportingMetricReader,
   SimpleLogRecordProcessor
-} from "@adobe/aio-lib-telemetry/otel-api";
+} from "@adobe/aio-lib-telemetry/otel";
 
 function localCollectorConfig(isDev: boolean) {
   return {
@@ -383,7 +383,7 @@ import {
   OTLPMetricExporterProto,
   PeriodicExportingMetricReader,
   SimpleLogRecordProcessor
-} from "@adobe/aio-lib-telemetry/otel-api";
+} from "@adobe/aio-lib-telemetry/otel";
 
 function localCollectorConfig(exportUrl: string) {
   const makeExporterConfig = (path: string) => ({

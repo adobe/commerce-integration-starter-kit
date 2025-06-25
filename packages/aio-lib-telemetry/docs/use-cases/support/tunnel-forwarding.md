@@ -185,7 +185,7 @@ import {
   OTLPTraceExporterGrpc,
   OTLPMetricExporterGrpc,
   OTLPLogExporterGrpc
-} from "@adobe/aio-lib-telemetry/otel-api";
+} from "@adobe/aio-lib-telemetry/otel";
 
 // For tunneling, you may need insecure credentials
 import { credentials } from "@grpc/grpc-js";

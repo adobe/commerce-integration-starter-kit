@@ -72,7 +72,7 @@ import {
   OTLPMetricExporterProto,
   PeriodicExportingMetricReader,
   SimpleLogRecordProcessor
-} from "@adobe/aio-lib-telemetry/otel-api";
+} from "@adobe/aio-lib-telemetry/otel";
 
 // Choose the correct endpoint for your region
 // We'll be using HTTP/Protobuf protocol, which uses the 4318 port.

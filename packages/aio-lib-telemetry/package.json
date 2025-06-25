@@ -12,10 +12,10 @@
       "types": "./dist/es/index.d.ts",
       "require": "./dist/cjs/index.cjs"
     },
-    "./otel-api": {
-      "import": "./dist/es/otel-api.js",
-      "types": "./dist/es/otel-api.d.ts",
-      "require": "./dist/cjs/otel-api.cjs"
+    "./otel": {
+      "import": "./dist/es/otel.js",
+      "types": "./dist/es/otel.d.ts",
+      "require": "./dist/cjs/otel.cjs"
     }
   },
   "scripts": {

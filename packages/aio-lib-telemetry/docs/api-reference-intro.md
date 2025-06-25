@@ -64,5 +64,5 @@ import {
   OTLPMetricExporterHttp,
   OTLPLogExporterGrpc,
   // ...
-} from '@adobe/aio-lib-telemetry/otel-api';
+} from '@adobe/aio-lib-telemetry/otel';
 ```
