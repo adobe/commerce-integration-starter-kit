@@ -58,7 +58,7 @@ This configuration uses the HTTP/Protobuf exporter, as per New Relic's [document
 > If you want to use gRPC exporters, make sure you switch the imported exporters to their gRPC counterparts. Also, ensure your ingestion endpoint points to the 4317 port, which is the default port for gRPC.
 
 ```ts
-// telemetry.ts
+// telemetry.{ts,js}
 
 import {
   defineTelemetryConfig,

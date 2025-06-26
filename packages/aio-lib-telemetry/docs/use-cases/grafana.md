@@ -76,7 +76,7 @@ services:
     container_name: prometheus
     restart: unless-stopped
     volumes: 
-      - "./prometheus.yaml:/etc/prometheus/prometheus.yaml"
+      - "./prometheus.yaml:/etc/prometheus/prometheus.yml"
     ports: 
       - "9090:9090" # Prometheus UI
     networks: [telemetry]
@@ -210,7 +210,7 @@ scrape_configs:
 Configure your App Builder actions to send telemetry to the local collector:
 
 ```ts
-// telemetry.ts
+// telemetry.{ts,js}
 import {
   defineTelemetryConfig,
   getAioRuntimeResource,
@@ -370,7 +370,7 @@ Look for a line like: `https://abc123-def456-ghi789.trycloudflare.com` - this is
 Replace the default localhost collector configuration with the tunnel URL in your telemetry setup:
 
 ```ts
-// telemetry.ts
+// telemetry.{ts,js}
 import {
   defineTelemetryConfig,
   getAioRuntimeResource,
