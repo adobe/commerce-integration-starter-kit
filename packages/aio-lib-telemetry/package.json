@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "author": "Adobe Inc.",
   "type": "module",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "description": "A utility module for easy instrumentation of Adobe I/O Runtime actions via OpenTelemetry.",
   "files": ["dist", "*.d.ts"],
   "exports": {
