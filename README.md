@@ -739,6 +739,19 @@ The instrumentation is designed to be minimally invasive and won't disrupt exist
 
 The integration within the `customer/commerce` workflow facilitates three key signals: **traces**, **metrics**, and **logs**, while also adding automatic context propagation. This means that when you trigger your `consumer` action, it will generate a unified trace that spans the entire execution flow, including any invoked (but instrumented) actions such as `created`.
 
+### Local Telemetry Stack
+
+We provide a Docker Compose configuration out of the box for running a local telemetry stack, which follows the [**Grafana** use case](packages/aio-lib-telemetry/docs/use-cases/grafana.md#), documented within the `@adobe/aio-lib-telemetry` package.
+
+To spin up the telemetry stack, run the following command:
+```bash
+docker compose up
+```
+
+Once running, the stack will collect and forward telemetry signals from all your instrumented actions (such as `customer/commerce/consumer`) to the local telemetry infrastructure.
+
+Check out the linked guide to learn how to set up Grafana for visualizing your telemetry data. The guide also covers how to use the included cloudflared service to tunnel telemetry data from your deployed App Builder runtime actions in the cloud back to your local environment.
+
 ## Included actions documentation
 ### External back-office ingestion webhook
 - [Ingestion webhook consumer](actions/ingestion/webhook/docs/README.md)
