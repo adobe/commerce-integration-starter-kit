@@ -59,6 +59,13 @@ const UNKNOWN_ERROR_NAME = "Unknown Error";
 
 /** Access helpers for the current instrumented operation. */
 export function getInstrumentationHelpers(): InstrumentationHelpers {
+  if (!isTelemetryEnabled()) {
+    throw new Error(
+      "getInstrumentationHelpers has been called in a runtime action that has not telemetry enabled. " +
+        "Ensure the `ENABLE_TELEMETRY` environment variable is set to `true`. Otherwise, instrumentation will not work.",
+    );
+  }
+
   const context = helpersStorage.getStore();
 
   if (!context) {
