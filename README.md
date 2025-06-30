@@ -33,12 +33,12 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
   - Adobe I/O Events for Adobe Commerce
   - I/O management API
 - Download the [workspace configuration JSON](https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file) file and save it as `workspace.json` in the `./scripts/onboarding/config` starter kit folder because you will use it to configure Adobe IO Events in commerce afterward.
-  
-### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5) 
+
+### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5)
 Install Adobe I/O Events for Adobe Commerce module in your commerce instance following this [documentation](https://developer.adobe.com/commerce/extensibility/events/installation/)
 
 > [!TIP]
-> 
+>
 > By upgrading the Adobe I/O Events for Adobe Commerce module to version 1.6.0 or greater, you will benefit from some additional automated steps during onboarding.
 
 ## Starter Kit first deploy & onboarding
@@ -51,13 +51,13 @@ Following the next steps, you will deploy and onboard the starter kit for the fi
 
 > [!NOTE]
 > When configuring the `COMMERCE_BASE_URL` environment variable, the format differs between PaaS and SaaS:
-> 
+>
 > For PaaS (On-Premise/Cloud):
 > - Must include your base site URL + `/rest/` suffix
 > - Example: `https://[environment-name].us-4.magentosite.cloud/rest/`
 >
 > For SaaS:
-> - Must be the REST API endpoint provided by Adobe Commerce 
+> - Must be the REST API endpoint provided by Adobe Commerce
 > - Example: `https://na1-sandbox.api.commerce.adobe.com/[tenant-id]/`
 >
 > Make sure to use your actual environment name or tenant ID in the URL. The examples above use placeholder values.
@@ -70,7 +70,7 @@ With the new announcement of **Adobe Commerce as a Cloud Service** (ACCS), reque
 
 - If you're using the new cloud service (SaaS) offering, you'll need to authenticate your requests using [Adobe Identity Management System](https://experienceleague.adobe.com/en/docs/experience-manager-learn/foundation/authentication/adobe-ims-authentication-technical-video-understand) (IMS).
 
-#### [PaaS] Commerce OAuth1 - Configure a new Integration in Commerce
+#### \[PaaS\] Commerce OAuth1 - Configure a new Integration in Commerce
 Configure a new Integration to secure the calls to Commerce from App Builder using OAuth by following these steps:
 - In the Commerce Admin, navigate to System > Extensions > Integrations.
 - Click the `Add New Integration` button. The following screen displays
@@ -90,7 +90,7 @@ COMMERCE_ACCESS_TOKEN=
 COMMERCE_ACCESS_TOKEN_SECRET=
 ```
 
-#### [SaaS] IMS OAuth - Add the OAuth Server to Server credentials to the environment
+#### \[SaaS\] IMS OAuth - Add the OAuth Server to Server credentials to the environment
 Configure a new IMS OAuth Server to Server following this [documentation](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/implementation/#setting-up-the-oauth-server-to-server-credential/)
 
 Store the credentials in the `.env` file, these are the minimum required values:
@@ -132,7 +132,7 @@ aio console workspace select
 Sync your local application with the App Builder project using the following command:
 ```bash
 aio app use
-# Choose the option 'm' (merge) 
+# Choose the option 'm' (merge)
 ```
 
 Edit the file `app.config.yaml` if you want to deploy specific entities by commenting on the entities you don't need (e.g., `product-backoffice` if you don't need to sync products from an external back-office application):
@@ -183,7 +183,7 @@ e.g., In the previous onboarding step (`Configure the project`), we commented on
 
 #### Execute the onboarding
 This step will generate the IO Events providers and the registrations for your starter kit project.
-If your Commerce instance Adobe I/O Events for Adobe Commerce module version 1.6.0 or greater, the module will also be automatically configured by the onboarding script.  
+If your Commerce instance Adobe I/O Events for Adobe Commerce module version 1.6.0 or greater, the module will also be automatically configured by the onboarding script.
 To start the process run the command:
 ```bash
 npm run onboard
@@ -299,19 +299,19 @@ The starter kit provides boilerplate code for the synchronization across systems
 - Order
 - Shipment
 
-The synchronization is bidirectional by default: changes in Commerce are propagated to the external back-office application. 
+The synchronization is bidirectional by default: changes in Commerce are propagated to the external back-office application.
 application and the other way around.
 
 The source code is organized following the
-[file structure](https://developer.adobe.com/app-builder/docs/guides/extensions/extension_migration_guide/#old-file-structure) 
+[file structure](https://developer.adobe.com/app-builder/docs/guides/extensions/extension_migration_guide/#old-file-structure)
 of a typical App Builder application, where the `actions` folder contains the source code for all the serverless actions.
 
 #### `actions` folder structure
 
 The `actions` folder contains:
- 
+
 - an `ingestion` folder containing the source code for an alternative events ingestion endpoint.
- 
+
 - a `webhook` folder containing the source for synchronous webhooks that could be called from Commerce.
 
 - a folder named after each entity being synchronized (e.g. `customer`, `order`, `product`).
@@ -321,11 +321,11 @@ The `actions` folder contains:
 Each `entity` folder follows a similar structure, and it contains folders named after each system being integrated, namely:
 
 - a `commerce` folder.
-  
+
   This folder contains the runtime actions responsible for handling incoming events from Commerce and synchronizing the data with the 3rd-party external system.
 
 - an `external` folder.
-  
+
   This folder contains the runtime actions responsible for handling incoming events from the 3rd-party external system and updating the data accordingly in Commerce.
 
 #### `commerce` and `external` folders structure
@@ -333,7 +333,7 @@ Each `entity` folder follows a similar structure, and it contains folders named 
 The `commerce` and `external` folders follow a similar structure:
 
 - a `consumer` folder.
-  
+
   This folder contains the code for the runtime action that routes incoming events to the action responsible for handling each event.
 
 - one or more folders named after an action (e.g. `created`, `deleted`, etc.)
@@ -349,13 +349,13 @@ The `commerce` and `external` folders follow a similar structure:
 Each individual `action` folder contains the following files:
 
 - an `index.js` file.
-  
+
   It contains the `main` method that gets invoked when handling an event and is responsible for coordinating the different activities involved in that handling, such as validating the incoming payload, transforming the payload to the target API, and interacting with the target API.
 
 - a `validator.js` file.
 
   It implements the logic to validate the incoming event payload.
-  
+
   Actions in the `external` folder provide a sample implementation based on a JSON schema specified in the `schema.json` file.
 
 - a `transformer.js` file.
@@ -414,19 +414,20 @@ Additionally, boilerplate code and samples for `event ingestion` and `synchronou
 
 #### `consumer` action
 
-This action is subscribed to a subset of events (typically all of them belonging to the same entity, e.g. `product`, 
+This action is subscribed to a subset of events (typically all of them belonging to the same entity, e.g. `product`,
 although there are examples where it receives events from various entities belonging to the same "domain",
 e.g. `order` and `shipment`).
 When the event provider it is attached to receives an event, this runtime action will be automatically activated.
 
-The main purpose of this action is to route the event received to the `event handler` action. Normally, 
-this routing is determined by the name of the event received.
+The main purpose of this action is to route the event received to the `event handler` action. Normally,
+this routing is determined by the name of the event received. This action could also implement logic about special
+event flow logic as breaking infinite loops in update events (see an example in [Product Entity](#product-entity))
 
-The response returned by a `consumer` action is expected to be consistent with the response received 
-from the activation of the subsequent `event handler` action. For example, if the `event handler` action 
+The response returned by a `consumer` action is expected to be consistent with the response received
+from the activation of the subsequent `event handler` action. For example, if the `event handler` action
 returns an `HTTP/400` status, the consumer action is expected to respond with the same status.
 
-When it receives an event that it does not know how to route, it is expected to return `HTTP/400` status. 
+When it receives an event that it does not know how to route, it is expected to return `HTTP/400` status.
 This will prevent the event handling from being retried.
 
 By default, the response of the `consumer` actions is the following:
@@ -459,15 +460,15 @@ By default, the response of the `consumer` actions is the following:
 
 #### `event handler` action
 
-This action implements the business logic to manage an individual event notifying about a change in one 
-of the systems being integrated. Typically, its business logic includes an API call to propagate the changes 
+This action implements the business logic to manage an individual event notifying about a change in one
+of the systems being integrated. Typically, its business logic includes an API call to propagate the changes
 to the other system being integrated.
 
-The `consumer` action activates these `event handler` actions to delegate the handling of a particular event. 
+The `consumer` action activates these `event handler` actions to delegate the handling of a particular event.
 This activation is done in a synchronous way.
 
-The response returned by an `event handler` action is expected to include a `statusCode` attribute. 
-This attribute allows the `consumer` action to propagate the response HTTP status code upstream 
+The response returned by an `event handler` action is expected to include a `statusCode` attribute.
+This attribute allows the `consumer` action to propagate the response HTTP status code upstream
 so it properly reflects on the event registration `Debug Tracing` tab on the Adobe Developer Console.
 
 By default, the response of the `event handler` actions is the following:
@@ -500,7 +501,7 @@ By default, the response of the `event handler` actions is the following:
 
 The source code for this action can be found at [./actions/ingestion](./actions/ingestion).
 
-This runtime action is provided as an alternative approach to deliver events to the integration 
+This runtime action is provided as an alternative approach to deliver events to the integration
 if the 3rd-party back-office application cannot fulfill the [Events Publishing API](https://developer.adobe.com/events/docs/guides/api/eventsingress_api/) requirements.
 
 Additional details can be found at this [README](actions/ingestion/webhook/docs/README.md)
@@ -543,10 +544,10 @@ By default, the response of the `event ingestion` actions is the following:
 
 The source code for these actions can be found at [./actions/webhook](./actions/webhook).
 
-These runtime actions are meant to expose a webhook that can be invoked synchronously from Commerce 
+These runtime actions are meant to expose a webhook that can be invoked synchronously from Commerce
 in order to affect the behavior of a particular business flow.
 
-The [./actions/webhook/check-stock](./actions/webhook/check-stock) folder provides a sample implementation 
+The [./actions/webhook/check-stock](./actions/webhook/check-stock) folder provides a sample implementation
 of a `synchronous webhook` action. Additional details can be found at this [README](actions/webhook/check-stock/docs/README.md)
 
 To get the URL of the webhook, run the following command:
@@ -583,7 +584,7 @@ Remember, these responses are adapted to [Commerce webhook module](https://devel
 
 #### `starter kit info` action
 
-> **Warning**  
+> **Warning**
 > Please DO NOT DELETE this action; future functionalities planned for upcoming starter kit releases may stop working.
 
 The source code for this action can be found at [./actions/starter-kit-info](./actions/starter-kit-info).
@@ -762,11 +763,13 @@ Check out the linked guide to learn how to set up Grafana for visualizing your t
 - [Product updated in commerce](actions/product/commerce/updated/docs/README.md)
 - [Product deleted in commerce](actions/product/commerce/deleted/docs/README.md)
 - [Product full sync in commerce](actions/product/commerce/full-sync/docs/README.md)
+- [Product Infinite Loop breaker](actions/product/commerce/consumer/docs/README.md)
 
 #### Third party to Commerce
 - [Product created in third party](actions/product/external/created/docs/README.md)
 - [Product updated in third party](actions/product/external/updated/docs/README.md)
 - [Product deleted in third party](actions/product/external/deleted/docs/README.md)
+- [Product Infinite loop breaker](actions/product/external/consumer/docs/README.md)
 
 ### Customer entity
 #### Commerce to third party
