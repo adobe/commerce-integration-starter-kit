@@ -1,0 +1,68 @@
+{
+  "name": "@adobe/aio-lib-telemetry",
+  "version": "1.0.0",
+  "author": "Adobe Inc.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "description": "A utility module for easy instrumentation of Adobe I/O Runtime actions via OpenTelemetry.",
+  "files": ["dist", "*.d.ts"],
+  "exports": {
+    ".": {
+      "import": "./dist/es/index.js",
+      "types": "./dist/es/index.d.ts",
+      "require": "./dist/cjs/index.cjs"
+    },
+    "./otel": {
+      "import": "./dist/es/otel.js",
+      "types": "./dist/es/otel.d.ts",
+      "require": "./dist/cjs/otel.cjs"
+    }
+  },
+  "scripts": {
+    "docs": "typedoc",
+    "build": "tsdown",
+    "format": "biome format --write --no-errors-on-unmatched",
+    "format:check": "biome check --linter-enabled=false --no-errors-on-unmatched",
+    "lint": "biome check --formatter-enabled=false --no-errors-on-unmatched",
+    "lint:fix": "biome lint --write --no-errors-on-unmatched"
+  },
+  "dependencies": {
+    "@adobe/aio-lib-core-logging": "^3.0.2",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/api-logs": "^0.200.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.58.1",
+    "@opentelemetry/exporter-logs-otlp-grpc": "^0.200.0",
+    "@opentelemetry/exporter-logs-otlp-http": "^0.200.0",
+    "@opentelemetry/exporter-logs-otlp-proto": "^0.200.0",
+    "@opentelemetry/exporter-metrics-otlp-grpc": "^0.200.0",
+    "@opentelemetry/exporter-metrics-otlp-http": "^0.200.0",
+    "@opentelemetry/exporter-metrics-otlp-proto": "^0.200.0",
+    "@opentelemetry/exporter-trace-otlp-grpc": "^0.200.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.200.0",
+    "@opentelemetry/exporter-trace-otlp-proto": "^0.200.0",
+    "@opentelemetry/instrumentation": "^0.200.0",
+    "@opentelemetry/instrumentation-graphql": "^0.48.0",
+    "@opentelemetry/instrumentation-http": "^0.200.0",
+    "@opentelemetry/instrumentation-undici": "^0.11.0",
+    "@opentelemetry/instrumentation-winston": "^0.45.0",
+    "@opentelemetry/otlp-exporter-base": "^0.200.0",
+    "@opentelemetry/otlp-grpc-exporter-base": "^0.200.0",
+    "@opentelemetry/resources": "^2.0.1",
+    "@opentelemetry/sdk-logs": "^0.200.0",
+    "@opentelemetry/sdk-metrics": "^2.0.0",
+    "@opentelemetry/sdk-node": "^0.200.0",
+    "@opentelemetry/sdk-trace-node": "^2.0.0",
+    "@opentelemetry/semantic-conventions": "^1.33.0",
+    "@opentelemetry/winston-transport": "^0.11.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "prettier": "^3.5.3",
+    "tsdown": "^0.11.1",
+    "type-fest": "^4.41.0",
+    "typedoc": "^0.28.5",
+    "typedoc-plugin-markdown": "^4.6.3",
+    "typescript": "^5.8.3"
+  },
+  "sideEffects": false
+}

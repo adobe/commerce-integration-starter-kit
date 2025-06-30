@@ -1,0 +1,42 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+
+      # Uncomment this if you want to use the gRPC protocol
+      # grpc:
+        # endpoint: 0.0.0.0:4317 
+
+processors:
+  batch:
+
+exporters:
+  # Traces to Tempo
+  otlphttp/tempo:
+    endpoint: http://tempo:4318
+
+  # Metrics to Prometheus
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+
+  # Logs to Loki
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp/tempo]
+    
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus]
+    
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [loki]

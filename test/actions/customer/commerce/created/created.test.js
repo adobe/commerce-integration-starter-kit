@@ -14,6 +14,10 @@ const action = require('../../../../../actions/customer/commerce/created')
 jest.mock('../../../../../actions/customer/commerce/created/validator')
 const { validateData } = require('../../../../../actions/customer/commerce/created/validator')
 
+beforeAll(() => {
+  process.env.__AIO_DEV = 'false'
+})
+
 afterEach(() => {
   jest.clearAllMocks()
   jest.resetModules()
@@ -28,7 +32,8 @@ describe('Given customer commerce created action', () => {
   describe('When invalid customer created event data is received', () => {
     test('Then returns action error response', async () => {
       const params = {
-        data: {}
+        data: {},
+        ENABLE_TELEMETRY: true
       }
 
       const ERROR_MESSAGE = 'Invalid data'
