@@ -19,6 +19,15 @@
           "allowModules": ["@adobe/aio-lib-telemetry"]
         }]
       }
+    },
+    {
+      "files": ["scripts/**/*.js"],
+      "rules": {
+        // It's better to let the IDE infer the return types
+        // As typing experience with JSDoc is not great
+        "jsdoc/require-returns-type": "off",
+        "jsdoc/require-returns": "off"
+      }
     }
   ]
 }
