@@ -16,6 +16,10 @@ const openwhisk = require('openwhisk')
 const { HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_INTERNAL_ERROR } = require('../../../../../actions/constants')
 const Openwhisk = require('../../../../../actions/openwhisk')
 
+beforeAll(() => {
+  process.env.__AIO_DEV = 'false'
+})
+
 afterEach(() => {
   jest.clearAllMocks()
   jest.resetModules()

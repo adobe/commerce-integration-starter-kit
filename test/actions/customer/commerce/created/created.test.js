@@ -14,6 +14,10 @@ const action = require('../../../../../actions/customer/commerce/created')
 jest.mock('../../../../../actions/customer/commerce/created/validator')
 const { validateData } = require('../../../../../actions/customer/commerce/created/validator')
 
+beforeAll(() => {
+  process.env.__AIO_DEV = 'false'
+})
+
 afterEach(() => {
   jest.clearAllMocks()
   jest.resetModules()
