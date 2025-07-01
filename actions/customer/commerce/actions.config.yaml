@@ -4,6 +4,7 @@ consumer:
   runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
+    ENABLE_TELEMETRY: true
   annotations:
     require-adobe-auth: true
     final: true
@@ -13,6 +14,7 @@ created:
   runtime: nodejs:20
   inputs:
     LOG_LEVEL: debug
+    ENABLE_TELEMETRY: true
   annotations:
     require-adobe-auth: true
     final: true

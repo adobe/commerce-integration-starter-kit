@@ -51,6 +51,20 @@ function actionErrorResponse (statusCode, error) {
 }
 
 /**
+ * Helper function used to determine if an action was successful.
+ * @param {unknown} result - The result of the instrumented action.
+ * @returns {boolean} - True if the action is successful, false otherwise.
+ */
+function isActionSuccessful (result) {
+  if (result && typeof result === 'object') {
+    return 'body' in result && 'success' in result.body && result.body.success
+  }
+
+  // Not an object, we assume it's successful if it has a truthy value.
+  return !!result
+}
+
+/**
  *
  * Returns an error response object, this method should be called on the consumers and public webhooks
  *
@@ -92,6 +106,24 @@ function successResponse (type, response) {
 }
 
 /**
+ * Helper function used to determine if a consumer was successful.
+ * @param {unknown} result - The result of the instrumented consumer.
+ * @returns {boolean} - True if the consumer is successful, false otherwise.
+ */
+function isConsumerSuccessful (result) {
+  if (result && typeof result === 'object') {
+    if ('error' in result) {
+      return false
+    }
+
+    return 'statusCode' in result && result.statusCode === HTTP_OK
+  }
+
+  // Not an object, we assume it's successful if it has a truthy value.
+  return !!result
+}
+
+/**
  * Returns response error adapted to ingestion webhooks module
  *
  * @param {string} message the error message.
@@ -123,11 +155,28 @@ function webhookSuccessResponse () {
   }
 }
 
+/**
+ * Helper function used to determine if a webhook was successful.
+ * @param {unknown} result - The result of the instrumented webhook.
+ * @returns {boolean} - True if the webhook is successful, false otherwise.
+ */
+function isWebhookSuccessful (result) {
+  if (result && typeof result === 'object') {
+    return 'op' in result && result.op === 'success'
+  }
+
+  // Not an object, we assume it's successful if it has a truthy value.
+  return !!result
+}
+
 module.exports = {
   successResponse,
   errorResponse,
   actionErrorResponse,
   actionSuccessResponse,
   webhookErrorResponse,
-  webhookSuccessResponse
+  webhookSuccessResponse,
+  isActionSuccessful,
+  isConsumerSuccessful,
+  isWebhookSuccessful
 }
