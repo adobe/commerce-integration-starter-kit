@@ -32,6 +32,7 @@ const { errorResponse, successResponse } = require('../../responses')
  */
 async function main (params) {
   const logger = Core.Logger('ingestion-webhook', { level: params.LOG_LEVEL || 'info' })
+  console.log(params);
   try {
     logger.info('Start processing request')
     logger.debug(`Webhook main params: ${stringParameters(params)}`)

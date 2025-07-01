@@ -13,6 +13,11 @@ governing permissions and limitations under the License.
 const chalk = require('chalk')
 const { context, getToken } = require('@adobe/aio-lib-ims')
 
+/**
+ * Checks if the given argument is a valid string environment variable.
+ * @param arg
+ * @returns {boolean}
+ */
 const isValidStringEnv = (arg) => typeof arg === 'string' && arg.trim().length > 0
 
 /**
@@ -36,16 +41,16 @@ function logMissingParams (missingParams) {
  */
 function validateAdobeAuthParams (params) {
   const requiredParams = [
-    { key: 'OAUTH_CLIENT_ID', value: params.OAUTH_CLIENT_ID },
-    { key: 'OAUTH_CLIENT_SECRET', value: params.OAUTH_CLIENT_SECRET },
-    { key: 'OAUTH_TECHNICAL_ACCOUNT_ID', value: params.OAUTH_TECHNICAL_ACCOUNT_ID },
-    { key: 'OAUTH_TECHNICAL_ACCOUNT_EMAIL', value: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL },
-    { key: 'OAUTH_ORG_ID', value: params.OAUTH_ORG_ID }
+    'OAUTH_CLIENT_ID',
+    'OAUTH_CLIENT_SECRET',
+    'OAUTH_TECHNICAL_ACCOUNT_ID',
+    'OAUTH_TECHNICAL_ACCOUNT_EMAIL',
+    'OAUTH_ORG_ID'
   ]
 
   const missingParams = requiredParams
-    .filter(param => !isValidStringEnv(param.value))
-    .map(param => param.key)
+    .filter(key => !isValidStringEnv(params[key]))
+    .map(key => key)
 
   logMissingParams(missingParams)
 
