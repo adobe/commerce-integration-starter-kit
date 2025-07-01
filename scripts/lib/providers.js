@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 require('dotenv').config()
-const { checkMissingRequestInputs } = require('../../actions/utils')
+const { checkMissingRequestInputs, logMissingParams} = require('../../actions/utils')
 const fetch = require('node-fetch')
 const uuid = require('uuid')
 const { getExistingProviders } = require('../../utils/adobe-events-api')
@@ -27,6 +27,8 @@ const providersEventsConfig = require('../onboarding/config/events.json')
  * @returns {object} - returns success or not and provider data
  */
 async function createProvider (environment, accessToken, provider) {
+  validateParams(environment);
+
   const createCustomEventProviderReq = await fetch(
         `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers`,
         {
@@ -171,6 +173,35 @@ async function main (clientRegistrations, environment, accessToken) {
       success: false,
       error: errorMessage
     }
+  }
+}
+
+/**
+ * Checks if the given argument is a valid string environment variable.
+ * @param arg
+ * @returns {boolean}
+ */
+const isValidStringEnv = (arg) => typeof arg === 'string' && arg.trim().length > 0
+
+/**
+ * Validates the required parameters for this script.
+ * @param {object} params - Object containing Adobe authentication parameters.
+ */
+function validateParams (params) {
+  const requiredParams = [
+    'IO_CONSUMER_ID',
+    'IO_PROJECT_ID',
+    'IO_WORKSPACE_ID',
+  ]
+
+  const missingParams = requiredParams
+      .filter(key => !isValidStringEnv(params[key]))
+      .map(key => key)
+
+  logMissingParams(missingParams)
+
+  if (missingParams.length > 0) {
+    throw new Error(`createProviders validation failed. Missing params: ${missingParams.join(', ')}`)
   }
 }
 

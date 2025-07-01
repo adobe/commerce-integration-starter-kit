@@ -7,8 +7,8 @@ describe('validateParams', () => {
     }
 
     expect(() => {
-      validateParams(params, ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET'])
-    }).toThrow('Expected parameters are missing OAUTH_CLIENT_SECRET')
+      validateParams(params, ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET'], 'IMS')
+    }).toThrow('Expected parameters for IMS auth are missing OAUTH_CLIENT_SECRET')
   })
 
   it('should not throw error if params are not missing', () => {
@@ -19,7 +19,7 @@ describe('validateParams', () => {
     }
 
     expect(() => {
-      validateParams(params, ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET', 'OAUTH_SCOPES'])
+      validateParams(params, ['OAUTH_CLIENT_ID', 'OAUTH_CLIENT_SECRET', 'OAUTH_SCOPES'], 'IMS')
     }).not.toThrow()
   })
 })
