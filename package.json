@@ -16,41 +16,19 @@
     "@adobe/aio-lib-telemetry": "^1.0.0",
     "@adobe/aio-sdk": "^6.0.0",
     "@adobe/commerce-sdk-auth": "^0.1.0",
-    "@adobe/exc-app": "^1.4.1",
-    "@adobe/generator-add-action-generic": "^1.0.1",
-    "@adobe/generator-add-web-assets-exc-react": "^1.0.2",
-    "@adobe/generator-app-events-generic": "^2.0.1",
-    "@adobe/react-spectrum": "^3.35.1",
-    "@spectrum-icons/workflow": "^4.2.12",
     "ajv": "^8.16.0",
     "cloudevents": "^8.0.0",
-    "core-js": "^3.37.1",
     "dotenv": "^16.4.5",
     "got": "^11.8.5",
     "graphql-request": "^7.1.2",
     "node-fetch": "^2.7.0",
-    "oauth-1.0a": "^2.2.6",
     "openwhisk": "^3.21.8",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-error-boundary": "^4.0.13",
-    "react-router-dom": "^6.23.1",
-    "regenerator-runtime": "^0.14.1",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@adobe/eslint-config-aio-lib-config": "^4.0.0",
-    "@babel/core": "^7.24.7",
-    "@babel/plugin-transform-react-jsx": "^7.24.7",
-    "@babel/preset-env": "^7.24.7",
-    "@tsconfig/node20": "^20.1.4",
-    "concurrently": "^9.1.0",
-    "follow-redirects": ">=1.15.6",
     "jest": "^29.7.0",
-    "nock": "^13.5.6",
-    "rimraf": "^6.0.1",
-    "stdout-stderr": "^0.1.13",
-    "typescript": "^5.7.2"
+    "nock": "^13.5.6"
   },
   "scripts": {
     "test": "jest --passWithNoTests -c ./test/jest.config.js ./test",
@@ -58,18 +36,11 @@
     "onboard": "node --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
     "commerce-event-subscribe": "node --no-warnings -e 'require(\"./scripts/commerce-event-subscribe/index.js\").main()'",
     "code-check": "npx eslint 'actions/**/*.js' 'scripts/**/*.js' 'test/**/*.js' 'utils/**/*.js'",
-    "postinstall": "npm run build --if-present --workspaces",
-    "clean": "rimraf ./packages/*/dist-* ./packages/*/*.tsbuildinfo"
+    "postinstall": "npm run build --if-present --workspaces"
   },
   "engines": {
     "node": ">=18"
   },
-  "aio-app-builder-templates": [
-    "@adobe/generator-app-events-generic",
-    "@adobe/generator-add-action-generic",
-    "@adobe/generator-add-events-generic",
-    "@adobe/generator-add-web-assets-exc-react"
-  ],
   "workspaces": {
     "packages": [
       "packages/*"

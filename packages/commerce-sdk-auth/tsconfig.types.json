@@ -3,8 +3,12 @@
     "baseUrl": ".",
     "declarationDir": "dist-types",
     "rootDir": "src",
-    "paths": {}
+    "paths": {},
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "removeComments": false,
+    "strict": true
   },
-  "extends": "../../tsconfig.types.json",
+  "extends": "./tsconfig.json",
   "include": ["src/"]
 }

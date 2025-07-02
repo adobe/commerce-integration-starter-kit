@@ -18,7 +18,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@tsconfig/node20": "^20.1.6",
     "@types/node": "^22.1.0",
+    "concurrently": "^9.2.0",
     "typescript": "^5.5.4"
   },
   "dependencies": {
