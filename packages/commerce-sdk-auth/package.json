@@ -24,7 +24,6 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@hey-api/client-fetch": "^0.5.2",
     "oauth-1.0a": "^2.2.6",
     "simple-oauth2": "^5.1.0"
   }
