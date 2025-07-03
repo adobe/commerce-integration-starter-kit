@@ -1,0 +1,40 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    ":autodetectPinVersions",
+    ":automergeDisabled",
+    ":combinePatchMinorReleases",
+    ":dependencyDashboard",
+    ":ignoreModulesAndTests",
+    ":ignoreUnstable",
+    ":prHourlyLimit2",
+    ":prImmediately",
+    ":semanticPrefixFixDepsChoreOthers",
+    ":separateMajorReleases",
+    ":updateNotScheduled",
+    "group:monorepos",
+    "group:recommended",
+    "helpers:disableTypesNodeMajor"
+  ],
+  "prConcurrentLimit": 3,
+  "commitMessagePrefix": "RENOVATE: ",
+  "packageRules": [
+    {
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch",
+      "matchPackageNames": [
+        "*"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": false,
+      "schedule": [
+        "before 12pm on Thursday"
+      ]
+    }
+  ],
+  "reviewers": [],
+  "assignees": []
+} 
