@@ -3,8 +3,10 @@
     "rootDir": "./src",
     "outDir": "./dist-es",
     "baseUrl": ".",
-    "paths": {}
+    "paths": {},
+    "lib": ["dom"],
+    "module": "esnext"
   },
-  "extends": "../../tsconfig.es.json",
+  "extends": "./tsconfig.json",
   "include": ["src/"]
 }

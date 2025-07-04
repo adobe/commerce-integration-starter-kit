@@ -10,13 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-// eslint-disable-next-line node/no-unpublished-require
-const { stdout } = require('stdout-stderr')
-
 process.env.CI = true
 
 jest.setTimeout(30000)
-
-// trap console log
-beforeEach(() => { stdout.start() })
-afterEach(() => { stdout.stop() })
