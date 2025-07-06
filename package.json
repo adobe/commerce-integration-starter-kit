@@ -27,17 +27,8 @@
   },
   "devDependencies": {
     "@adobe/eslint-config-aio-lib-config": "^4.0.0",
-    "@babel/core": "^7.24.7",
-    "@babel/plugin-transform-react-jsx": "^7.24.7",
-    "@babel/polyfill": "^7.8.7",
-    "@babel/preset-env": "^7.24.7",
-    "@openwhisk/wskdebug": "^1.4.0",
-    "follow-redirects": ">=1.15.6",
     "jest": "^29.7.0",
-    "nock": "^13.5.6",
-    "rimraf": "^6.0.1",
-    "stdout-stderr": "^0.1.13",
-    "typescript": "^5.7.2"
+    "nock": "^13.5.6"
   },
   "scripts": {
     "test": "jest --passWithNoTests -c ./test/jest.config.js ./test",
@@ -45,8 +36,7 @@
     "onboard": "node --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
     "commerce-event-subscribe": "node --no-warnings -e 'require(\"./scripts/commerce-event-subscribe/index.js\").main()'",
     "code-check": "npx eslint 'actions/**/*.js' 'scripts/**/*.js' 'test/**/*.js' 'utils/**/*.js'",
-    "postinstall": "npm run build --if-present --workspaces",
-    "clean": "rimraf ./packages/*/dist-* ./packages/*/*.tsbuildinfo"
+    "postinstall": "npm run build --if-present --workspaces"
   },
   "engines": {
     "node": ">=18"
