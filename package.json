@@ -44,8 +44,8 @@
     "e2e": "jest --collectCoverage=false --testRegex ./e2e",
     "onboard": "node --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
     "commerce-event-subscribe": "node --no-warnings -e 'require(\"./scripts/commerce-event-subscribe/index.js\").main()'",
-    "code-check": "npm exec eslint -- actions/**/*.js scripts/**/*.js test/**/*.js utils/**/*.js",
-    "postinstall": "npm run build --if-present --workspaces || true",
+    "code-check": "npx eslint 'actions/**/*.js' 'scripts/**/*.js' 'test/**/*.js' 'utils/**/*.js'",
+    "postinstall": "npm run build --if-present --workspaces",
     "clean": "rimraf ./packages/*/dist-* ./packages/*/*.tsbuildinfo"
   },
   "engines": {
