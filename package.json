@@ -66,12 +66,6 @@
   "engines": {
     "node": ">=18"
   },
-  "aio-app-builder-templates": [
-    "@adobe/generator-app-events-generic",
-    "@adobe/generator-add-action-generic",
-    "@adobe/generator-add-events-generic",
-    "@adobe/generator-add-web-assets-exc-react"
-  ],
   "workspaces": {
     "packages": [
       "packages/*"
