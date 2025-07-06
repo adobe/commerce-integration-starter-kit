@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@adobe/eslint-config-aio-lib-config": "^4.0.0",
-    "eslint": "8.57.1",
+    "eslint": "^8.57.1",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jest": "^27.9.0",
@@ -44,8 +44,8 @@
     "e2e": "jest --collectCoverage=false --testRegex ./e2e",
     "onboard": "node --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
     "commerce-event-subscribe": "node --no-warnings -e 'require(\"./scripts/commerce-event-subscribe/index.js\").main()'",
-    "code-check": "npx eslint 'actions/**/*.js' 'scripts/**/*.js' 'test/**/*.js' 'utils/**/*.js'",
-    "postinstall": "npm run build --if-present --workspaces",
+    "code-check": "npx --yes eslint 'actions/**/*.js' 'scripts/**/*.js' 'test/**/*.js' 'utils/**/*.js'",
+    "postinstall": "npm run build --if-present --workspaces || true",
     "clean": "rimraf ./packages/*/dist-* ./packages/*/*.tsbuildinfo"
   },
   "engines": {
