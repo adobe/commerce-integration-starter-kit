@@ -9,7 +9,6 @@
     "moduleResolution": "node",
     "noEmitHelpers": false,
     "noFallthroughCasesInSwitch": true,
-
     "preserveConstEnums": true,
     "removeComments": true,
     "resolveJsonModule": true,
