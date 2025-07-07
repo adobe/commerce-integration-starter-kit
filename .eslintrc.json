@@ -21,7 +21,7 @@
       }
     },
     {
-      "files": ["scripts/**/*.js"],
+      "files": ["**/*.js"],
       "rules": {
         // It's better to let the IDE infer the return types
         // As typing experience with JSDoc is not great
