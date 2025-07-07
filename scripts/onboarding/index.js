@@ -14,18 +14,16 @@ const { getAdobeAccessToken } = require('../../utils/adobe-auth')
 require('dotenv').config()
 
 /**
- * This method handle the onboarding script, it creates the events providers, add metadata to them, create the registrations
+ * This method handles the onboarding script, it creates the events providers, adds metadata to them, creates the registrations
  * and configures the Adobe I/O Events module in Commerce
  *
  * @returns {object} - returns a response with provider and registrations info
  */
 async function main () {
-  console.log('Starting the process of on-boarding based on you registration choice')
+  console.log('Starting the process of on-boarding based on your registration choices')
 
   const registrations = require('./config/starter-kit-registrations.json')
-
   const accessToken = await getAdobeAccessToken(process.env)
-
   const createProvidersResult = await require('../lib/providers').main(registrations, process.env, accessToken)
 
   if (!createProvidersResult.success) {
@@ -63,8 +61,8 @@ async function main () {
   }
 
   console.log('Process of On-Boarding done successfully:', providers)
-
   console.log('Starting the process of configuring Adobe I/O Events module in Commerce')
+
   try {
     // node/no-missing-require
     // eslint-disable-next-line node/no-missing-require,node/no-unpublished-require
