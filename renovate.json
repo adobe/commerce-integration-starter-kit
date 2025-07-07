@@ -18,6 +18,9 @@
   ],
   "prConcurrentLimit": 3,
   "commitMessagePrefix": "RENOVATE: ",
+  "labels": [
+    "dependencies"
+  ],
   "packageRules": [
     {
       "groupName": "all non-major dependencies",
@@ -29,12 +32,9 @@
         "minor",
         "patch"
       ],
-      "automerge": false,
-      "schedule": [
-        "before 12pm on Monday"
-      ]
+      "automerge": false
     }
   ],
   "reviewers": [],
   "assignees": []
-} 
+}
