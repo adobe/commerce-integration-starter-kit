@@ -241,9 +241,7 @@ async function main (clientRegistrations, providers, environment, accessToken) {
     return makeError(
       'UNEXPECTED_ERROR',
       'Unexpected error occurred while adding metadata to provider',
-      {
-        ...error
-      }
+      { error }
     )
   }
 }
