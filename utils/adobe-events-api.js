@@ -18,13 +18,11 @@ const { getProviderName } = require('./naming')
  *
  * @param {object} environment includes the needed parameters to call IO Event
  * @param {string} accessToken Adobe OAuth access token
- * @param {?string} next registrations url to get more data
- * @returns {Array} returns array of registrations
+ * @param {string} [next] registrations url to get more data
  * @throws {Error} Throw exception in case the API call fails
  */
 async function getExistingRegistrationsData (environment, accessToken, next = null) {
   const url = `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/registrations`
-
   const getRegistrationsReq = await fetch(
     next || url,
     {
@@ -37,18 +35,19 @@ async function getExistingRegistrationsData (environment, accessToken, next = nu
       }
     }
   )
-  const getRegistrationsResult = await getRegistrationsReq.json()
 
+  const getRegistrationsResult = await getRegistrationsReq.json()
   const existingRegistrations = []
+
   if (getRegistrationsResult?._embedded?.registrations) {
-    getRegistrationsResult._embedded.registrations.forEach(registration => {
+    for (const registration of getRegistrationsResult._embedded.registrations) {
       existingRegistrations.push({
         id: registration.id,
         registration_id: registration.registration_id,
         name: registration.name,
         enabled: registration.enabled
       })
-    })
+    }
   }
 
   if (getRegistrationsResult?._links?.next) {
@@ -63,13 +62,16 @@ async function getExistingRegistrationsData (environment, accessToken, next = nu
  *
  * @param {object} environment includes the needed parameters to call IO Event
  * @param {string} accessToken Adobe OAuth access token
- * @returns {Array} returns array of registrations with the name of the registration as key
  * @throws {Error} Throw exception in case the API call fails
  */
 async function getExistingRegistrations (environment, accessToken) {
   const existingRegistrationsResult = await getExistingRegistrationsData(environment, accessToken)
   const existingRegistrations = []
-  existingRegistrationsResult.forEach(item => { existingRegistrations[item.name] = item })
+
+  for (const item of existingRegistrationsResult) {
+    existingRegistrations[item.name] = item
+  }
+
   return existingRegistrations
 }
 
@@ -78,9 +80,9 @@ async function getExistingRegistrations (environment, accessToken) {
  *
  * @param {object} environment - environment params
  * @param {string} accessToken - access token
- * @returns {Array} - returns the list of providers
  */
 async function getExistingProviders (environment, accessToken) {
+  // See: https://developer.adobe.com/events/docs/api#operation/getProvidersByConsumerOrgId
   const getCreatedProvidersReq = await fetch(
       `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/providers`,
       {
@@ -96,10 +98,11 @@ async function getExistingProviders (environment, accessToken) {
   const getCreatedProvidersResult = await getCreatedProvidersReq.json()
   const existingProviders = []
   if (getCreatedProvidersResult?._embedded?.providers) {
-    getCreatedProvidersResult._embedded.providers.forEach(provider => {
+    for (const provider of getCreatedProvidersResult._embedded.providers) {
       existingProviders[provider.label] = provider
-    })
+    }
   }
+
   return existingProviders
 }
 
@@ -109,7 +112,6 @@ async function getExistingProviders (environment, accessToken) {
  * @param {object} params includes parameters needed to make the call to Adobe IO Events
  * @param {string} accessToken Adobe OAuth access token
  * @param {string} providerKey Provider key used to find the provider
- * @returns {Promise<*>} return IO Event provider
  */
 async function getProviderByKey (params, accessToken, providerKey) {
   const providers = await getExistingProviders(params, accessToken)
