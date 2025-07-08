@@ -18,6 +18,8 @@ jobs:
         os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch full history for comparison
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -26,5 +28,66 @@ jobs:
       - run: npm ci
       - run: npm run code-check
       - run: npm test
-      - run: npm audit
+      - name: Check for new vulnerabilities
+        run: |
+          # Get the base branch for comparison
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          else
+            BASE_BRANCH="main"
+          fi
+          
+          echo "Comparing vulnerabilities against base branch: $BASE_BRANCH"
+          
+          # Generate audit report for current branch
+          npm audit --audit-level=moderate --json > current-audit.json || true
+          
+          # Switch to base branch and generate audit report
+          git checkout $BASE_BRANCH
+          npm ci
+          npm audit --audit-level=moderate --json > base-audit.json || true
+          
+          # Switch back to current branch
+          git checkout -
+          npm ci
+          
+          # Compare vulnerabilities
+          CURRENT_VULNS=$(node -e "
+            try {
+              const report = JSON.parse(require('fs').readFileSync('current-audit.json', 'utf8'));
+              const vulnCount = report.metadata?.vulnerabilities || {};
+              const totalVulns = Object.values(vulnCount).reduce((sum, count) => sum + count, 0);
+              console.log(totalVulns);
+            } catch (e) {
+              console.log('0');
+            }
+          ")
+          
+          BASE_VULNS=$(node -e "
+            try {
+              const report = JSON.parse(require('fs').readFileSync('base-audit.json', 'utf8'));
+              const vulnCount = report.metadata?.vulnerabilities || {};
+              const totalVulns = Object.values(vulnCount).reduce((sum, count) => sum + count, 0);
+              console.log(totalVulns);
+            } catch (e) {
+              console.log('0');
+            }
+          ")
+          
+          echo "Base branch vulnerabilities: $BASE_VULNS"
+          echo "Current branch vulnerabilities: $CURRENT_VULNS"
+          
+          if [ "$CURRENT_VULNS" -gt "$BASE_VULNS" ]; then
+            NEW_VULNS=$((CURRENT_VULNS - BASE_VULNS))
+            echo "❌ This PR introduces $NEW_VULNS new vulnerabilities"
+            echo "Please review and fix the new vulnerabilities before proceeding:"
+            npm audit --audit-level=moderate
+            exit 1
+          else
+            echo "✅ No new vulnerabilities introduced"
+            if [ "$CURRENT_VULNS" -lt "$BASE_VULNS" ]; then
+              FIXED_VULNS=$((BASE_VULNS - CURRENT_VULNS))
+              echo "🎉 Fixed $FIXED_VULNS vulnerabilities!"
+            fi
+          fi
       - run: npx npm-check
