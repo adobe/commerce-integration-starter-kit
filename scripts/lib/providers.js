@@ -32,45 +32,43 @@ const providersEventsConfig = require('../onboarding/config/events.json')
  */
 async function createProvider (environment, accessToken, provider) {
   // See: https://developer.adobe.com/events/docs/api#operation/createProvider
-  const createCustomEventProviderReq = await fetch(
-    `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers`,
-    {
-      method: 'POST',
-      headers: {
-        'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
-        Accept: 'application/hal+json'
-      },
-      body: JSON.stringify(
-        {
-          // read here about the use of the spread operator to merge objects: https://dev.to/sagar/three-dots---in-javascript-26ci
-          ...(provider?.key === 'commerce' && { provider_metadata: 'dx_commerce_events', instance_id: `${uuid.v4()}` }),
-          ...(provider?.label && { label: `${provider?.label}` }),
-          ...(provider?.description && { description: `${provider?.description}` }),
-          ...(provider?.docs_url && { docs_url: `${provider?.docs_url}` })
-        }
-      )
-    }
-  )
+  const url = `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers`
+  const createCustomEventProviderReq = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
+      Authorization: `Bearer ${accessToken}`,
+      'content-type': 'application/json',
+      Accept: 'application/hal+json'
+    },
+    body: JSON.stringify(
+      {
+        // read here about the use of the spread operator to merge objects: https://dev.to/sagar/three-dots---in-javascript-26ci
+        ...(provider?.key === 'commerce' && { provider_metadata: 'dx_commerce_events', instance_id: `${uuid.v4()}` }),
+        ...(provider?.label && { label: `${provider?.label}` }),
+        ...(provider?.description && { description: `${provider?.description}` }),
+        ...(provider?.docs_url && { docs_url: `${provider?.docs_url}` })
+      }
+    )
+  })
+
+  const result = await createCustomEventProviderReq.json()
 
   if (!createCustomEventProviderReq.ok) {
-    const error = await createCustomEventProviderReq.json()
     return makeError(
       'PROVIDER_CREATION_FAILED',
-      'I/O Management API: call to /createProvider returned a non-2XX status code',
+      `I/O Management API: call to ${url} returned a non-2XX status code`,
       {
-        ...error,
+        ...result,
         code: createCustomEventProviderReq.status
       }
     )
   }
 
-  const result = await createCustomEventProviderReq.json()
   if (!result?.id) {
     return makeError(
       'PROVIDER_CREATION_FAILED',
-      'I/O Management API: call to /createProvider did not return the expected response',
+      `I/O Management API: call to ${url} did not return the expected response`,
       {
         ...result,
         code: createCustomEventProviderReq.status
