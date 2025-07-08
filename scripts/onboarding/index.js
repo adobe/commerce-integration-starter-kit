@@ -20,7 +20,7 @@ require('dotenv').config()
  * @param {'providers' | 'metadata' | 'registrations' | 'configure-eventing'} phase - The phase of the onboarding process where the error occurred.
  * @param {object} errorInfo - General information about the error.
  */
-function logError (phase, errorInfo) {
+function logOnboardingError (phase, errorInfo) {
   const { label, reason, payload } = errorInfo
   const phaseLabels = {
     providers: 'PROVIDER_ONBOARDING',
@@ -53,7 +53,7 @@ async function main () {
   const createProvidersResult = await require('../lib/providers').main(registrations, process.env, accessToken)
 
   if (!createProvidersResult.success) {
-    logError('providers', createProvidersResult.error)
+    logOnboardingError('providers', createProvidersResult.error)
     return
   }
 
@@ -61,28 +61,18 @@ async function main () {
   const createProvidersMetadataResult = await require('../lib/metadata').main(registrations, providers, process.env, accessToken)
 
   if (!createProvidersMetadataResult.success) {
-    const errorMessage = `Process of on-boarding (metadata) failed with error: ${createProvidersResult.error}`
-    console.log(errorMessage)
-    return {
-      code: createProvidersResult.code,
-      success: false,
-      error: errorMessage
-    }
+    logOnboardingError('metadata', createProvidersMetadataResult.error)
+    return
   }
 
   const registerEntityEventsResult = await require('../lib/registrations').main(registrations, providers, process.env, accessToken)
   if (!registerEntityEventsResult.success) {
-    const errorMessage = `Process of on-boarding (registrations) failed with error: ${createProvidersResult.error}`
-    console.log(errorMessage)
-    return {
-      code: createProvidersResult.code,
-      success: false,
-      error: errorMessage
-    }
+    logOnboardingError('registrations', registerEntityEventsResult.error)
+    return
   }
 
-  console.log('Process of On-Boarding done successfully:', providers)
-  console.log('Starting the process of configuring Adobe I/O Events module in Commerce')
+  console.log('Onboarding completed successfully:', providers)
+  console.log('Starting the process of configuring Adobe I/O Events module in Commerce...')
 
   try {
     // node/no-missing-require
@@ -94,6 +84,7 @@ async function main () {
       commerceProvider.instanceId,
       workspaceConfiguration,
       process.env)
+
     if (!configureEventingResult.success) {
       let errorMessage = `The configuration process of the Adobe I/O Events module failed with error: ${configureEventingResult.error}`
       if (configureEventingResult.error.includes('Response code 404 (Not Found)')) {
