@@ -55,9 +55,9 @@ jobs:
           CURRENT_VULNS=$(node -e "
             try {
               const report = JSON.parse(require('fs').readFileSync('current-audit.json', 'utf8'));
-              const vulnCount = report.metadata?.vulnerabilities || {};
-              const totalVulns = Object.values(vulnCount).reduce((sum, count) => sum + count, 0);
-              console.log(totalVulns);
+              // Count actual vulnerabilities, not metadata counts
+              const vulnCount = Object.keys(report.vulnerabilities || {}).length;
+              console.log(vulnCount);
             } catch (e) {
               console.log('0');
             }
@@ -66,9 +66,9 @@ jobs:
           BASE_VULNS=$(node -e "
             try {
               const report = JSON.parse(require('fs').readFileSync('base-audit.json', 'utf8'));
-              const vulnCount = report.metadata?.vulnerabilities || {};
-              const totalVulns = Object.values(vulnCount).reduce((sum, count) => sum + count, 0);
-              console.log(totalVulns);
+              // Count actual vulnerabilities, not metadata counts
+              const vulnCount = Object.keys(report.vulnerabilities || {}).length;
+              console.log(vulnCount);
             } catch (e) {
               console.log('0');
             }
