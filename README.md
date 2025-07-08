@@ -31,7 +31,11 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
 - Add the following API services (select default Oauth server to server)
   - I/0 events
   - Adobe I/O Events for Adobe Commerce
-  - I/O management API
+  - Adobe Commerce as a Cloud Service.
+    - Upgrading from I/O management API:
+      - Add this new API required for Adobe Commerce as a Cloud Service REST API access. I/O management API is not required for new projects.
+      - Download workspace configuration as explained below and ```run aio app use``` again.
+      - Check ```.env``` to ensure that ```commerce.accs``` scope has been added
 - Download the [workspace configuration JSON](https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file) file and save it as `workspace.json` in the `./scripts/onboarding/config` starter kit folder because you will use it to configure Adobe IO Events in commerce afterward.
 
 ### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5)
@@ -734,9 +738,9 @@ See the [package README](packages/aio-lib-telemetry/README.md) for more informat
 > [!NOTE]
 > Check the [How To Use](packages/aio-lib-telemetry/README.md#how-to-use) section in the `@adobe/aio-lib-telemetry` README for comprehensive integration instructions.
 
-The starter kit includes a sample implementation in the `actions/customer/commerce` workflow, specifically within the `consumer` and `created` actions. These examples utilize the telemetry configuration in `actions/telemetry.js` and the metrics definitions in `actions/customer/commerce/metrics.js`. 
+The starter kit includes a sample implementation in the `actions/customer/commerce` workflow, specifically within the `consumer` and `created` actions. These examples utilize the telemetry configuration in `actions/telemetry.js` and the metrics definitions in `actions/customer/commerce/metrics.js`.
 
-The instrumentation is designed to be minimally invasive and won't disrupt existing functionality. However, telemetry requires explicit opt-in configuration: you must instrument each runtime action individually, configure exporters in the `telemetry.js` file, and set the `ENABLE_TELEMETRY` environment variable to `true` in each action's `inputs` section. While we've implemented this setup for the aforementioned actions, to fully enable telemetry, you need to complete your configuration in the `telemetry.js` file. 
+The instrumentation is designed to be minimally invasive and won't disrupt existing functionality. However, telemetry requires explicit opt-in configuration: you must instrument each runtime action individually, configure exporters in the `telemetry.js` file, and set the `ENABLE_TELEMETRY` environment variable to `true` in each action's `inputs` section. While we've implemented this setup for the aforementioned actions, to fully enable telemetry, you need to complete your configuration in the `telemetry.js` file.
 
 The integration within the `customer/commerce` workflow facilitates three key signals: **traces**, **metrics**, and **logs**, while also adding automatic context propagation. This means that when you trigger your `consumer` action, it will generate a unified trace that spans the entire execution flow, including any invoked (but instrumented) actions such as `created`.
 
@@ -803,7 +807,7 @@ Check out the linked guide to learn how to set up Grafana for visualizing your t
 - [Stock updated in third party](actions/stock/external/updated/docs/README.md)
 
 ## References
-- [Adobe Commerce Extensibility](https://developer.adobe.com/commerce/extensibility/) 
+- [Adobe Commerce Extensibility](https://developer.adobe.com/commerce/extensibility/)
 - [Adobe developer console](https://developer.adobe.com/developer-console/docs/guides/)
 - [Adobe App Builder](https://developer.adobe.com/app-builder/docs/overview/)
 - [Adobe I/O Events](https://developer.adobe.com/events/docs/)
