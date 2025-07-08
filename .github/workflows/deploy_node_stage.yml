@@ -28,7 +28,7 @@ jobs:
       - run: npm ci
       - run: npm run code-check
       - run: npm test
-      - name: Check for new vulnerabilities
+      - name: Check for new vulnerabilities and dependency issues
         run: |
           # Get the base branch for comparison
           if [ "${{ github.event_name }}" = "pull_request" ]; then
@@ -37,15 +37,19 @@ jobs:
             BASE_BRANCH="main"
           fi
           
-          echo "Comparing vulnerabilities against base branch: $BASE_BRANCH"
+          echo "Comparing against base branch: $BASE_BRANCH"
           
-          # Generate audit report for current branch
+          # Generate reports for current branch
+          echo "🔍 Checking current branch..."
           npm audit --audit-level=moderate --json > current-audit.json || true
+          npx npm-check --no-emoji --no-color > current-npm-check.txt 2>&1 || true
           
-          # Switch to base branch and generate audit report
+          # Switch to base branch and generate reports
+          echo "🔍 Checking base branch..."
           git checkout $BASE_BRANCH
           npm ci
           npm audit --audit-level=moderate --json > base-audit.json || true
+          npx npm-check --no-emoji --no-color > base-npm-check.txt 2>&1 || true
           
           # Switch back to current branch
           git checkout -
@@ -55,7 +59,6 @@ jobs:
           CURRENT_VULNS=$(node -e "
             try {
               const report = JSON.parse(require('fs').readFileSync('current-audit.json', 'utf8'));
-              // Count actual vulnerabilities, not metadata counts
               const vulnCount = Object.keys(report.vulnerabilities || {}).length;
               console.log(vulnCount);
             } catch (e) {
@@ -66,7 +69,6 @@ jobs:
           BASE_VULNS=$(node -e "
             try {
               const report = JSON.parse(require('fs').readFileSync('base-audit.json', 'utf8'));
-              // Count actual vulnerabilities, not metadata counts
               const vulnCount = Object.keys(report.vulnerabilities || {}).length;
               console.log(vulnCount);
             } catch (e) {
@@ -74,77 +76,44 @@ jobs:
             }
           ")
           
-          echo "Base branch vulnerabilities: $BASE_VULNS"
-          echo "Current branch vulnerabilities: $CURRENT_VULNS"
+          echo "📊 Vulnerability Analysis:"
+          echo "  Base branch: $BASE_VULNS vulnerabilities"
+          echo "  Current branch: $CURRENT_VULNS vulnerabilities"
           
+          # Compare dependency issues (using text patterns for CI environment)
+          CURRENT_ISSUES=$(grep -E "(MAJOR UP|UPDATE|NPM ERR|PKG ERR|Not in package.json)" current-npm-check.txt | wc -l || echo "0")
+          BASE_ISSUES=$(grep -E "(MAJOR UP|UPDATE|NPM ERR|PKG ERR|Not in package.json)" base-npm-check.txt | wc -l || echo "0")
+          
+          echo "📦 Dependency Analysis:"
+          echo "  Base branch: $BASE_ISSUES dependency issues"
+          echo "  Current branch: $CURRENT_ISSUES dependency issues"
+          
+          # Check for new vulnerabilities
           if [ "$CURRENT_VULNS" -gt "$BASE_VULNS" ]; then
             NEW_VULNS=$((CURRENT_VULNS - BASE_VULNS))
             echo "❌ This PR introduces $NEW_VULNS new vulnerabilities"
             echo "Please review and fix the new vulnerabilities before proceeding:"
             npm audit --audit-level=moderate
             exit 1
+          elif [ "$CURRENT_VULNS" -lt "$BASE_VULNS" ]; then
+            FIXED_VULNS=$((BASE_VULNS - CURRENT_VULNS))
+            echo "🎉 Fixed $FIXED_VULNS vulnerabilities!"
           else
             echo "✅ No new vulnerabilities introduced"
-            if [ "$CURRENT_VULNS" -lt "$BASE_VULNS" ]; then
-              FIXED_VULNS=$((BASE_VULNS - CURRENT_VULNS))
-              echo "🎉 Fixed $FIXED_VULNS vulnerabilities!"
-            fi
           fi
-      - name: Check for new dependency issues
-        run: |
-          # Generate npm-check report for current branch
-          npx npm-check --json > current-npm-check.json || true
           
-          # Switch to base branch and generate npm-check report
-          git checkout $BASE_BRANCH
-          npm ci
-          npx npm-check --json > base-npm-check.json || true
-          
-          # Switch back to current branch
-          npm ci
-          
-          # Compare dependency issues
-          CURRENT_ISSUES=$(node -e "
-            try {
-              const report = JSON.parse(require('fs').readFileSync('current-npm-check.json', 'utf8'));
-              // Count outdated, incorrect, and unused dependencies
-              const outdated = report.outdated?.length || 0;
-              const incorrect = report.incorrect?.length || 0;
-              const unused = report.unused?.length || 0;
-              const total = outdated + incorrect + unused;
-              console.log(total);
-            } catch (e) {
-              console.log('0');
-            }
-          ")
-          
-          BASE_ISSUES=$(node -e "
-            try {
-              const report = JSON.parse(require('fs').readFileSync('base-npm-check.json', 'utf8'));
-              // Count outdated, incorrect, and unused dependencies
-              const outdated = report.outdated?.length || 0;
-              const incorrect = report.incorrect?.length || 0;
-              const unused = report.unused?.length || 0;
-              const total = outdated + incorrect + unused;
-              console.log(total);
-            } catch (e) {
-              console.log('0');
-            }
-          ")
-          
-          echo "Base branch dependency issues: $BASE_ISSUES"
-          echo "Current branch dependency issues: $CURRENT_ISSUES"
-          
+          # Check for new dependency issues
           if [ "$CURRENT_ISSUES" -gt "$BASE_ISSUES" ]; then
             NEW_ISSUES=$((CURRENT_ISSUES - BASE_ISSUES))
             echo "❌ This PR introduces $NEW_ISSUES new dependency issues"
             echo "Please review and fix the new dependency issues before proceeding:"
-            npx npm-check
+            npx npm-check --no-emoji --no-color
             exit 1
+          elif [ "$CURRENT_ISSUES" -lt "$BASE_ISSUES" ]; then
+            FIXED_ISSUES=$((BASE_ISSUES - CURRENT_ISSUES))
+            echo "🎉 Fixed $FIXED_ISSUES dependency issues!"
           else
             echo "✅ No new dependency issues introduced"
-            if [ "$CURRENT_ISSUES" -lt "$BASE_ISSUES" ]; then
-              FIXED_ISSUES=$((BASE_ISSUES - CURRENT_ISSUES))
-              echo "🎉 Fixed $FIXED_ISSUES dependency issues!"
-            fi
           fi
+          
+          echo "✅ All checks passed - no new issues introduced!"
