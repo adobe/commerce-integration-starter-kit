@@ -26,3 +26,5 @@ jobs:
       - run: npm ci
       - run: npm run code-check
       - run: npm test
+      - run: npm audit
+      - run: npx npm-check
