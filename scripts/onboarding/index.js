@@ -10,14 +10,40 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const ansis = require('ansis')
 const { getAdobeAccessToken } = require('../../utils/adobe-auth')
+
 require('dotenv').config()
+
+/**
+ * Logs an error ocurred during the onboarding process.
+ * @param {'providers' | 'metadata' | 'registrations' | 'configure-eventing'} phase - The phase of the onboarding process where the error occurred.
+ * @param {object} errorInfo - General information about the error.
+ */
+function logError (phase, errorInfo) {
+  const { label, reason, payload } = errorInfo
+  const phaseLabels = {
+    providers: 'PROVIDER_ONBOARDING',
+    metadata: 'METADATA_ONBOARDING',
+    registrations: 'REGISTRATIONS_ONBOARDING',
+    'configure-eventing': 'CONFIGURE_EVENTING'
+  }
+
+  const additionalDetails = payload
+    ? JSON.stringify(payload, null, 2)
+    : 'No additional details'
+
+  console.error(
+    ansis.bgRed(`\n ${phaseLabels[phase]} → ${label} \n`),
+    ansis.red(`\nProcess of on-boarding (${phase}) failed:\n`),
+    reason,
+    ansis.red(`\nAdditional error details:" ${additionalDetails}\n`)
+  )
+}
 
 /**
  * This method handles the onboarding script, it creates the events providers, adds metadata to them, creates the registrations
  * and configures the Adobe I/O Events module in Commerce
- *
- * @returns {object} - returns a response with provider and registrations info
  */
 async function main () {
   console.log('Starting the process of on-boarding based on your registration choices')
@@ -27,13 +53,8 @@ async function main () {
   const createProvidersResult = await require('../lib/providers').main(registrations, process.env, accessToken)
 
   if (!createProvidersResult.success) {
-    const errorMessage = `Process of on-boarding (providers) failed with error: ${createProvidersResult.error}`
-    console.log(errorMessage)
-    return {
-      code: createProvidersResult.code,
-      success: false,
-      error: errorMessage
-    }
+    logError('providers', createProvidersResult.error)
+    return
   }
 
   const providers = createProvidersResult.result
