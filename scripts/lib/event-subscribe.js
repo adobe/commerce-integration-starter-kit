@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const { eventSubscribe } = require('./commerce-eventing-api-client')
+const { makeError } = require('./helpers/errors')
 
 /**
  * This method subscribes to an event in the commerce eventing module
@@ -25,18 +26,16 @@ async function main (eventSpec, environment) {
       environment,
       eventSpec
     )
+
     return {
-      code: 200,
       success: true
     }
   } catch (error) {
-    const errorMessage = `Unable to complete the process of event subscription: ${error.message}`
-    console.log(errorMessage)
-    return {
-      code: 500,
-      success: false,
-      error: errorMessage
-    }
+    return makeError(
+      'UNEXPECTED_ERROR',
+      'Unexpected error occurred while subscribing to an event in the Adobe I/O Events module in Commerce',
+      { error, eventSpec }
+    )
   }
 }
 

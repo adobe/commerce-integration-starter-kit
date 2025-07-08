@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const { updateConfiguration } = require('./commerce-eventing-api-client')
+const { makeError } = require('./helpers/errors')
 
 /**
  * This method configures the commerce eventing module
@@ -21,33 +22,28 @@ const { updateConfiguration } = require('./commerce-eventing-api-client')
  * @returns {object} - returns response object
  */
 async function main (providerId, instanceId, workspaceConfiguration, environment) {
+  const body = {
+    config: {
+      enabled: true,
+      merchant_id: environment.COMMERCE_ADOBE_IO_EVENTS_MERCHANT_ID,
+      environment_id: 'Stage',
+      provider_id: providerId,
+      instance_id: instanceId,
+      workspace_configuration: JSON.stringify(workspaceConfiguration)
+    }
+  }
+
   try {
-    await updateConfiguration(
-      environment.COMMERCE_BASE_URL,
-      environment,
-      {
-        config: {
-          enabled: true,
-          merchant_id: environment.COMMERCE_ADOBE_IO_EVENTS_MERCHANT_ID,
-          environment_id: 'Stage',
-          provider_id: providerId,
-          instance_id: instanceId,
-          workspace_configuration: JSON.stringify(workspaceConfiguration)
-        }
-      }
-    )
+    await updateConfiguration(environment.COMMERCE_BASE_URL, environment, body)
     return {
-      code: 200,
       success: true
     }
   } catch (error) {
-    const errorMessage = `Unable to complete the process of commerce configuration: ${error.message}`
-    console.log(errorMessage)
-    return {
-      code: 500,
-      success: false,
-      error: errorMessage
-    }
+    return makeError(
+      'UNEXPECTED_ERROR',
+      'Unexpected error occurred while updating the eventing configuration of the Adobe I/O Events module in Commerce',
+      { error, config: body.config }
+    )
   }
 }
 
