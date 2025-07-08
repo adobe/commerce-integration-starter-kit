@@ -59,7 +59,7 @@ async function createProvider (environment, accessToken, provider) {
       'PROVIDER_CREATION_FAILED',
       `I/O Management API: call to ${url} returned a non-2XX status code`,
       {
-        ...result,
+        response: result,
         code: createCustomEventProviderReq.status
       }
     )
@@ -70,7 +70,7 @@ async function createProvider (environment, accessToken, provider) {
       'PROVIDER_CREATION_FAILED',
       `I/O Management API: call to ${url} did not return the expected response`,
       {
-        ...result,
+        response: result,
         code: createCustomEventProviderReq.status
       }
     )

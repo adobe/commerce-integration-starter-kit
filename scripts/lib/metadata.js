@@ -85,7 +85,7 @@ async function addEventCodeToProvider (metadata, providerId, environment, access
       'ADD_EVENT_CODE_TO_PROVIDER_FAILED',
       `I/O Management API: call to ${url} returned a non-2XX status code`,
       {
-        ...result,
+        response: result,
         code: addEventMetadataReq.status
       }
     )
@@ -96,7 +96,7 @@ async function addEventCodeToProvider (metadata, providerId, environment, access
       'ADD_EVENT_CODE_TO_PROVIDER_FAILED',
       `I/O Management API: call to ${url} did not return the expected response`,
       {
-        ...result,
+        response: result,
         code: addEventMetadataReq.status
       }
     )
@@ -158,7 +158,7 @@ async function getExistingMetadata (providerId, environment, accessToken, next =
       'GET_EXISTING_METADATA_FAILED',
       `I/O Management API: call to ${url} returned a non-2XX status code`,
       {
-        ...result,
+        response: result,
         code: getExistingMetadataReq.status
       }
     )
