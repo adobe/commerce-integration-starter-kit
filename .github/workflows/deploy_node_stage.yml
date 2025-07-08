@@ -90,4 +90,61 @@ jobs:
               echo "🎉 Fixed $FIXED_VULNS vulnerabilities!"
             fi
           fi
-      - run: npx npm-check
+      - name: Check for new dependency issues
+        run: |
+          # Generate npm-check report for current branch
+          npx npm-check --json > current-npm-check.json || true
+          
+          # Switch to base branch and generate npm-check report
+          git checkout $BASE_BRANCH
+          npm ci
+          npx npm-check --json > base-npm-check.json || true
+          
+          # Switch back to current branch
+          npm ci
+          
+          # Compare dependency issues
+          CURRENT_ISSUES=$(node -e "
+            try {
+              const report = JSON.parse(require('fs').readFileSync('current-npm-check.json', 'utf8'));
+              // Count outdated, incorrect, and unused dependencies
+              const outdated = report.outdated?.length || 0;
+              const incorrect = report.incorrect?.length || 0;
+              const unused = report.unused?.length || 0;
+              const total = outdated + incorrect + unused;
+              console.log(total);
+            } catch (e) {
+              console.log('0');
+            }
+          ")
+          
+          BASE_ISSUES=$(node -e "
+            try {
+              const report = JSON.parse(require('fs').readFileSync('base-npm-check.json', 'utf8'));
+              // Count outdated, incorrect, and unused dependencies
+              const outdated = report.outdated?.length || 0;
+              const incorrect = report.incorrect?.length || 0;
+              const unused = report.unused?.length || 0;
+              const total = outdated + incorrect + unused;
+              console.log(total);
+            } catch (e) {
+              console.log('0');
+            }
+          ")
+          
+          echo "Base branch dependency issues: $BASE_ISSUES"
+          echo "Current branch dependency issues: $CURRENT_ISSUES"
+          
+          if [ "$CURRENT_ISSUES" -gt "$BASE_ISSUES" ]; then
+            NEW_ISSUES=$((CURRENT_ISSUES - BASE_ISSUES))
+            echo "❌ This PR introduces $NEW_ISSUES new dependency issues"
+            echo "Please review and fix the new dependency issues before proceeding:"
+            npx npm-check
+            exit 1
+          else
+            echo "✅ No new dependency issues introduced"
+            if [ "$CURRENT_ISSUES" -lt "$BASE_ISSUES" ]; then
+              FIXED_ISSUES=$((BASE_ISSUES - CURRENT_ISSUES))
+              echo "🎉 Fixed $FIXED_ISSUES dependency issues!"
+            fi
+          fi
