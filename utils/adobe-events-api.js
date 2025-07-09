@@ -96,7 +96,7 @@ async function getExistingProviders (environment, accessToken) {
       }
   )
   const getCreatedProvidersResult = await getCreatedProvidersReq.json()
-  const existingProviders = []
+  const existingProviders = {}
   if (getCreatedProvidersResult?._embedded?.providers) {
     for (const provider of getCreatedProvidersResult._embedded.providers) {
       existingProviders[provider.label] = provider
