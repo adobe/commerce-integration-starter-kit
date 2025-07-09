@@ -19,7 +19,6 @@ const { makeError } = require('./helpers/errors')
  * @param {string} instanceId - instance id
  * @param {object} workspaceConfiguration - workspace configuration
  * @param {object} environment - environment variables
- * @returns {object} - returns response object
  */
 async function main (providerId, instanceId, workspaceConfiguration, environment) {
   const body = {
