@@ -66,7 +66,7 @@ async function getExistingRegistrationsData (environment, accessToken, next = nu
  */
 async function getExistingRegistrations (environment, accessToken) {
   const existingRegistrationsResult = await getExistingRegistrationsData(environment, accessToken)
-  const existingRegistrations = []
+  const existingRegistrations = {}
 
   for (const item of existingRegistrationsResult) {
     existingRegistrations[item.name] = item
