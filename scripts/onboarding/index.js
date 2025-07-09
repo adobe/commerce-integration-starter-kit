@@ -17,7 +17,7 @@ const { makeError } = require('../lib/helpers/errors')
 require('dotenv').config()
 
 /**
- * Logs an error ocurred during the onboarding process.
+ * Logs an error occurred during the onboarding process.
  * @param {'providers' | 'metadata' | 'registrations'} phase - The phase of the onboarding process where the error occurred.
  * @param {object} errorInfo - General information about the error.
  */
