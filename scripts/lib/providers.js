@@ -87,7 +87,6 @@ async function createProvider (environment, accessToken, provider) {
  *
  * @param {string} selection - option selected by client
  * @param {object} clientRegistrations - client registrations
- * @returns {boolean} - returns true or false
  */
 function hasSelection (selection, clientRegistrations) {
   return Object.values(clientRegistrations).some(value => value.includes(selection))

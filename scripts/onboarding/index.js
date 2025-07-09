@@ -18,7 +18,7 @@ require('dotenv').config()
 
 /**
  * Logs an error ocurred during the onboarding process.
- * @param {'providers' | 'metadata' | 'registrations' | 'configure-eventing'} phase - The phase of the onboarding process where the error occurred.
+ * @param {'providers' | 'metadata' | 'registrations'} phase - The phase of the onboarding process where the error occurred.
  * @param {object} errorInfo - General information about the error.
  */
 function logOnboardingError (phase, errorInfo) {

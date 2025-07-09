@@ -17,7 +17,6 @@ const { makeError } = require('./helpers/errors')
  * This method subscribes to an event in the commerce eventing module
  * @param {object} eventSpec - event specification as described in https://developer.adobe.com/commerce/extensibility/events/api/#subscribe-to-events
  * @param {object} environment - environment variables
- * @returns {object} - returns response object
  */
 async function main (eventSpec, environment) {
   try {
