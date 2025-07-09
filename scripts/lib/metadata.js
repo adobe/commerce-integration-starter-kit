@@ -193,13 +193,13 @@ async function getExistingMetadata (providerId, environment, accessToken, next =
  * @param {string} accessToken - access token
  */
 async function main (clientRegistrations, providers, environment, accessToken) {
-  let currentProvider;
+  let currentProvider
   try {
     let providersEvents = {}
 
     const result = []
     for (const provider of providers) {
-      currentProvider = provider;
+      currentProvider = provider
       const existingMetadataResult = await getExistingMetadata(provider.id, environment, accessToken)
 
       if (!existingMetadataResult.success) {
