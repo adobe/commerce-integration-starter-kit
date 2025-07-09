@@ -18,7 +18,7 @@ const uuid = require('uuid')
 const { makeError } = require('./helpers/errors')
 const { getMissingKeys } = require('../../actions/utils')
 const { getExistingProviders } = require('../../utils/adobe-events-api')
-const { addAioRuntimeNamespaceSuffix } = require('../../utils/naming')
+const { addSuffix } = require('../../utils/naming')
 const { arrayItemsErrorFormat } = require('./helpers/errors')
 
 const providersEventsConfig = require('../onboarding/config/events.json')
@@ -132,7 +132,7 @@ async function main (clientRegistrations, environment, accessToken) {
 
     for (const provider of providersList) {
       currentProvider = provider
-      provider.label = addAioRuntimeNamespaceSuffix(provider.label, environment)
+      provider.label = addSuffix(provider.label, environment)
       const isProviderSelectedByClient = hasSelection(provider.key, clientRegistrations)
 
       if (isProviderSelectedByClient) {
