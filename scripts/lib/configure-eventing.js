@@ -39,10 +39,21 @@ async function main (providerId, instanceId, workspaceConfiguration, environment
       success: true
     }
   } catch (error) {
+    const hints = []
+
+    if (error.includes('Response code 404 (Not Found)')) {
+      hints.push('Make sure the latest version of the Adobe I/O Events module (see https://developer.adobe.com/commerce/extensibility/events/release-notes/) is installed and enabled in Commerce (see https://developer.adobe.com/commerce/extensibility/events/installation/).')
+      hints.push('If the module cannot be updated to the latest version, you can manually configure the Adobe I/O Events module in the Commerce Admin console (see https://developer.adobe.com/commerce/extensibility/events/configure-commerce/)')
+    }
+
     return makeError(
       'UNEXPECTED_ERROR',
       'Unexpected error occurred while updating the eventing configuration of the Adobe I/O Events module in Commerce',
-      { error, config: body.config }
+      {
+        error,
+        config: body.config,
+        hints: hints.length > 0 ? hints : undefined
+      }
     )
   }
 }

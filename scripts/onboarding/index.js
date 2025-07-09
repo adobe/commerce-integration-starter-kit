@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 const ansis = require('ansis')
 const { getAdobeAccessToken } = require('../../utils/adobe-auth')
+const { makeError } = require('../lib/helpers/errors')
 
 require('dotenv').config()
 
@@ -25,8 +26,7 @@ function logOnboardingError (phase, errorInfo) {
   const phaseLabels = {
     providers: 'PROVIDER_ONBOARDING',
     metadata: 'METADATA_ONBOARDING',
-    registrations: 'REGISTRATIONS_ONBOARDING',
-    'configure-eventing': 'CONFIGURE_EVENTING'
+    registrations: 'REGISTRATIONS_ONBOARDING'
   }
 
   const additionalDetails = payload
@@ -36,6 +36,24 @@ function logOnboardingError (phase, errorInfo) {
   console.error(
     ansis.bgRed(`\n ${phaseLabels[phase]} → ${label} \n`),
     ansis.red(`\nProcess of on-boarding (${phase}) failed:\n`),
+    reason,
+    ansis.red(`\nAdditional error details:" ${additionalDetails}\n`)
+  )
+}
+
+/**
+ * Logs an error ocurred during the configure eventing process.
+ * @param {object} errorInfo - General information about the error.
+ */
+function logConfigureEventingError (errorInfo) {
+  const { label, reason, payload } = errorInfo
+  const additionalDetails = payload
+    ? JSON.stringify(payload, null, 2)
+    : 'No additional details'
+
+  console.error(
+    ansis.bgRed(`\n CONFIGURE_EVENTING → ${label} \n`),
+    ansis.red('\nProcess of configuring Adobe I/O Events module in Commerce failed:\n'),
     reason,
     ansis.red(`\nAdditional error details:" ${additionalDetails}\n`)
   )
@@ -75,7 +93,6 @@ async function main () {
   console.log('Starting the process of configuring Adobe I/O Events module in Commerce...')
 
   try {
-    // node/no-missing-require
     // eslint-disable-next-line node/no-missing-require,node/no-unpublished-require
     const workspaceConfiguration = require('./config/workspace.json')
     const commerceProvider = providers.find(provider => provider.key === 'commerce')
@@ -83,42 +100,42 @@ async function main () {
       commerceProvider.id,
       commerceProvider.instanceId,
       workspaceConfiguration,
-      process.env)
+      process.env
+    )
 
     if (!configureEventingResult.success) {
-      let errorMessage = `The configuration process of the Adobe I/O Events module failed with error: ${configureEventingResult.error}`
-      if (configureEventingResult.error.includes('Response code 404 (Not Found)')) {
-        errorMessage += ' - Make sure the latest version of the Adobe I/O Events module (see https://developer.adobe.com/commerce/extensibility/events/release-notes/) is installed and enabled in Commerce (see https://developer.adobe.com/commerce/extensibility/events/installation/). If the module cannot be updated to the latest version, you can manually configure the Adobe I/O Events module in the Commerce Admin console (see https://developer.adobe.com/commerce/extensibility/events/configure-commerce/)'
-      }
-      console.log(errorMessage)
-      return {
-        code: configureEventingResult.code,
-        success: false,
-        error: errorMessage
-      }
+      logConfigureEventingError(configureEventingResult.error)
+      return
     }
   } catch (error) {
     if (error?.code === 'MODULE_NOT_FOUND') {
-      console.log('The configuration process of the Adobe I/O Events module failed with error: "workspace.json" file not found. Make sure the file exists in the "scripts/onboarding/config/workspace.json" directory (see https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file for instructions on how to download the file. Also, make sure the file is named "workspace.json")')
-      return {
-        code: 500,
-        success: false,
-        error: error.message
-      }
+      logConfigureEventingError(makeError(
+        'MISSING_WORKSPACE_FILE',
+        'The "workspace.json" file was not found.',
+        {
+          error,
+          hints: [
+            'Make sure the file exists in the "scripts/onboarding/config/workspace.json" directory',
+            'See https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file for instructions on how to download the file.',
+            'Also, make sure the file is named "workspace.json".'
+          ]
+        }
+      ))
+
+      return
     }
 
-    console.log(`The configuration process of the Adobe I/O Events module failed with error: ${error}`)
-    return {
-      code: 500,
-      success: false,
-      error: error.message
-    }
+    logConfigureEventingError(makeError(
+      'UNEXPECTED_ERROR',
+      'An unexpected error occurred',
+      { error }
+    ))
+
+    return
   }
-  console.log('Process of configuring Adobe I/O Events module in Commerce completed successfully')
 
+  console.log('Process of configuring Adobe I/O Events module in Commerce completed successfully')
   return {
-    code: 200,
-    success: true,
     providers,
     registrations: registerEntityEventsResult.registrations
   }
