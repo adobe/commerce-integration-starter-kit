@@ -102,6 +102,7 @@ function hasSelection (selection, clientRegistrations) {
 async function main (clientRegistrations, environment, accessToken) {
   // Load predefined provider, providerEvents and clientRegistrations
   const providersList = require('../onboarding/config/providers.json')
+  let currentProvider
 
   try {
     console.log('Start process of creating providers: ', providersEventsConfig)
@@ -130,6 +131,7 @@ async function main (clientRegistrations, environment, accessToken) {
     const result = []
 
     for (const provider of providersList) {
+      currentProvider = provider
       provider.label = addAioRuntimeNamespaceSuffix(provider.label, environment)
       const isProviderSelectedByClient = hasSelection(provider.key, clientRegistrations)
 
@@ -180,7 +182,7 @@ async function main (clientRegistrations, environment, accessToken) {
     return makeError(
       'UNEXPECTED_ERROR',
       'Unexpected error occurred while creating providers',
-      { error }
+      { error, provider: currentProvider }
     )
   }
 }
