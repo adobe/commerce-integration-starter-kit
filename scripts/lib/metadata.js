@@ -193,11 +193,13 @@ async function getExistingMetadata (providerId, environment, accessToken, next =
  * @param {string} accessToken - access token
  */
 async function main (clientRegistrations, providers, environment, accessToken) {
+  let currentProvider;
   try {
     let providersEvents = {}
 
     const result = []
     for (const provider of providers) {
+      currentProvider = provider;
       const existingMetadataResult = await getExistingMetadata(provider.id, environment, accessToken)
 
       if (!existingMetadataResult.success) {
@@ -241,7 +243,7 @@ async function main (clientRegistrations, providers, environment, accessToken) {
     return makeError(
       'UNEXPECTED_ERROR',
       'Unexpected error occurred while adding metadata to provider',
-      { error }
+      { error, provider: currentProvider }
     )
   }
 }
