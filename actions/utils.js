@@ -97,7 +97,7 @@ function checkMissingRequestInputs (
   )
 
   if (missingHeaders.length > 0) {
-    errorMessage = `Missing header(s): [${missingHeaders.join(', ')}]`
+    errorMessage = `missing header(s) '${missingHeaders}'`
   }
 
   // check for missing parameters
@@ -108,7 +108,7 @@ function checkMissingRequestInputs (
     } else {
       errorMessage = ''
     }
-    errorMessage += `Missing parameter(s): [${missingParams.join(', ')}]`
+    errorMessage += `missing parameter(s) '${missingParams}'`
   }
 
   return errorMessage
