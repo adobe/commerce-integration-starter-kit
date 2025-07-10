@@ -11,6 +11,8 @@
   "author": "Adobe Inc.",
   "private": true,
   "dependencies": {
+    "@adobe/aio-commerce-lib-auth": "^0.2.0",
+    "@adobe/aio-commerce-lib-core": "^0.2.0",
     "@adobe/aio-lib-ims": "^7.0.1",
     "@adobe/aio-lib-state": "^5.1.0",
     "@adobe/aio-lib-telemetry": "^1.0.0",
@@ -48,5 +50,3 @@
     ]
   }
 }
-
-

@@ -23,6 +23,8 @@ const { getProviderByKey } = require('../../../utils/adobe-events-api')
 const { validateData } = require('./validator')
 const { checkAuthentication } = require('./auth')
 const { errorResponse, successResponse } = require('../../responses')
+const { isErr, unwrap } = require("@adobe/aio-commerce-lib-core/result");
+const { summarizeValidationError } = require("@adobe/aio-commerce-lib-core/validation");
 
 /**
  * This web action allow external back-office application publish event to IO event using custom authentication mechanism.
@@ -49,7 +51,16 @@ async function main (params) {
     }
 
     logger.debug('Generate Adobe access token')
-    const accessToken = await getAdobeAccessToken(params)
+    const result = await getAdobeAccessToken(process.env);
+
+    if (isErr(result)) {
+      const { error } = result;
+      logger.info(summarizeValidationError(error))
+      logger.error(`Failed to get an access token: ${result.error.message}. See console for more details.`);
+    }
+
+    const accessToken = unwrap(result);
+
 
     logger.debug('Get existing registrations')
     const provider = await getProviderByKey(params, accessToken, BACKOFFICE_PROVIDER_KEY)
