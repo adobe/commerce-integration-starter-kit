@@ -10,32 +10,44 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { context, getToken } = require('@adobe/aio-lib-ims')
+const { tryGetImsAuthProvider } = require('@adobe/aio-commerce-lib-auth');
+const { isErr, map, Result } = require('@adobe/aio-commerce-lib-core/result');
+const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets'];
+
+/**
+ * Convert the parameters into the format expected by the IMS auth provider. Only to be used for OAUTH_* parameters.
+ * TODO: remove this function once the IMS auth provider is updated to accept the new format
+ * @param params
+ * @returns {{AIO_COMMERCE_IMS_CLIENT_ID: (string|*), AIO_COMMERCE_IMS_CLIENT_SECRETS: *, AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_ID: *, AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_EMAIL: *, AIO_COMMERCE_IMS_IMS_ORG_ID: (string|*), AIO_COMMERCE_IMS_ENV: string, AIO_COMMERCE_IMS_CTX: string, AIO_COMMERCE_IMS_SCOPES: string}}
+ */
+function intoImsAuthParameters (params) {
+  return {
+    AIO_COMMERCE_IMS_CLIENT_ID: params.OAUTH_CLIENT_ID,
+    AIO_COMMERCE_IMS_CLIENT_SECRETS: JSON.stringify([params.OAUTH_CLIENT_SECRET]),
+    AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_ID: params.OAUTH_TECHNICAL_ACCOUNT_ID,
+    AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_EMAIL: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
+    AIO_COMMERCE_IMS_IMS_ORG_ID: params.OAUTH_ORG_ID,
+    AIO_COMMERCE_IMS_ENV: 'prod', // There is no alternative
+    AIO_COMMERCE_IMS_CTX: 'onboarding-config', // There is no alternative
+    AIO_COMMERCE_IMS_SCOPES: JSON.stringify(params.OAUTH_SCOPES ?? DEFAULT_IMS_SCOPES)
+  }
+}
 
 /**
  * Generate access token to connect with Adobe tools (e.g. IO Events)
- *
  * @param {object} params includes env parameters
- * @returns {Promise<string>} returns the access token
- * @throws {Error} in case of any failure
+ * @returns {Result} returns the access token
  */
 async function getAdobeAccessToken (params) {
-  const ioManagementAPIScopes = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets']
-  const config = {
-    client_id: params.OAUTH_CLIENT_ID,
-    client_secrets: [params.OAUTH_CLIENT_SECRET],
-    technical_account_id: params.OAUTH_TECHNICAL_ACCOUNT_ID,
-    technical_account_email: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
-    ims_org_id: params.OAUTH_ORG_ID,
-    scopes: ioManagementAPIScopes
+  const result = tryGetImsAuthProvider(params);
+  if (isErr(result)) {
+    return result;
   }
 
-  await context.setCurrent('onboarding-config')
-  await context.set('onboarding-config', config)
-
-  return await getToken()
+  return map(result, (imsAuthProvider) => imsAuthProvider.getAccessToken())
 }
 
 module.exports = {
-  getAdobeAccessToken
+  getAdobeAccessToken,
+  intoImsAuthParameters
 }
