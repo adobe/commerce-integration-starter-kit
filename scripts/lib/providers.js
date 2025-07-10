@@ -11,11 +11,16 @@ governing permissions and limitations under the License.
 */
 
 require('dotenv').config()
-const { checkMissingRequestInputs } = require('../../actions/utils')
+
 const fetch = require('node-fetch')
 const uuid = require('uuid')
+
+const { makeError } = require('./helpers/errors')
+const { getMissingKeys } = require('../../actions/utils')
 const { getExistingProviders } = require('../../utils/adobe-events-api')
 const { addSuffix } = require('../../utils/naming')
+const { arrayItemsErrorFormat } = require('./helpers/errors')
+
 const providersEventsConfig = require('../onboarding/config/events.json')
 
 /**
@@ -24,40 +29,53 @@ const providersEventsConfig = require('../onboarding/config/events.json')
  * @param {object} environment - environment params
  * @param {string} accessToken - access token
  * @param {object} provider - provider data
- * @returns {object} - returns success or not and provider data
  */
 async function createProvider (environment, accessToken, provider) {
-  const createCustomEventProviderReq = await fetch(
-        `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers`,
-        {
-          method: 'POST',
-          headers: {
-            'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
-            Authorization: `Bearer ${accessToken}`,
-            'content-type': 'application/json',
-            Accept: 'application/hal+json'
-          },
-          body: JSON.stringify(
-            {
-              // read here about the use of the spread operator to merge objects: https://dev.to/sagar/three-dots---in-javascript-26ci
-              ...(provider?.key === 'commerce' ? { provider_metadata: 'dx_commerce_events', instance_id: `${uuid.v4()}` } : null),
-              ...(provider?.label ? { label: `${provider?.label}` } : null),
-              ...(provider?.description ? { description: `${provider?.description}` } : null),
-              ...(provider?.docs_url ? { docs_url: `${provider?.docs_url}` } : null)
-            }
-          )
-        }
-  )
-  const result = await createCustomEventProviderReq.json()
-  if (!result?.id) {
-    return {
-      success: false,
-      error: {
-        reason: result?.reason,
-        message: result?.message
+  // See: https://developer.adobe.com/events/docs/api#operation/createProvider
+  const url = `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers`
+  const createCustomEventProviderReq = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
+      Authorization: `Bearer ${accessToken}`,
+      'content-type': 'application/json',
+      Accept: 'application/hal+json'
+    },
+    body: JSON.stringify(
+      {
+        // read here about the use of the spread operator to merge objects: https://dev.to/sagar/three-dots---in-javascript-26ci
+        ...(provider?.key === 'commerce' && { provider_metadata: 'dx_commerce_events', instance_id: `${uuid.v4()}` }),
+        ...(provider?.label && { label: `${provider?.label}` }),
+        ...(provider?.description && { description: `${provider?.description}` }),
+        ...(provider?.docs_url && { docs_url: `${provider?.docs_url}` })
       }
-    }
+    )
+  })
+
+  const result = await createCustomEventProviderReq.json()
+
+  if (!createCustomEventProviderReq.ok) {
+    return makeError(
+      'PROVIDER_CREATION_FAILED',
+      `I/O Management API: call to ${url} returned a non-2XX status code`,
+      {
+        response: result,
+        code: createCustomEventProviderReq.status
+      }
+    )
   }
+
+  if (!result?.id) {
+    return makeError(
+      'PROVIDER_CREATION_FAILED',
+      `I/O Management API: call to ${url} did not return the expected response`,
+      {
+        response: result,
+        code: createCustomEventProviderReq.status
+      }
+    )
+  }
+
   return {
     success: true,
     provider: result
@@ -69,7 +87,6 @@ async function createProvider (environment, accessToken, provider) {
  *
  * @param {string} selection - option selected by client
  * @param {object} clientRegistrations - client registrations
- * @returns {boolean} - returns true or false
  */
 function hasSelection (selection, clientRegistrations) {
   return Object.values(clientRegistrations).some(value => value.includes(selection))
@@ -81,66 +98,64 @@ function hasSelection (selection, clientRegistrations) {
  * @param {object} clientRegistrations - client registrations
  * @param {object} environment - environment params
  * @param {string} accessToken - access token
- * @returns {object} - return reponse with success status and providers created
  */
 async function main (clientRegistrations, environment, accessToken) {
   // Load predefined provider, providerEvents and clientRegistrations
   const providersList = require('../onboarding/config/providers.json')
+  let currentProvider
 
   try {
-    // 'info' is the default level if not set
     console.log('Start process of creating providers: ', providersEventsConfig)
 
     // Validate client registration selection
     const requiredRegistrations = ['product', 'customer', 'order', 'stock']
-    const errorMessage = checkMissingRequestInputs(clientRegistrations, requiredRegistrations, [])
-    if (errorMessage) {
-      // return and log client errors
-      return {
-        code: 400,
-        success: false,
-        error: errorMessage
-      }
+    const missingRegistrations = getMissingKeys(clientRegistrations, requiredRegistrations)
+
+    if (missingRegistrations.length > 0) {
+      const lines = [
+        arrayItemsErrorFormat(
+          missingRegistrations,
+          item => `Registration "${item}" is required`
+        ),
+        '\nCheck that they are present in "/onboarding/config/starter-kit-registrations.json"'
+      ]
+
+      const reason = lines.join('\n')
+      return makeError('MISSING_REGISTRATIONS', reason, {
+        requiredRegistrations,
+        missingRegistrations
+      })
     }
 
-    // Load the existing providers in org
     const existingProviders = await getExistingProviders(environment, accessToken)
-
     const result = []
 
-    // Loop over the predefined providers and create the provider in the System
     for (const provider of providersList) {
-      // Calculate provider label
+      currentProvider = provider
       provider.label = addSuffix(provider.label, environment)
       const isProviderSelectedByClient = hasSelection(provider.key, clientRegistrations)
-      if (isProviderSelectedByClient) {
-        // Check if provider is already created
-        const persistedProvider = existingProviders[provider.label]
-        // persistedProvider = { value, expiration }
-        if (persistedProvider) {
-          console.log(`Skipping creation of "${provider.label}" creation`)
 
+      if (isProviderSelectedByClient) {
+        const persistedProvider = existingProviders[provider.label]
+
+        if (persistedProvider) {
+          console.log(`Skipping creation of "${provider.label}" creation, provider already exists`)
           result.push({
             key: provider.key,
             id: persistedProvider.id,
             instanceId: persistedProvider.instance_id,
             label: provider.label
           })
+
           continue
         }
 
-        console.log('Creating provider with: ' + provider.label)
-        console.log(`provider information: ${JSON.stringify(provider)}`)
+        console.log('Creating provider with:', provider.label)
+        console.log('Provider information:', provider)
 
         const createProviderResult = await createProvider(environment, accessToken, provider)
         if (!createProviderResult?.success) {
-          const errorMessage = `Unable to create provider: reason = '${createProviderResult.error?.reason}', message = '${createProviderResult.error?.message}'`
-          console.log(errorMessage)
-          return {
-            code: 500,
-            success: false,
-            error: errorMessage
-          }
+          return createProviderResult
         }
 
         result.push({
@@ -152,25 +167,23 @@ async function main (clientRegistrations, environment, accessToken) {
       }
     }
 
-    result.forEach(provider => console.log(`Defining the ${provider.key} provider id as : ${provider.id}`))
+    for (const provider of result) {
+      console.log(`Defining the provider with key: ${provider.key} as: ${provider.id}`)
+    }
 
     const response = {
-      code: 200,
       success: true,
       result
     }
 
-    // log the response status code
-    console.log(`${response.code}: Process of creating providers done successfully`)
+    console.log('Process of creating providers done successfully')
     return response
   } catch (error) {
-    const errorMessage = `Unable to complete the process of creating providers: ${error.message}`
-    console.log(errorMessage)
-    return {
-      code: 500,
-      success: false,
-      error: errorMessage
-    }
+    return makeError(
+      'UNEXPECTED_ERROR',
+      'Unexpected error occurred while creating providers',
+      { error, provider: currentProvider }
+    )
   }
 }
 
