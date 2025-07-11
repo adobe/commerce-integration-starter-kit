@@ -38,6 +38,10 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
       - Download again workspace configuration as explained below and execute ```run aio app use``` again.
 - Download the [workspace configuration JSON](https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file) file and save it as `workspace.json` in the `./scripts/onboarding/config` starter kit folder because you will use it to configure Adobe IO Events in commerce afterward.
 
+> [!TIP]
+> Adobe Commerce as a Cloud Service API is only required when accessing to Adobe Commerce as a Cloud Service.
+
+
 ### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5)
 Install Adobe I/O Events for Adobe Commerce module in your commerce instance following this [documentation](https://developer.adobe.com/commerce/extensibility/events/installation/)
 
