@@ -30,12 +30,12 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
 - Select stage workspace or create a new one
 - Add the following API services (select default Oauth server to server)
   - I/0 events
+  - I/O management
   - Adobe I/O Events for Adobe Commerce
   - Adobe Commerce as a Cloud Service.
-    - Upgrading from I/O management API:
-      - Add this new API required for Adobe Commerce as a Cloud Service REST API access. I/O management API is not required for new projects.
-      - Download workspace configuration as explained below and ```run aio app use``` again.
-      - Check ```.env``` to ensure that ```commerce.accs``` scope has been added
+    - If upgrading from previous versions without Adobe Commerce as a Cloud Service API:
+      - Check ```.env``` to ensure that ```commerce.accs``` scope has been added to OAUTH_SCOPES
+      - Download again workspace configuration as explained below and execute ```run aio app use``` again.
 - Download the [workspace configuration JSON](https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file) file and save it as `workspace.json` in the `./scripts/onboarding/config` starter kit folder because you will use it to configure Adobe IO Events in commerce afterward.
 
 ### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5)
