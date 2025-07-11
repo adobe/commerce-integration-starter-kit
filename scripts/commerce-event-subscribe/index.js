@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const ansis = require('ansis')
-const { makeError } = require('../lib/helpers/errors')
+const { makeError, formatError } = require('../lib/helpers/errors')
 
 require('dotenv').config()
 
@@ -22,14 +22,15 @@ require('dotenv').config()
 function logCommerceEventSubscribeError (errorInfo) {
   const { label, reason, payload } = errorInfo
   const additionalDetails = payload
-    ? JSON.stringify(payload, null, 2)
+    ? formatError(payload)
     : 'No additional details'
 
   console.error(
+    ansis.red('\nAn error occurred:\n'),
     ansis.bgRed(`\n COMMERCE_EVENT_SUBSCRIBE → ${label} \n`),
     ansis.red('\nProcess of subscribing to events in the Adobe I/O Events module in Commerce failed:\n'),
-    reason,
-    ansis.red(`\nAdditional error details:" ${additionalDetails}\n`)
+    ansis.red(reason),
+    ansis.red(`\nAdditional error details: ${additionalDetails}\n`)
   )
 }
 
