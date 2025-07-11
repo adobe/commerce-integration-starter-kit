@@ -355,11 +355,9 @@ describe('Given On-boarding providers file', () => {
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse)
 
       const clientRegistrations = require('../../data/onboarding/providers/create_commerce_and_backoffice_providers.json')
-
       const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
-        code: 200,
         success: true,
         result: [
           {
@@ -600,11 +598,9 @@ describe('Given On-boarding providers file', () => {
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse)
 
       const clientRegistrations = require('../../data/onboarding/providers/create_commerce_provider_only.json')
-
       const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
-        code: 200,
         success: true,
         result: [
           {
@@ -839,11 +835,9 @@ describe('Given On-boarding providers file', () => {
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse)
 
       const clientRegistrations = require('../../data/onboarding/providers/create_backoffice_provider_only.json')
-
       const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
-        code: 200,
         success: true,
         result: [
           {
@@ -1080,11 +1074,9 @@ describe('Given On-boarding providers file', () => {
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse)
 
       const clientRegistrations = require('../../data/onboarding/providers/create_commerce_and_backoffice_providers.json')
-
       const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
-        code: 200,
         success: true,
         result: [
           {
@@ -1110,10 +1102,15 @@ describe('Given On-boarding providers file', () => {
       const clientRegistrations = require('../../data/onboarding/providers/create_commerce_and_backoffice_providers.json')
       const response = await action.main(clientRegistrations, ACCESS_TOKEN)
       expect(response).toEqual({
-        code: 500,
         success: false,
-        error: 'Unable to complete the process of creating providers: fake'
-
+        error: {
+          label: 'UNEXPECTED_ERROR',
+          reason: 'Unexpected error occurred while creating providers',
+          payload: {
+            error: fakeError,
+            provider: undefined
+          }
+        }
       })
     })
   })
@@ -1123,10 +1120,15 @@ describe('Given On-boarding providers file', () => {
 
       const response = await action.main(invalidClientRegistrations, ACCESS_TOKEN)
       expect(response).toEqual({
-        code: 400,
         success: false,
-        error: "missing parameter(s) 'customer'"
-
+        error: {
+          label: 'MISSING_REGISTRATIONS',
+          reason: '└── Registration "customer" is required\n\nCheck that they are present in "/onboarding/config/starter-kit-registrations.json"',
+          payload: {
+            missingRegistrations: ['customer'],
+            requiredRegistrations: ['product', 'customer', 'order', 'stock']
+          }
+        }
       })
     })
   })
@@ -1250,6 +1252,7 @@ describe('Given On-boarding providers file', () => {
       }
       const mockFetchCreateCommerceProviderResponse = {
         ok: true,
+        status: 500,
         json: () => Promise.resolve({
           reason: 'Invalid data',
           message: 'Please provide valid data'
@@ -1259,13 +1262,28 @@ describe('Given On-boarding providers file', () => {
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse)
 
       const clientRegistrations = require('../../data/onboarding/providers/create_commerce_and_backoffice_providers.json')
+      const environment = {
+        ...ENVIRONMENT,
+        IO_MANAGEMENT_BASE_URL: 'https://io-management.fake/',
+        IO_CONSUMER_ID: '1234567890',
+        IO_PROJECT_ID: '1234567890',
+        IO_WORKSPACE_ID: '1234567890'
+      }
 
-      const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
-
+      const response = await action.main(clientRegistrations, environment, ACCESS_TOKEN)
       expect(response).toEqual({
-        code: 500,
         success: false,
-        error: "Unable to create provider: reason = 'Invalid data', message = 'Please provide valid data'"
+        error: {
+          label: 'PROVIDER_CREATION_FAILED',
+          reason: 'I/O Management API: call to https://io-management.fake/1234567890/1234567890/1234567890/providers did not return the expected response',
+          payload: {
+            code: 500,
+            response: {
+              reason: 'Invalid data',
+              message: 'Please provide valid data'
+            }
+          }
+        }
       })
     })
   })

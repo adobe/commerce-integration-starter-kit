@@ -14,6 +14,7 @@ const fetch = require('node-fetch')
 const { getExistingRegistrations } = require('../../utils/adobe-events-api')
 const { getRegistrationName } = require('../../utils/naming')
 const providersEventsConfig = require('../onboarding/config/events.json')
+const { makeError } = require('./helpers/errors')
 
 /**
  * Create the registrations based on the selection of the client from the file custom/starter-kit-registrations.json
@@ -22,7 +23,6 @@ const providersEventsConfig = require('../onboarding/config/events.json')
  * @param {Array} providers - list of providers
  * @param {object} environment - environment params
  * @param {string} accessToken - access token
- * @returns {object} - returns response with success status and registrations information
  */
 async function main (clientRegistrations, providers, environment, accessToken) {
   const result = []
@@ -53,35 +53,38 @@ async function main (clientRegistrations, providers, environment, accessToken) {
         }
 
         const createEventRegistrationResult = await createRequestRegistration(accessToken, entityName, provider.key, events, environment)
+
         if (!createEventRegistrationResult.success) {
-          const errorMessage = `Unable to create registration for ${entityName} with provider ${provider.key} - ${provider.id}`
-          console.log(errorMessage)
-          console.log(`Reason: ${createEventRegistrationResult.error.reason}, message: ${createEventRegistrationResult.error.message}`)
-          return {
-            code: 500,
-            success: false,
-            error: errorMessage
-          }
+          const error = createEventRegistrationResult.error
+          return makeError(
+            error.label,
+            error.reason,
+            {
+              ...error.payload,
+              entityName,
+              provider
+            }
+          )
         }
+
         console.log(`Registration created for entity ${entityName} - ${provider.key}`)
         result.push(createEventRegistrationResult.result)
       }
     }
+
     console.log('Create registrations process done correctly!')
     console.log('Created registrations: ', result)
+
     return {
-      code: 200,
       success: true,
       registrations: result
     }
   } catch (error) {
-    const errorMessage = `Unable to complete the process of creating events registrations: ${error.message}`
-    console.log(errorMessage)
-    return {
-      code: 500,
-      success: false,
-      error: errorMessage
-    }
+    return makeError(
+      'UNEXPECTED_ERROR',
+      'Unexpected error occurred while creating registrations',
+      { error }
+    )
   }
 }
 
@@ -93,45 +96,53 @@ async function main (clientRegistrations, providers, environment, accessToken) {
  * @param {string} providerKey - provider key
  * @param {Array} events - provider events
  * @param {object} environment - environment params
- * @returns {object} - returns success status and registration info
  */
 async function createRequestRegistration (accessToken, entityName, providerKey, events, environment) {
-  const body = JSON.stringify(
-    {
-      client_id: `${environment.OAUTH_CLIENT_ID}`,
-      runtime_action: `${entityName}-${providerKey}/consumer`,
-      name: getRegistrationName(providerKey, entityName),
-      description: getRegistrationName(providerKey, entityName),
-      events_of_interest: events,
-      delivery_type: 'webhook'
-    }
-  )
+  const body = JSON.stringify({
+    client_id: `${environment.OAUTH_CLIENT_ID}`,
+    runtime_action: `${entityName}-${providerKey}/consumer`,
+    name: getRegistrationName(providerKey, entityName),
+    description: getRegistrationName(providerKey, entityName),
+    events_of_interest: events,
+    delivery_type: 'webhook'
+  })
 
-  const createEventRegistrationReq = await fetch(
-        `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/registrations`,
-        {
-          method: 'POST',
-          headers: {
-            'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
-            Authorization: `Bearer ${accessToken}`,
-            'content-type': 'application/json',
-            Accept: 'application/hal+json'
-          },
-          body
-        }
-  )
+  const url = `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/registrations`
+  const createEventRegistrationReq = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
+      Authorization: `Bearer ${accessToken}`,
+      'content-type': 'application/json',
+      Accept: 'application/hal+json'
+    },
+    body
+  })
 
   const result = await createEventRegistrationReq.json()
 
-  if (!result?.client_id) {
-    return {
-      success: false,
-      error: {
-        reason: result?.reason,
-        message: result?.message
+  if (!createEventRegistrationReq.ok) {
+    return makeError(
+      'CREATE_EVENT_REGISTRATION_FAILED',
+      `I/O Management API: call to ${url} returned a non-2XX status code`,
+      {
+        response: result,
+        code: createEventRegistrationReq.status
       }
-    }
+    )
   }
+
+  if (!result?.client_id) {
+    return makeError(
+      'CREATE_EVENT_REGISTRATION_FAILED',
+      `I/O Management API: call to ${url} did not return the expected response`,
+      {
+        response: result,
+        code: createEventRegistrationReq.status
+      }
+    )
+  }
+
   return {
     success: true,
     result: {

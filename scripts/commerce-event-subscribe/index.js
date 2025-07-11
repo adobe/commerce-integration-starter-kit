@@ -10,18 +10,39 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const ansis = require('ansis')
+const { makeError } = require('../lib/helpers/errors')
+
 require('dotenv').config()
 
 /**
- * This method handles the commerce event subscribe script, it configures the Adobe I/O Events Commerce module event subscriptions
- * @returns {object} - returns a response with successful and failed commerce event subscriptions
+ * Logs an error ocurred during the commerce event subscribe process.
+ * @param {object} errorInfo - General information about the error.
+ */
+function logCommerceEventSubscribeError (errorInfo) {
+  const { label, reason, payload } = errorInfo
+  const additionalDetails = payload
+    ? JSON.stringify(payload, null, 2)
+    : 'No additional details'
+
+  console.error(
+    ansis.bgRed(`\n COMMERCE_EVENT_SUBSCRIBE → ${label} \n`),
+    ansis.red('\nProcess of subscribing to events in the Adobe I/O Events module in Commerce failed:\n'),
+    reason,
+    ansis.red(`\nAdditional error details:" ${additionalDetails}\n`)
+  )
+}
+
+/**
+ * This method handles the commerce event subscribe script.
+ * It configures the Adobe I/O Events Commerce module event subscriptions
  */
 async function main () {
   console.log('Starting the commerce event subscribe process')
 
   const result = {
-    successful_subscriptions: [],
-    failed_subscriptions: []
+    successfulSubscriptions: [],
+    failedSubscriptions: []
   }
 
   try {
@@ -29,50 +50,47 @@ async function main () {
     for (const commerceEventSubscription of commerceEventSubscriptions) {
       const eventSubscribeResult = await require('../lib/event-subscribe').main(commerceEventSubscription, process.env)
       if (!eventSubscribeResult.success) {
-        let errorMessage = `Failed to subscribe to event: ${commerceEventSubscription.event.name} with error: ${eventSubscribeResult.error}`
-        if (eventSubscribeResult.error.includes('Response code 400 (Bad Request)')) {
-          errorMessage += ' - Please make sure the event name is valid and the subscription payload is not malformed'
-        }
-        if (eventSubscribeResult.error.includes('Response code 404 (Not Found)')) {
-          errorMessage += ' - Make sure the latest version of the Adobe I/O Events module (see https://developer.adobe.com/commerce/extensibility/events/release-notes/) is installed and enabled in Commerce (see https://developer.adobe.com/commerce/extensibility/events/installation/). If the module cannot be updated to the latest version, you can use the "bin/magento events:subscribe" command to manually configure the event subscriptions. (See the command reference at https://developer.adobe.com/commerce/extensibility/events/commands/).'
-        }
-        console.log(errorMessage)
-        result.failed_subscriptions.push(commerceEventSubscription.event.name)
+        logCommerceEventSubscribeError(eventSubscribeResult.error)
+        result.failedSubscriptions.push(commerceEventSubscription.event.name)
+
         continue
       }
+
       console.log(`Successfully subscribed to event: ${commerceEventSubscription.event.name}`)
-      result.successful_subscriptions.push(commerceEventSubscription.event.name)
-    }
-    console.log('Finished the commerce event subscribe process with result', result)
-    return {
-      code: 200,
-      success: true,
-      result
+      result.successfulSubscriptions.push(commerceEventSubscription.event.name)
     }
   } catch (error) {
     if (error?.code === 'MODULE_NOT_FOUND') {
-      console.log('Failed to subscribe to events with error: "commerce-event-subscribe.json" file not found. Make sure the file exists in the "scripts/commerce-event-subscribe/config" directory')
-      return {
-        code: 500,
-        success: false,
-        error: error.message
-      }
+      logCommerceEventSubscribeError(makeError(
+        'MISSING_EVENT_SPEC_FILE',
+        'The "commerce-event-subscribe.json" file was not found. Make sure the file exists in the "scripts/commerce-event-subscribe/config" directory',
+        { error }
+      ))
+
+      return
     }
+
     if (error?.name === 'SyntaxError') {
-      console.log('Failed to subscribe to events with error: "commerce-event-subscribe.json" file is not a valid JSON file. Make sure the file in the "scripts/commerce-event-subscribe/config" directory contains well-formed JSON')
-      return {
-        code: 500,
-        success: false,
-        error: error.message
-      }
+      logCommerceEventSubscribeError(makeError(
+        'INVALID_JSON_FILE',
+        'The "commerce-event-subscribe.json" file is not a valid JSON file. Make sure the file in the "scripts/commerce-event-subscribe/config" directory contains well-formed JSON',
+        { error }
+      ))
+
+      return
     }
-    console.log('Failed to subscribe to events with error:', error)
-    return {
-      code: 500,
-      success: false,
-      error: error.message
-    }
+
+    logCommerceEventSubscribeError(makeError(
+      'UNEXPECTED_ERROR',
+      'An unexpected error occurred',
+      { error }
+    ))
+
+    return
   }
+
+  console.log('Finished the commerce event subscribe process with result', result)
+  return { result }
 }
 
 exports.main = main

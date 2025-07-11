@@ -25,7 +25,6 @@ function withBearer (token) {
 /**
  * This function return the Adobe commerce OAuth client
  *
- * @returns {object} - The Oauth client
  * @param {object} options - include the information to configure oauth
  * @param {object} authOptions - 'IMS' or 'COMMERCE'
  * @param {object} logger - Logger
@@ -67,7 +66,6 @@ function createClient (options, authOptions, logger) {
   /**
    * This function make the call to the api
    *
-   * @returns {object} - returns the call response
    * @param {object} requestData - include the request data
    * @param {string} requestToken - access token
    * @param {object} customHeaders - include custom headers
@@ -159,7 +157,6 @@ function createClient (options, authOptions, logger) {
 /**
  * This function create the oauth client to use for calling adobe commerce api
  *
- * @returns {object} - returns the oauth client
  * @param {object} clientOptions - define the options for the client
  * @param {object} logger - define the Logger
  */

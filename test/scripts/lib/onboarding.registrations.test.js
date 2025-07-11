@@ -248,11 +248,9 @@ describe('Given on-boarding registrations file', () => {
         .mockResolvedValueOnce(mockFetchCreateProductBackofficeRegistrationResponse)
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
-
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
-        code: 200,
         success: true,
         registrations: [
           {
@@ -441,11 +439,9 @@ describe('Given on-boarding registrations file', () => {
         .mockResolvedValueOnce(mockFetchCreateProductCommerceRegistrationResponse)
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_only_commerce_registrations.json')
-
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
-        code: 200,
         success: true,
         registrations: [
           {
@@ -628,11 +624,9 @@ describe('Given on-boarding registrations file', () => {
         .mockResolvedValueOnce(mockFetchCreateProductBackofficeRegistrationResponse)
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_only_backoffice_registrations.json')
-
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
-        code: 200,
         success: true,
         registrations: [
           {
@@ -815,11 +809,9 @@ describe('Given on-boarding registrations file', () => {
         .mockResolvedValueOnce(mockFetchCreateProductBackofficeRegistrationResponse)
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
-
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
-        code: 200,
         success: true,
         registrations: [
           {
@@ -844,9 +836,14 @@ describe('Given on-boarding registrations file', () => {
       fetch.mockRejectedValue(fakeError)
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
       expect(response).toEqual({
-        code: 500,
         success: false,
-        error: 'Unable to complete the process of creating events registrations: fake'
+        error: {
+          label: 'UNEXPECTED_ERROR',
+          reason: 'Unexpected error occurred while creating registrations',
+          payload: {
+            error: fakeError
+          }
+        }
       })
     })
   })
@@ -854,6 +851,7 @@ describe('Given on-boarding registrations file', () => {
     test('Then returns error response', async () => {
       const mockFetchCreateProviderMetadataResponse = {
         ok: true,
+        status: 500,
         json: () => Promise.resolve({
           reason: 'Invalid data',
           message: 'Please provide valid data'
@@ -863,13 +861,35 @@ describe('Given on-boarding registrations file', () => {
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse)
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
+      const environment = {
+        ...EMPTY_ENVIRONMENT,
+        IO_MANAGEMENT_BASE_URL: 'https://io-management.fake/',
+        IO_CONSUMER_ID: '1234567890',
+        IO_PROJECT_ID: '1234567890',
+        IO_WORKSPACE_ID: '1234567890'
+      }
 
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, environment, ACCESS_TOKEN)
 
       expect(response).toEqual({
-        code: 500,
         success: false,
-        error: 'Unable to create registration for product with provider commerce - COMMERCE_PROVIDER_ID'
+        error: {
+          label: 'CREATE_EVENT_REGISTRATION_FAILED',
+          reason: 'I/O Management API: call to https://io-management.fake/1234567890/1234567890/1234567890/registrations did not return the expected response',
+          payload: {
+            code: 500,
+            entityName: 'product',
+            provider: {
+              id: 'COMMERCE_PROVIDER_ID',
+              key: 'commerce',
+              label: 'Commerce Provider'
+            },
+            response: {
+              reason: 'Invalid data',
+              message: 'Please provide valid data'
+            }
+          }
+        }
       })
     })
   })

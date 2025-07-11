@@ -17,7 +17,6 @@ const logger = Core.Logger('commerce-eventing-api-client', { level: 'info' })
 /**
  * This function calls Adobe commerce rest API to update the eventing configuration
  *
- * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
@@ -42,7 +41,6 @@ async function updateConfiguration (baseUrl, params, data) {
 /**
  * This function calls Adobe commerce rest API to subscribe to an event
  *
- * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
