@@ -38,7 +38,9 @@ async function main (providerId, instanceId, workspaceConfiguration, environment
       success: true
     }
   } catch (error) {
-    const hints = []
+    const hints = [
+      'Ensure your "onboarding/config/workspace.json" file is up to date'
+    ]
 
     if (error?.message?.includes('Response code 404 (Not Found)')) {
       hints.push('Make sure the latest version of the Adobe I/O Events module (see https://developer.adobe.com/commerce/extensibility/events/release-notes/) is installed and enabled in Commerce (see https://developer.adobe.com/commerce/extensibility/events/installation/).')
