@@ -50,7 +50,7 @@ async function main (providerId, instanceId, workspaceConfiguration, environment
       'Unexpected error occurred while updating the eventing configuration of the Adobe I/O Events module in Commerce',
       {
         error,
-        config: body.config,
+        config: { ...body.config, workspace_configuration: undefined },
         hints: hints.length > 0 ? hints : undefined
       }
     )
