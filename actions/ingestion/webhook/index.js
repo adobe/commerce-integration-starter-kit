@@ -18,13 +18,13 @@ const {
   HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR, HTTP_UNAUTHORIZED,
   BACKOFFICE_PROVIDER_KEY, PUBLISH_EVENT_SUCCESS
 } = require('../../../actions/constants')
-const { getAdobeAccessToken } = require('../../../utils/adobe-auth')
+const { getAdobeAccessHeaders } = require('../../../utils/adobe-auth')
 const { getProviderByKey } = require('../../../utils/adobe-events-api')
 const { validateData } = require('./validator')
 const { checkAuthentication } = require('./auth')
 const { errorResponse, successResponse } = require('../../responses')
-const { isErr, unwrap } = require("@adobe/aio-commerce-lib-core/result");
-const { summarizeValidationError } = require("@adobe/aio-commerce-lib-core/validation");
+const { CommerceSdkValidationError } = require("@adobe/aio-commerce-lib-core/validation");
+
 
 /**
  * This web action allow external back-office application publish event to IO event using custom authentication mechanism.
@@ -51,19 +51,11 @@ async function main (params) {
     }
 
     logger.debug('Generate Adobe access token')
-    const result = await getAdobeAccessToken(process.env);
-
-    if (isErr(result)) {
-      const { error } = result;
-      logger.info(summarizeValidationError(error))
-      logger.error(`Failed to get an access token: ${result.error.message}. See console for more details.`);
-    }
-
-    const accessToken = unwrap(result);
-
+    const authHeaders = await getAdobeAccessHeaders(params)
+    const accessToken = authHeaders.Authorization.replace('Bearer ', '');
 
     logger.debug('Get existing registrations')
-    const provider = await getProviderByKey(params, accessToken, BACKOFFICE_PROVIDER_KEY)
+    const provider = await getProviderByKey(params, authHeaders, BACKOFFICE_PROVIDER_KEY)
 
     if (!provider) {
       const errorMessage = 'Could not find any external backoffice provider'
@@ -73,9 +65,9 @@ async function main (params) {
 
     logger.debug('Initiate events client')
     const eventsClient = await Events.init(
-      params.OAUTH_ORG_ID,
-      params.OAUTH_CLIENT_ID,
-      accessToken)
+        params.AIO_COMMERCE_IMS_ORG_ID,
+        params.AIO_COMMERCE_IMS_CLIENT_ID,
+        accessToken)
 
     const eventType = params.data.event
     logger.info(`Process event data ${eventType}`)
@@ -102,6 +94,11 @@ async function main (params) {
       message: 'Event published successfully'
     })
   } catch (error) {
+    if (error instanceof CommerceSdkValidationError) {
+      logger.error(error.display());
+      return;
+    }
+
     logger.error(`Server error: ${error.message}`)
     return errorResponse(HTTP_INTERNAL_ERROR, error.message)
   }

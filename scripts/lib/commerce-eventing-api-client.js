@@ -15,11 +15,11 @@ const { Core } = require('@adobe/aio-sdk')
 const logger = Core.Logger('commerce-eventing-api-client', { level: 'info' })
 
 /**
- * This function calls Adobe commerce rest API to update the eventing configuration
- *
- * @param {string} baseUrl - Adobe commerce rest api base url
- * @param {object} params - Environment params from the IO Runtime request
- * @param {object} data - Adobe commerce api payload
+ * Updates Adobe Commerce eventing configuration via REST API
+ * @param {string} baseUrl - Adobe Commerce REST API base URL
+ * @param {Object} params - Environment parameters for OAuth authentication
+ * @param {Object} data - Configuration payload to send to Adobe Commerce API
+ * @returns {Promise<Object>} Response from the Adobe Commerce API
  */
 async function updateConfiguration (baseUrl, params, data) {
   const client = getClient(
@@ -39,11 +39,11 @@ async function updateConfiguration (baseUrl, params, data) {
 }
 
 /**
- * This function calls Adobe commerce rest API to subscribe to an event
- *
- * @param {string} baseUrl - Adobe commerce rest api base url
- * @param {object} params - Environment params from the IO Runtime request
- * @param {object} data - Adobe commerce api payload
+ * Subscribes to an event in Adobe Commerce via REST API
+ * @param {string} baseUrl - Adobe Commerce REST API base URL
+ * @param {Object} params - Environment parameters for OAuth authentication
+ * @param {Object} data - Event subscription payload to send to Adobe Commerce API
+ * @returns {Promise<Object>} Response from the Adobe Commerce API
  */
 async function eventSubscribe (baseUrl, params, data) {
   const client = getClient(

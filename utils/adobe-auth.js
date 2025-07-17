@@ -44,7 +44,19 @@ async function getAdobeAccessToken (params) {
   return imsAuthProvider.getAccessToken();
 }
 
+/**
+ * Get the access token headers for Adobe tools (e.g. IO Events)
+ * @param params
+ * @returns {Promise<object>} returns the headers with access token
+ */
+async function getAdobeAccessHeaders (params) {
+  assertImsAuthParams(params);
+  const imsAuthProvider = getImsAuthProvider(params);
+
+  return imsAuthProvider.getHeaders();
+}
+
 module.exports = {
   getAdobeAccessToken,
-  intoImsAuthParameters
+  getAdobeAccessHeaders,
 }
