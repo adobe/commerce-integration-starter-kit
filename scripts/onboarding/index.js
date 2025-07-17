@@ -12,7 +12,8 @@ governing permissions and limitations under the License.
 
 const ansis = require('ansis')
 const { getAdobeAccessToken } = require('../../utils/adobe-auth')
-const { makeError } = require('../lib/helpers/errors')
+const { makeError, formatError } = require('../lib/helpers/errors')
+const { CommerceSdkValidationError } = require('@adobe/aio-commerce-lib-core/validation')
 
 require('dotenv').config()
 
@@ -24,20 +25,22 @@ require('dotenv').config()
 function logOnboardingError (phase, errorInfo) {
   const { label, reason, payload } = errorInfo
   const phaseLabels = {
+    getAccessToken: 'GET_ACCESS_TOKEN',
     providers: 'PROVIDER_ONBOARDING',
     metadata: 'METADATA_ONBOARDING',
     registrations: 'REGISTRATIONS_ONBOARDING'
   }
 
-  const additionalDetails = payload
-    ? JSON.stringify(payload, null, 2)
+  const additionalDetails = CommerceSdkValidationError.is(payload) && typeof payload?.display === 'function' ? `\n${payload.display()}` : payload
+    ? formatError(payload)
     : 'No additional details'
 
   console.error(
+    ansis.red('\nAn error occurred:\n'),
     ansis.bgRed(`\n ${phaseLabels[phase]} → ${label} \n`),
     ansis.red(`\nProcess of on-boarding (${phase}) failed:\n`),
-    reason,
-    ansis.red(`\nAdditional error details:" ${additionalDetails}\n`)
+    ansis.red(reason),
+    ansis.red(`\nAdditional error details: ${additionalDetails}\n`)
   )
 }
 
@@ -48,14 +51,15 @@ function logOnboardingError (phase, errorInfo) {
 function logConfigureEventingError (errorInfo) {
   const { label, reason, payload } = errorInfo
   const additionalDetails = payload
-    ? JSON.stringify(payload, null, 2)
+    ? formatError(payload)
     : 'No additional details'
 
   console.error(
+    ansis.red('\nAn error occurred:\n'),
     ansis.bgRed(`\n CONFIGURE_EVENTING → ${label} \n`),
     ansis.red('\nProcess of configuring Adobe I/O Events module in Commerce failed:\n'),
-    reason,
-    ansis.red(`\nAdditional error details:" ${additionalDetails}\n`)
+    ansis.red(reason),
+    ansis.red(`\nAdditional error details: ${additionalDetails}\n`)
   )
 }
 
@@ -67,8 +71,39 @@ async function main () {
   console.log('Starting the process of on-boarding based on your registration choices')
 
   const registrations = require('./config/starter-kit-registrations.json')
-  const accessToken = await getAdobeAccessToken(process.env)
-  const createProvidersResult = await require('../lib/providers').main(registrations, process.env, accessToken)
+  let accessToken;
+
+  try {
+    // resolve params
+    const imsAuthParams = {
+      clientId: process.env.AIO_COMMERCE_IMS_CLIENT_ID,
+      clientSecrets: JSON.parse(process.env.AIO_COMMERCE_IMS_CLIENT_SECRETS),
+      technicalAccountId: process.env.AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_ID,
+      technicalAccountEmail: process.env.AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_EMAIL,
+      imsOrgId: process.env.AIO_COMMERCE_IMS_IMS_ORG_ID,
+      imsEnv: process.env.AIO_COMMERCE_IMS_ENV,
+      ctx: process.env.AIO_COMMERCE_IMS_CTX,
+      scopes: JSON.parse(process.env.AIO_COMMERCE_IMS_SCOPES)
+    }
+
+    accessToken = await getAdobeAccessToken(imsAuthParams);
+
+  } catch (error) {
+    if (error instanceof CommerceSdkValidationError) {
+      logOnboardingError('getAccessToken', makeError(
+          'INVALID_IMS_AUTH_PARAMS',
+          'Missing or invalid environment variables for Adobe IMS authentication.',
+          error
+      ).error);
+      return;
+    }
+
+    console.error(error);
+    return;
+  }
+
+  console.log('Access token successfully generated:', accessToken)
+  const createProvidersResult = await require('../lib/providers').main(registrations, process.env, accessToken);
 
   if (!createProvidersResult.success) {
     logOnboardingError('providers', createProvidersResult.error)
@@ -76,14 +111,14 @@ async function main () {
   }
 
   const providers = createProvidersResult.result
-  const createProvidersMetadataResult = await require('../lib/metadata').main(registrations, providers, process.env, accessToken)
+  const createProvidersMetadataResult = await require('../lib/metadata').main(registrations, providers, process.env, result)
 
   if (!createProvidersMetadataResult.success) {
     logOnboardingError('metadata', createProvidersMetadataResult.error)
     return
   }
 
-  const registerEntityEventsResult = await require('../lib/registrations').main(registrations, providers, process.env, accessToken)
+  const registerEntityEventsResult = await require('../lib/registrations').main(registrations, providers, process.env, result)
   if (!registerEntityEventsResult.success) {
     logOnboardingError('registrations', registerEntityEventsResult.error)
     return

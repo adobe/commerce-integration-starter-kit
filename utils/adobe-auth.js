@@ -10,8 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { tryGetImsAuthProvider } = require('@adobe/aio-commerce-lib-auth');
-const { isErr, map, Result } = require('@adobe/aio-commerce-lib-core/result');
+const { assertImsAuthParams, getImsAuthProvider } = require('@adobe/aio-commerce-lib-auth');
 const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets'];
 
 /**
@@ -39,12 +38,10 @@ function intoImsAuthParameters (params) {
  * @returns {Result} returns the access token
  */
 async function getAdobeAccessToken (params) {
-  const result = tryGetImsAuthProvider(params);
-  if (isErr(result)) {
-    return result;
-  }
+  assertImsAuthParams(params);
+  const imsAuthProvider = getImsAuthProvider(params);
 
-  return map(result, (imsAuthProvider) => imsAuthProvider.getAccessToken())
+  return imsAuthProvider.getAccessToken();
 }
 
 module.exports = {
