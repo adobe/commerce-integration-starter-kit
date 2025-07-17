@@ -327,7 +327,6 @@ describe('Given customer commerce consumer', () => {
             }
           }
         }
-    
         const params = {
           type,
           EVENT_PREFIX: 'test_app',
