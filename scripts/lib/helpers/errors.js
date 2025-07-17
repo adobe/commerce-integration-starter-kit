@@ -1,3 +1,5 @@
+const util = require('node:util')
+
 const LAST_RETURN_CHAR = '└── '
 const RETURN_CHAR = '├── '
 
@@ -35,7 +37,25 @@ function makeError (label, reason, payload = {}) {
   }
 }
 
+/**
+ * Format an error object to be logged to the console.
+ * It uses util.inspect to format the error object and log at maximum depth.
+ *
+ * @param {object} error - The error object to format.
+ */
+function formatError (error) {
+  return (
+    util.inspect(error, {
+      sorted: true,
+      depth: null,
+      colors: true,
+      maxStringLength: Number.POSITIVE_INFINITY
+    })
+  )
+}
+
 module.exports = {
   makeError,
-  arrayItemsErrorFormat
+  arrayItemsErrorFormat,
+  formatError
 }

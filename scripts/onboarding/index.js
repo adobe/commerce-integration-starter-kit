@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 const ansis = require('ansis')
 const { getAdobeAccessToken } = require('../../utils/adobe-auth')
-const { makeError } = require('../lib/helpers/errors')
+const { makeError, formatError } = require('../lib/helpers/errors')
 
 require('dotenv').config()
 
@@ -30,14 +30,15 @@ function logOnboardingError (phase, errorInfo) {
   }
 
   const additionalDetails = payload
-    ? JSON.stringify(payload, null, 2)
+    ? formatError(payload)
     : 'No additional details'
 
   console.error(
+    ansis.red('\nAn error occurred:\n'),
     ansis.bgRed(`\n ${phaseLabels[phase]} → ${label} \n`),
     ansis.red(`\nProcess of on-boarding (${phase}) failed:\n`),
-    reason,
-    ansis.red(`\nAdditional error details:" ${additionalDetails}\n`)
+    ansis.red(reason),
+    ansis.red(`\nAdditional error details: ${additionalDetails}\n`)
   )
 }
 
@@ -48,14 +49,15 @@ function logOnboardingError (phase, errorInfo) {
 function logConfigureEventingError (errorInfo) {
   const { label, reason, payload } = errorInfo
   const additionalDetails = payload
-    ? JSON.stringify(payload, null, 2)
+    ? formatError(payload)
     : 'No additional details'
 
   console.error(
+    ansis.red('\nAn error occurred:\n'),
     ansis.bgRed(`\n CONFIGURE_EVENTING → ${label} \n`),
     ansis.red('\nProcess of configuring Adobe I/O Events module in Commerce failed:\n'),
-    reason,
-    ansis.red(`\nAdditional error details:" ${additionalDetails}\n`)
+    ansis.red(reason),
+    ansis.red(`\nAdditional error details: ${additionalDetails}\n`)
   )
 }
 
