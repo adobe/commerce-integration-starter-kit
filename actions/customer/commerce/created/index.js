@@ -10,7 +10,9 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { Core } = require('@adobe/aio-sdk')
+const { telemetryConfig } = require('../../../telemetry')
+const { instrumentEntrypoint, getInstrumentationHelpers } = require('@adobe/aio-lib-telemetry')
+
 const { stringParameters } = require('../../../utils')
 const { transformData } = require('./transformer')
 const { sendData } = require('./sender')
@@ -18,7 +20,7 @@ const { HTTP_INTERNAL_ERROR, HTTP_BAD_REQUEST } = require('../../../constants')
 const { validateData } = require('./validator')
 const { preProcess } = require('./pre')
 const { postProcess } = require('./post')
-const { actionSuccessResponse, actionErrorResponse } = require('../../../responses')
+const { actionSuccessResponse, actionErrorResponse, isActionSuccessful } = require('../../../responses')
 
 /**
  * This action is on charge of sending created customer information in Adobe commerce to external back-office application
@@ -27,7 +29,7 @@ const { actionSuccessResponse, actionErrorResponse } = require('../../../respons
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main (params) {
-  const logger = Core.Logger('customer-commerce-created', { level: params.LOG_LEVEL || 'info' })
+  const { logger } = getInstrumentationHelpers()
 
   logger.info('Start processing request')
   logger.debug(`Received params: ${stringParameters(params)}`)
@@ -64,4 +66,7 @@ async function main (params) {
   }
 }
 
-exports.main = main
+exports.main = instrumentEntrypoint(main, {
+  ...telemetryConfig,
+  isSuccessful: isActionSuccessful
+})

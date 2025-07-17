@@ -16,6 +16,10 @@ const openwhisk = require('openwhisk')
 const { HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_INTERNAL_ERROR } = require('../../../../../actions/constants')
 const Openwhisk = require('../../../../../actions/openwhisk')
 
+beforeAll(() => {
+  process.env.__AIO_DEV = 'false'
+})
+
 afterEach(() => {
   jest.clearAllMocks()
   jest.resetModules()
@@ -33,6 +37,7 @@ describe('Given customer commerce consumer', () => {
         API_HOST: 'API_HOST',
         API_AUTH: 'API_AUTH',
         EVENT_PREFIX: 'test_app',
+        ENABLE_TELEMETRY: 'true',
         type: 'com.adobe.commerce.test_app.observer.customer_save_commit_after',
         data: {
           value: {
@@ -81,6 +86,7 @@ describe('Given customer commerce consumer', () => {
       async () => {
         const params = {
           EVENT_PREFIX: 'test_app',
+          ENABLE_TELEMETRY: 'true',
           type: 'com.adobe.commerce.test_app.observer.customer_save_commit_after',
           data: {
             value: {
@@ -127,6 +133,7 @@ describe('Given customer commerce consumer', () => {
     test('Then returns success response', async () => {
       const params = {
         EVENT_PREFIX: 'test_app',
+        ENABLE_TELEMETRY: 'true',
         type: 'com.adobe.commerce.test_app.observer.customer_delete_commit_after',
         data: {
           value: {
@@ -173,6 +180,7 @@ describe('Given customer commerce consumer', () => {
     test('Then returns success response', async () => {
       const params = {
         EVENT_PREFIX: 'test_app',
+        ENABLE_TELEMETRY: 'true',
         type: 'com.adobe.commerce.test_app.observer.customer_group_save_commit_after',
         data: {
           value: {
@@ -221,6 +229,7 @@ describe('Given customer commerce consumer', () => {
     test('Then returns success response', async () => {
       const params = {
         EVENT_PREFIX: 'test_app',
+        ENABLE_TELEMETRY: 'true',
         type: 'com.adobe.commerce.test_app.observer.customer_group_delete_commit_after',
         data: {
           value: {
@@ -269,6 +278,7 @@ describe('Given customer commerce consumer', () => {
     test('Then returns error response', async () => {
       const params = {
         EVENT_PREFIX: 'test_app',
+        ENABLE_TELEMETRY: 'true',
         type: 'NOT_SUPPORTED_TYPE',
         data: {
           value: {
@@ -317,7 +327,18 @@ describe('Given customer commerce consumer', () => {
             }
           }
         }
-        const params = { type, EVENT_PREFIX: 'test_app', data: { value: { customer_group_code: 'xxx' } } }
+    
+        const params = {
+          type,
+          EVENT_PREFIX: 'test_app',
+          ENABLE_TELEMETRY: 'true',
+          data: {
+            value: {
+              customer_group_code: 'xxx'
+            }
+          }
+        }
+
         Openwhisk.prototype.invokeAction = jest.fn()
           .mockResolvedValue(ACTION_RESPONSE)
         expect(await action.main(params)).toMatchObject(CONSUMER_RESPONSE)

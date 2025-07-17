@@ -63,11 +63,9 @@ describe('Given on-boarding metadata file', () => {
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse)
 
       const clientRegistrations = require('../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json')
-
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
-        code: 200,
         success: true,
         result: [{
           entity: 'product',
@@ -99,14 +97,13 @@ describe('Given on-boarding metadata file', () => {
           }
         })
       }
+
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse)
 
       const clientRegistrations = require('../../data/onboarding/metadata/create_only_commerce_providers_metadata.json')
-
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
-        code: 200,
         success: true,
         result: [
           {
@@ -138,11 +135,9 @@ describe('Given on-boarding metadata file', () => {
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse)
 
       const clientRegistrations = require('../../data/onboarding/metadata/create_only_backoffice_providers_metadata.json')
-
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
-        code: 200,
         success: true,
         result: [
           {
@@ -160,9 +155,19 @@ describe('Given on-boarding metadata file', () => {
       const clientRegistrations = require('../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json')
       const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
       expect(response).toEqual({
-        code: 500,
         success: false,
-        error: 'Unable to complete the process of adding metadata to provider: fake'
+        error: {
+          label: 'UNEXPECTED_ERROR',
+          reason: 'Unexpected error occurred while adding metadata to provider',
+          payload: {
+            error: fakeError,
+            provider: {
+              id: 'COMMERCE_PROVIDER_ID',
+              key: 'commerce',
+              label: 'Commerce Provider'
+            }
+          }
+        }
       })
     })
   })
@@ -170,6 +175,7 @@ describe('Given on-boarding metadata file', () => {
     test('Then returns error response', async () => {
       const mockFetchCreateProviderMetadataResponse = {
         ok: true,
+        status: 500,
         json: () => Promise.resolve({
           reason: 'Invalid data',
           message: 'Please provide valid data'
@@ -178,13 +184,28 @@ describe('Given on-boarding metadata file', () => {
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse)
 
       const clientRegistrations = require('../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json')
+      const environment = {
+        ...ENVIRONMENT,
+        IO_MANAGEMENT_BASE_URL: 'https://io-management.fake/',
+        IO_CONSUMER_ID: '1234567890',
+        IO_PROJECT_ID: '1234567890',
+        IO_WORKSPACE_ID: '1234567890'
+      }
 
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT)
-
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, environment)
       expect(response).toEqual({
-        code: 500,
         success: false,
-        error: "Unable to add event metadata: reason = 'Invalid data', message = 'Please provide valid data'"
+        error: {
+          label: 'ADD_EVENT_CODE_TO_PROVIDER_FAILED',
+          reason: 'I/O Management API: call to https://io-management.fake/1234567890/1234567890/1234567890/providers/COMMERCE_PROVIDER_ID/eventmetadata did not return the expected response',
+          payload: {
+            code: 500,
+            response: {
+              reason: 'Invalid data',
+              message: 'Please provide valid data'
+            }
+          }
+        }
       })
     })
   })

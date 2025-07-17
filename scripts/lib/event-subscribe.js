@@ -12,12 +12,12 @@ governing permissions and limitations under the License.
 
 const { eventSubscribe } = require('./commerce-eventing-api-client')
 const { getEventName } = require('../../utils/naming')
+const { makeError } = require('./helpers/errors')
 
 /**
  * This method subscribes to an event in the commerce eventing module
  * @param {object} eventSpec - event specification as described in https://developer.adobe.com/commerce/extensibility/events/api/#subscribe-to-events
  * @param {object} environment - environment variables
- * @returns {object} - returns response object
  */
 async function main (eventSpec, environment) {
   if (!environment.EVENT_PREFIX) {
@@ -38,18 +38,35 @@ async function main (eventSpec, environment) {
       environment,
       eventSpec
     )
+
     return {
-      code: 200,
       success: true
     }
   } catch (error) {
-    const errorMessage = `Unable to complete the process of event subscription: ${error.message}`
-    console.log(errorMessage)
-    return {
-      code: 500,
-      success: false,
-      error: errorMessage
+    let label = 'UNEXPECTED_ERROR'
+    let reason = 'Unexpected error occurred while subscribing to an event in the Adobe I/O Events module in Commerce'
+    const hints = []
+
+    if (error?.message?.includes('Response code 400 (Bad Request)')) {
+      label = 'MALFORMED_EVENT_SPEC'
+      reason = 'The given event specification payload is not valid'
+      hints.push('Make sure the event name is valid and the subscription payload is not malformed')
     }
+
+    if (error?.message?.includes('Response code 404 (Not Found)')) {
+      hints.push('Make sure the latest version of the Adobe I/O Events module (see https://developer.adobe.com/commerce/extensibility/events/release-notes/) is installed and enabled in Commerce (see https://developer.adobe.com/commerce/extensibility/events/installation/).')
+      hints.push('If the module cannot be updated to the latest version, you can manually configure the Adobe I/O Events module in the Commerce Admin console (see https://developer.adobe.com/commerce/extensibility/events/configure-commerce/)')
+    }
+
+    return makeError(
+      label,
+      reason,
+      {
+        error,
+        eventSpec,
+        hints: hints.length > 0 ? hints : undefined
+      }
+    )
   }
 }
 

@@ -1,8 +1,16 @@
-# Commerce  Integration Starter Kit
+# Commerce Integration Starter Kit
 
 [![Node.js CI](https://github.com/adobe/commerce-integration-starter-kit/actions/workflows/deploy_node_stage.yml/badge.svg)](https://github.com/adobe/commerce-integration-starter-kit/actions/workflows/deploy_node_stage.yml)
 
-_Table of contents_: **[Prerequisites](#prerequisites)** | **[Supported Auth types](#supported-auth-types)** | **[Starter Kit first deploy & onboarding](#starter-kit-first-deploy--onboarding)** | **[Development](#development)** | **[Included actions documentation](#included-actions-documentation)** | **[References](#references)**
+_Table of contents_:
+- [**Commerce Integration Starter Kit**](#commerce--integration-starter-kit)
+  - [**Prerequisites**](#prerequisites)
+  - [**Starter Kit first deploy \& onboarding**](#starter-kit-first-deploy--onboarding)
+  - [**Development**](#development)
+  - [**Integrating OpenTelemetry**](#integrating-opentelemetry)
+  - [**Included actions documentation**](#included-actions-documentation)
+  - [**References**](#references)
+
 
 Welcome to Adobe Commerce Integration Starter Kit.
 
@@ -22,9 +30,17 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
 - Select stage workspace or create a new one
 - Add the following API services (select default Oauth server to server)
   - I/0 events
+  - I/O management
   - Adobe I/O Events for Adobe Commerce
-  - I/O management API
+  - Adobe Commerce as a Cloud Service.
+    - If upgrading from previous versions without Adobe Commerce as a Cloud Service API:
+      - Check ```.env``` to ensure that ```commerce.accs``` scope has been added to OAUTH_SCOPES
+      - Download again workspace configuration as explained below and execute ```run aio app use``` again.
 - Download the [workspace configuration JSON](https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file) file and save it as `workspace.json` in the `./scripts/onboarding/config` starter kit folder because you will use it to configure Adobe IO Events in commerce afterward.
+
+> [!TIP]
+> Adobe Commerce as a Cloud Service API is only required when accessing to Adobe Commerce as a Cloud Service.
+
 
 ### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5)
 Install Adobe I/O Events for Adobe Commerce module in your commerce instance following this [documentation](https://developer.adobe.com/commerce/extensibility/events/installation/)
@@ -712,6 +728,40 @@ If you want to change an existing event, make the changes in the same places:
 - Make changes to the operation action invoked by the consumer switch case.
 - Deploy your changes
 
+## Integrating OpenTelemetry
+
+The starter kit includes the `@adobe/aio-lib-telemetry` package by default, which currently resides as a local, non-published package in the `packages` folder. This package enables easy instrumentation of your actions with OpenTelemetry to collect comprehensive telemetry data:
+
+- Traces (with distributed tracing capabilities)
+- Metrics (for monitoring)
+- Logs (for debugging)
+
+See the [package README](packages/aio-lib-telemetry/README.md) for more information about guides and examples for instrumenting your Adobe App Builder actions.
+
+### Usage Example
+
+> [!NOTE]
+> Check the [How To Use](packages/aio-lib-telemetry/README.md#how-to-use) section in the `@adobe/aio-lib-telemetry` README for comprehensive integration instructions.
+
+The starter kit includes a sample implementation in the `actions/customer/commerce` workflow, specifically within the `consumer` and `created` actions. These examples utilize the telemetry configuration in `actions/telemetry.js` and the metrics definitions in `actions/customer/commerce/metrics.js`.
+
+The instrumentation is designed to be minimally invasive and won't disrupt existing functionality. However, telemetry requires explicit opt-in configuration: you must instrument each runtime action individually, configure exporters in the `telemetry.js` file, and set the `ENABLE_TELEMETRY` environment variable to `true` in each action's `inputs` section. While we've implemented this setup for the aforementioned actions, to fully enable telemetry, you need to complete your configuration in the `telemetry.js` file.
+
+The integration within the `customer/commerce` workflow facilitates three key signals: **traces**, **metrics**, and **logs**, while also adding automatic context propagation. This means that when you trigger your `consumer` action, it will generate a unified trace that spans the entire execution flow, including any invoked (but instrumented) actions such as `created`.
+
+### Local Telemetry Stack
+
+We provide a Docker Compose configuration out of the box for running a local telemetry stack, which follows the [**Grafana** use case](packages/aio-lib-telemetry/docs/use-cases/grafana.md#), documented within the `@adobe/aio-lib-telemetry` package.
+
+To spin up the telemetry stack, run the following command:
+```bash
+docker compose up
+```
+
+Once running, the stack will collect and forward telemetry signals from all your instrumented actions (such as `customer/commerce/consumer`) to the local telemetry infrastructure.
+
+Check out the linked guide to learn how to set up Grafana for visualizing your telemetry data. The guide also covers how to use the included cloudflared service to tunnel telemetry data from your deployed App Builder runtime actions in the cloud back to your local environment.
+
 ## Included actions documentation
 ### External back-office ingestion webhook
 - [Ingestion webhook consumer](actions/ingestion/webhook/docs/README.md)
@@ -761,7 +811,7 @@ If you want to change an existing event, make the changes in the same places:
 #### Third party to Commerce
 - [Stock updated in third party](actions/stock/external/updated/docs/README.md)
 
-# References
+## References
 - [Adobe Commerce Extensibility](https://developer.adobe.com/commerce/extensibility/)
 - [Adobe developer console](https://developer.adobe.com/developer-console/docs/guides/)
 - [Adobe App Builder](https://developer.adobe.com/app-builder/docs/overview/)
@@ -770,6 +820,6 @@ If you want to change an existing event, make the changes in the same places:
 - [Adobe I/O Runtime](https://developer.adobe.com/runtime/docs/)
 - [Commerce Web APIs](https://developer.adobe.com/commerce/webapi/)
 
-## Contributing
+### Contributing
 
 Contributions are welcomed! Read the [Contributing Guide](./.github/CONTRIBUTING.md) for more information.
