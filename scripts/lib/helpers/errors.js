@@ -44,14 +44,8 @@ function makeError (label, reason, payload = {}) {
  * @param {object} error - The error object to format.
  */
 function formatError (error) {
-  const { name, message, stack } = error;
-
   return (
-    util.inspect({
-      name,
-      message,
-      stack,
-    }, {
+    util.inspect(error, {
       sorted: true,
       depth: null,
       colors: true,
