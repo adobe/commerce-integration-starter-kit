@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 const ansis = require('ansis')
 const { getAdobeAccessHeaders } = require('../../utils/adobe-auth')
 const { makeError, formatError } = require('../lib/helpers/errors')
-const { CommerceSdkValidationError } = require('@adobe/aio-commerce-lib-core/validation')
+const { CommerceSdkValidationError } = require('@adobe/aio-commerce-lib-core/error')
 
 require('dotenv').config()
 

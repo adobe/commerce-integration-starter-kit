@@ -23,7 +23,7 @@ const { getProviderByKey } = require('../../../utils/adobe-events-api')
 const { validateData } = require('./validator')
 const { checkAuthentication } = require('./auth')
 const { errorResponse, successResponse } = require('../../responses')
-const { CommerceSdkValidationError } = require('@adobe/aio-commerce-lib-core/validation')
+const { CommerceSdkValidationError } = require('@adobe/aio-commerce-lib-core/error')
 
 /**
  * This web action allow external back-office application publish event to IO event using custom authentication mechanism.
