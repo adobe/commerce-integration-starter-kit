@@ -18,7 +18,7 @@ const {
   HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR, HTTP_UNAUTHORIZED,
   BACKOFFICE_PROVIDER_KEY, PUBLISH_EVENT_SUCCESS
 } = require('../../../actions/constants')
-const { getAdobeAccessHeaders } = require('../../../utils/adobe-auth')
+const { getAdobeAccessToken} = require('../../../utils/adobe-auth')
 const { getProviderByKey } = require('../../../utils/adobe-events-api')
 const { validateData } = require('./validator')
 const { checkAuthentication } = require('./auth')
@@ -51,8 +51,11 @@ async function main (params) {
     }
 
     logger.debug('Generate Adobe access token')
-    const authHeaders = await getAdobeAccessHeaders(params)
-    const accessToken = authHeaders.Authorization.replace('Bearer ', '');
+    const accessToken = await getAdobeAccessToken(params)
+    const authHeaders = {
+        Authorization: `Bearer ${accessToken}`,
+        'x-api-key': params.AIO_COMMERCE_IMS_CLIENT_ID
+    }
 
     logger.debug('Get existing registrations')
     const provider = await getProviderByKey(params, authHeaders, BACKOFFICE_PROVIDER_KEY)
