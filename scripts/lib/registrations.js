@@ -88,7 +88,8 @@ async function main (clientRegistrations, providers, environment, accessToken) {
     return makeError(
       'UNEXPECTED_ERROR',
       'Unexpected error occurred while creating registrations',
-      { error,
+      {
+        error,
         hints: hints.length > 0 ? hints : undefined
       }
     )
