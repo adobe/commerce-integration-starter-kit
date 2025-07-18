@@ -163,7 +163,11 @@ describe('Given on-boarding metadata file', () => {
               id: 'COMMERCE_PROVIDER_ID',
               key: 'commerce',
               label: 'Commerce Provider'
-            }
+            },
+            hints: [
+              'Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL',
+              'Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?'
+            ]
           }
         }
       })
