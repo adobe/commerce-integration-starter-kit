@@ -14,25 +14,6 @@ const { assertImsAuthParams, getImsAuthProvider } = require('@adobe/aio-commerce
 const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets'];
 
 /**
- * Convert the parameters into the format expected by the IMS auth provider. Only to be used for OAUTH_* parameters.
- * TODO: remove this function once the IMS auth provider is updated to accept the new format
- * @param params
- * @returns {{AIO_COMMERCE_IMS_CLIENT_ID: (string|*), AIO_COMMERCE_IMS_CLIENT_SECRETS: *, AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_ID: *, AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_EMAIL: *, AIO_COMMERCE_IMS_IMS_ORG_ID: (string|*), AIO_COMMERCE_IMS_ENV: string, AIO_COMMERCE_IMS_CTX: string, AIO_COMMERCE_IMS_SCOPES: string}}
- */
-function intoImsAuthParameters (params) {
-  return {
-    AIO_COMMERCE_IMS_CLIENT_ID: params.OAUTH_CLIENT_ID,
-    AIO_COMMERCE_IMS_CLIENT_SECRETS: JSON.stringify([params.OAUTH_CLIENT_SECRET]),
-    AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_ID: params.OAUTH_TECHNICAL_ACCOUNT_ID,
-    AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_EMAIL: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
-    AIO_COMMERCE_IMS_IMS_ORG_ID: params.OAUTH_ORG_ID,
-    AIO_COMMERCE_IMS_ENV: 'prod', // There is no alternative
-    AIO_COMMERCE_IMS_CTX: 'onboarding-config', // There is no alternative
-    AIO_COMMERCE_IMS_SCOPES: JSON.stringify(params.OAUTH_SCOPES ?? DEFAULT_IMS_SCOPES)
-  }
-}
-
-/**
  * Generate access token to connect with Adobe tools (e.g. IO Events)
  * @param {object} params includes env parameters
  * @returns {Result} returns the access token
