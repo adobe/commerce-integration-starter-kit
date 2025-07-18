@@ -11,12 +11,11 @@ governing permissions and limitations under the License.
 */
 
 const { assertImsAuthParams, getImsAuthProvider } = require('@adobe/aio-commerce-lib-auth');
-const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets'];
 
 /**
  * Generate access token to connect with Adobe tools (e.g. IO Events)
  * @param {object} params includes env parameters
- * @returns {Result} returns the access token
+ * @returns {Promise<string>} returns the access token
  */
 async function getAdobeAccessToken (params) {
   assertImsAuthParams(params);
