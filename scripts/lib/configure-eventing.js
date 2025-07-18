@@ -38,7 +38,11 @@ async function main (providerId, instanceId, workspaceConfiguration, environment
       success: true
     }
   } catch (error) {
-    const hints = []
+    const hints = [
+      'Ensure your "onboarding/config/workspace.json" file is up to date',
+      'Did you run `aio app deploy`? Your runtime actions should be deployed before running the onboarding script',
+      'Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL'
+    ]
 
     if (error?.message?.includes('Response code 404 (Not Found)')) {
       hints.push('Make sure the latest version of the Adobe I/O Events module (see https://developer.adobe.com/commerce/extensibility/events/release-notes/) is installed and enabled in Commerce (see https://developer.adobe.com/commerce/extensibility/events/installation/).')
@@ -50,7 +54,7 @@ async function main (providerId, instanceId, workspaceConfiguration, environment
       'Unexpected error occurred while updating the eventing configuration of the Adobe I/O Events module in Commerce',
       {
         error,
-        config: body.config,
+        config: { ...body.config, workspace_configuration: undefined },
         hints: hints.length > 0 ? hints : undefined
       }
     )
