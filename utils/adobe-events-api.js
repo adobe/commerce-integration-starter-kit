@@ -15,8 +15,8 @@ const { getProviderName } = require('./naming')
 
 /**
  * Makes API call to IO Events to get existing registrations with pagination support
- * @param {Object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID
- * @param {Object} authHeaders - Authentication headers including Adobe OAuth access token
+ * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID
+ * @param {object} authHeaders - Authentication headers including Adobe OAuth access token
  * @param {string} [next] - Next URL for pagination
  * @returns {Promise<Array<{id: string, registration_id: string, name: string, enabled: boolean}>>} Array of registration objects
  * @throws {Error} Throws exception if the API call fails
@@ -58,9 +58,9 @@ async function getExistingRegistrationsData (environment, authHeaders, next = nu
 
 /**
  * Gets existing registrations for the current project as a keyed object
- * @param {Object} environment - Environment configuration containing needed parameters to call IO Event API
- * @param {Object} authHeaders - Authentication headers for API requests
- * @returns {Promise<Object.<string, {id: string, registration_id: string, name: string, enabled: boolean}>>} Object mapping registration names to registration objects
+ * @param {object} environment - Environment configuration containing needed parameters to call IO Event API
+ * @param {object} authHeaders - Authentication headers for API requests
+ * @returns {Promise<object>} Object mapping registration names to registration objects
  * @throws {Error} Throws exception if the API call fails
  */
 async function getExistingRegistrations (environment, authHeaders) {
@@ -76,9 +76,9 @@ async function getExistingRegistrations (environment, authHeaders) {
 
 /**
  * Gets the list of existing providers for the consumer organization
- * @param {Object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL and IO_CONSUMER_ID
- * @param {Object} authHeaders - Authentication headers for API requests
- * @returns {Promise<Object.<string, Object>>} Object mapping provider labels to provider objects
+ * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL and IO_CONSUMER_ID
+ * @param {object} authHeaders - Authentication headers for API requests
+ * @returns {Promise<object>} Object mapping provider labels to provider objects
  */
 async function getExistingProviders (environment, authHeaders) {
   // See: https://developer.adobe.com/events/docs/api#operation/getProvidersByConsumerOrgId
@@ -106,10 +106,10 @@ async function getExistingProviders (environment, authHeaders) {
 
 /**
  * Gets an existing provider by its key from the providers configuration
- * @param {Object} params - Parameters needed to make the call to Adobe IO Events
- * @param {Object} authHeaders - Authentication headers including Adobe OAuth access token
+ * @param {object} params - Parameters needed to make the call to Adobe IO Events
+ * @param {object} authHeaders - Authentication headers including Adobe OAuth access token
  * @param {string} providerKey - Provider key used to find the provider (from onboarding/config/providers.json)
- * @returns {Promise<Object|undefined>} Provider object if found, undefined otherwise
+ * @returns {Promise<object|undefined>} Provider object if found, undefined otherwise
  */
 async function getProviderByKey (params, authHeaders, providerKey) {
   const providers = await getExistingProviders(params, authHeaders)

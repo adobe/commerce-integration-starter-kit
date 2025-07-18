@@ -18,11 +18,11 @@ const { makeError } = require('./helpers/errors')
 
 /**
  * Creates event registrations based on client selections from custom/starter-kit-registrations.json
- * @param {Object.<string, Array<string>>} clientRegistrations - Client registrations mapping entity names to provider keys
+ * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
  * @param {Array<{id: string, key: string, label: string}>} providers - List of provider objects
- * @param {Object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID, OAUTH_CLIENT_ID
- * @param {Object} authHeaders - Authentication headers for API requests
- * @returns {Promise<{success: boolean, registrations?: Array<{id: string, registration_id: string, name: string, enabled: boolean}>, error?: {label: string, reason: string, payload: Object}}>} Result object with registrations or error
+ * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID, OAUTH_CLIENT_ID
+ * @param {object} authHeaders - Authentication headers for API requests
+ * @returns {Promise<{success: boolean, registrations?: Array<{id: string, registration_id: string, name: string, enabled: boolean}>, error?: {label: string, reason: string, payload: object}}>} Result object with registrations or error
  */
 async function main (clientRegistrations, providers, environment, authHeaders) {
   const result = []
@@ -90,12 +90,12 @@ async function main (clientRegistrations, providers, environment, authHeaders) {
 
 /**
  * Creates an event registration in Adobe I/O Events
- * @param {Object} authHeaders - Authentication headers for API requests
+ * @param {object} authHeaders - Authentication headers for API requests
  * @param {string} entityName - Entity name for the registration
  * @param {string} providerKey - Provider key identifier
  * @param {Array<{provider_id: string, event_code: string}>} events - Array of events to register
- * @param {Object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID, OAUTH_CLIENT_ID
- * @returns {Promise<{success: boolean, result?: {id: string, registration_id: string, name: string, enabled: boolean}, error?: {label: string, reason: string, payload: Object}}>} Result object with registration details or error
+ * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID, OAUTH_CLIENT_ID
+ * @returns {Promise<{success: boolean, result?: {id: string, registration_id: string, name: string, enabled: boolean}, error?: {label: string, reason: string, payload: object}}>} Result object with registration details or error
  */
 async function createRequestRegistration (authHeaders, entityName, providerKey, events, environment) {
   const body = JSON.stringify({

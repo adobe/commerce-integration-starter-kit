@@ -25,10 +25,10 @@ const providersEventsConfig = require('../onboarding/config/events.json')
 
 /**
  * Creates an events provider via the I/O Management API
- * @param {Object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID
- * @param {Object} authHeaders - Authentication headers including access token
+ * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID
+ * @param {object} authHeaders - Authentication headers including access token
  * @param {{key?: string, label?: string, description?: string, docs_url?: string}} provider - Provider configuration object
- * @returns {Promise<{success: boolean, provider?: Object, error?: {label: string, reason: string, payload: Object}}>} Result object with created provider or error
+ * @returns {Promise<{success: boolean, provider?: object, error?: {label: string, reason: string, payload: object}}>} Result object with created provider or error
  */
 async function createProvider (environment, authHeaders, provider) {
   // See: https://developer.adobe.com/events/docs/api#operation/createProvider
@@ -84,7 +84,7 @@ async function createProvider (environment, authHeaders, provider) {
 /**
  * Checks if a provider was selected in client registrations
  * @param {string} selection - Provider key to check
- * @param {Object.<string, Array<string>>} clientRegistrations - Client registrations mapping entity names to provider keys
+ * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
  * @returns {boolean} True if provider is selected in any registration
  */
 function hasSelection (selection, clientRegistrations) {
@@ -93,10 +93,10 @@ function hasSelection (selection, clientRegistrations) {
 
 /**
  * Main function to create events providers based on config/providers.json and client registrations
- * @param {Object.<string, Array<string>>} clientRegistrations - Client registrations mapping entity names to provider keys
- * @param {Object} environment - Environment configuration
- * @param {Object} authHeaders - Authentication headers for API requests
- * @returns {Promise<{success: boolean, result?: Array<{key: string, id: string, instanceId: string, label: string}>, error?: {label: string, reason: string, payload: Object}}>} Result object with created providers or error
+ * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
+ * @param {object} environment - Environment configuration
+ * @param {object} authHeaders - Authentication headers for API requests
+ * @returns {Promise<{success: boolean, result?: Array<{key: string, id: string, instanceId: string, label: string}>, error?: {label: string, reason: string, payload: object}}>} Result object with created providers or error
  */
 async function main (clientRegistrations, environment, authHeaders) {
   // Load predefined provider, providerEvents and clientRegistrations
