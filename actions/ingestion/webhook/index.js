@@ -107,12 +107,12 @@ async function main (params) {
       message: 'Event published successfully'
     })
   } catch (error) {
+    logger.error(`Server error: ${error.message}`)
+
     if (error instanceof CommerceSdkValidationError) {
       logger.error(error.display());
-      return errorResponse(HTTP_INTERNAL_ERROR, error.message)
     }
 
-    logger.error(`Server error: ${error.message}`)
     return errorResponse(HTTP_INTERNAL_ERROR, error.message)
   }
 }

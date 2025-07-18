@@ -222,6 +222,10 @@ describe('Given external backoffice events ingestion webhook', () => {
           }
         }
       })
+
+      // Verify logger.error was called with the correct messages
+      expect(mockLoggerInstance.error).toHaveBeenCalledWith('Server error: Invalid ImsAuthProvider configuration')
+      expect(mockLoggerInstance.error).toHaveBeenCalledWith(expect.stringContaining('Invalid ImsAuthProvider configuration'))
     })
   })
   describe('When fetching existing providers fails', () => {
