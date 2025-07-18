@@ -95,10 +95,10 @@ function hasSelection (selection, clientRegistrations) {
  * Main function to create events providers based on config/providers.json and client registrations
  * @param {Object.<string, Array<string>>} clientRegistrations - Client registrations mapping entity names to provider keys
  * @param {Object} environment - Environment configuration
- * @param {Object} headers - Authentication headers for API requests
+ * @param {Object} authHeaders - Authentication headers for API requests
  * @returns {Promise<{success: boolean, result?: Array<{key: string, id: string, instanceId: string, label: string}>, error?: {label: string, reason: string, payload: Object}}>} Result object with created providers or error
  */
-async function main (clientRegistrations, environment, headers) {
+async function main (clientRegistrations, environment, authHeaders) {
   // Load predefined provider, providerEvents and clientRegistrations
   const providersList = require('../onboarding/config/providers.json')
   let currentProvider
@@ -126,7 +126,7 @@ async function main (clientRegistrations, environment, headers) {
       })
     }
 
-    const existingProviders = await getExistingProviders(environment, headers)
+    const existingProviders = await getExistingProviders(environment, authHeaders)
     const result = []
 
     for (const provider of providersList) {
@@ -152,7 +152,7 @@ async function main (clientRegistrations, environment, headers) {
         console.log('Creating provider with:', provider.label)
         console.log('Provider information:', provider)
 
-        const createProviderResult = await createProvider(environment, headers, provider)
+        const createProviderResult = await createProvider(environment, authHeaders, provider)
         if (!createProviderResult?.success) {
           return createProviderResult
         }
