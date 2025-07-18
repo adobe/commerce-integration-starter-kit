@@ -61,7 +61,7 @@ async function main (params) {
         env: params.AIO_COMMERCE_IMS_ENVIRONMENT,
         context: params.AIO_COMMERCE_IMS_CTX
     })
-    console.log(accessToken)
+
     const authHeaders = {
         Authorization: `Bearer ${accessToken}`,
         'x-api-key': params.AIO_COMMERCE_IMS_CLIENT_ID
