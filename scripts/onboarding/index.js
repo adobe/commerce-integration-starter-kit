@@ -77,17 +77,13 @@ async function main () {
 
   try {
     // resolve params
-    const imsAuthParams = {
-      clientId: process.env.AIO_COMMERCE_IMS_CLIENT_ID,
-      clientSecrets: JSON.parse(process.env.AIO_COMMERCE_IMS_CLIENT_SECRETS),
-      technicalAccountId: process.env.AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_ID,
-      technicalAccountEmail: process.env.AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_EMAIL,
-      imsOrgId: process.env.AIO_COMMERCE_IMS_ORG_ID,
-      ctx: process.env.AIO_COMMERCE_IMS_CTX,
-      scopes: JSON.parse(process.env.AIO_COMMERCE_IMS_SCOPES)
-    }
-
-    authHeaders = await getAdobeAccessHeaders(imsAuthParams);
+    authHeaders = await getAdobeAccessHeaders({
+      clientId: process.env.OAUTH_CLIENT_ID,
+      clientSecrets: [process.env.OAUTH_CLIENT_SECRET],
+      technicalAccountId: process.env.OAUTH_TECHNICAL_ACCOUNT_ID,
+      technicalAccountEmail: process.env.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
+      imsOrgId: process.env.OAUTH_ORG_ID
+    });
 
   } catch (error) {
     if (error instanceof CommerceSdkValidationError) {

@@ -52,19 +52,16 @@ async function main (params) {
 
     logger.debug('Generate Adobe access token')
     const accessToken = await getAdobeAccessToken({
-        clientId: params.AIO_COMMERCE_IMS_CLIENT_ID,
-        clientSecrets: params.AIO_COMMERCE_IMS_CLIENT_SECRETS,
-        imsOrgId: params.AIO_COMMERCE_IMS_ORG_ID,
-        technicalAccountId: params.AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_ID,
-        technicalAccountEmail: params.AIO_COMMERCE_IMS_TECHNICAL_ACCOUNT_EMAIL,
-        scopes: params.AIO_COMMERCE_IMS_SCOPES,
-        env: params.AIO_COMMERCE_IMS_ENVIRONMENT,
-        context: params.AIO_COMMERCE_IMS_CTX
+        clientId: params.OAUTH_CLIENT_ID,
+        clientSecrets: [params.OAUTH_CLIENT_SECRET],
+        imsOrgId: params.OAUTH_ORG_ID,
+        technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
+        technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL
     })
 
     const authHeaders = {
         Authorization: `Bearer ${accessToken}`,
-        'x-api-key': params.AIO_COMMERCE_IMS_CLIENT_ID
+        'x-api-key': params.OAUTH_CLIENT_ID
     }
 
     logger.debug('Get existing registrations')
@@ -78,8 +75,8 @@ async function main (params) {
 
     logger.debug('Initiate events client')
     const eventsClient = await Events.init(
-        params.AIO_COMMERCE_IMS_ORG_ID,
-        params.AIO_COMMERCE_IMS_CLIENT_ID,
+        params.OAUTH_ORG_ID,
+        params.OAUTH_CLIENT_ID,
         accessToken)
 
     const eventType = params.data.event
