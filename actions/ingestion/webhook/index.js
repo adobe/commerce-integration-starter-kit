@@ -18,7 +18,7 @@ const {
   HTTP_BAD_REQUEST, HTTP_OK, HTTP_INTERNAL_ERROR, HTTP_UNAUTHORIZED,
   BACKOFFICE_PROVIDER_KEY, PUBLISH_EVENT_SUCCESS
 } = require('../../../actions/constants')
-const { getAdobeAccessToken} = require('../../../utils/adobe-auth')
+const { getAdobeAccessToken } = require('../../../utils/adobe-auth')
 const { getProviderByKey } = require('../../../utils/adobe-events-api')
 const { validateData } = require('./validator')
 const { checkAuthentication } = require('./auth')
