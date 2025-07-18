@@ -79,6 +79,17 @@ function mockResolvedAccessToken () {
   })
 }
 
+function createMockFetchProvidersResponse (providers) {
+  return {
+    ok: true,
+    json: () => Promise.resolve({
+      _embedded: {
+        providers
+      }
+    })
+  }
+}
+
 describe('Given external backoffice events ingestion webhook', () => {
   describe('When method main is defined', () => {
     test('Then is an instance of Function', () => {
@@ -103,24 +114,16 @@ describe('Given external backoffice events ingestion webhook', () => {
       }
 
       mockResolvedAccessToken()
-      const mockFetchGetExistingProvidersResponse = {
-        ok: true,
-        json: () => Promise.resolve({
-          _embedded: {
-            providers: [
-              {
-                id: 'PROVIDER_ID',
-                label: 'Backoffice Provider - eistarterkitv1',
-                description: 'string',
-                source: 'string',
-                docs_url: 'string',
-                publisher: 'string'
-              }
-            ]
-          }
-        })
-      }
-      fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
+      fetch.mockResolvedValueOnce(createMockFetchProvidersResponse([
+        {
+          id: 'PROVIDER_ID',
+          label: 'Backoffice Provider - eistarterkitv1',
+          description: 'string',
+          source: 'string',
+          docs_url: 'string',
+          publisher: 'string'
+        }
+      ]))
       mockEventsInstance.publishEvent.mockResolvedValueOnce(
         Promise.resolve('OK'))
       const response = await action.main(params)
@@ -306,24 +309,16 @@ describe('Given external backoffice events ingestion webhook', () => {
       }
 
       mockResolvedAccessToken()
-      const mockFetchGetExistingProvidersResponse = {
-        ok: true,
-        json: () => Promise.resolve({
-          _embedded: {
-            providers: [
-              {
-                id: 'PROVIDER_ID',
-                label: 'Backoffice Provider - eistarterkitv1',
-                description: 'string',
-                source: 'string',
-                docs_url: 'string',
-                publisher: 'string'
-              }
-            ]
-          }
-        })
-      }
-      fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
+      fetch.mockResolvedValueOnce(createMockFetchProvidersResponse([
+        {
+          id: 'PROVIDER_ID',
+          label: 'Backoffice Provider - eistarterkitv1',
+          description: 'string',
+          source: 'string',
+          docs_url: 'string',
+          publisher: 'string'
+        }
+      ]))
       mockEventsInstance.publishEvent.mockRejectedValue(new Error('fake error'))
       const response = await action.main(params)
 
@@ -355,24 +350,16 @@ describe('Given external backoffice events ingestion webhook', () => {
       }
 
       mockResolvedAccessToken()
-      const mockFetchGetExistingProvidersResponse = {
-        ok: true,
-        json: () => Promise.resolve({
-          _embedded: {
-            providers: [
-              {
-                id: 'PROVIDER_ID',
-                label: 'Backoffice Provider - eistarterkitv1',
-                description: 'string',
-                source: 'string',
-                docs_url: 'string',
-                publisher: 'string'
-              }
-            ]
-          }
-        })
-      }
-      fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
+      fetch.mockResolvedValueOnce(createMockFetchProvidersResponse([
+        {
+          id: 'PROVIDER_ID',
+          label: 'Backoffice Provider - eistarterkitv1',
+          description: 'string',
+          source: 'string',
+          docs_url: 'string',
+          publisher: 'string'
+        }
+      ]))
       mockEventsInstance.publishEvent.mockResolvedValueOnce(Promise.resolve(undefined))
       const response = await action.main(params)
 
@@ -405,24 +392,16 @@ describe('Given external backoffice events ingestion webhook', () => {
         }
 
         mockResolvedAccessToken()
-        const mockFetchGetExistingProvidersResponse = {
-          ok: true,
-          json: () => Promise.resolve({
-            _embedded: {
-              providers: [
-                {
-                  id: 'PROVIDER_ID',
-                  label: 'Backoffice Provider - eistarterkitv1',
-                  description: 'string',
-                  source: 'string',
-                  docs_url: 'string',
-                  publisher: 'string'
-                }
-              ]
-            }
-          })
-        }
-        fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
+        fetch.mockResolvedValueOnce(createMockFetchProvidersResponse([
+          {
+            id: 'PROVIDER_ID',
+            label: 'Backoffice Provider - eistarterkitv1',
+            description: 'string',
+            source: 'string',
+            docs_url: 'string',
+            publisher: 'string'
+          }
+        ]))
 
         await action.main(params)
         expect(Events.init)
