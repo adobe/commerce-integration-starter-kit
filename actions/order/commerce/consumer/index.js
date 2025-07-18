@@ -45,7 +45,7 @@ async function main (params) {
     logger.info('Params type: ' + params.type)
 
     switch (params.type) {
-      case 'com.adobe.commerce.observer.sales_order_save_commit_after': {
+      case `com.adobe.commerce.${params.EVENT_PREFIX}.observer.sales_order_save_commit_after`: {
         const createdAt = Date.parse(params.data.value.created_at)
         const updatedAt = Date.parse(params.data.value.updated_at)
         if (createdAt === updatedAt) {
