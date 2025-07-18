@@ -38,7 +38,7 @@ async function createProvider (environment, authHeaders, provider) {
     headers: {
       'content-type': 'application/json',
       Accept: 'application/hal+json',
-      ...authHeaders,
+      ...authHeaders
     },
     body: JSON.stringify(
       {

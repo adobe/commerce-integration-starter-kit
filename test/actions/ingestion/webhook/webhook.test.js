@@ -40,13 +40,13 @@ jest.mock('@adobe/aio-lib-ims', () => ({
 }))
 
 jest.mock('@adobe/aio-commerce-lib-auth', () => {
-  const originalModule = jest.requireActual('@adobe/aio-commerce-lib-auth',);
+  const originalModule = jest.requireActual('@adobe/aio-commerce-lib-auth')
   return {
     __esModule: true,
     ...originalModule,
-    getImsAuthProvider: jest.fn(),
-  };
-});
+    getImsAuthProvider: jest.fn()
+  }
+})
 
 const { getImsAuthProvider } = require('@adobe/aio-commerce-lib-auth')
 
@@ -70,13 +70,20 @@ const validEnvParams = {
   OAUTH_ORG_ID: 'OAUTH_ORG_ID'
 }
 
+/**
+ * Mocks a resolved access token for testing
+ */
 function mockResolvedAccessToken () {
   getImsAuthProvider.mockReturnValueOnce({
     getAccessToken: jest.fn().mockResolvedValue('access token'),
-    getHeaders: jest.fn(),
+    getHeaders: jest.fn()
   })
 }
 
+/**
+ * Creates a mock fetch response for providers
+ * @param {Array} providers - Array of provider objects
+ */
 function createMockFetchProvidersResponse (providers) {
   return {
     ok: true,
@@ -180,7 +187,7 @@ describe('Given external backoffice events ingestion webhook', () => {
           getAccessToken: () => {
             throw new Error('fake error')
           },
-          getHeaders: () => {},
+          getHeaders: () => {}
         }
       })
 

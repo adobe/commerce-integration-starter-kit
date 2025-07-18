@@ -49,7 +49,7 @@ function formatError (error) {
       sorted: true,
       depth: null,
       colors: true,
-      maxStringLength: Number.POSITIVE_INFINITY,
+      maxStringLength: Number.POSITIVE_INFINITY
     })
   )
 }

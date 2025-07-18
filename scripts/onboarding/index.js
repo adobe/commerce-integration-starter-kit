@@ -32,9 +32,11 @@ function logOnboardingError (phase, errorInfo) {
     registrations: 'REGISTRATIONS_ONBOARDING'
   }
 
-  const additionalDetails = CommerceSdkValidationError.is(payload) && typeof payload?.display === 'function' ? `\n${payload.display()}` : payload
-    ? formatError(payload)
-    : 'No additional details'
+  const additionalDetails = CommerceSdkValidationError.is(payload) && typeof payload?.display === 'function'
+    ? `\n${payload.display()}`
+    : payload
+      ? formatError(payload)
+      : 'No additional details'
 
   console.error(
     ansis.red('\nAn error occurred:\n'),
@@ -73,7 +75,7 @@ async function main () {
   console.log('Starting the process of on-boarding based on your registration choices')
 
   const registrations = require('./config/starter-kit-registrations.json')
-  let authHeaders;
+  let authHeaders
 
   try {
     // resolve params
@@ -83,23 +85,22 @@ async function main () {
       technicalAccountId: process.env.OAUTH_TECHNICAL_ACCOUNT_ID,
       technicalAccountEmail: process.env.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
       imsOrgId: process.env.OAUTH_ORG_ID
-    });
-
+    })
   } catch (error) {
     if (error instanceof CommerceSdkValidationError) {
       logOnboardingError('getAccessToken', makeError(
-          'INVALID_IMS_AUTH_PARAMS',
-          'Missing or invalid environment variables for Adobe IMS authentication.',
-          error
-      ).error);
-      return;
+        'INVALID_IMS_AUTH_PARAMS',
+        'Missing or invalid environment variables for Adobe IMS authentication.',
+        error
+      ).error)
+      return
     }
 
-    console.error(error);
-    return;
+    console.error(error)
+    return
   }
 
-  const createProvidersResult = await require('../lib/providers').main(registrations, process.env, authHeaders);
+  const createProvidersResult = await require('../lib/providers').main(registrations, process.env, authHeaders)
 
   if (!createProvidersResult.success) {
     logOnboardingError('providers', createProvidersResult.error)

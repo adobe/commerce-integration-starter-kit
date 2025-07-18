@@ -10,8 +10,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { assertImsAuthParams, getImsAuthProvider } = require('@adobe/aio-commerce-lib-auth');
-const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets', 'commerce.accs'];
+const { assertImsAuthParams, getImsAuthProvider } = require('@adobe/aio-commerce-lib-auth')
+const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets', 'commerce.accs']
 
 /**
  * Generate access token to connect with Adobe tools (e.g. IO Events)
@@ -20,30 +20,30 @@ const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'addition
  */
 async function getAdobeAccessToken (params) {
   if (!params.scopes || params.scopes.length === 0) {
-    params.scopes = DEFAULT_IMS_SCOPES;
+    params.scopes = DEFAULT_IMS_SCOPES
   }
-  assertImsAuthParams(params);
-  const imsAuthProvider = getImsAuthProvider(params);
+  assertImsAuthParams(params)
+  const imsAuthProvider = getImsAuthProvider(params)
 
-  return imsAuthProvider.getAccessToken();
+  return imsAuthProvider.getAccessToken()
 }
 
 /**
  * Get the access token headers for Adobe tools (e.g. IO Events)
- * @param params
+ * @param {object} params - IMS authentication parameters
  * @returns {Promise<object>} returns the headers with access token
  */
 async function getAdobeAccessHeaders (params) {
   if (!params.scopes || params.scopes.length === 0) {
-    params.scopes = DEFAULT_IMS_SCOPES;
+    params.scopes = DEFAULT_IMS_SCOPES
   }
-  assertImsAuthParams(params);
-  const imsAuthProvider = getImsAuthProvider(params);
+  assertImsAuthParams(params)
+  const imsAuthProvider = getImsAuthProvider(params)
 
-  return imsAuthProvider.getHeaders();
+  return imsAuthProvider.getHeaders()
 }
 
 module.exports = {
   getAdobeAccessToken,
-  getAdobeAccessHeaders,
+  getAdobeAccessHeaders
 }

@@ -23,8 +23,7 @@ const { getProviderByKey } = require('../../../utils/adobe-events-api')
 const { validateData } = require('./validator')
 const { checkAuthentication } = require('./auth')
 const { errorResponse, successResponse } = require('../../responses')
-const { CommerceSdkValidationError } = require("@adobe/aio-commerce-lib-core/validation");
-
+const { CommerceSdkValidationError } = require('@adobe/aio-commerce-lib-core/validation')
 
 /**
  * This web action allow external back-office application publish event to IO event using custom authentication mechanism.
@@ -52,16 +51,16 @@ async function main (params) {
 
     logger.debug('Generate Adobe access token')
     const accessToken = await getAdobeAccessToken({
-        clientId: params.OAUTH_CLIENT_ID,
-        clientSecrets: [params.OAUTH_CLIENT_SECRET],
-        imsOrgId: params.OAUTH_ORG_ID,
-        technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
-        technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL
+      clientId: params.OAUTH_CLIENT_ID,
+      clientSecrets: [params.OAUTH_CLIENT_SECRET],
+      imsOrgId: params.OAUTH_ORG_ID,
+      technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
+      technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL
     })
 
     const authHeaders = {
-        Authorization: `Bearer ${accessToken}`,
-        'x-api-key': params.OAUTH_CLIENT_ID
+      Authorization: `Bearer ${accessToken}`,
+      'x-api-key': params.OAUTH_CLIENT_ID
     }
 
     logger.debug('Get existing registrations')
@@ -75,9 +74,9 @@ async function main (params) {
 
     logger.debug('Initiate events client')
     const eventsClient = await Events.init(
-        params.OAUTH_ORG_ID,
-        params.OAUTH_CLIENT_ID,
-        accessToken)
+      params.OAUTH_ORG_ID,
+      params.OAUTH_CLIENT_ID,
+      accessToken)
 
     const eventType = params.data.event
     logger.info(`Process event data ${eventType}`)
@@ -107,7 +106,7 @@ async function main (params) {
     logger.error(`Server error: ${error.message}`)
 
     if (error instanceof CommerceSdkValidationError) {
-      logger.error(error.display());
+      logger.error(error.display())
     }
 
     return errorResponse(HTTP_INTERNAL_ERROR, error.message)

@@ -137,7 +137,7 @@ async function addMetadataToProvider (providerEvents, providerId, environment, a
  * @param {string} providerId - Provider ID
  * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL
  * @param {object} authHeaders - Authentication headers for API requests
- * @param {string|null} [next=null] - Next URL for pagination
+ * @param {string|null} [next] - Next URL for pagination
  * @returns {Promise<{success: boolean, existingMetadata?: Array, error?: {label: string, reason: string, payload: object}}>} Result object with existing metadata or error
  */
 async function getExistingMetadata (providerId, environment, authHeaders, next = null) {
