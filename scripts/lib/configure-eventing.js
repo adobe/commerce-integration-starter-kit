@@ -40,7 +40,8 @@ async function main (providerId, instanceId, workspaceConfiguration, environment
   } catch (error) {
     const hints = [
       'Ensure your "onboarding/config/workspace.json" file is up to date',
-      'Did you run `aio app deploy`? Your runtime actions should be deployed before running the onboarding script'
+      'Did you run `aio app deploy`? Your runtime actions should be deployed before running the onboarding script',
+      'Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL'
     ]
 
     if (error?.message?.includes('Response code 404 (Not Found)')) {
