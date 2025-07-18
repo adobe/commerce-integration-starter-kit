@@ -32,7 +32,9 @@ async function main (eventSpec, environment) {
   } catch (error) {
     let label = 'UNEXPECTED_ERROR'
     let reason = 'Unexpected error occurred while subscribing to an event in the Adobe I/O Events module in Commerce'
-    const hints = []
+    const hints = [
+      'Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL'
+    ]
 
     if (error?.message?.includes('Response code 400 (Bad Request)')) {
       label = 'MALFORMED_EVENT_SPEC'

@@ -179,10 +179,19 @@ async function main (clientRegistrations, environment, accessToken) {
     console.log('Process of creating providers done successfully')
     return response
   } catch (error) {
+    const hints = [
+      'Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL',
+      'Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?'
+    ]
+
     return makeError(
       'UNEXPECTED_ERROR',
       'Unexpected error occurred while creating providers',
-      { error, provider: currentProvider }
+      {
+        error,
+        provider: currentProvider,
+        hints: hints.length > 0 ? hints : undefined
+      }
     )
   }
 }
