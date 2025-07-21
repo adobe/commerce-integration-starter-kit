@@ -26,7 +26,8 @@
     "graphql-request": "^7.1.2",
     "node-fetch": "^2.7.0",
     "openwhisk": "^3.21.8",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "valibot": "^1.1.0"
   },
   "devDependencies": {
     "@adobe/eslint-config-aio-lib-config": "^4.0.0",

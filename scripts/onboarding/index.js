@@ -14,6 +14,7 @@ const ansis = require('ansis')
 const { getAdobeAccessHeaders } = require('../../utils/adobe-auth')
 const { makeError, formatError } = require('../lib/helpers/errors')
 const { CommerceSdkValidationError } = require('@adobe/aio-commerce-lib-core/error')
+const v = require('valibot');
 
 require('dotenv').config()
 
@@ -26,13 +27,14 @@ require('dotenv').config()
 function logOnboardingError (phase, errorInfo) {
   const { label, reason, payload } = errorInfo
   const phaseLabels = {
+    environment: 'ENVIRONMENT_ONBOARDING',
     getAccessToken: 'GET_ACCESS_TOKEN',
     providers: 'PROVIDER_ONBOARDING',
     metadata: 'METADATA_ONBOARDING',
     registrations: 'REGISTRATIONS_ONBOARDING'
   }
 
-  const additionalDetails = CommerceSdkValidationError.is(payload) && typeof payload?.display === 'function'
+  const additionalDetails = CommerceSdkValidationError.isSdkError(payload) && typeof payload?.display === 'function'
     ? `\n${payload.display()}`
     : payload
       ? formatError(payload)
@@ -67,11 +69,38 @@ function logConfigureEventingError (errorInfo) {
   )
 }
 
+const StringSchema = v.pipe(
+    v.string(),
+    v.nonEmpty('The string should contain at least one character.')
+);
+
+const ProcessEnvSchema = v.object({
+  IO_CONSUMER_ID: StringSchema,
+  IO_PROJECT_ID: StringSchema,
+  IO_WORKSPACE_ID: StringSchema,
+})
+
 /**
  * Main onboarding function that creates events providers, adds metadata, creates registrations, and configures Adobe I/O Events module in Commerce
  * @returns {Promise<{providers: Array<{key: string, id: string, instanceId: string, label: string}>, registrations: Array} | void>} Object with providers and registrations on success, or void on error
  */
 async function main () {
+
+  const environmentResult = v.safeParse(ProcessEnvSchema, process.env);
+
+  if (!environmentResult.success) {
+    const error = new CommerceSdkValidationError(
+        "Invalid environment variables", {
+          issues: environmentResult.issues
+        });
+    logOnboardingError('environment', makeError(
+        'INVALID_ENV_VARS',
+        'Missing or invalid environment variables for Onboarding script.',
+        error
+    ).error)
+    return
+  }
+
   console.log('Starting the process of on-boarding based on your registration choices')
 
   const registrations = require('./config/starter-kit-registrations.json')
