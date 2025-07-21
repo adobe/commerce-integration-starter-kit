@@ -17,7 +17,7 @@ jest.mock('../../../scripts/lib/providers')
 jest.mock('../../../scripts/lib/metadata')
 jest.mock('../../../scripts/lib/registrations')
 jest.mock('../../../scripts/lib/configure-eventing')
-const ansis = require('ansis');
+const ansis = require('ansis')
 
 const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
 describe('onboarding index', () => {

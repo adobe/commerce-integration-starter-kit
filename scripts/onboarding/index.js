@@ -14,7 +14,7 @@ const ansis = require('ansis')
 const { getAdobeAccessHeaders } = require('../../utils/adobe-auth')
 const { makeError, formatError } = require('../lib/helpers/errors')
 const { CommerceSdkValidationError } = require('@adobe/aio-commerce-lib-core/error')
-const v = require('valibot');
+const v = require('valibot')
 
 require('dotenv').config()
 
@@ -70,14 +70,14 @@ function logConfigureEventingError (errorInfo) {
 }
 
 const StringSchema = v.pipe(
-    v.string(),
-    v.nonEmpty('The string should contain at least one character.')
-);
+  v.string(),
+  v.nonEmpty('The string should contain at least one character.')
+)
 
 const ProcessEnvSchema = v.object({
   IO_CONSUMER_ID: StringSchema,
   IO_PROJECT_ID: StringSchema,
-  IO_WORKSPACE_ID: StringSchema,
+  IO_WORKSPACE_ID: StringSchema
 })
 
 /**
@@ -85,18 +85,17 @@ const ProcessEnvSchema = v.object({
  * @returns {Promise<{providers: Array<{key: string, id: string, instanceId: string, label: string}>, registrations: Array} | void>} Object with providers and registrations on success, or void on error
  */
 async function main () {
-
-  const environmentResult = v.safeParse(ProcessEnvSchema, process.env);
+  const environmentResult = v.safeParse(ProcessEnvSchema, process.env)
 
   if (!environmentResult.success) {
     const error = new CommerceSdkValidationError(
-        "Invalid environment variables", {
-          issues: environmentResult.issues
-        });
+      'Invalid environment variables', {
+        issues: environmentResult.issues
+      })
     logOnboardingError('environment', makeError(
-        'INVALID_ENV_VARS',
-        'Missing or invalid environment variables for Onboarding script.',
-        error
+      'INVALID_ENV_VARS',
+      'Missing or invalid environment variables for Onboarding script.',
+      error
     ).error)
     return
   }
