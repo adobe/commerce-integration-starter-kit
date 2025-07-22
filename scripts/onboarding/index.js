@@ -22,7 +22,6 @@ require('dotenv').config()
  * Logs an error occurred during the onboarding process
  * @param {'getAccessToken' | 'providers' | 'metadata' | 'registrations'} phase - The phase of the onboarding process where the error occurred
  * @param {{label: string, reason: string, payload?: any}} errorInfo - Error information object with label, reason, and optional payload
- * @returns {void}
  */
 function logOnboardingError (phase, errorInfo) {
   const { label, reason, payload } = errorInfo
@@ -52,7 +51,6 @@ function logOnboardingError (phase, errorInfo) {
 /**
  * Logs an error occurred during the configure eventing process
  * @param {{label: string, reason: string, payload?: any}} errorInfo - Error information object with label, reason, and optional payload
- * @returns {void}
  */
 function logConfigureEventingError (errorInfo) {
   const { label, reason, payload } = errorInfo
