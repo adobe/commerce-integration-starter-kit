@@ -27,7 +27,7 @@ require('dotenv').config()
 function logOnboardingError (phase, errorInfo) {
   const { label, reason, payload } = errorInfo
   const phaseLabels = {
-    environment: 'ENVIRONMENT_ONBOARDING',
+    environment: 'ENVIRONMENT_VARIABLES',
     getAccessToken: 'GET_ACCESS_TOKEN',
     providers: 'PROVIDER_ONBOARDING',
     metadata: 'METADATA_ONBOARDING',

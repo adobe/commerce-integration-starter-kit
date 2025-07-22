@@ -45,7 +45,7 @@ describe('onboarding index', () => {
     const errorMessages = errorCalls.map(call => call.join(' '))
     const fullErrorMessage = ansis.strip(errorMessages.join(' '))
 
-    expect(fullErrorMessage).toContain('ENVIRONMENT_ONBOARDING')
+    expect(fullErrorMessage).toContain('ENVIRONMENT_VARIABLES')
     expect(fullErrorMessage).toContain('INVALID_ENV_VARS')
     expect(fullErrorMessage).toContain('Missing or invalid environment variables for Onboarding script')
     expect(fullErrorMessage).toContain('Invalid environment variables')
