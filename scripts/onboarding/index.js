@@ -19,8 +19,8 @@ const v = require('valibot')
 require('dotenv').config()
 
 const StringSchema = v.pipe(
-    v.string(),
-    v.nonEmpty('The string should contain at least one character.')
+  v.string(),
+  v.nonEmpty('The string should contain at least one character.')
 )
 
 const ProcessEnvSchema = v.object({
