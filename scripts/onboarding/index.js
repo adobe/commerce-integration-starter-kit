@@ -18,6 +18,17 @@ const v = require('valibot')
 
 require('dotenv').config()
 
+const StringSchema = v.pipe(
+    v.string(),
+    v.nonEmpty('The string should contain at least one character.')
+)
+
+const ProcessEnvSchema = v.object({
+  IO_CONSUMER_ID: StringSchema,
+  IO_PROJECT_ID: StringSchema,
+  IO_WORKSPACE_ID: StringSchema
+})
+
 /**
  * Logs an error occurred during the onboarding process
  * @param {'getAccessToken' | 'providers' | 'metadata' | 'registrations'} phase - The phase of the onboarding process where the error occurred
@@ -67,20 +78,9 @@ function logConfigureEventingError (errorInfo) {
   )
 }
 
-const StringSchema = v.pipe(
-  v.string(),
-  v.nonEmpty('The string should contain at least one character.')
-)
-
-const ProcessEnvSchema = v.object({
-  IO_CONSUMER_ID: StringSchema,
-  IO_PROJECT_ID: StringSchema,
-  IO_WORKSPACE_ID: StringSchema
-})
-
 /**
  * Main onboarding function that creates events providers, adds metadata, creates registrations, and configures Adobe I/O Events module in Commerce
- * @returns {Promise<{providers: Array<{key: string, id: string, instanceId: string, label: string}>, registrations: Array} | void>} Object with providers and registrations on success, or void on error
+ * @returns {Promise<object>} Object with providers and registrations on success, or void on error
  */
 async function main () {
   const environmentResult = v.safeParse(ProcessEnvSchema, process.env)

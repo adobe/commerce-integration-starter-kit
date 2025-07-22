@@ -18,7 +18,7 @@ const { getProviderName } = require('./naming')
  * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID
  * @param {object} authHeaders - Authentication headers including Adobe OAuth access token
  * @param {string} [next] - Next URL for pagination
- * @returns {Promise<Array<{id: string, registration_id: string, name: string, enabled: boolean}>>} Array of registration objects
+ * @returns {Promise<Array>} Array of registration objects
  * @throws {Error} Throws exception if the API call fails
  */
 async function getExistingRegistrationsData (environment, authHeaders, next = null) {
