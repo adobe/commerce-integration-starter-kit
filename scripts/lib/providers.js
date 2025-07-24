@@ -14,6 +14,9 @@ require('dotenv').config()
 
 const fetch = require('node-fetch')
 const uuid = require('uuid')
+const fs = require('fs')
+const path = require('path')
+const envPath = path.resolve(__dirname, '../../.env')
 
 const { makeError } = require('./helpers/errors')
 const { getMissingKeys } = require('../../actions/utils')
@@ -93,6 +96,33 @@ function hasSelection (selection, clientRegistrations) {
 }
 
 /**
+ * Updates the .env file with provider id.
+ *
+ * @param {Array} providers - list of providers
+ */
+function writeToEnvFile (providers) {
+  // Read the existing .env content
+  let envContent = fs.readFileSync(envPath, 'utf8')
+  envContent = envContent.replace(/\r\n/g, '\n').replace(/\s+$/, '')
+
+  providers.forEach(provider => {
+    const providerType = provider.key.toUpperCase()
+    const providerIdEnv = `${providerType}_PROVIDER_ID=${provider.id}`
+    const providerIdEnvRegex = new RegExp(`^${providerType}_PROVIDER_ID=.*$`, 'm')
+
+    console.log(`Defining the ${provider.key} provider id as : ${provider.id} having instance id : ${provider.instanceId}`)
+    if (providerIdEnvRegex.test(envContent)) {
+      envContent = envContent.replace(providerIdEnvRegex, providerIdEnv)
+    } else {
+      envContent += `\n${providerIdEnv}`
+    }
+  })
+  // Write back to the .env file
+  fs.writeFileSync(envPath, envContent.trim() + '\n', 'utf8')
+  console.log('Successfully updated .env file with provider id\'s')
+}
+
+/**
  * Create events providers based on the config/providers.json and client registrations custom/starter-kit-registrations.json
  *
  * @param {object} clientRegistrations - client registrations
@@ -167,6 +197,8 @@ async function main (clientRegistrations, environment, accessToken) {
       }
     }
 
+    // update the env file with provider ID
+    writeToEnvFile(result)
     for (const provider of result) {
       console.log(`Defining the provider with key: ${provider.key} as: ${provider.id}`)
     }

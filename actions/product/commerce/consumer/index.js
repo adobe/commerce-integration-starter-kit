@@ -69,7 +69,7 @@ async function main (params) {
     }
 
     switch (params.type) {
-      case 'com.adobe.commerce.observer.catalog_product_save_commit_after': {
+      case `com.adobe.commerce.${params.EVENT_PREFIX}.observer.catalog_product_save_commit_after`: {
         const createdAt = Date.parse(params.data.value.created_at)
         const updatedAt = Date.parse(params.data.value.updated_at)
         if (createdAt === updatedAt) {
@@ -85,7 +85,7 @@ async function main (params) {
         }
         break
       }
-      case 'com.adobe.commerce.observer.catalog_product_delete_commit_after': {
+      case `com.adobe.commerce.${params.EVENT_PREFIX}.observer.catalog_product_delete_commit_after`: {
         logger.info('Invoking delete product')
         const res = await openwhiskClient.invokeAction('product-commerce/deleted', params.data.value)
         response = res?.response?.result?.body

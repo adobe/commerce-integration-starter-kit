@@ -11,15 +11,33 @@ governing permissions and limitations under the License.
 */
 
 jest.mock('node-fetch')
+jest.mock('path', () => {
+  const originalPath = jest.requireActual('path')
+  return {
+    ...originalPath,
+    resolve: jest.fn((...args) => {
+      if (args.includes('../../.env')) {
+        return originalPath.resolve(__dirname, '../../data/onboarding/.env_test')
+      }
+      return originalPath.resolve(...args)
+    })
+  }
+})
+
 const fetch = require('node-fetch')
+const fs = require('fs')
+const path = require('path')
 const action = require('../../../scripts/lib/providers.js')
 const ACCESS_TOKEN = 'token'
 const RUNTIME_NAMESPACE = '1340225-testOrg-testWorkspace'
 const PROVIDER_SUFFIX = 'testOrg-testWorkspace'
 const ENVIRONMENT = { AIO_runtime_namespace: RUNTIME_NAMESPACE }
+const TEST_ENV_PATH = path.resolve(__dirname, '../../data/onboarding/.env_test')
 
 beforeEach(() => {
-  jest.resetModules() // Most important - it clears the cache
+  jest.resetModules()
+  // Reset path.resolve mock calls
+  path.resolve.mockClear()
 })
 
 afterEach(() => {
@@ -1289,6 +1307,54 @@ describe('Given On-boarding providers file', () => {
           }
         }
       })
+    })
+  })
+  describe('When writing provider IDs to env file', () => {
+    test('Then writes provider IDs correctly', async () => {
+      fs.writeFileSync(TEST_ENV_PATH, '', 'utf8')
+
+      const commerceProviderId = 'COMMERCE_PROVIDER_ID'
+      const mockFetchGetExistingProvidersResponse = {
+        ok: true,
+        json: () => Promise.resolve({
+          _embedded: { providers: [] }
+        })
+      }
+      const mockFetchCreateCommerceProviderResponse = {
+        ok: true,
+        json: () => Promise.resolve({
+          id: commerceProviderId,
+          label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
+          instance_id: 'AC_INSTANCE_ID'
+        })
+      }
+
+      fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
+        .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse)
+
+      const clientRegistrations = {
+        product: ['commerce'],
+        customer: ['commerce'],
+        order: ['commerce'],
+        stock: ['commerce']
+      }
+
+      const response = await action.main(clientRegistrations, ENVIRONMENT, ACCESS_TOKEN)
+
+      expect(response).toEqual({
+        success: true,
+        result: [
+          {
+            key: 'commerce',
+            id: commerceProviderId,
+            instanceId: 'AC_INSTANCE_ID',
+            label: `Commerce Provider - ${PROVIDER_SUFFIX}`
+          }
+        ]
+      })
+
+      const envContent = fs.readFileSync(TEST_ENV_PATH, 'utf8')
+      expect(envContent.trim()).toBe('COMMERCE_PROVIDER_ID=COMMERCE_PROVIDER_ID')
     })
   })
 })
