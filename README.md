@@ -34,8 +34,8 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
   - Adobe I/O Events for Adobe Commerce
   - Adobe Commerce as a Cloud Service.
     - If upgrading from previous versions without Adobe Commerce as a Cloud Service API:
-      - Check ```.env``` to ensure that ```commerce.accs``` scope has been added to OAUTH_SCOPES
-      - Download again workspace configuration as explained below and execute ```run aio app use``` again.
+      - Check `.env` to ensure that `commerce.accs` scope has been added to `OAUTH_SCOPES`
+      - Download again workspace configuration as explained below and execute `aio app use` again.
 - Download the [workspace configuration JSON](https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file) file and save it as `workspace.json` in the `./scripts/onboarding/config` starter kit folder because you will use it to configure Adobe IO Events in commerce afterward.
 
 > [!TIP]

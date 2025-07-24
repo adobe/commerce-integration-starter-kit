@@ -843,7 +843,11 @@ describe('Given on-boarding registrations file', () => {
           label: 'UNEXPECTED_ERROR',
           reason: 'Unexpected error occurred while creating registrations',
           payload: {
-            error: fakeError
+            error: fakeError,
+            hints: [
+              'Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL',
+              'Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?'
+            ]
           }
         }
       })
