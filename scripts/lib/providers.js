@@ -156,7 +156,7 @@ async function main (clientRegistrations, environment, authHeaders) {
       })
     }
 
-    const existingProviders = await getExistingProviders(environment, accessToken)
+    const existingProviders = await getExistingProviders(environment, authHeaders)
     const result = []
 
     for (const provider of providersList) {
