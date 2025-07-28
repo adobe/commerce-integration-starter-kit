@@ -115,7 +115,7 @@ async function main () {
       ).error)
       return
     }
-    return;
+    return
   }
 
   const createProvidersResult = await require('../lib/providers').main(registrations, process.env, authHeaders)
