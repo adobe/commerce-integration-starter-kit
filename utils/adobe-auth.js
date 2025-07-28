@@ -19,11 +19,17 @@ const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'addition
  * @returns {Promise<string>} returns the access token
  */
 async function getAdobeAccessToken (params) {
-  if (!params.scopes || params.scopes.length === 0) {
-    params.scopes = DEFAULT_IMS_SCOPES
+  const config = {
+    clientId: params.OAUTH_CLIENT_ID,
+    clientSecrets: [params.OAUTH_CLIENT_SECRET],
+    technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
+    technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
+    imsOrgId: params.OAUTH_ORG_ID,
+    scopes: !!params.scopes || params.scopes?.length > 0 ? params.scopes : DEFAULT_IMS_SCOPES
   }
-  assertImsAuthParams(params)
-  const imsAuthProvider = getImsAuthProvider(params)
+
+  assertImsAuthParams(config)
+  const imsAuthProvider = getImsAuthProvider(config)
 
   return imsAuthProvider.getAccessToken()
 }

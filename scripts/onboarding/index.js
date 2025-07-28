@@ -105,13 +105,7 @@ async function main () {
 
   try {
     // resolve params
-    authHeaders = await getAdobeAccessHeaders({
-      clientId: process.env.OAUTH_CLIENT_ID,
-      clientSecrets: [process.env.OAUTH_CLIENT_SECRET],
-      technicalAccountId: process.env.OAUTH_TECHNICAL_ACCOUNT_ID,
-      technicalAccountEmail: process.env.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
-      imsOrgId: process.env.OAUTH_ORG_ID
-    })
+    authHeaders = await getAdobeAccessHeaders(process.env)
   } catch (error) {
     if (error instanceof CommerceSdkValidationError) {
       logOnboardingError('getAccessToken', makeError(
@@ -121,7 +115,7 @@ async function main () {
       ).error)
       return
     }
-    throw error;
+    return;
   }
 
   const createProvidersResult = await require('../lib/providers').main(registrations, process.env, authHeaders)

@@ -50,13 +50,7 @@ async function main (params) {
     }
 
     logger.debug('Generate Adobe access token')
-    const accessToken = await getAdobeAccessToken({
-      clientId: params.OAUTH_CLIENT_ID,
-      clientSecrets: [params.OAUTH_CLIENT_SECRET],
-      imsOrgId: params.OAUTH_ORG_ID,
-      technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
-      technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL
-    })
+    const accessToken = await getAdobeAccessToken(params)
 
     const authHeaders = {
       Authorization: `Bearer ${accessToken}`,
