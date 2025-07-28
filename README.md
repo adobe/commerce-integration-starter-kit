@@ -191,7 +191,8 @@ e.g., In the previous onboarding step (`Configure the project`), we commented on
 
 #### Execute the onboarding
 This step will generate the IO Events providers and the registrations for your starter kit project.
-If your Commerce instance Adobe I/O Events for Adobe Commerce module version 1.6.0 or greater, the module will also be automatically configured by the onboarding script.
+If your Commerce instance Adobe I/O Events for Adobe Commerce module version 1.12.0 or greater, the module will also be automatically configured by the onboarding script and your commerce instance can connect to other event providers besides the default Commerce event provider registered in the system configuration.
+
 To start the process run the command:
 ```bash
 npm run onboard

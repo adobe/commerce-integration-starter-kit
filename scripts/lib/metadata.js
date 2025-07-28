@@ -14,6 +14,7 @@ const fetch = require('node-fetch')
 
 const { makeError } = require('./helpers/errors')
 const providersEventsConfig = require('../onboarding/config/events.json')
+const { getEventName } = require('../../utils/naming')
 
 /**
  * This method build an array of provider events
@@ -194,6 +195,7 @@ async function getExistingMetadata (providerId, environment, accessToken, next =
  */
 async function main (clientRegistrations, providers, environment, accessToken) {
   let currentProvider
+  let eventName
   try {
     let providersEvents = {}
 
@@ -209,16 +211,18 @@ async function main (clientRegistrations, providers, environment, accessToken) {
       const { existingMetadata } = existingMetadataResult
 
       for (const [entityName, options] of Object.entries(clientRegistrations)) {
-        if (options?.includes(provider.key) && providersEventsConfig[entityName]) {
-          for (const [event, eventProps] of Object.entries(providersEventsConfig[entityName][provider.key])) {
-            if (existingMetadata[event]) {
-              console.log(`Skipping, Metadata event code ${event} already exists!`)
-              continue
-            }
-
-            providersEvents = {
-              ...providersEvents,
-              [event]: eventProps
+        if (options !== undefined && options.includes(provider.key)) {
+          if (providersEventsConfig[entityName]) {
+            for (const [event, eventProps] of Object.entries(providersEventsConfig[entityName][provider.key])) {
+              eventName = getEventName(event, environment)
+              if (existingMetadata[eventName]) {
+                console.log(`Skipping, Metadata event code ${eventName} already exists!`)
+                continue
+              }
+              providersEvents = {
+                ...providersEvents,
+                [eventName]: eventProps
+              }
             }
           }
 

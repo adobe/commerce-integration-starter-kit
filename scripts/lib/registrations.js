@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 const fetch = require('node-fetch')
 const { getExistingRegistrations } = require('../../utils/adobe-events-api')
 const { getRegistrationName } = require('../../utils/naming')
+const { getEventName } = require('../../utils/naming')
 const providersEventsConfig = require('../onboarding/config/events.json')
 const { makeError } = require('./helpers/errors')
 
@@ -48,7 +49,7 @@ async function main (clientRegistrations, providers, environment, accessToken) {
         for (const event of Object.keys(providersEventsConfig[entityName][provider.key])) {
           events.push({
             provider_id: provider.id,
-            event_code: event
+            event_code: getEventName(event, environment)
           })
         }
 
