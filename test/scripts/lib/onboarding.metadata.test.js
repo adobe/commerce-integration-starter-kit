@@ -14,7 +14,9 @@ jest.mock('node-fetch')
 const fetch = require('node-fetch')
 const action = require('../../../scripts/lib/metadata.js')
 const ACCESS_TOKEN = 'token'
-const EMPTY_ENVIRONMENT = {}
+const ENVIRONMENT = {
+  EVENT_PREFIX: 'test-project'
+}
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -61,7 +63,7 @@ describe('Given on-boarding metadata file', () => {
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse)
 
       const clientRegistrations = require('../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json')
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
         success: true,
@@ -99,7 +101,7 @@ describe('Given on-boarding metadata file', () => {
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse)
 
       const clientRegistrations = require('../../data/onboarding/metadata/create_only_commerce_providers_metadata.json')
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
         success: true,
@@ -133,7 +135,7 @@ describe('Given on-boarding metadata file', () => {
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse)
 
       const clientRegistrations = require('../../data/onboarding/metadata/create_only_backoffice_providers_metadata.json')
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
         success: true,
@@ -151,7 +153,7 @@ describe('Given on-boarding metadata file', () => {
       const fakeError = new Error('fake')
       fetch.mockRejectedValue(fakeError)
       const clientRegistrations = require('../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json')
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
       expect(response).toEqual({
         success: false,
         error: {
@@ -163,7 +165,11 @@ describe('Given on-boarding metadata file', () => {
               id: 'COMMERCE_PROVIDER_ID',
               key: 'commerce',
               label: 'Commerce Provider'
-            }
+            },
+            hints: [
+              'Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL',
+              'Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?'
+            ]
           }
         }
       })
@@ -183,7 +189,7 @@ describe('Given on-boarding metadata file', () => {
 
       const clientRegistrations = require('../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json')
       const environment = {
-        ...EMPTY_ENVIRONMENT,
+        ...ENVIRONMENT,
         IO_MANAGEMENT_BASE_URL: 'https://io-management.fake/',
         IO_CONSUMER_ID: '1234567890',
         IO_PROJECT_ID: '1234567890',

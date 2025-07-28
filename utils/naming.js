@@ -74,8 +74,35 @@ function getProviderName (params, providerKey) {
   return addSuffix(backofficeProvider.label, params)
 }
 
+/**
+ * Add event prefix defined in .env file to event name.
+ *
+ * @param {string} eventName event name
+ * @param {object} environment - environment params
+ * @returns {string} returns the event name
+ */
+function getEventName (eventName, environment) {
+  const eventPrefix = environment.EVENT_PREFIX
+  const prefix = 'com.adobe.commerce.'
+
+  if (!eventPrefix) {
+    throw new Error('EVENT_PREFIX is required but was not provided in .env file.')
+  }
+
+  if (eventName.startsWith(prefix)) {
+    return prefix + eventPrefix + '.' + eventName.slice(prefix.length)
+  }
+
+  if (eventName.startsWith('be-observer')) {
+    return eventName
+  }
+
+  return eventPrefix + '.' + eventName
+}
+
 module.exports = {
   addSuffix,
   getRegistrationName,
-  getProviderName
+  getProviderName,
+  getEventName
 }

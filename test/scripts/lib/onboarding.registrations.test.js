@@ -34,7 +34,9 @@ const DEFAULT_PROVIDERS = [
 ]
 
 const ACCESS_TOKEN = 'token'
-const EMPTY_ENVIRONMENT = {}
+const ENVIRONMENT = {
+  EVENT_PREFIX: 'test-project'
+}
 
 describe('Given on-boarding registrations file', () => {
   describe('When method main is defined', () => {
@@ -248,7 +250,7 @@ describe('Given on-boarding registrations file', () => {
         .mockResolvedValueOnce(mockFetchCreateProductBackofficeRegistrationResponse)
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
         success: true,
@@ -439,7 +441,7 @@ describe('Given on-boarding registrations file', () => {
         .mockResolvedValueOnce(mockFetchCreateProductCommerceRegistrationResponse)
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_only_commerce_registrations.json')
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
         success: true,
@@ -624,7 +626,7 @@ describe('Given on-boarding registrations file', () => {
         .mockResolvedValueOnce(mockFetchCreateProductBackofficeRegistrationResponse)
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_only_backoffice_registrations.json')
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
         success: true,
@@ -809,7 +811,7 @@ describe('Given on-boarding registrations file', () => {
         .mockResolvedValueOnce(mockFetchCreateProductBackofficeRegistrationResponse)
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
 
       expect(response).toEqual({
         success: true,
@@ -834,14 +836,18 @@ describe('Given on-boarding registrations file', () => {
     test('Then returns error response', async () => {
       const fakeError = new Error('fake')
       fetch.mockRejectedValue(fakeError)
-      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, EMPTY_ENVIRONMENT, ACCESS_TOKEN)
+      const response = await action.main(clientRegistrations, DEFAULT_PROVIDERS, ENVIRONMENT, ACCESS_TOKEN)
       expect(response).toEqual({
         success: false,
         error: {
           label: 'UNEXPECTED_ERROR',
           reason: 'Unexpected error occurred while creating registrations',
           payload: {
-            error: fakeError
+            error: fakeError,
+            hints: [
+              'Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL',
+              'Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?'
+            ]
           }
         }
       })
@@ -862,7 +868,7 @@ describe('Given on-boarding registrations file', () => {
 
       const clientRegistrations = require('../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json')
       const environment = {
-        ...EMPTY_ENVIRONMENT,
+        ...ENVIRONMENT,
         IO_MANAGEMENT_BASE_URL: 'https://io-management.fake/',
         IO_CONSUMER_ID: '1234567890',
         IO_PROJECT_ID: '1234567890',

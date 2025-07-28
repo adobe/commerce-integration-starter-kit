@@ -34,8 +34,8 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
   - Adobe I/O Events for Adobe Commerce
   - Adobe Commerce as a Cloud Service.
     - If upgrading from previous versions without Adobe Commerce as a Cloud Service API:
-      - Check ```.env``` to ensure that ```commerce.accs``` scope has been added to OAUTH_SCOPES
-      - Download again workspace configuration as explained below and execute ```run aio app use``` again.
+      - Check `.env` to ensure that `commerce.accs` scope has been added to `OAUTH_SCOPES`
+      - Download again workspace configuration as explained below and execute `aio app use` again.
 - Download the [workspace configuration JSON](https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file) file and save it as `workspace.json` in the `./scripts/onboarding/config` starter kit folder because you will use it to configure Adobe IO Events in commerce afterward.
 
 > [!TIP]
@@ -191,7 +191,8 @@ e.g., In the previous onboarding step (`Configure the project`), we commented on
 
 #### Execute the onboarding
 This step will generate the IO Events providers and the registrations for your starter kit project.
-If your Commerce instance Adobe I/O Events for Adobe Commerce module version 1.6.0 or greater, the module will also be automatically configured by the onboarding script.
+If your Commerce instance Adobe I/O Events for Adobe Commerce module version 1.12.0 or greater, the module will also be automatically configured by the onboarding script and your commerce instance can connect to other event providers besides the default Commerce event provider registered in the system configuration.
+
 To start the process run the command:
 ```bash
 npm run onboard

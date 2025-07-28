@@ -14,6 +14,7 @@ const fetch = require('node-fetch')
 
 const { makeError } = require('./helpers/errors')
 const providersEventsConfig = require('../onboarding/config/events.json')
+const { getEventName } = require('../../utils/naming')
 
 /**
  * Builds an array of provider events with their metadata
@@ -194,6 +195,7 @@ async function getExistingMetadata (providerId, environment, authHeaders, next =
  */
 async function main (clientRegistrations, providers, environment, authHeaders) {
   let currentProvider
+  let eventName
   try {
     let providersEvents = {}
 
@@ -209,16 +211,18 @@ async function main (clientRegistrations, providers, environment, authHeaders) {
       const { existingMetadata } = existingMetadataResult
 
       for (const [entityName, options] of Object.entries(clientRegistrations)) {
-        if (options?.includes(provider.key) && providersEventsConfig[entityName]) {
-          for (const [event, eventProps] of Object.entries(providersEventsConfig[entityName][provider.key])) {
-            if (existingMetadata[event]) {
-              console.log(`Skipping, Metadata event code ${event} already exists!`)
-              continue
-            }
-
-            providersEvents = {
-              ...providersEvents,
-              [event]: eventProps
+        if (options !== undefined && options.includes(provider.key)) {
+          if (providersEventsConfig[entityName]) {
+            for (const [event, eventProps] of Object.entries(providersEventsConfig[entityName][provider.key])) {
+              eventName = getEventName(event, environment)
+              if (existingMetadata[eventName]) {
+                console.log(`Skipping, Metadata event code ${eventName} already exists!`)
+                continue
+              }
+              providersEvents = {
+                ...providersEvents,
+                [eventName]: eventProps
+              }
             }
           }
 
@@ -240,10 +244,19 @@ async function main (clientRegistrations, providers, environment, authHeaders) {
       result
     }
   } catch (error) {
+    const hints = [
+      'Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL',
+      'Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?'
+    ]
+
     return makeError(
       'UNEXPECTED_ERROR',
       'Unexpected error occurred while adding metadata to provider',
-      { error, provider: currentProvider }
+      {
+        error,
+        provider: currentProvider,
+        hints: hints.length > 0 ? hints : undefined
+      }
     )
   }
 }

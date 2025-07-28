@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const { eventSubscribe } = require('./commerce-eventing-api-client')
+const { getEventName } = require('../../utils/naming')
 const { makeError } = require('./helpers/errors')
 
 /**
@@ -19,6 +20,18 @@ const { makeError } = require('./helpers/errors')
  * @param {object} environment - environment variables
  */
 async function main (eventSpec, environment) {
+  if (!environment.EVENT_PREFIX) {
+    throw new Error('EVENT_PREFIX is required but is missing or empty from the .env file.')
+  }
+
+  if (!environment.COMMERCE_PROVIDER_ID) {
+    throw new Error('COMMERCE_PROVIDER_ID is required but is missing or empty from the .env file. Please run "npm run onboard".')
+  }
+
+  eventSpec.event.parent = eventSpec.event.name
+  eventSpec.event.provider_id = environment.COMMERCE_PROVIDER_ID
+  eventSpec.event.name = getEventName(eventSpec.event.name, environment)
+
   try {
     await eventSubscribe(
       environment.COMMERCE_BASE_URL,
@@ -32,7 +45,9 @@ async function main (eventSpec, environment) {
   } catch (error) {
     let label = 'UNEXPECTED_ERROR'
     let reason = 'Unexpected error occurred while subscribing to an event in the Adobe I/O Events module in Commerce'
-    const hints = []
+    const hints = [
+      'Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL'
+    ]
 
     if (error?.message?.includes('Response code 400 (Bad Request)')) {
       label = 'MALFORMED_EVENT_SPEC'

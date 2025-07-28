@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 const fetch = require('node-fetch')
 const { getExistingRegistrations } = require('../../utils/adobe-events-api')
 const { getRegistrationName } = require('../../utils/naming')
+const { getEventName } = require('../../utils/naming')
 const providersEventsConfig = require('../onboarding/config/events.json')
 const { makeError } = require('./helpers/errors')
 
@@ -48,7 +49,7 @@ async function main (clientRegistrations, providers, environment, authHeaders) {
         for (const event of Object.keys(providersEventsConfig[entityName][provider.key])) {
           events.push({
             provider_id: provider.id,
-            event_code: event
+            event_code: getEventName(event, environment)
           })
         }
 
@@ -80,10 +81,18 @@ async function main (clientRegistrations, providers, environment, authHeaders) {
       registrations: result
     }
   } catch (error) {
+    const hints = [
+      'Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL',
+      'Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?'
+    ]
+
     return makeError(
       'UNEXPECTED_ERROR',
       'Unexpected error occurred while creating registrations',
-      { error }
+      {
+        error,
+        hints: hints.length > 0 ? hints : undefined
+      }
     )
   }
 }

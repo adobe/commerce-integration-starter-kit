@@ -14,6 +14,9 @@ require('dotenv').config()
 
 const fetch = require('node-fetch')
 const uuid = require('uuid')
+const fs = require('fs')
+const path = require('path')
+const envPath = path.resolve(__dirname, '../../.env')
 
 const { makeError } = require('./helpers/errors')
 const { getMissingKeys } = require('../../actions/utils')
@@ -92,6 +95,33 @@ function hasSelection (selection, clientRegistrations) {
 }
 
 /**
+ * Updates the .env file with provider id.
+ *
+ * @param {Array} providers - list of providers
+ */
+function writeToEnvFile (providers) {
+  // Read the existing .env content
+  let envContent = fs.readFileSync(envPath, 'utf8')
+  envContent = envContent.replace(/\r\n/g, '\n').replace(/\s+$/, '')
+
+  providers.forEach(provider => {
+    const providerType = provider.key.toUpperCase()
+    const providerIdEnv = `${providerType}_PROVIDER_ID=${provider.id}`
+    const providerIdEnvRegex = new RegExp(`^${providerType}_PROVIDER_ID=.*$`, 'm')
+
+    console.log(`Defining the ${provider.key} provider id as : ${provider.id} having instance id : ${provider.instanceId}`)
+    if (providerIdEnvRegex.test(envContent)) {
+      envContent = envContent.replace(providerIdEnvRegex, providerIdEnv)
+    } else {
+      envContent += `\n${providerIdEnv}`
+    }
+  })
+  // Write back to the .env file
+  fs.writeFileSync(envPath, envContent.trim() + '\n', 'utf8')
+  console.log('Successfully updated .env file with provider id\'s')
+}
+
+/**
  * Main function to create events providers based on config/providers.json and client registrations
  * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
  * @param {object} environment - Environment configuration
@@ -126,7 +156,7 @@ async function main (clientRegistrations, environment, authHeaders) {
       })
     }
 
-    const existingProviders = await getExistingProviders(environment, authHeaders)
+    const existingProviders = await getExistingProviders(environment, accessToken)
     const result = []
 
     for (const provider of providersList) {
@@ -166,6 +196,8 @@ async function main (clientRegistrations, environment, authHeaders) {
       }
     }
 
+    // update the env file with provider ID
+    writeToEnvFile(result)
     for (const provider of result) {
       console.log(`Defining the provider with key: ${provider.key} as: ${provider.id}`)
     }
@@ -178,10 +210,19 @@ async function main (clientRegistrations, environment, authHeaders) {
     console.log('Process of creating providers done successfully')
     return response
   } catch (error) {
+    const hints = [
+      'Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL',
+      'Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?'
+    ]
+
     return makeError(
       'UNEXPECTED_ERROR',
       'Unexpected error occurred while creating providers',
-      { error, provider: currentProvider }
+      {
+        error,
+        provider: currentProvider,
+        hints: hints.length > 0 ? hints : undefined
+      }
     )
   }
 }
