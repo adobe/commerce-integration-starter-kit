@@ -27,21 +27,22 @@ const { arrayItemsErrorFormat } = require('./helpers/errors')
 const providersEventsConfig = require('../onboarding/config/events.json')
 
 /**
- * Creates an events provider via the I/O Management API
- * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID
- * @param {object} authHeaders - Authentication headers including access token
- * @param {{key?: string, label?: string, description?: string, docs_url?: string}} provider - Provider configuration object
- * @returns {Promise<{success: boolean, provider?: object, error?: {label: string, reason: string, payload: object}}>} Result object with created provider or error
+ * Create the events provider
+ *
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
+ * @param {object} provider - provider data
  */
-async function createProvider (environment, authHeaders, provider) {
+async function createProvider (environment, accessToken, provider) {
   // See: https://developer.adobe.com/events/docs/api#operation/createProvider
   const url = `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers`
   const createCustomEventProviderReq = await fetch(url, {
     method: 'POST',
     headers: {
+      'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
+      Authorization: `Bearer ${accessToken}`,
       'content-type': 'application/json',
-      Accept: 'application/hal+json',
-      ...authHeaders
+      Accept: 'application/hal+json'
     },
     body: JSON.stringify(
       {
@@ -85,10 +86,10 @@ async function createProvider (environment, authHeaders, provider) {
 }
 
 /**
- * Checks if a provider was selected in client registrations
- * @param {string} selection - Provider key to check
- * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
- * @returns {boolean} True if provider is selected in any registration
+ * Check if provider was selected
+ *
+ * @param {string} selection - option selected by client
+ * @param {object} clientRegistrations - client registrations
  */
 function hasSelection (selection, clientRegistrations) {
   return Object.values(clientRegistrations).some(value => value.includes(selection))
@@ -122,13 +123,13 @@ function writeToEnvFile (providers) {
 }
 
 /**
- * Main function to create events providers based on config/providers.json and client registrations
- * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
- * @param {object} environment - Environment configuration
- * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<{success: boolean, result?: Array<{key: string, id: string, instanceId: string, label: string}>, error?: {label: string, reason: string, payload: object}}>} Result object with created providers or error
+ * Create events providers based on the config/providers.json and client registrations custom/starter-kit-registrations.json
+ *
+ * @param {object} clientRegistrations - client registrations
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
  */
-async function main (clientRegistrations, environment, authHeaders) {
+async function main (clientRegistrations, environment, accessToken) {
   // Load predefined provider, providerEvents and clientRegistrations
   const providersList = require('../onboarding/config/providers.json')
   let currentProvider
@@ -156,7 +157,7 @@ async function main (clientRegistrations, environment, authHeaders) {
       })
     }
 
-    const existingProviders = await getExistingProviders(environment, authHeaders)
+    const existingProviders = await getExistingProviders(environment, accessToken)
     const result = []
 
     for (const provider of providersList) {
@@ -182,7 +183,7 @@ async function main (clientRegistrations, environment, authHeaders) {
         console.log('Creating provider with:', provider.label)
         console.log('Provider information:', provider)
 
-        const createProviderResult = await createProvider(environment, authHeaders, provider)
+        const createProviderResult = await createProvider(environment, accessToken, provider)
         if (!createProviderResult?.success) {
           return createProviderResult
         }
