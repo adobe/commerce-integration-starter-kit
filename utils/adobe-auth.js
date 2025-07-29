@@ -22,7 +22,7 @@ const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'addition
 async function resolveConfigFromEnv (params) {
   let scopes = DEFAULT_IMS_SCOPES
 
-  if (!!params.OAUTH_SCOPES || params.OAUTH_SCOPES.length > 0) {
+  if (params.OAUTH_SCOPES && params.OAUTH_SCOPES.length > 0) {
     if (typeof params.OAUTH_SCOPES === 'string') {
       try {
         scopes = JSON.parse(params.OAUTH_SCOPES)
