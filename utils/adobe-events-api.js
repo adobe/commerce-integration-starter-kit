@@ -109,7 +109,7 @@ async function getExistingProviders (environment, authHeaders) {
  * @param {object} params - Parameters needed to make the call to Adobe IO Events
  * @param {object} authHeaders - Authentication headers including Adobe OAuth access token
  * @param {string} providerKey - Provider key used to find the provider (from onboarding/config/providers.json)
- * @returns {Promise<object|undefined>} Provider object if found, undefined otherwise
+ * @returns {Promise<object>} Provider object if found, undefined otherwise
  */
 async function getProviderByKey (params, authHeaders, providerKey) {
   const providers = await getExistingProviders(params, authHeaders)

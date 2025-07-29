@@ -126,7 +126,7 @@ function writeToEnvFile (providers) {
  * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
  * @param {object} environment - Environment configuration
  * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise} Result object with created providers or error
+ * @returns {Promise<object>} Result object with created providers or error
  */
 async function main (clientRegistrations, environment, authHeaders) {
   // Load predefined provider, providerEvents and clientRegistrations
