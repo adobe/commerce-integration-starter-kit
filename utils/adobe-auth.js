@@ -13,6 +13,11 @@ governing permissions and limitations under the License.
 const { assertImsAuthParams, getImsAuthProvider } = require('@adobe/aio-commerce-lib-auth')
 const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets', 'commerce.accs']
 
+/**
+ * Resolve IMS configuration from environment parameters
+ * @param params
+ * @returns {{clientId: (string|*), clientSecrets: (string|*)[], technicalAccountId: string, technicalAccountEmail: string, imsOrgId: (string|*), scopes: string[]}}
+ */
 function resolveImsConfig(params) {
   return {
     clientId: params.OAUTH_CLIENT_ID,
