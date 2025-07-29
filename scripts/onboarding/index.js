@@ -104,7 +104,6 @@ async function main () {
   let authHeaders
 
   try {
-    // resolve params
     authHeaders = await getAdobeAccessHeaders(process.env)
   } catch (error) {
     if (error instanceof CommerceSdkValidationError) {
@@ -115,6 +114,7 @@ async function main () {
       ).error)
       return
     }
+    console.error(error)
     return
   }
 

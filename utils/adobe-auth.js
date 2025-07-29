@@ -11,22 +11,32 @@ governing permissions and limitations under the License.
 */
 
 const { assertImsAuthParams, getImsAuthProvider } = require('@adobe/aio-commerce-lib-auth')
+const { context } = require('@adobe/aio-lib-ims')
+
 const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets', 'commerce.accs']
 
-/**
- * Generate access token to connect with Adobe tools (e.g. IO Events)
- * @param {object} params includes env parameters
- * @returns {Promise<string>} returns the access token
- */
-async function getAdobeAccessToken (params) {
+async function resolveConfigFromEnv (params) {
   const config = {
     clientId: params.OAUTH_CLIENT_ID,
     clientSecrets: [params.OAUTH_CLIENT_SECRET],
     technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
     technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
     imsOrgId: params.OAUTH_ORG_ID,
-    scopes: !!params.scopes || params.scopes?.length > 0 ? params.scopes : DEFAULT_IMS_SCOPES
-  }
+    scopes: !!params.OAUTH_SCOPES || params.OAUTH_SCOPES?.length > 0 ? params.OAUTH_SCOPES : DEFAULT_IMS_SCOPES,
+    context: "onboarding-config"
+  };
+
+  await context.setCurrent(params.context)
+
+  return config;
+}
+/**
+ * Generate access token to connect with Adobe tools (e.g. IO Events)
+ * @param {object} params includes env parameters
+ * @returns {Promise<string>} returns the access token
+ */
+async function getAdobeAccessToken (params) {
+  const config = await resolveConfigFromEnv(params);
 
   assertImsAuthParams(config)
   const imsAuthProvider = getImsAuthProvider(config)
@@ -40,12 +50,10 @@ async function getAdobeAccessToken (params) {
  * @returns {Promise<object>} returns the headers with access token
  */
 async function getAdobeAccessHeaders (params) {
-  if (!params.scopes || params.scopes.length === 0) {
-    params.scopes = DEFAULT_IMS_SCOPES
-  }
-  assertImsAuthParams(params)
-  const imsAuthProvider = getImsAuthProvider(params)
+  const config = await resolveConfigFromEnv(params);
 
+  assertImsAuthParams(config)
+  const imsAuthProvider = getImsAuthProvider(config)
   return imsAuthProvider.getHeaders()
 }
 
