@@ -16,7 +16,7 @@ const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'addition
 /**
  * Resolve IMS configuration from environment parameters
  * @param params
- * @returns {{clientId: (string|*), clientSecrets: (string|*)[], technicalAccountId: string, technicalAccountEmail: string, imsOrgId: (string|*), scopes: string[]}}
+ * @returns {object}
  */
 function resolveImsConfig(params) {
   return {
