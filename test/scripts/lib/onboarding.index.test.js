@@ -68,8 +68,8 @@ describe('onboarding index', () => {
 
     expect(fullErrorMessage).toContain('IMS_AUTH_PARAMS')
     expect(fullErrorMessage).toContain('INVALID_IMS_AUTH_PARAMS')
-    expect(fullErrorMessage).toContain('Missing or invalid environment variables for Adobe IMS authentication.');
-    expect(fullErrorMessage).toContain('Invalid ImsAuthProvider configuration');
+    expect(fullErrorMessage).toContain('Missing or invalid environment variables for Adobe IMS authentication.')
+    expect(fullErrorMessage).toContain('Invalid ImsAuthProvider configuration')
     expect(fullErrorMessage).toContain('clientId')
     expect(fullErrorMessage).toContain('clientSecrets')
     expect(fullErrorMessage).toContain('technicalAccountId')

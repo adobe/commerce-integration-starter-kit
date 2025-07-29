@@ -95,8 +95,8 @@ async function addCommerceEventProvider (providerId, instanceId, workspaceConfig
       eventProvider: {
         provider_id: providerId,
         instance_id: instanceId,
-        label: label,
-        description: description,
+        label,
+        description,
         workspace_configuration: JSON.stringify(workspaceConfiguration)
       }
     }
