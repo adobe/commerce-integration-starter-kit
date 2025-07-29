@@ -15,10 +15,10 @@ const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'addition
 
 /**
  * Resolve IMS configuration from environment parameters
- * @param params
- * @returns {object}
+ * @param {object} params - Environment parameters containing ImsAuth configuration
+ * @returns {object} IMS authentication configuration object
  */
-function resolveImsConfig(params) {
+function resolveImsConfig (params) {
   return {
     clientId: params.OAUTH_CLIENT_ID,
     clientSecrets: [params.OAUTH_CLIENT_SECRET],
@@ -35,7 +35,7 @@ function resolveImsConfig(params) {
  * @returns {Promise<string>} returns the access token
  */
 async function getAdobeAccessToken (params) {
-  const config = resolveImsConfig(params);
+  const config = resolveImsConfig(params)
 
   assertImsAuthParams(config)
   const imsAuthProvider = getImsAuthProvider(config)
@@ -49,7 +49,7 @@ async function getAdobeAccessToken (params) {
  * @returns {Promise<object>} returns the headers with access token
  */
 async function getAdobeAccessHeaders (params) {
-  const config = resolveImsConfig(params);
+  const config = resolveImsConfig(params)
   assertImsAuthParams(config)
   const imsAuthProvider = getImsAuthProvider(config)
 
