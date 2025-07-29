@@ -19,7 +19,7 @@ const { getEventName } = require('../../utils/naming')
 /**
  * Builds an array of provider events with their metadata
  * @param {object} providerEvents - Provider events configuration object
- * @returns {Array<{eventCode: string, label: string, description: string, sampleEventTemplate: object}>} Array of formatted event metadata
+ * @returns {Array} Array of formatted event metadata
  */
 function buildProviderData (providerEvents) {
   const events = []
@@ -54,7 +54,7 @@ function base64EncodedSampleEvent (sampleEventTemplate) {
  * @param {string} providerId - Provider ID
  * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID
  * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<{success: boolean, error?: {label: string, reason: string, payload: object}}>} Result object indicating success or error
+ * @returns {Promise} Result object indicating success or error
  */
 async function addEventCodeToProvider (metadata, providerId, environment, authHeaders) {
   console.log(`Trying to create metadata for ${metadata?.eventCode} to provider ${providerId}`)
@@ -115,7 +115,7 @@ async function addEventCodeToProvider (metadata, providerId, environment, authHe
  * @param {string} providerId - Provider ID
  * @param {object} environment - Environment configuration
  * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<{success: boolean, error?: {label: string, reason: string, payload: object}}>} Result object indicating success or error
+ * @returns {Promise} Result object indicating success or error
  */
 async function addMetadataToProvider (providerEvents, providerId, environment, authHeaders) {
   const commerceProviderMetadata = buildProviderData(providerEvents)
@@ -139,7 +139,7 @@ async function addMetadataToProvider (providerEvents, providerId, environment, a
  * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL
  * @param {object} authHeaders - Authentication headers for API requests
  * @param {string|null} [next] - Next URL for pagination
- * @returns {Promise<{success: boolean, existingMetadata?: Array, error?: {label: string, reason: string, payload: object}}>} Result object with existing metadata or error
+ * @returns {Promise} Result object with existing metadata or error
  */
 async function getExistingMetadata (providerId, environment, authHeaders, next = null) {
   const url = `${environment.IO_MANAGEMENT_BASE_URL}providers/${providerId}/eventmetadata`
@@ -191,7 +191,7 @@ async function getExistingMetadata (providerId, environment, authHeaders, next =
  * @param {Array<{id: string, key: string, label: string}>} providers - List of provider objects
  * @param {object} environment - Environment configuration
  * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<{success: boolean, result?: Array<{entity: string, label: string}>, error?: {label: string, reason: string, payload: object}}>} Result object with operation outcome
+ * @returns {Promise} Result object with operation outcome
  */
 async function main (clientRegistrations, providers, environment, authHeaders) {
   let currentProvider
