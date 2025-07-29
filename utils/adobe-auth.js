@@ -14,18 +14,23 @@ const { assertImsAuthParams, getImsAuthProvider } = require('@adobe/aio-commerce
 
 const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets', 'commerce.accs']
 
+/**
+ * Resolves IMS authentication configuration from environment parameters
+ * @param {object} params - Environment parameters containing OAuth configuration
+ * @returns {Promise<object>} IMS authentication configuration object
+ */
 async function resolveConfigFromEnv (params) {
-  let scopes = DEFAULT_IMS_SCOPES;
+  let scopes = DEFAULT_IMS_SCOPES
 
   if (!!params.OAUTH_SCOPES || params.OAUTH_SCOPES?.length > 0) {
     if (typeof params.OAUTH_SCOPES === 'string') {
       try {
-        scopes = JSON.parse(params.OAUTH_SCOPES);
+        scopes = JSON.parse(params.OAUTH_SCOPES)
       } catch (e) {
-        throw new Error(`Invalid OAUTH_SCOPES format: ${params.OAUTH_SCOPES}. It should be a valid JSON array.`);
+        throw new Error(`Invalid OAUTH_SCOPES format: ${params.OAUTH_SCOPES}. It should be a valid JSON array.`)
       }
     } else if (Array.isArray(params.OAUTH_SCOPES)) {
-        scopes = params.OAUTH_SCOPES;
+      scopes = params.OAUTH_SCOPES
     }
   }
 
@@ -35,8 +40,8 @@ async function resolveConfigFromEnv (params) {
     technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
     technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
     imsOrgId: params.OAUTH_ORG_ID,
-    scopes,
-  };
+    scopes
+  }
 }
 /**
  * Generate access token to connect with Adobe tools (e.g. IO Events)
@@ -44,7 +49,7 @@ async function resolveConfigFromEnv (params) {
  * @returns {Promise<string>} returns the access token
  */
 async function getAdobeAccessToken (params) {
-  const config = await resolveConfigFromEnv(params);
+  const config = await resolveConfigFromEnv(params)
 
   assertImsAuthParams(config)
   const imsAuthProvider = getImsAuthProvider(config)
@@ -58,7 +63,7 @@ async function getAdobeAccessToken (params) {
  * @returns {Promise<object>} returns the headers with access token
  */
 async function getAdobeAccessHeaders (params) {
-  const config = await resolveConfigFromEnv(params);
+  const config = await resolveConfigFromEnv(params)
 
   assertImsAuthParams(config)
   const imsAuthProvider = getImsAuthProvider(config)
