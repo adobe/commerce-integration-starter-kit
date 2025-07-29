@@ -18,18 +18,18 @@ const providersEventsConfig = require('../onboarding/config/events.json')
 const { makeError } = require('./helpers/errors')
 
 /**
- * Creates event registrations based on client selections from custom/starter-kit-registrations.json
- * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
- * @param {Array<{id: string, key: string, label: string}>} providers - List of provider objects
- * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID, OAUTH_CLIENT_ID
- * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<{success: boolean, registrations?: Array<{id: string, registration_id: string, name: string, enabled: boolean}>, error?: {label: string, reason: string, payload: object}}>} Result object with registrations or error
+ * Create the registrations based on the selection of the client from the file custom/starter-kit-registrations.json
+ *
+ * @param {object} clientRegistrations - client registrations
+ * @param {Array} providers - list of providers
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
  */
-async function main (clientRegistrations, providers, environment, authHeaders) {
+async function main (clientRegistrations, providers, environment, accessToken) {
   const result = []
 
   try {
-    const existingRegistrations = await getExistingRegistrations(environment, authHeaders)
+    const existingRegistrations = await getExistingRegistrations(environment, accessToken)
     for (const provider of providers) {
       console.log(`Start creating registrations for the provider: ${provider.label}`)
 
@@ -53,7 +53,7 @@ async function main (clientRegistrations, providers, environment, authHeaders) {
           })
         }
 
-        const createEventRegistrationResult = await createRequestRegistration(authHeaders, entityName, provider.key, events, environment)
+        const createEventRegistrationResult = await createRequestRegistration(accessToken, entityName, provider.key, events, environment)
 
         if (!createEventRegistrationResult.success) {
           const error = createEventRegistrationResult.error
@@ -98,15 +98,15 @@ async function main (clientRegistrations, providers, environment, authHeaders) {
 }
 
 /**
- * Creates an event registration in Adobe I/O Events
- * @param {object} authHeaders - Authentication headers for API requests
- * @param {string} entityName - Entity name for the registration
- * @param {string} providerKey - Provider key identifier
- * @param {Array<{provider_id: string, event_code: string}>} events - Array of events to register
- * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID, OAUTH_CLIENT_ID
- * @returns {Promise<{success: boolean, result?: {id: string, registration_id: string, name: string, enabled: boolean}, error?: {label: string, reason: string, payload: object}}>} Result object with registration details or error
+ * Create the registration in Adobe event
+ *
+ * @param {string} accessToken - access token
+ * @param {string} entityName - entity name
+ * @param {string} providerKey - provider key
+ * @param {Array} events - provider events
+ * @param {object} environment - environment params
  */
-async function createRequestRegistration (authHeaders, entityName, providerKey, events, environment) {
+async function createRequestRegistration (accessToken, entityName, providerKey, events, environment) {
   const body = JSON.stringify({
     client_id: `${environment.OAUTH_CLIENT_ID}`,
     runtime_action: `${entityName}-${providerKey}/consumer`,
@@ -120,9 +120,10 @@ async function createRequestRegistration (authHeaders, entityName, providerKey, 
   const createEventRegistrationReq = await fetch(url, {
     method: 'POST',
     headers: {
+      'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
+      Authorization: `Bearer ${accessToken}`,
       'content-type': 'application/json',
-      Accept: 'application/hal+json',
-      ...authHeaders
+      Accept: 'application/hal+json'
     },
     body
   })

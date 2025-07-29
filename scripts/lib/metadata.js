@@ -17,9 +17,8 @@ const providersEventsConfig = require('../onboarding/config/events.json')
 const { getEventName } = require('../../utils/naming')
 
 /**
- * Builds an array of provider events with their metadata
- * @param {object} providerEvents - Provider events configuration object
- * @returns {Array<{eventCode: string, label: string, description: string, sampleEventTemplate: object}>} Array of formatted event metadata
+ * This method build an array of provider events
+ * @param {Array} providerEvents - provider events
  */
 function buildProviderData (providerEvents) {
   const events = []
@@ -37,9 +36,8 @@ function buildProviderData (providerEvents) {
 }
 
 /**
- * Encodes a sample event template to base64 string
- * @param {object} sampleEventTemplate - Sample event template object
- * @returns {string|null} Base64 encoded string of the template or null if invalid
+ * This method builds a base64 encoded sample event if one exists
+ * @param {object} sampleEventTemplate - Sample Event Template as object
  */
 function base64EncodedSampleEvent (sampleEventTemplate) {
   if (!sampleEventTemplate || typeof sampleEventTemplate !== 'object') {
@@ -49,14 +47,14 @@ function base64EncodedSampleEvent (sampleEventTemplate) {
 }
 
 /**
- * Adds event metadata to a provider via the I/O Management API
- * @param {{eventCode: string, label: string, description: string, sampleEventTemplate: object}} metadata - Event metadata object
- * @param {string} providerId - Provider ID
- * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID
- * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<{success: boolean, error?: {label: string, reason: string, payload: object}}>} Result object indicating success or error
+ * This method add the events codes to the provider
+ *
+ * @param {object} metadata - metadata data
+ * @param {string} providerId - provider id
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
  */
-async function addEventCodeToProvider (metadata, providerId, environment, authHeaders) {
+async function addEventCodeToProvider (metadata, providerId, environment, accessToken) {
   console.log(`Trying to create metadata for ${metadata?.eventCode} to provider ${providerId}`)
 
   const { eventCode, label, description, sampleEventTemplate } = metadata
@@ -73,9 +71,10 @@ async function addEventCodeToProvider (metadata, providerId, environment, authHe
   const addEventMetadataReq = await fetch(url, {
     method: 'POST',
     headers: {
+      'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
+      Authorization: `Bearer ${accessToken}`,
       'content-type': 'application/json',
-      Accept: 'application/hal+json',
-      ...authHeaders
+      Accept: 'application/hal+json'
     },
     body: JSON.stringify(body)
   })
@@ -110,18 +109,18 @@ async function addEventCodeToProvider (metadata, providerId, environment, authHe
 }
 
 /**
- * Adds multiple event metadata entries to a provider
- * @param {object} providerEvents - Provider events configuration object
- * @param {string} providerId - Provider ID
- * @param {object} environment - Environment configuration
- * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<{success: boolean, error?: {label: string, reason: string, payload: object}}>} Result object indicating success or error
+ * This method add metadata to the provider
+ *
+ * @param {object} providerEvents - provider events
+ * @param {string} providerId - provider id
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
  */
-async function addMetadataToProvider (providerEvents, providerId, environment, authHeaders) {
+async function addMetadataToProvider (providerEvents, providerId, environment, accessToken) {
   const commerceProviderMetadata = buildProviderData(providerEvents)
 
   for (const metadata of commerceProviderMetadata) {
-    const result = await addEventCodeToProvider(metadata, providerId, environment, authHeaders)
+    const result = await addEventCodeToProvider(metadata, providerId, environment, accessToken)
 
     if (!result.success) {
       return result
@@ -134,22 +133,23 @@ async function addMetadataToProvider (providerEvents, providerId, environment, a
 }
 
 /**
- * Retrieves existing metadata for a provider with pagination support
- * @param {string} providerId - Provider ID
- * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL
- * @param {object} authHeaders - Authentication headers for API requests
- * @param {string|null} [next] - Next URL for pagination
- * @returns {Promise<{success: boolean, existingMetadata?: Array, error?: {label: string, reason: string, payload: object}}>} Result object with existing metadata or error
+ * Get existing provider metadata
+ *
+ * @param {string} providerId - provider id
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
+ * @param {string} next - next url
  */
-async function getExistingMetadata (providerId, environment, authHeaders, next = null) {
+async function getExistingMetadata (providerId, environment, accessToken, next = null) {
   const url = `${environment.IO_MANAGEMENT_BASE_URL}providers/${providerId}/eventmetadata`
   const fetchUrl = next ?? url
   const getExistingMetadataReq = await fetch(fetchUrl, {
     method: 'GET',
     headers: {
+      'x-api-key': `${environment.OAUTH_CLIENT_ID}`,
+      Authorization: `Bearer ${accessToken}`,
       'content-type': 'application/json',
-      Accept: 'application/hal+json',
-      ...authHeaders
+      Accept: 'application/hal+json'
     }
   })
 
@@ -175,7 +175,7 @@ async function getExistingMetadata (providerId, environment, authHeaders, next =
   }
 
   if (getExistingMetadataResult?._links?.next) {
-    const data = await getExistingMetadata(providerId, environment, authHeaders, getExistingMetadataResult._links.next)
+    const data = await getExistingMetadata(providerId, environment, accessToken, getExistingMetadataResult._links.next)
     existingMetadata.push(...data)
   }
 
@@ -186,14 +186,14 @@ async function getExistingMetadata (providerId, environment, authHeaders, next =
 }
 
 /**
- * Main function to add metadata events codes from config/events.json to corresponding providers
- * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
- * @param {Array<{id: string, key: string, label: string}>} providers - List of provider objects
- * @param {object} environment - Environment configuration
- * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<{success: boolean, result?: Array<{entity: string, label: string}>, error?: {label: string, reason: string, payload: object}}>} Result object with operation outcome
+ * Add metadata events codes from file config/events.json to corresponding provider
+ *
+ * @param {object} clientRegistrations - client registrations
+ * @param {Array} providers - list of providers
+ * @param {object} environment - environment params
+ * @param {string} accessToken - access token
  */
-async function main (clientRegistrations, providers, environment, authHeaders) {
+async function main (clientRegistrations, providers, environment, accessToken) {
   let currentProvider
   let eventName
   try {
@@ -202,7 +202,7 @@ async function main (clientRegistrations, providers, environment, authHeaders) {
     const result = []
     for (const provider of providers) {
       currentProvider = provider
-      const existingMetadataResult = await getExistingMetadata(provider.id, environment, authHeaders)
+      const existingMetadataResult = await getExistingMetadata(provider.id, environment, accessToken)
 
       if (!existingMetadataResult.success) {
         return existingMetadataResult
@@ -233,7 +233,7 @@ async function main (clientRegistrations, providers, environment, authHeaders) {
         }
       }
 
-      const addMetadataResult = await addMetadataToProvider(providersEvents, provider.id, environment, authHeaders)
+      const addMetadataResult = await addMetadataToProvider(providersEvents, provider.id, environment, accessToken)
       if (!addMetadataResult.success) {
         return addMetadataResult
       }

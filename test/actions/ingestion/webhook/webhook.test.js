@@ -33,22 +33,13 @@ const mockEventsInstance = { publishEvent: jest.fn() }
 Events.init.mockReturnValue(mockEventsInstance)
 
 jest.mock('@adobe/aio-lib-ims', () => ({
+  getToken: jest.fn(),
   context: {
     setCurrent: jest.fn(),
     set: jest.fn()
   }
 }))
-
-jest.mock('@adobe/aio-commerce-lib-auth', () => {
-  const originalModule = jest.requireActual('@adobe/aio-commerce-lib-auth')
-  return {
-    __esModule: true,
-    ...originalModule,
-    getImsAuthProvider: jest.fn()
-  }
-})
-
-const { getImsAuthProvider } = require('@adobe/aio-commerce-lib-auth')
+const { getToken } = require('@adobe/aio-lib-ims')
 
 jest.mock('node-fetch')
 const fetch = require('node-fetch')
@@ -62,39 +53,6 @@ afterEach(() => {
   jest.resetModules()
 })
 
-const validEnvParams = {
-  OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
-  OAUTH_CLIENT_SECRET: 'OAUTH_CLIENT_SECRET',
-  OAUTH_TECHNICAL_ACCOUNT_ID: 'example@adobe-ds.com',
-  OAUTH_TECHNICAL_ACCOUNT_EMAIL: 'example2@adobe-ds.com',
-  OAUTH_ORG_ID: 'OAUTH_ORG_ID'
-}
-
-/**
- * Mocks a resolved access token for testing
- */
-function mockResolvedAccessToken () {
-  getImsAuthProvider.mockReturnValueOnce({
-    getAccessToken: jest.fn().mockResolvedValue('access token'),
-    getHeaders: jest.fn()
-  })
-}
-
-/**
- * Creates a mock fetch response for providers
- * @param {Array} providers - Array of provider objects
- */
-function createMockFetchProvidersResponse (providers) {
-  return {
-    ok: true,
-    json: () => Promise.resolve({
-      _embedded: {
-        providers
-      }
-    })
-  }
-}
-
 describe('Given external backoffice events ingestion webhook', () => {
   describe('When method main is defined', () => {
     test('Then is an instance of Function', () => {
@@ -104,7 +62,8 @@ describe('Given external backoffice events ingestion webhook', () => {
   describe('When received data information is valid', () => {
     test('Then returns success response', async () => {
       const params = {
-        ...validEnvParams,
+        OAUTH_ORG_ID: 'OAUTH_ORG_ID',
+        OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
         AIO_runtime_namespace: 'eistarterkitv1',
         data: {
           uid: 'product-123',
@@ -118,17 +77,26 @@ describe('Given external backoffice events ingestion webhook', () => {
         }
       }
 
-      mockResolvedAccessToken()
-      fetch.mockResolvedValueOnce(createMockFetchProvidersResponse([
-        {
-          id: 'PROVIDER_ID',
-          label: 'Backoffice Provider - eistarterkitv1',
-          description: 'string',
-          source: 'string',
-          docs_url: 'string',
-          publisher: 'string'
-        }
-      ]))
+      getToken.mockResolvedValueOnce(Promise.resolve('access token'))
+
+      const mockFetchGetExistingProvidersResponse = {
+        ok: true,
+        json: () => Promise.resolve({
+          _embedded: {
+            providers: [
+              {
+                id: 'PROVIDER_ID',
+                label: 'Backoffice Provider - eistarterkitv1',
+                description: 'string',
+                source: 'string',
+                docs_url: 'string',
+                publisher: 'string'
+              }
+            ]
+          }
+        })
+      }
+      fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
       mockEventsInstance.publishEvent.mockResolvedValueOnce(
         Promise.resolve('OK'))
       const response = await action.main(params)
@@ -168,7 +136,8 @@ describe('Given external backoffice events ingestion webhook', () => {
   describe('When generation of access token fail', () => {
     test('Then returns error response', async () => {
       const params = {
-        ...validEnvParams,
+        OAUTH_ORG_ID: 'OAUTH_ORG_ID',
+        OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
         AIO_runtime_namespace: 'eistarterkitv1',
         data: {
           uid: 'product-123',
@@ -182,14 +151,7 @@ describe('Given external backoffice events ingestion webhook', () => {
         }
       }
 
-      getImsAuthProvider.mockImplementation(() => {
-        return {
-          getAccessToken: () => {
-            throw new Error('fake error')
-          },
-          getHeaders: () => {}
-        }
-      })
+      getToken.mockRejectedValue(new Error('fake error'))
 
       const response = await action.main(params)
 
@@ -202,41 +164,12 @@ describe('Given external backoffice events ingestion webhook', () => {
         }
       })
     })
-    test('Then returns error response with CommerceSdkValidationError', async () => {
-      const params = {
-        AIO_runtime_namespace: 'eistarterkitv1',
-        data: {
-          uid: 'product-123',
-          event: 'be-observer.catalog_product_create',
-          value: {
-            sku: 'TEST_WEBHOOK_2',
-            name: 'Test webhook test',
-            price: 52,
-            description: 'Test webhook description'
-          }
-        }
-      }
-
-      const response = await action.main(params)
-
-      expect(response).toEqual({
-        error: {
-          statusCode: 500,
-          body: {
-            error: 'Invalid ImsAuthProvider configuration'
-          }
-        }
-      })
-
-      // Verify logger.error was called with the correct messages
-      expect(mockLoggerInstance.error).toHaveBeenCalledWith('Server error: Invalid ImsAuthProvider configuration')
-      expect(mockLoggerInstance.error).toHaveBeenCalledWith(expect.stringContaining('Invalid ImsAuthProvider configuration'))
-    })
   })
   describe('When fetching existing providers fails', () => {
     test('Then returns error response', async () => {
       const params = {
-        ...validEnvParams,
+        OAUTH_ORG_ID: 'OAUTH_ORG_ID',
+        OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
         AIO_runtime_namespace: 'eistarterkitv1',
         data: {
           uid: 'product-123',
@@ -250,7 +183,8 @@ describe('Given external backoffice events ingestion webhook', () => {
         }
       }
 
-      mockResolvedAccessToken()
+      getToken.mockResolvedValueOnce(Promise.resolve('access token'))
+
       fetch.mockRejectedValue(new Error('fake error'))
 
       const response = await action.main(params)
@@ -268,7 +202,8 @@ describe('Given external backoffice events ingestion webhook', () => {
   describe('When external backoffice not found', () => {
     test('Then returns error response', async () => {
       const params = {
-        ...validEnvParams,
+        OAUTH_ORG_ID: 'OAUTH_ORG_ID',
+        OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
         AIO_runtime_namespace: 'eistarterkitv1',
         data: {
           uid: 'product-123',
@@ -282,7 +217,8 @@ describe('Given external backoffice events ingestion webhook', () => {
         }
       }
 
-      mockResolvedAccessToken()
+      getToken.mockResolvedValueOnce(Promise.resolve('access token'))
+
       fetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({})
@@ -303,7 +239,8 @@ describe('Given external backoffice events ingestion webhook', () => {
   describe('When publish events fails', () => {
     test('Then returns error response', async () => {
       const params = {
-        ...validEnvParams,
+        OAUTH_ORG_ID: 'OAUTH_ORG_ID',
+        OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
         AIO_runtime_namespace: 'eistarterkitv1',
         data: {
           uid: 'product-123',
@@ -317,17 +254,26 @@ describe('Given external backoffice events ingestion webhook', () => {
         }
       }
 
-      mockResolvedAccessToken()
-      fetch.mockResolvedValueOnce(createMockFetchProvidersResponse([
-        {
-          id: 'PROVIDER_ID',
-          label: 'Backoffice Provider - eistarterkitv1',
-          description: 'string',
-          source: 'string',
-          docs_url: 'string',
-          publisher: 'string'
-        }
-      ]))
+      getToken.mockResolvedValueOnce(Promise.resolve('access token'))
+
+      const mockFetchGetExistingProvidersResponse = {
+        ok: true,
+        json: () => Promise.resolve({
+          _embedded: {
+            providers: [
+              {
+                id: 'PROVIDER_ID',
+                label: 'Backoffice Provider - eistarterkitv1',
+                description: 'string',
+                source: 'string',
+                docs_url: 'string',
+                publisher: 'string'
+              }
+            ]
+          }
+        })
+      }
+      fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
       mockEventsInstance.publishEvent.mockRejectedValue(new Error('fake error'))
       const response = await action.main(params)
 
@@ -344,7 +290,8 @@ describe('Given external backoffice events ingestion webhook', () => {
   describe('When publish events response is undefined', () => {
     test('Then returns error response', async () => {
       const params = {
-        ...validEnvParams,
+        OAUTH_ORG_ID: 'OAUTH_ORG_ID',
+        OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
         AIO_runtime_namespace: 'eistarterkitv1',
         data: {
           uid: 'product-123',
@@ -358,17 +305,26 @@ describe('Given external backoffice events ingestion webhook', () => {
         }
       }
 
-      mockResolvedAccessToken()
-      fetch.mockResolvedValueOnce(createMockFetchProvidersResponse([
-        {
-          id: 'PROVIDER_ID',
-          label: 'Backoffice Provider - eistarterkitv1',
-          description: 'string',
-          source: 'string',
-          docs_url: 'string',
-          publisher: 'string'
-        }
-      ]))
+      getToken.mockResolvedValueOnce(Promise.resolve('access token'))
+
+      const mockFetchGetExistingProvidersResponse = {
+        ok: true,
+        json: () => Promise.resolve({
+          _embedded: {
+            providers: [
+              {
+                id: 'PROVIDER_ID',
+                label: 'Backoffice Provider - eistarterkitv1',
+                description: 'string',
+                source: 'string',
+                docs_url: 'string',
+                publisher: 'string'
+              }
+            ]
+          }
+        })
+      }
+      fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
       mockEventsInstance.publishEvent.mockResolvedValueOnce(Promise.resolve(undefined))
       const response = await action.main(params)
 
@@ -386,7 +342,8 @@ describe('Given external backoffice events ingestion webhook', () => {
     test('Then receives credentials params in the input',
       async () => {
         const params = {
-          ...validEnvParams,
+          OAUTH_ORG_ID: 'OAUTH_ORG_ID',
+          OAUTH_CLIENT_ID: 'OAUTH_CLIENT_ID',
           AIO_runtime_namespace: 'eistarterkitv1',
           data: {
             uid: 'product-123',
@@ -400,17 +357,26 @@ describe('Given external backoffice events ingestion webhook', () => {
           }
         }
 
-        mockResolvedAccessToken()
-        fetch.mockResolvedValueOnce(createMockFetchProvidersResponse([
-          {
-            id: 'PROVIDER_ID',
-            label: 'Backoffice Provider - eistarterkitv1',
-            description: 'string',
-            source: 'string',
-            docs_url: 'string',
-            publisher: 'string'
-          }
-        ]))
+        getToken.mockResolvedValueOnce(Promise.resolve('access token'))
+
+        const mockFetchGetExistingProvidersResponse = {
+          ok: true,
+          json: () => Promise.resolve({
+            _embedded: {
+              providers: [
+                {
+                  id: 'PROVIDER_ID',
+                  label: 'Backoffice Provider - eistarterkitv1',
+                  description: 'string',
+                  source: 'string',
+                  docs_url: 'string',
+                  publisher: 'string'
+                }
+              ]
+            }
+          })
+        }
+        fetch.mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
 
         await action.main(params)
         expect(Events.init)

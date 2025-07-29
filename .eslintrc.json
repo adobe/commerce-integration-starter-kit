@@ -6,7 +6,7 @@
 
   "rules": {
     "node/no-missing-require": ["error", {
-      "allowModules": ["@adobe/aio-lib-telemetry", "ansis", "@adobe/aio-commerce-lib-core"]
+      "allowModules": ["@adobe/aio-lib-telemetry", "ansis"]    
     }]
   },
 
@@ -16,7 +16,7 @@
       "rules": {
         "node/no-unpublished-require": "off",
         "node/no-missing-require": ["error", {
-          "allowModules": ["@adobe/aio-lib-telemetry", "ansis", "@adobe/aio-commerce-lib-core"]
+          "allowModules": ["@adobe/aio-lib-telemetry"]
         }]
       }
     },
