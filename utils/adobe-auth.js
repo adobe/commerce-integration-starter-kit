@@ -11,24 +11,18 @@ governing permissions and limitations under the License.
 */
 
 const { assertImsAuthParams, getImsAuthProvider } = require('@adobe/aio-commerce-lib-auth')
-const { context } = require('@adobe/aio-lib-ims')
 
 const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets', 'commerce.accs']
 
 async function resolveConfigFromEnv (params) {
-  const config = {
+  return {
     clientId: params.OAUTH_CLIENT_ID,
     clientSecrets: [params.OAUTH_CLIENT_SECRET],
     technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
     technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
     imsOrgId: params.OAUTH_ORG_ID,
     scopes: !!params.OAUTH_SCOPES || params.OAUTH_SCOPES?.length > 0 ? params.OAUTH_SCOPES : DEFAULT_IMS_SCOPES,
-    context: "onboarding-config"
   };
-
-  await context.setCurrent(params.context)
-
-  return config;
 }
 /**
  * Generate access token to connect with Adobe tools (e.g. IO Events)
