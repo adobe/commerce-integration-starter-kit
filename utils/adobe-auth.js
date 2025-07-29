@@ -15,13 +15,27 @@ const { assertImsAuthParams, getImsAuthProvider } = require('@adobe/aio-commerce
 const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets', 'commerce.accs']
 
 async function resolveConfigFromEnv (params) {
+  let scopes = DEFAULT_IMS_SCOPES;
+
+  if (!!params.OAUTH_SCOPES || params.OAUTH_SCOPES?.length > 0) {
+    if (typeof params.OAUTH_SCOPES === 'string') {
+      try {
+        scopes = JSON.parse(params.OAUTH_SCOPES);
+      } catch (e) {
+        throw new Error(`Invalid OAUTH_SCOPES format: ${params.OAUTH_SCOPES}. It should be a valid JSON array.`);
+      }
+    } else if (Array.isArray(params.OAUTH_SCOPES)) {
+        scopes = params.OAUTH_SCOPES;
+    }
+  }
+
   return {
     clientId: params.OAUTH_CLIENT_ID,
     clientSecrets: [params.OAUTH_CLIENT_SECRET],
     technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
     technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
     imsOrgId: params.OAUTH_ORG_ID,
-    scopes: !!params.OAUTH_SCOPES || params.OAUTH_SCOPES?.length > 0 ? params.OAUTH_SCOPES : DEFAULT_IMS_SCOPES,
+    scopes,
   };
 }
 /**

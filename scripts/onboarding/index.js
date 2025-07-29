@@ -114,7 +114,14 @@ async function main () {
       ).error)
       return
     }
-    console.error(error)
+
+    logOnboardingError('getAccessToken', makeError(
+        'INVALID_IMS_AUTH_PARAMS',
+        'An error occurred while trying to get Adobe IMS authentication headers.',
+        error
+        ).error
+    )
+
     return
   }
 
