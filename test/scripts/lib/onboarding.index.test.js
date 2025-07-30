@@ -58,7 +58,7 @@ describe('onboarding index', () => {
       IO_CONSUMER_ID: 'test',
       IO_WORKSPACE_ID: 'test',
       IO_PROJECT_ID: 'test',
-      EVENT_PREFIX: 'test',
+      EVENT_PREFIX: 'test'
     }
     jest.replaceProperty(process, 'env', mockEnv)
     const result = await main()

@@ -27,7 +27,7 @@ const ProcessEnvSchema = v.object({
   IO_CONSUMER_ID: StringSchema,
   IO_PROJECT_ID: StringSchema,
   IO_WORKSPACE_ID: StringSchema,
-  EVENT_PREFIX: StringSchema,
+  EVENT_PREFIX: StringSchema
 })
 
 /**
@@ -119,9 +119,9 @@ async function main () {
     }
 
     logOnboardingError('getAccessToken', makeError(
-        'UNEXPECTED_IMS_AUTH_ERROR',
-        'An error occurred while trying to get Adobe IMS authentication headers.',
-        error
+      'UNEXPECTED_IMS_AUTH_ERROR',
+      'An error occurred while trying to get Adobe IMS authentication headers.',
+      error
     ).error)
     return
   }
