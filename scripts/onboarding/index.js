@@ -95,7 +95,6 @@ async function main () {
       'Missing or invalid environment variables for Onboarding script.',
       error
     ).error)
-    return
   }
 
   console.log('Starting the process of on-boarding based on your registration choices')
@@ -115,7 +114,12 @@ async function main () {
       ).error)
       return
     }
-    console.log(error)
+
+    logOnboardingError('getAccessToken', makeError(
+        'UNEXPECTED_IMS_AUTH_ERROR',
+        'An error occurred while trying to get Adobe IMS authentication headers.',
+        error
+    ).error)
     return
   }
 
