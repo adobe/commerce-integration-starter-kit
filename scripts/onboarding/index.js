@@ -26,7 +26,8 @@ const StringSchema = v.pipe(
 const ProcessEnvSchema = v.object({
   IO_CONSUMER_ID: StringSchema,
   IO_PROJECT_ID: StringSchema,
-  IO_WORKSPACE_ID: StringSchema
+  IO_WORKSPACE_ID: StringSchema,
+  EVENT_PREFIX: StringSchema,
 })
 
 /**
@@ -95,6 +96,8 @@ async function main () {
       'Missing or invalid environment variables for Onboarding script.',
       error
     ).error)
+
+    return
   }
 
   console.log('Starting the process of on-boarding based on your registration choices')

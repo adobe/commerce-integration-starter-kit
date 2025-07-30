@@ -15,6 +15,8 @@ const { main } = require('../../../scripts/onboarding/index')
 const ansis = require('ansis')
 
 const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
+
 describe('onboarding index', () => {
   const originalEnv = process.env
 
@@ -27,7 +29,7 @@ describe('onboarding index', () => {
     process.env = originalEnv
   })
 
-  test('should print an error when IO_PROJECT_ID, IO_CONSUMER_ID and IO_WORKSPACE_ID are missing', async () => {
+  test('should print an error when IO_PROJECT_ID, IO_CONSUMER_ID and IO_WORKSPACE_ID and EVENT_PREFIX are missing', async () => {
     // Mock process.env to simulate missing environment variables
     const mockEnv = {}
     jest.replaceProperty(process, 'env', mockEnv)
@@ -47,6 +49,7 @@ describe('onboarding index', () => {
     expect(fullErrorMessage).toContain('IO_PROJECT_ID')
     expect(fullErrorMessage).toContain('IO_CONSUMER_ID')
     expect(fullErrorMessage).toContain('IO_WORKSPACE_ID')
+    expect(fullErrorMessage).toContain('EVENT_PREFIX')
   })
 
   test('should print an error when IMS Auth Parameters are missing', async () => {
@@ -54,7 +57,8 @@ describe('onboarding index', () => {
     const mockEnv = {
       IO_CONSUMER_ID: 'test',
       IO_WORKSPACE_ID: 'test',
-      IO_PROJECT_ID: 'test'
+      IO_PROJECT_ID: 'test',
+      EVENT_PREFIX: 'test',
     }
     jest.replaceProperty(process, 'env', mockEnv)
     const result = await main()
@@ -76,5 +80,133 @@ describe('onboarding index', () => {
     expect(fullErrorMessage).toContain('technicalAccountEmail')
     expect(fullErrorMessage).toContain('imsOrgId')
     expect(fullErrorMessage).not.toContain('scopes')
+  })
+
+  test('should complete successfully when all required values are provided', async () => {
+    // Mock all required dependencies for this test
+    jest.doMock('../../../utils/adobe-auth', () => ({
+      getAdobeAccessHeaders: jest.fn().mockResolvedValue({
+        Authorization: 'Bearer test-token',
+        'x-api-key': 'test-api-key'
+      })
+    }))
+
+    jest.doMock('../../../scripts/lib/providers', () => ({
+      main: jest.fn().mockResolvedValue({
+        success: true,
+        result: [
+          {
+            key: 'commerce',
+            id: 'COMMERCE_PROVIDER_ID',
+            instanceId: 'AC_INSTANCE_ID',
+            label: 'Commerce Provider - test'
+          },
+          {
+            key: 'backoffice',
+            id: 'BACKOFFICE_PROVIDER_ID',
+            instanceId: 'BO_INSTANCE_ID',
+            label: 'Backoffice Provider - test'
+          }
+        ]
+      })
+    }))
+
+    jest.doMock('../../../scripts/lib/metadata', () => ({
+      main: jest.fn().mockResolvedValue({
+        success: true,
+        result: [
+          {
+            entity: 'product',
+            label: 'Commerce Provider'
+          },
+          {
+            entity: 'product',
+            label: 'Backoffice Provider'
+          }
+        ]
+      })
+    }))
+
+    jest.doMock('../../../scripts/lib/registrations', () => ({
+      main: jest.fn().mockResolvedValue({
+        success: true,
+        registrations: ['product', 'customer', 'order', 'stock']
+      })
+    }))
+
+    jest.doMock('../../../scripts/lib/configure-eventing', () => ({
+      main: jest.fn().mockResolvedValue({
+        success: true
+      })
+    }))
+
+    jest.doMock('../../../scripts/onboarding/config/workspace.json', () => ({
+      id: 'test-workspace-id',
+      name: 'test-workspace'
+    }), { virtual: true })
+
+    jest.doMock('../../../scripts/onboarding/config/starter-kit-registrations.json', () => ({
+      product: ['commerce', 'backoffice'],
+      customer: ['commerce'],
+      order: ['commerce'],
+      stock: ['commerce']
+    }), { virtual: true })
+
+    // Set up required environment variables
+    const mockEnv = {
+      IO_CONSUMER_ID: 'test-consumer-id',
+      IO_WORKSPACE_ID: 'test-workspace-id',
+      IO_PROJECT_ID: 'test-project-id',
+      EVENT_PREFIX: 'test-prefix',
+      IO_MANAGEMENT_BASE_URL: 'https://io-management.test/',
+      OAUTH_CLIENT_ID: 'test-client-id',
+      OAUTH_CLIENT_SECRET: 'test-client-secret',
+      OAUTH_TECHNICAL_ACCOUNT_ID: 'test-tech-account-id',
+      OAUTH_TECHNICAL_ACCOUNT_EMAIL: 'test@example.com',
+      IMS_ORG_ID: 'test-org-id'
+    }
+    jest.replaceProperty(process, 'env', mockEnv)
+
+    // Re-require the module to get fresh instance with mocks
+    jest.resetModules()
+    const { main: mockedMain } = require('../../../scripts/onboarding/index')
+
+    const result = await mockedMain()
+
+    // Verify the success flow
+    expect(result).toBeDefined()
+    expect(result.providers).toEqual([
+      {
+        key: 'commerce',
+        id: 'COMMERCE_PROVIDER_ID',
+        instanceId: 'AC_INSTANCE_ID',
+        label: 'Commerce Provider - test'
+      },
+      {
+        key: 'backoffice',
+        id: 'BACKOFFICE_PROVIDER_ID',
+        instanceId: 'BO_INSTANCE_ID',
+        label: 'Backoffice Provider - test'
+      }
+    ])
+    expect(result.registrations).toEqual(['product', 'customer', 'order', 'stock'])
+
+    // Verify console logs for success messages
+    expect(consoleLogSpy).toHaveBeenCalledWith('Starting the process of on-boarding based on your registration choices')
+    expect(consoleLogSpy).toHaveBeenCalledWith('Onboarding completed successfully:', result.providers)
+    expect(consoleLogSpy).toHaveBeenCalledWith('Starting the process of configuring Adobe I/O Events module in Commerce...')
+    expect(consoleLogSpy).toHaveBeenCalledWith('Process of configuring Adobe I/O Events module in Commerce completed successfully')
+
+    // Verify no errors were logged
+    expect(consoleErrorSpy).not.toHaveBeenCalled()
+
+    // Clean up mocks
+    jest.dontMock('../../../utils/adobe-auth')
+    jest.dontMock('../../../scripts/lib/providers')
+    jest.dontMock('../../../scripts/lib/metadata')
+    jest.dontMock('../../../scripts/lib/registrations')
+    jest.dontMock('../../../scripts/lib/configure-eventing')
+    jest.dontMock('../../../scripts/onboarding/config/workspace.json')
+    jest.dontMock('../../../scripts/onboarding/config/starter-kit-registrations.json')
   })
 })
