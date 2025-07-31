@@ -11,6 +11,8 @@
   "author": "Adobe Inc.",
   "private": true,
   "dependencies": {
+    "@adobe/aio-commerce-lib-auth": "^0.3.3",
+    "@adobe/aio-commerce-lib-core": "^0.4.1",
     "@adobe/aio-lib-ims": "^7.0.1",
     "@adobe/aio-lib-state": "^5.1.0",
     "@adobe/aio-lib-telemetry": "^1.0.0",
@@ -24,7 +26,8 @@
     "graphql-request": "^7.1.2",
     "node-fetch": "^2.7.0",
     "openwhisk": "^3.21.8",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "valibot": "^1.1.0"
   },
   "devDependencies": {
     "@adobe/eslint-config-aio-lib-config": "^4.0.0",
@@ -48,5 +51,3 @@
     ]
   }
 }
-
-
