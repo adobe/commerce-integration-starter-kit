@@ -29,7 +29,7 @@ describe('onboarding index', () => {
     process.env = originalEnv
   })
 
-  test('should print an error when IO_PROJECT_ID, IO_CONSUMER_ID and IO_WORKSPACE_ID and EVENT_PREFIX are missing', async () => {
+  test('should print an error when COMMERCE_BASE_URL, IO_PROJECT_ID, IO_CONSUMER_ID and IO_WORKSPACE_ID and EVENT_PREFIX are missing', async () => {
     // Mock process.env to simulate missing environment variables
     const mockEnv = {}
     jest.replaceProperty(process, 'env', mockEnv)
@@ -46,6 +46,7 @@ describe('onboarding index', () => {
     expect(fullErrorMessage).toContain('INVALID_ENV_VARS')
     expect(fullErrorMessage).toContain('Missing or invalid environment variables for Onboarding script')
     expect(fullErrorMessage).toContain('Invalid environment variables')
+    expect(fullErrorMessage).toContain('COMMERCE_BASE_URL')
     expect(fullErrorMessage).toContain('IO_PROJECT_ID')
     expect(fullErrorMessage).toContain('IO_CONSUMER_ID')
     expect(fullErrorMessage).toContain('IO_WORKSPACE_ID')
@@ -55,6 +56,7 @@ describe('onboarding index', () => {
   test('should print an error when IMS Auth Parameters are missing', async () => {
     // Mock process.env to simulate missing environment variables
     const mockEnv = {
+      COMMERCE_BASE_URL: 'https://commerce.test/',
       IO_CONSUMER_ID: 'test',
       IO_WORKSPACE_ID: 'test',
       IO_PROJECT_ID: 'test',
@@ -154,6 +156,7 @@ describe('onboarding index', () => {
 
     // Set up required environment variables
     const mockEnv = {
+      COMMERCE_BASE_URL: 'https://commerce.test/',
       IO_CONSUMER_ID: 'test-consumer-id',
       IO_WORKSPACE_ID: 'test-workspace-id',
       IO_PROJECT_ID: 'test-project-id',

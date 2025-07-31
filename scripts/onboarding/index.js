@@ -24,6 +24,7 @@ const StringSchema = v.pipe(
 )
 
 const ProcessEnvSchema = v.object({
+  COMMERCE_BASE_URL: StringSchema,
   IO_CONSUMER_ID: StringSchema,
   IO_PROJECT_ID: StringSchema,
   IO_WORKSPACE_ID: StringSchema,
