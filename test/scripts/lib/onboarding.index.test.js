@@ -170,7 +170,7 @@ describe('onboarding index', () => {
           'x-api-key': 'test-api-key'
         })
       }),
-      assertImsAuthParams,
+      assertImsAuthParams
     }))
 
     jest.doMock('../../../scripts/lib/providers', () => ({
