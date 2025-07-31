@@ -21,7 +21,7 @@ const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'addition
 function resolveImsConfig (params) {
   return {
     clientId: params.OAUTH_CLIENT_ID,
-    clientSecrets: [params.OAUTH_CLIENT_SECRET],
+    clientSecrets: params.OAUTH_CLIENT_SECRET ? [params.OAUTH_CLIENT_SECRET] : [],
     technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
     technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
     imsOrgId: params.OAUTH_ORG_ID,

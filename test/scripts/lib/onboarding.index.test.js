@@ -84,13 +84,93 @@ describe('onboarding index', () => {
     expect(fullErrorMessage).not.toContain('scopes')
   })
 
+  test('should print an error when IMS Auth clientSecrets is empty', async () => {
+    // Mock process.env to simulate missing environment variables
+    const mockEnv = {
+      COMMERCE_BASE_URL: 'https://commerce.test/',
+      IO_CONSUMER_ID: 'test-consumer-id',
+      IO_WORKSPACE_ID: 'test-workspace-id',
+      IO_PROJECT_ID: 'test-project-id',
+      EVENT_PREFIX: 'test-prefix',
+      IO_MANAGEMENT_BASE_URL: 'https://io-management.test/',
+      OAUTH_CLIENT_ID: 'test-client-id',
+      OAUTH_TECHNICAL_ACCOUNT_ID: 'test-tech-account-id',
+      OAUTH_TECHNICAL_ACCOUNT_EMAIL: 'test@example.com',
+      OAUTH_ORG_ID: 'test-org-id'
+    }
+    jest.replaceProperty(process, 'env', mockEnv)
+    const result = await main()
+
+    expect(result).toBeUndefined()
+    expect(consoleErrorSpy).toHaveBeenCalled()
+
+    const errorCalls = consoleErrorSpy.mock.calls
+    const errorMessages = errorCalls.map(call => call.join(' '))
+    const fullErrorMessage = ansis.strip(errorMessages.join(' '))
+
+    expect(fullErrorMessage).toContain('IMS_AUTH_PARAMS')
+    expect(fullErrorMessage).toContain('INVALID_IMS_AUTH_PARAMS')
+    expect(fullErrorMessage).toContain('Missing or invalid environment variables for Adobe IMS authentication.')
+    expect(fullErrorMessage).toContain('Invalid ImsAuthProvider configuration')
+    expect(fullErrorMessage).toContain('clientSecrets')
+    expect(fullErrorMessage).toContain('Expected at least one client secret for IMS auth')
+    expect(fullErrorMessage).not.toContain('clientId')
+    expect(fullErrorMessage).not.toContain('technicalAccountId')
+    expect(fullErrorMessage).not.toContain('technicalAccountEmail')
+    expect(fullErrorMessage).not.toContain('imsOrgId')
+    expect(fullErrorMessage).not.toContain('scopes')
+  })
+
+  test('should print an error when IMS Auth clientSecrets.0 is defined but an empty string', async () => {
+    // Mock process.env to simulate missing environment variables
+    const mockEnv = {
+      COMMERCE_BASE_URL: 'https://commerce.test/',
+      IO_CONSUMER_ID: 'test-consumer-id',
+      IO_WORKSPACE_ID: 'test-workspace-id',
+      IO_PROJECT_ID: 'test-project-id',
+      EVENT_PREFIX: 'test-prefix',
+      IO_MANAGEMENT_BASE_URL: 'https://io-management.test/',
+      OAUTH_CLIENT_ID: 'test-client-id',
+      OAUTH_TECHNICAL_ACCOUNT_ID: 'test-tech-account-id',
+      OAUTH_TECHNICAL_ACCOUNT_EMAIL: 'test@example.com',
+      OAUTH_ORG_ID: 'test-org-id',
+      OAUTH_CLIENT_SECRET: ''
+    }
+    jest.replaceProperty(process, 'env', mockEnv)
+    const result = await main()
+
+    expect(result).toBeUndefined()
+    expect(consoleErrorSpy).toHaveBeenCalled()
+
+    const errorCalls = consoleErrorSpy.mock.calls
+    const errorMessages = errorCalls.map(call => call.join(' '))
+    const fullErrorMessage = ansis.strip(errorMessages.join(' '))
+
+    expect(fullErrorMessage).toContain('IMS_AUTH_PARAMS')
+    expect(fullErrorMessage).toContain('INVALID_IMS_AUTH_PARAMS')
+    expect(fullErrorMessage).toContain('Missing or invalid environment variables for Adobe IMS authentication.')
+    expect(fullErrorMessage).toContain('Invalid ImsAuthProvider configuration')
+    expect(fullErrorMessage).toContain('clientSecrets')
+    expect(fullErrorMessage).toContain('Expected at least one client secret for IMS auth')
+    expect(fullErrorMessage).not.toContain('clientId')
+    expect(fullErrorMessage).not.toContain('technicalAccountId')
+    expect(fullErrorMessage).not.toContain('technicalAccountEmail')
+    expect(fullErrorMessage).not.toContain('imsOrgId')
+    expect(fullErrorMessage).not.toContain('scopes')
+  })
+
   test('should complete successfully when all required values are provided', async () => {
     // Mock all required dependencies for this test
-    jest.doMock('../../../utils/adobe-auth', () => ({
-      getAdobeAccessHeaders: jest.fn().mockResolvedValue({
-        Authorization: 'Bearer test-token',
-        'x-api-key': 'test-api-key'
-      })
+    const { assertImsAuthParams } = jest.requireActual('@adobe/aio-commerce-lib-auth')
+    jest.doMock('@adobe/aio-commerce-lib-auth', () => ({
+      __esModule: true,
+      getImsAuthProvider: jest.fn().mockReturnValue({
+        getHeaders: jest.fn().mockResolvedValue({
+          Authorization: 'Bearer test-token',
+          'x-api-key': 'test-api-key'
+        })
+      }),
+      assertImsAuthParams,
     }))
 
     jest.doMock('../../../scripts/lib/providers', () => ({
@@ -166,15 +246,14 @@ describe('onboarding index', () => {
       OAUTH_CLIENT_SECRET: 'test-client-secret',
       OAUTH_TECHNICAL_ACCOUNT_ID: 'test-tech-account-id',
       OAUTH_TECHNICAL_ACCOUNT_EMAIL: 'test@example.com',
-      IMS_ORG_ID: 'test-org-id'
+      OAUTH_ORG_ID: 'test-org-id'
     }
     jest.replaceProperty(process, 'env', mockEnv)
-
-    // Re-require the module to get fresh instance with mocks
     jest.resetModules()
-    const { main: mockedMain } = require('../../../scripts/onboarding/index')
 
-    const result = await mockedMain()
+    const { main } = require('../../../scripts/onboarding/index')
+
+    const result = await main()
 
     // Verify the success flow
     expect(result).toBeDefined()
