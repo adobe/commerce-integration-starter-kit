@@ -128,6 +128,18 @@ Install the npm dependencies using the command:
 npm install
 ```
 
+> [!NOTE]
+> #### Workspace packages (packages/**)
+> In the folder packages/** you will find workspace packages that are used in starter kit. These packages are not found on npm registry, so you will need to install them manually.
+> ```
+> ├── packages
+>      ├── aio-lib-telemetry
+>      └── commerce-sdk-auth
+> ```
+>
+> Run `npm install` above and the `npm postinstall` script will automatically install and build the packages from the `packages/**` folder.
+>
+
 This step will connect your starter kit project to the App builder project you created earlier.
 Ensure to select the proper Organization > Project > Workspace with the following commands:
 ```bash
