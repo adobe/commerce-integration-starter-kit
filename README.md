@@ -137,7 +137,7 @@ npm install
 >      └── commerce-sdk-auth
 > ```
 >
-> Run `npm install` above and the `npm postinstall` script will automatically install and build the packages from the `packages/**` folder.
+> Run `npm install` in the root directory and the `npm postinstall` script will automatically install and build the packages from the `packages/**` folder.
 >
 
 This step will connect your starter kit project to the App builder project you created earlier.
