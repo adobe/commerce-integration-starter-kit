@@ -20,7 +20,7 @@
     "@adobe/commerce-sdk-auth": "^0.1.0",
     "ajv": "^8.16.0",
     "ansis": "^4.1.0",
-    "cloudevents": "^8.0.0",
+    "cloudevents": "^10.0.0",
     "dotenv": "^16.4.5",
     "got": "^11.8.5",
     "graphql-request": "^7.1.2",
