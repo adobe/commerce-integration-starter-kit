@@ -51,12 +51,12 @@ You can access any needed environment parameter from `params`. Add the required 
 check-stock:
   function: check-stock/index.js
   web: 'yes'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
-    
+
     HERE_YOUR_PARAM: $HERE_YOUR_PARAM_ENV
-    
+
   annotations:
     require-adobe-auth: false
     final: true

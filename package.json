@@ -38,12 +38,13 @@
     "test": "jest --passWithNoTests -c ./test/jest.config.js ./test",
     "e2e": "jest --collectCoverage=false --testRegex ./e2e",
     "onboard": "node --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
+    "debugonboard": "node --inspect-brk --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
     "commerce-event-subscribe": "node --no-warnings -e 'require(\"./scripts/commerce-event-subscribe/index.js\").main()'",
     "code-check": "npx eslint 'actions/**/*.js' 'scripts/**/*.js' 'test/**/*.js' 'utils/**/*.js'",
     "postinstall": "npm run build --if-present --workspaces"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22.0.0"
   },
   "workspaces": {
     "packages": [

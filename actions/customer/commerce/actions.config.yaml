@@ -1,7 +1,7 @@
 consumer:
   function: consumer/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
     EVENT_PREFIX: $EVENT_PREFIX
@@ -12,7 +12,7 @@ consumer:
 created:
   function: created/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
     ENABLE_TELEMETRY: true
@@ -22,7 +22,7 @@ created:
 updated:
   function: updated/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
   annotations:
@@ -31,7 +31,7 @@ updated:
 deleted:
   function: deleted/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
   annotations:
@@ -40,7 +40,7 @@ deleted:
 group-updated:
   function: group-updated/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
   annotations:
@@ -49,7 +49,7 @@ group-updated:
 group-deleted:
   function: group-deleted/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
   annotations:

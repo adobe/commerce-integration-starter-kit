@@ -1,7 +1,7 @@
 webhook:
   function: ./webhook/index.js
   web: 'yes'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
     OAUTH_ORG_ID: $OAUTH_ORG_ID

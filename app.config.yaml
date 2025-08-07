@@ -10,7 +10,7 @@ application:
           info:
             function: actions/starter-kit-info/index.js
             web: 'yes'
-            runtime: nodejs:20
+            runtime: nodejs:22
             inputs:
               LOG_LEVEL: debug
             annotations:
