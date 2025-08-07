@@ -38,7 +38,7 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
       - Download again workspace configuration as explained below and execute `aio app use` again.
 - Download the [workspace configuration JSON](https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file) file and save it as `workspace.json` in the `./scripts/onboarding/config` starter kit folder because you will use it to configure Adobe IO Events in commerce afterward.
 
-> [!TIP]
+> [!]
 > Adobe Commerce as a Cloud Service API is only required when accessing to Adobe Commerce as a Cloud Service.
 
 
@@ -744,7 +744,7 @@ See the [package usage guide](https://github.com/adobe/aio-lib-telemetry/blob/ma
 ### Usage Example
 
 > [!TIP]
-> Check the [How To Use](https://github.com/adobe/aio-lib-telemetry/blob/main/docs/usage.md#how-to-use) section in the `@adobe/aio-lib-telemetry` README for comprehensive integration instructions.
+> Check the [How To Use](https://github.com/adobe/aio-lib-telemetry/blob/main/docs/usage.md#how-to-use) section in the `@adobe/aio-lib-telemetry` usage guide for comprehensive integration instructions.
 
 The starter kit includes a sample implementation in the `actions/customer/commerce` workflow, specifically within the `consumer` and `created` actions. These examples utilize the telemetry configuration in `actions/telemetry.js` and the metrics definitions in `actions/customer/commerce/metrics.js`.
 
