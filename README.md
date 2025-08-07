@@ -730,18 +730,21 @@ If you want to change an existing event, make the changes in the same places:
 
 ## Integrating OpenTelemetry
 
-The starter kit includes the `@adobe/aio-lib-telemetry` package by default, which currently resides as a local, non-published package in the `packages` folder. This package enables easy instrumentation of your actions with OpenTelemetry to collect comprehensive telemetry data:
+> [!NOTE]
+> The `@adobe/aio-lib-telemetry` package released it's first stable version `1.0.0` and no longer lives as a workspace package in the `packages` folder. Find it on NPM [here](https://www.npmjs.com/package/@adobe/aio-lib-telemetry).
+
+The starter kit includes the `@adobe/aio-lib-telemetry` package by default. This package enables easy instrumentation of your actions with OpenTelemetry to collect comprehensive telemetry data:
 
 - Traces (with distributed tracing capabilities)
 - Metrics (for monitoring)
 - Logs (for debugging)
 
-See the [package README](packages/aio-lib-telemetry/README.md) for more information about guides and examples for instrumenting your Adobe App Builder actions.
+See the [package usage guide](https://github.com/adobe/aio-lib-telemetry/blob/main/docs/usage.md) for more information about guides and examples for instrumenting your Adobe App Builder actions.
 
 ### Usage Example
 
 > [!NOTE]
-> Check the [How To Use](packages/aio-lib-telemetry/README.md#how-to-use) section in the `@adobe/aio-lib-telemetry` README for comprehensive integration instructions.
+> Check the [How To Use](https://github.com/adobe/aio-lib-telemetry/blob/main/docs/usage.md#how-to-use) section in the `@adobe/aio-lib-telemetry` README for comprehensive integration instructions.
 
 The starter kit includes a sample implementation in the `actions/customer/commerce` workflow, specifically within the `consumer` and `created` actions. These examples utilize the telemetry configuration in `actions/telemetry.js` and the metrics definitions in `actions/customer/commerce/metrics.js`.
 
@@ -751,7 +754,7 @@ The integration within the `customer/commerce` workflow facilitates three key si
 
 ### Local Telemetry Stack
 
-We provide a Docker Compose configuration out of the box for running a local telemetry stack, which follows the [**Grafana** use case](packages/aio-lib-telemetry/docs/use-cases/grafana.md#), documented within the `@adobe/aio-lib-telemetry` package.
+We provide a Docker Compose configuration out of the box for running a local telemetry stack, which follows the [**Grafana** use case](https://github.com/adobe/aio-lib-telemetry/blob/main/docs/use-cases/grafana.md#), documented within the `@adobe/aio-lib-telemetry` package.
 
 To spin up the telemetry stack, run the following command:
 ```bash
