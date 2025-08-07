@@ -731,7 +731,9 @@ If you want to change an existing event, make the changes in the same places:
 ## Integrating OpenTelemetry
 
 > [!NOTE]
-The starter kit includes the `@adobe/aio-lib-telemetry` package by default. Find it on NPM [here](https://www.npmjs.com/package/@adobe/aio-lib-telemetry). This package enables easy instrumentation of your actions with OpenTelemetry to collect comprehensive telemetry data:
+The starter kit includes the `@adobe/aio-lib-telemetry` package by default. Find it on NPM [here](https://www.npmjs.com/package/@adobe/aio-lib-telemetry).
+
+This package enables easy instrumentation of your actions with OpenTelemetry to collect comprehensive telemetry data:
 
 - Traces (with distributed tracing capabilities)
 - Metrics (for monitoring)
