@@ -133,7 +133,6 @@ npm install
 > In the folder packages/** you will find workspace packages that are used in starter kit. These packages are not found on npm registry, so you will need to install them manually.
 > ```
 > ├── packages
->      ├── aio-lib-telemetry
 >      └── commerce-sdk-auth
 > ```
 >
