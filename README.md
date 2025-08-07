@@ -392,7 +392,7 @@ Pass the required parameters to the action by configuring them in the `actions/{
 {action name}:
   function: commerce/{action name}/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
     HERE_YOUR_PARAM: $HERE_YOUR_PARAM_ENV
@@ -702,7 +702,7 @@ The starter kit comes with predefined events for each entity. Sometimes, you may
   NEW_OPERATION:
     function: NEW_OPERATION/index.js
     web: 'no'
-    runtime: nodejs:20
+    runtime: nodejs:22
     inputs:
       LOG_LEVEL: debug
     annotations:

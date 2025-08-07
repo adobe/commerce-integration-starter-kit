@@ -17,14 +17,14 @@ Here is a payload example of the data received in the event:
 There is other interesting information that you can access from `params`, like the event type and event ID.
 
 ## Connect with the 3rd party
-The `sendData` function in the `sender.js` file defines the connection with the third party. 
-Please include all the authentication and connection login on that `sender.js` file or an extracted file outside `index.js`. 
+The `sendData` function in the `sender.js` file defines the connection with the third party.
+Please include all the authentication and connection login on that `sender.js` file or an extracted file outside `index.js`.
 Any values from the environment could be accessed from `params`. Pass the required parameters by the action by configuring them in the `actions/product/commerce/actions.config.yaml` under `created -> inputs` as follows:
 ```yaml
 created:
   function: commerce/created/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
     HERE_YOUR_PARAM: $HERE_YOUR_PARAM_ENV

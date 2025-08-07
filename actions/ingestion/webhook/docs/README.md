@@ -39,7 +39,7 @@ You can access any needed environment parameter from `params`. Add the required 
 webhook:
   function: ./consumer/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
     OAUTH_ORG_ID: $OAUTH_ORG_ID
@@ -52,9 +52,9 @@ webhook:
     IO_PROJECT_ID: $IO_PROJECT_ID
     IO_WORKSPACE_ID: $IO_WORKSPACE_ID
     AIO_runtime_namespace: $AIO_runtime_namespace
-    
+
     HERE_YOUR_PARAM: $HERE_YOUR_PARAM_ENV
-    
+
   annotations:
     require-adobe-auth: false
     final: true

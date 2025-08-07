@@ -1,7 +1,7 @@
 consumer:
   function: consumer/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
     EVENT_PREFIX: $EVENT_PREFIX
@@ -11,7 +11,7 @@ consumer:
 created:
   function: created/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
   annotations:
@@ -20,7 +20,7 @@ created:
 updated:
   function: updated/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
   annotations:
@@ -29,7 +29,7 @@ updated:
 deleted:
   function: deleted/index.js
   web: 'no'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
   annotations:
@@ -38,7 +38,7 @@ deleted:
 full-sync:
   function: full-sync/index.js
   web: 'yes'
-  runtime: nodejs:20
+  runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
     COMMERCE_GRAPHQL_ENDPOINT: $COMMERCE_GRAPHQL_ENDPOINT
