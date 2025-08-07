@@ -743,7 +743,7 @@ See the [package usage guide](https://github.com/adobe/aio-lib-telemetry/blob/ma
 
 ### Usage Example
 
-> [!NOTE]
+> [!TIP]
 > Check the [How To Use](https://github.com/adobe/aio-lib-telemetry/blob/main/docs/usage.md#how-to-use) section in the `@adobe/aio-lib-telemetry` README for comprehensive integration instructions.
 
 The starter kit includes a sample implementation in the `actions/customer/commerce` workflow, specifically within the `consumer` and `created` actions. These examples utilize the telemetry configuration in `actions/telemetry.js` and the metrics definitions in `actions/customer/commerce/metrics.js`.
