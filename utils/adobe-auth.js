@@ -25,7 +25,8 @@ function resolveImsConfig (params) {
     technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
     technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
     imsOrgId: params.OAUTH_ORG_ID,
-    scopes: DEFAULT_IMS_SCOPES
+    scopes: DEFAULT_IMS_SCOPES,
+    environment: params.AIO_CLI_ENV || 'prod'
   }
 }
 
