@@ -236,14 +236,15 @@ Check your App developer console to confirm the creation of the registrations:
 
 ### Complete the Adobe Commerce eventing configuration
 
+You will configure your Adobe Commerce instance to send events to your App builder project using the following steps
+
+#### Configure Adobe I/O Events in Adobe Commerce instance
+
 > [!IMPORTANT]
 >
 > If your Commerce instance Adobe I/O Events for Adobe Commerce module version is 1.6.0 or greater and the onboarding script completed successfully, the following steps are not required. The onboarding script will configure the Adobe Commerce instance automatically.
 > Follow the steps in the next section to validate that the configuration is correct or skip to the next section.
 
-You will configure your Adobe Commerce instance to send events to your App builder project using the following steps
-
-#### Configure Adobe I/O Events in Adobe Commerce instance
 To configure the provider in Commerce, do the following:
 - In the Adobe Commerce Admin, navigate to Stores > Settings > Configuration > Adobe Services > Adobe I/O Events > General configuration. The following screen displays.
   ![Alt text](docs/commerce-events-configuration.webp "Commerce eventing configuration")
