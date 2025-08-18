@@ -30,10 +30,7 @@ dist*/
 !.cursor/rules
 .idea
 .nyc_output
-.vscode/*
-!.vscode/settings.json
-!.vscode/extensions.json
-!.vscode/tasks.json
+.vscode
 .wskdebug.props.tmp
 coverage
 
