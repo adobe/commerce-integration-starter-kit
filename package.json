@@ -31,10 +31,15 @@
   },
   "devDependencies": {
     "@adobe/eslint-config-aio-lib-config": "^4.0.0",
+    "@biomejs/biome": "^2.2.0",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
-    "nock": "^13.5.6"
+    "lint-staged": "^16.1.5",
+    "nock": "^13.5.6",
+    "ultracite": "^5.2.3"
   },
   "scripts": {
+    "prepare": "husky",
     "test": "jest --passWithNoTests -c ./test/jest.config.js ./test",
     "e2e": "jest --collectCoverage=false --testRegex ./e2e",
     "onboard": "node --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
@@ -49,6 +54,11 @@
   "workspaces": {
     "packages": [
       "packages/*"
+    ]
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
+      "npx ultracite format"
     ]
   }
 }
