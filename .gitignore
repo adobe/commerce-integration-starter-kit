@@ -24,13 +24,18 @@ junit.xml
 dist*/
 
 # IDE & Temp
+.aws.tmp.creds.json
 .cache
+.cursor/*
+!.cursor/rules
 .idea
 .nyc_output
-.vscode
-coverage
-.aws.tmp.creds.json
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
 .wskdebug.props.tmp
+coverage
 
 # Parcel
 .parcel-cache
