@@ -46,14 +46,10 @@
     "onboard": "node --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
     "onboard:debug": "node --inspect-brk --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
     "commerce-event-subscribe": "node --no-warnings -e 'require(\"./scripts/commerce-event-subscribe/index.js\").main()'",
-    "assist": "biome check --formatter-enabled=false --linter-enabled=false --assist-enabled=true --no-errors-on-unmatched",
-    "assist:apply": "biome check --write --formatter-enabled=false --linter-enabled=false --assist-enabled=true --no-errors-on-unmatched",
-    "check:ci": "biome ci --formatter-enabled=true --linter-enabled=true --assist-enabled=true --no-errors-on-unmatched",
-    "format": "biome format --write --no-errors-on-unmatched",
-    "format:markdown": "prettier --no-error-on-unmatched-pattern --write '**/*.md' \"!**/{CODE_OF_CONDUCT.md,COPYRIGHT,LICENSE,SECURITY.md,CONTRIBUTING.md}\"",
-    "format:check": "biome format --no-errors-on-unmatched",
-    "lint": "biome lint --no-errors-on-unmatched",
-    "lint:fix": "biome lint --write --no-errors-on-unmatched"
+    "code:report": "biome ci --formatter-enabled=true --linter-enabled=true --assist-enabled=true --no-errors-on-unmatched",
+    "code:format:fix": "biome format --write --no-errors-on-unmatched",
+    "code:lint:fix": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
+    "docs:format:fix": "prettier --write --no-error-on-unmatched-pattern '**/*.md' \"!**/{CODE_OF_CONDUCT.md,COPYRIGHT,LICENSE,SECURITY.md,CONTRIBUTING.md,COPILOT-INSTRUCTIONS.md}\""
   },
   "engines": {
     "node": ">=22.0.0"
@@ -65,10 +61,10 @@
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
-      "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+      "npm run code:lint:fix"
     ],
     "*.md": [
-      "prettier --no-error-on-unmatched-pattern --write '**/*.md' \"!**/{CODE_OF_CONDUCT.md,COPYRIGHT,LICENSE,SECURITY.md,CONTRIBUTING.md}\""
+      "npm run docs:format:fix"
     ],
     "*": [
       "biome check --no-errors-on-unmatched --files-ignore-unknown=true"
