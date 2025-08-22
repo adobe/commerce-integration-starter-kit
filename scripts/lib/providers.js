@@ -29,6 +29,7 @@ const providersEventsConfig = require("../onboarding/config/events.json");
 // Regex patterns defined at top level for performance
 const CRLF_PATTERN = /\r\n/g;
 const TRAILING_WHITESPACE_PATTERN = /\s+$/;
+const providersEventsConfig = require("../onboarding/config/events.json");
 
 /**
  * Creates an events provider via the I/O Management API

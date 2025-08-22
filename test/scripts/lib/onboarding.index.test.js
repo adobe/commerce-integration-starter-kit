@@ -279,6 +279,7 @@ describe("onboarding index", () => {
     const {
       main: onboardingMain,
     } = require("../../../scripts/onboarding/index");
+
     const result = await onboardingMain();
 
     // Verify the success flow
