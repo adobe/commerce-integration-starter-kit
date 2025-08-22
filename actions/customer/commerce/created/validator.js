@@ -10,8 +10,11 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { instrument, getInstrumentationHelpers } = require('@adobe/aio-lib-telemetry')
-const { isOperationSuccessful } = require('../../../telemetry')
+const {
+  instrument,
+  getInstrumentationHelpers,
+} = require("@adobe/aio-lib-telemetry");
+const { isOperationSuccessful } = require("../../../telemetry");
 
 /**
  * This function validate the customer data received
@@ -19,19 +22,19 @@ const { isOperationSuccessful } = require('../../../telemetry')
  * @param {object} data - Received data from adobe commerce
  * @returns {object} - returns the result of validation object
  */
-function validateData (data) {
+function validateData(data) {
   // @TODO Here add the logic to validate the received data
   // @TODO in case of error return { success: false, message: '<error message>' }
-  const { currentSpan } = getInstrumentationHelpers()
-  currentSpan.addEvent('created.phase', { value: 'validateData' })
+  const { currentSpan } = getInstrumentationHelpers();
+  currentSpan.addEvent("created.phase", { value: "validateData" });
 
   return {
-    success: true
-  }
+    success: true,
+  };
 }
 
 module.exports = {
   validateData: instrument(validateData, {
-    isSuccessful: isOperationSuccessful
-  })
-}
+    isSuccessful: isOperationSuccessful,
+  }),
+};

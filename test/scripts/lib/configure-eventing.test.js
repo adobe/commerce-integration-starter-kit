@@ -10,11 +10,11 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const action = require('../../../scripts/lib/configure-eventing')
-describe('Given the configure-eventing file', () => {
-  describe('When method main is defined', () => {
-    test('Then is an instance of Function', () => {
-      expect(action.main).toBeInstanceOf(Function)
-    })
-  })
-})
+const action = require("../../../scripts/lib/configure-eventing");
+describe("Given the configure-eventing file", () => {
+  describe("When method main is defined", () => {
+    test("Then is an instance of Function", () => {
+      expect(action.main).toBeInstanceOf(Function);
+    });
+  });
+});

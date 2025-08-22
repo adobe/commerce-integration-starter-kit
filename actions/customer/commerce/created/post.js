@@ -10,7 +10,10 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { instrument, getInstrumentationHelpers } = require('@adobe/aio-lib-telemetry')
+const {
+  instrument,
+  getInstrumentationHelpers,
+} = require("@adobe/aio-lib-telemetry");
 
 /**
  * This function hold any logic needed post sending information to external backoffice application
@@ -20,12 +23,12 @@ const { instrument, getInstrumentationHelpers } = require('@adobe/aio-lib-teleme
  * @param {object} preProcessed - preprocessed result data
  * @param {object} result - result data from the sender
  */
-function postProcess (data, transformed, preProcessed, result) {
+function postProcess(data, transformed, preProcessed, result) {
   // @TODO Here implement any preprocessing needed
-  const { currentSpan } = getInstrumentationHelpers()
-  currentSpan.addEvent('created.phase', { value: 'postProcess' })
+  const { currentSpan } = getInstrumentationHelpers();
+  currentSpan.addEvent("created.phase", { value: "postProcess" });
 }
 
 module.exports = {
-  postProcess: instrument(postProcess)
-}
+  postProcess: instrument(postProcess),
+};

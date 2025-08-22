@@ -10,7 +10,10 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { instrument, getInstrumentationHelpers } = require('@adobe/aio-lib-telemetry')
+const {
+  instrument,
+  getInstrumentationHelpers,
+} = require("@adobe/aio-lib-telemetry");
 
 /**
  * This function transform the received customer data from Adobe commerce to external back-office application
@@ -18,15 +21,15 @@ const { instrument, getInstrumentationHelpers } = require('@adobe/aio-lib-teleme
  * @param {object} data - Data received from Adobe commerce
  * @returns {object} - Returns transformed data object
  */
-function transformData (data) {
+function transformData(data) {
   // @Todo Here transform the data as needed for external back-office application API
-  const { currentSpan } = getInstrumentationHelpers()
-  currentSpan.addEvent('created.phase', { value: 'transformData' })
+  const { currentSpan } = getInstrumentationHelpers();
+  currentSpan.addEvent("created.phase", { value: "transformData" });
 
-  const transformedData = data
-  return transformedData
+  const transformedData = data;
+  return transformedData;
 }
 
 module.exports = {
-  transformData: instrument(transformData)
-}
+  transformData: instrument(transformData),
+};

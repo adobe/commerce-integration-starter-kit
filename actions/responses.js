@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { HTTP_OK } = require('./constants')
+const { HTTP_OK } = require("./constants");
 
 /**
  *
@@ -20,14 +20,14 @@ const { HTTP_OK } = require('./constants')
  *        e.g. 'missing xyz parameter'
  * @returns {object} the response object, ready to be returned from the action main's function.
  */
-function actionSuccessResponse (message) {
+function actionSuccessResponse(message) {
   return {
     statusCode: HTTP_OK,
     body: {
       success: true,
-      message
-    }
-  }
+      message,
+    },
+  };
 }
 
 /**
@@ -40,14 +40,14 @@ function actionSuccessResponse (message) {
  *        e.g. 'missing xyz parameter'
  * @returns {object} the response object, ready to be returned from the action main's function.
  */
-function actionErrorResponse (statusCode, error) {
+function actionErrorResponse(statusCode, error) {
   return {
     statusCode,
     body: {
       success: false,
-      error
-    }
-  }
+      error,
+    },
+  };
 }
 
 /**
@@ -55,13 +55,13 @@ function actionErrorResponse (statusCode, error) {
  * @param {unknown} result - The result of the instrumented action.
  * @returns {boolean} - True if the action is successful, false otherwise.
  */
-function isActionSuccessful (result) {
-  if (result && typeof result === 'object') {
-    return 'body' in result && 'success' in result.body && result.body.success
+function isActionSuccessful(result) {
+  if (result && typeof result === "object") {
+    return "body" in result && "success" in result.body && result.body.success;
   }
 
   // Not an object, we assume it's successful if it has a truthy value.
-  return !!result
+  return !!result;
 }
 
 /**
@@ -74,15 +74,15 @@ function isActionSuccessful (result) {
  *        e.g. 'missing xyz parameter'
  * @returns {object} the error object, ready to be returned from the action main's function.
  */
-function errorResponse (statusCode, message) {
+function errorResponse(statusCode, message) {
   return {
     error: {
       statusCode,
       body: {
-        error: message
-      }
-    }
-  }
+        error: message,
+      },
+    },
+  };
 }
 
 /**
@@ -95,14 +95,14 @@ function errorResponse (statusCode, message) {
  *        e.g. '{ success: true, message: 'Product created successfully'}'
  * @returns {object} the response object, ready to be returned from the action main's function.
  */
-function successResponse (type, response) {
+function successResponse(type, response) {
   return {
     statusCode: HTTP_OK,
     body: {
       type,
-      response
-    }
-  }
+      response,
+    },
+  };
 }
 
 /**
@@ -110,17 +110,17 @@ function successResponse (type, response) {
  * @param {unknown} result - The result of the instrumented consumer.
  * @returns {boolean} - True if the consumer is successful, false otherwise.
  */
-function isConsumerSuccessful (result) {
-  if (result && typeof result === 'object') {
-    if ('error' in result) {
-      return false
+function isConsumerSuccessful(result) {
+  if (result && typeof result === "object") {
+    if ("error" in result) {
+      return false;
     }
 
-    return 'statusCode' in result && result.statusCode === HTTP_OK
+    return "statusCode" in result && result.statusCode === HTTP_OK;
   }
 
   // Not an object, we assume it's successful if it has a truthy value.
-  return !!result
+  return !!result;
 }
 
 /**
@@ -130,14 +130,14 @@ function isConsumerSuccessful (result) {
  *        e.g. 'missing xyz parameter'
  * @returns {object} the response object, ready to be returned from the action main's function.
  */
-function webhookErrorResponse (message) {
+function webhookErrorResponse(message) {
   return {
     statusCode: HTTP_OK,
     body: {
-      op: 'exception',
-      message
-    }
-  }
+      op: "exception",
+      message,
+    },
+  };
 }
 
 /**
@@ -146,13 +146,13 @@ function webhookErrorResponse (message) {
  *
  * @returns {object} the response object, ready to be returned from the action main's function.
  */
-function webhookSuccessResponse () {
+function webhookSuccessResponse() {
   return {
     statusCode: HTTP_OK,
     body: {
-      op: 'success'
-    }
-  }
+      op: "success",
+    },
+  };
 }
 
 /**
@@ -160,13 +160,13 @@ function webhookSuccessResponse () {
  * @param {unknown} result - The result of the instrumented webhook.
  * @returns {boolean} - True if the webhook is successful, false otherwise.
  */
-function isWebhookSuccessful (result) {
-  if (result && typeof result === 'object') {
-    return 'op' in result && result.op === 'success'
+function isWebhookSuccessful(result) {
+  if (result && typeof result === "object") {
+    return "op" in result && result.op === "success";
   }
 
   // Not an object, we assume it's successful if it has a truthy value.
-  return !!result
+  return !!result;
 }
 
 module.exports = {
@@ -178,5 +178,5 @@ module.exports = {
   webhookSuccessResponse,
   isActionSuccessful,
   isConsumerSuccessful,
-  isWebhookSuccessful
-}
+  isWebhookSuccessful,
+};

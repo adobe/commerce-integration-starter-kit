@@ -12,10 +12,7 @@ governing permissions and limitations under the License.
 
 /* This file exposes some common utilities for your actions */
 
-const hidden = [
-  'secret',
-  'token'
-]
+const hidden = ["secret", "token"];
 
 /**
  * Returns a log ready string of the action input parameters.
@@ -24,23 +21,27 @@ const hidden = [
  *
  * @param {object} params action input parameters.
  */
-function stringParameters (params) {
+function stringParameters(params) {
   // hide authorization token without overriding params
-  let headers = params.__ow_headers || {}
+  let headers = params.__ow_headers || {};
   if (headers.authorization) {
-    headers = { ...headers, authorization: '<hidden>' }
+    headers = { ...headers, authorization: "<hidden>" };
   }
 
   // hide parameters including terms in the 'hidden' array
-  let sanitizedParams = { ...params }
+  let sanitizedParams = { ...params };
   for (const key of Object.keys(sanitizedParams)) {
-    if (!hidden.every(v => { return key.toLowerCase().indexOf(v) === -1 })) {
-      sanitizedParams = { ...sanitizedParams, [key]: '<hidden>' }
+    if (
+      !hidden.every((v) => {
+        return key.toLowerCase().indexOf(v) === -1;
+      })
+    ) {
+      sanitizedParams = { ...sanitizedParams, [key]: "<hidden>" };
     }
   }
 
   // loop over params keys and replace if needed
-  return JSON.stringify({ ...sanitizedParams, __ow_headers: headers })
+  return JSON.stringify({ ...sanitizedParams, __ow_headers: headers });
 }
 
 /**
@@ -54,16 +55,17 @@ function stringParameters (params) {
  * getMissingKeys({ a: 1, b: 2 }, ['a', 'b.c']) // ['b.c']
  * ```
  */
-function getMissingKeys (obj, required) {
-  return required.filter(r => {
-    const splits = r.split('.')
-    const last = splits[splits.length - 1]
+function getMissingKeys(obj, required) {
+  return required.filter((r) => {
+    const splits = r.split(".");
+    const last = splits[splits.length - 1];
 
-    const traverse = splits.slice(0, -1)
-      .reduce((tObj, split) => (tObj[split] || {}), obj)
+    const traverse = splits
+      .slice(0, -1)
+      .reduce((tObj, split) => tObj[split] || {}, obj);
 
-    return traverse[last] === undefined || traverse[last] === '' // missing default params are empty string
-  })
+    return traverse[last] === undefined || traverse[last] === ""; // missing default params are empty string
+  });
 }
 
 /**
@@ -82,40 +84,40 @@ function getMissingKeys (obj, required) {
  * checkMissingRequestInputs({ a: 1, b: 2 }, ['a', 'b.c'], ['x-api-key']) // 'missing header(s) 'x-api-key'' and 'missing parameter(s) 'b.c''
  * ```
  */
-function checkMissingRequestInputs (
+function checkMissingRequestInputs(
   params,
   requiredParams = [],
-  requiredHeaders = []
+  requiredHeaders = [],
 ) {
-  let errorMessage = null
+  let errorMessage = null;
 
   // Convert to lowercase for case-insensitive comparison.
-  const normalizedRequiredHeaders = requiredHeaders.map(h => h.toLowerCase())
+  const normalizedRequiredHeaders = requiredHeaders.map((h) => h.toLowerCase());
   const missingHeaders = getMissingKeys(
     params.__ow_headers || {},
-    normalizedRequiredHeaders
-  )
+    normalizedRequiredHeaders,
+  );
 
   if (missingHeaders.length > 0) {
-    errorMessage = `missing header(s) '${missingHeaders}'`
+    errorMessage = `missing header(s) '${missingHeaders}'`;
   }
 
   // check for missing parameters
-  const missingParams = getMissingKeys(params, requiredParams)
+  const missingParams = getMissingKeys(params, requiredParams);
   if (missingParams.length > 0) {
     if (errorMessage) {
-      errorMessage += ' and '
+      errorMessage += " and ";
     } else {
-      errorMessage = ''
+      errorMessage = "";
     }
-    errorMessage += `missing parameter(s) '${missingParams}'`
+    errorMessage += `missing parameter(s) '${missingParams}'`;
   }
 
-  return errorMessage
+  return errorMessage;
 }
 
 module.exports = {
   stringParameters,
   getMissingKeys,
-  checkMissingRequestInputs
-}
+  checkMissingRequestInputs,
+};

@@ -15,15 +15,15 @@ governing permissions and limitations under the License.
  * @param {object} params include the parameters received in the runtime action
  * @returns {object} success status and error message
  */
-async function checkAuthentication (params) {
+async function checkAuthentication(params) {
   // @TODO implement the logic to check authetication with you external application
   // @TODO return { success: false, message: 'error message'} in case of failure
 
   return {
-    success: true
-  }
+    success: true,
+  };
 }
 
 module.exports = {
-  checkAuthentication
-}
+  checkAuthentication,
+};

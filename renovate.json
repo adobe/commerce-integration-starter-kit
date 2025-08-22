@@ -18,20 +18,13 @@
   ],
   "prConcurrentLimit": 3,
   "commitMessagePrefix": "RENOVATE: ",
-  "labels": [
-    "dependencies"
-  ],
+  "labels": ["dependencies"],
   "packageRules": [
     {
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
-      "matchPackageNames": [
-        "*"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["minor", "patch"],
       "automerge": false
     }
   ],

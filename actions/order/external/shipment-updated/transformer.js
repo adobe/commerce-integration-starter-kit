@@ -15,14 +15,12 @@ governing permissions and limitations under the License.
  * @param {Array} items - incoming items
  * @returns {Array} - transformed items
  */
-function transformItems (items) {
-  return items.map(item => (
-    {
-      entity_id: item.entityId,
-      order_item_id: item.orderItemId,
-      qty: item.qty
-    }
-  ))
+function transformItems(items) {
+  return items.map((item) => ({
+    entity_id: item.entityId,
+    order_item_id: item.orderItemId,
+    qty: item.qty,
+  }));
 }
 
 /**
@@ -31,16 +29,14 @@ function transformItems (items) {
  * @param {Array} tracks - incoming tracks
  * @returns {Array} - transformed tracks
  */
-function transformTracks (orderId, tracks) {
-  return tracks.map(track => (
-    {
-      entity_id: track.entityId,
-      order_id: orderId,
-      track_number: track.trackNumber,
-      title: track.title,
-      carrier_code: track.carrierCode
-    }
-  ))
+function transformTracks(orderId, tracks) {
+  return tracks.map((track) => ({
+    entity_id: track.entityId,
+    order_id: orderId,
+    track_number: track.trackNumber,
+    title: track.title,
+    carrier_code: track.carrierCode,
+  }));
 }
 
 /**
@@ -48,15 +44,13 @@ function transformTracks (orderId, tracks) {
  * @param {Array} comments - incoming comments
  * @returns {Array} - transformed comments
  */
-function transformComments (comments) {
-  return comments.map(comment => (
-    {
-      entity_id: comment.entityId,
-      is_customer_notified: comment.notifyCustomer ? 1 : 0,
-      comment: comment.comment,
-      is_visible_on_front: comment.visibleOnFront ? 1 : 0
-    }
-  ))
+function transformComments(comments) {
+  return comments.map((comment) => ({
+    entity_id: comment.entityId,
+    is_customer_notified: comment.notifyCustomer ? 1 : 0,
+    comment: comment.comment,
+    is_visible_on_front: comment.visibleOnFront ? 1 : 0,
+  }));
 }
 
 /**
@@ -65,7 +59,7 @@ function transformComments (comments) {
  * @param {object} params - Data received from Adobe commerce
  * @returns {object} - Returns transformed data object
  */
-function transformData (params) {
+function transformData(params) {
   // @TODO This is a sample implementation. Please adapt based on your needs
   // @TODO Notice that the attribute_set_id may need to be changed
 
@@ -77,12 +71,12 @@ function transformData (params) {
       tracks: transformTracks(params.data.orderId, params.data.tracks),
       comments: transformComments(params.data.comments),
       extension_attributes: {
-        source_code: params.data.stockSourceCode
-      }
-    }
-  }
+        source_code: params.data.stockSourceCode,
+      },
+    },
+  };
 }
 
 module.exports = {
-  transformData
-}
+  transformData,
+};

@@ -10,24 +10,24 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const openwhisk = require('openwhisk')
+const openwhisk = require("openwhisk");
 
 class Openwhisk {
-  #openwhiskClient
+  #openwhiskClient;
 
-  constructor (host, apiKey) {
-    this.#openwhiskClient = openwhisk({ apihost: host, api_key: apiKey })
+  constructor(host, apiKey) {
+    this.#openwhiskClient = openwhisk({ apihost: host, api_key: apiKey });
   }
 
-  async invokeAction (action, data) {
+  async invokeAction(action, data) {
     return await this.#openwhiskClient.actions.invoke({
       name: action,
       blocking: true,
       params: {
-        data
-      }
-    })
+        data,
+      },
+    });
   }
 }
 
-module.exports = Openwhisk
+module.exports = Openwhisk;

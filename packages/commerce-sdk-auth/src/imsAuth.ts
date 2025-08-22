@@ -10,8 +10,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-// @ts-ignore
-import { ClientCredentials } from 'simple-oauth2';
+// @ts-expect-error
+import { ClientCredentials } from "simple-oauth2";
 
 export interface ImsAuthParams {
   host?: string;
@@ -37,10 +37,9 @@ interface ImsTokenResponse {
 export async function getImsAccessToken({
   clientId,
   clientSecret,
-  host = 'https://ims-na1.adobelogin.com',
+  host = "https://ims-na1.adobelogin.com",
   scopes,
 }: ImsAuthParams): Promise<ImsTokenResponse> {
-
   const config = {
     client: {
       id: clientId,
@@ -48,11 +47,11 @@ export async function getImsAccessToken({
     },
     auth: {
       tokenHost: host,
-      tokenPath: '/ims/token/v3',
+      tokenPath: "/ims/token/v3",
     },
     options: {
-      bodyFormat: 'form',
-      authorizationMethod: 'body',
+      bodyFormat: "form",
+      authorizationMethod: "body",
     },
   };
 

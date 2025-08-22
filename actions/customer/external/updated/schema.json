@@ -1,10 +1,10 @@
 {
   "type": "object",
   "properties": {
-    "id": {"type": "number"},
+    "id": { "type": "number" },
     "name": { "type": "string" },
-    "lastname": {"type": "string"},
-    "email": {"type":  "string"}
+    "lastname": { "type": "string" },
+    "email": { "type": "string" }
   },
   "required": ["id", "name", "lastname", "email"],
   "additionalProperties": true

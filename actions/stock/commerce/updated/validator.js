@@ -16,15 +16,15 @@ governing permissions and limitations under the License.
  * @param {object} data - Received data from adobe commerce
  * @returns {object} - returns the result of validation object
  */
-function validateData (data) {
+function validateData(data) {
   // @TODO Here add the logic to validate the received data
   // @TODO in case of error return { success: false, message: '<error message>' }
 
   return {
-    success: true
-  }
+    success: true,
+  };
 }
 
 module.exports = {
-  validateData
-}
+  validateData,
+};

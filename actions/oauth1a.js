@@ -10,16 +10,19 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const got = require('got')
-const { getImsAccessToken, getOAuthHeader } = require('@adobe/commerce-sdk-auth')
-const { fromParams } = require('./auth')
+const got = require("got");
+const {
+  getImsAccessToken,
+  getOAuthHeader,
+} = require("@adobe/commerce-sdk-auth");
+const { fromParams } = require("./auth");
 
 /**
  * @returns {string} - returns the bearer token
  * @param {string} token - access token
  */
-function withBearer (token) {
-  return `Bearer ${token}`
+function withBearer(token) {
+  return `Bearer ${token}`;
 }
 
 /**
@@ -29,38 +32,43 @@ function withBearer (token) {
  * @param {object} authOptions - 'IMS' or 'COMMERCE'
  * @param {object} logger - Logger
  */
-function createClient (options, authOptions, logger) {
-  const instance = {}
+function createClient(options, authOptions, logger) {
+  const instance = {};
 
   // Remove trailing slash if any
-  const serverUrl = options.url
-  const apiVersion = options.version
+  const serverUrl = options.url;
+  const apiVersion = options.version;
 
   let getAuthorizationHeaders = async (opts) => {
-    throw new Error('getAuthorizationHeaders not implemented')
-  }
+    throw new Error("getAuthorizationHeaders not implemented");
+  };
 
   if (authOptions?.ims) {
-    const { ims } = authOptions
+    const { ims } = authOptions;
     getAuthorizationHeaders = async (_opts) => {
-      const imsResponse = await getImsAccessToken(ims)
+      const imsResponse = await getImsAccessToken(ims);
       return {
-        Authorization: withBearer(imsResponse.access_token)
-      }
-    }
+        Authorization: withBearer(imsResponse.access_token),
+      };
+    };
   } else if (authOptions?.commerceOAuth1) {
-    const { commerceOAuth1 } = authOptions
+    const { commerceOAuth1 } = authOptions;
     const oauthToken = {
       key: commerceOAuth1.accessToken,
-      secret: commerceOAuth1.accessTokenSecret
-    }
-    const oauth = getOAuthHeader(commerceOAuth1)
+      secret: commerceOAuth1.accessTokenSecret,
+    };
+    const oauth = getOAuthHeader(commerceOAuth1);
     getAuthorizationHeaders = async ({ url, method }) => {
-      return oauth.toHeader(oauth.authorize({
-        url,
-        method
-      }, oauthToken))
-    }
+      return oauth.toHeader(
+        oauth.authorize(
+          {
+            url,
+            method,
+          },
+          oauthToken,
+        ),
+      );
+    };
   }
 
   /**
@@ -70,50 +78,54 @@ function createClient (options, authOptions, logger) {
    * @param {string} requestToken - access token
    * @param {object} customHeaders - include custom headers
    */
-  async function apiCall (requestData, requestToken = '', customHeaders = {}) {
+  async function apiCall(requestData, requestToken = "", customHeaders = {}) {
     try {
-      logger.debug('Fetching URL: ' + requestData.url + ' with method: ' + requestData.method)
+      logger.debug(
+        "Fetching URL: " +
+          requestData.url +
+          " with method: " +
+          requestData.method,
+      );
 
-      let authHeaders = {}
+      let authHeaders = {};
 
       if (requestToken.length > 0) {
-        authHeaders = { Authorization: withBearer(requestToken) }
+        authHeaders = { Authorization: withBearer(requestToken) };
       } else {
-        authHeaders = await getAuthorizationHeaders(requestData)
+        authHeaders = await getAuthorizationHeaders(requestData);
       }
 
       const headers = {
         ...customHeaders,
-        ...authHeaders
-      }
+        ...authHeaders,
+      };
       return await got(requestData.url, {
         http2: true,
         method: requestData.method,
         headers,
         body: requestData.body,
-        responseType: 'json'
-      }).json()
+        responseType: "json",
+      }).json();
     } catch (error) {
-      logger.error(`Error fetching URL ${requestData.url}: ${error}`)
-      throw error
+      logger.error(`Error fetching URL ${requestData.url}: ${error}`);
+      throw error;
     }
   }
 
-  instance.consumerToken = async function (loginData) {
-    return apiCall({
-      url: createUrl('integration/customer/token'),
-      method: 'POST',
-      body: loginData
-    })
-  }
+  instance.consumerToken = async (loginData) =>
+    apiCall({
+      url: createUrl("integration/customer/token"),
+      method: "POST",
+      body: loginData,
+    });
 
-  instance.get = async function (resourceUrl, requestToken = '') {
+  instance.get = async (resourceUrl, requestToken = "") => {
     const requestData = {
       url: createUrl(resourceUrl),
-      method: 'GET'
-    }
-    return apiCall(requestData, requestToken)
-  }
+      method: "GET",
+    };
+    return apiCall(requestData, requestToken);
+  };
 
   /**
    * This function create the full url
@@ -121,37 +133,47 @@ function createClient (options, authOptions, logger) {
    * @returns {string} - generated url
    * @param {string} resourceUrl - Adobe commerce rest API resource url
    */
-  function createUrl (resourceUrl) {
-    return serverUrl + apiVersion + '/' + resourceUrl
+  function createUrl(resourceUrl) {
+    return serverUrl + apiVersion + "/" + resourceUrl;
   }
 
-  instance.post = async function (resourceUrl, data, requestToken = '', customHeaders = {}) {
+  instance.post = async (
+    resourceUrl,
+    data,
+    requestToken = "",
+    customHeaders = {},
+  ) => {
     const requestData = {
       url: createUrl(resourceUrl),
-      method: 'POST',
-      body: data
-    }
-    return apiCall(requestData, requestToken, customHeaders)
-  }
+      method: "POST",
+      body: data,
+    };
+    return apiCall(requestData, requestToken, customHeaders);
+  };
 
-  instance.put = async function (resourceUrl, data, requestToken = '', customHeaders = {}) {
+  instance.put = async (
+    resourceUrl,
+    data,
+    requestToken = "",
+    customHeaders = {},
+  ) => {
     const requestData = {
       url: createUrl(resourceUrl),
-      method: 'PUT',
-      body: data
-    }
-    return apiCall(requestData, requestToken, customHeaders)
-  }
+      method: "PUT",
+      body: data,
+    };
+    return apiCall(requestData, requestToken, customHeaders);
+  };
 
-  instance.delete = async function (resourceUrl, requestToken = '') {
+  instance.delete = async (resourceUrl, requestToken = "") => {
     const requestData = {
       url: createUrl(resourceUrl),
-      method: 'DELETE'
-    }
-    return apiCall(requestData, requestToken)
-  }
+      method: "DELETE",
+    };
+    return apiCall(requestData, requestToken);
+  };
 
-  return instance
+  return instance;
 }
 
 /**
@@ -160,12 +182,12 @@ function createClient (options, authOptions, logger) {
  * @param {object} clientOptions - define the options for the client
  * @param {object} logger - define the Logger
  */
-function getClient (clientOptions, logger) {
-  const { params, ...options } = clientOptions
-  options.version = 'V1'
-  return createClient(options, fromParams(params), logger)
+function getClient(clientOptions, logger) {
+  const { params, ...options } = clientOptions;
+  options.version = "V1";
+  return createClient(options, fromParams(params), logger);
 }
 
 module.exports = {
-  getClient
-}
+  getClient,
+};

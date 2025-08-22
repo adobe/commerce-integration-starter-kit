@@ -16,15 +16,15 @@ governing permissions and limitations under the License.
  * @param {object} params - Data received from Adobe commerce
  * @returns {object} - Returns transformed data object
  */
-function transformData (params) {
+function transformData(params) {
   // @TODO This is a sample implementation. Please adapt based on your needs
-  const sourceItems = []
+  const sourceItems = [];
   for (const stockUpdate of params.data) {
-    sourceItems.push(transform(stockUpdate))
+    sourceItems.push(transform(stockUpdate));
   }
   return {
-    sourceItems
-  }
+    sourceItems,
+  };
 }
 
 /**
@@ -32,15 +32,15 @@ function transformData (params) {
  * @param {object} stockUpdate - stock update for an sku in a source
  * @returns {object} - transformed stock update
  */
-function transform (stockUpdate) {
+function transform(stockUpdate) {
   return {
     sku: stockUpdate.sku,
     source_code: stockUpdate.source,
     quantity: stockUpdate.quantity,
-    status: (stockUpdate.outOfStock ? 0 : 1)
-  }
+    status: stockUpdate.outOfStock ? 0 : 1,
+  };
 }
 
 module.exports = {
-  transformData
-}
+  transformData,
+};

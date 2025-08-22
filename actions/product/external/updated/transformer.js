@@ -16,7 +16,7 @@ governing permissions and limitations under the License.
  * @param {object} params - Data received from Adobe commerce
  * @returns {object} - Returns transformed data object
  */
-function transformData (params) {
+function transformData(params) {
   // This is a sample implementation. Please adapt based on your needs
   // Notice that the attribute_set_id may need to be changed
   return {
@@ -27,14 +27,14 @@ function transformData (params) {
       attribute_set_id: 4,
       custom_attributes: [
         {
-          attribute_code: 'description',
-          value: params.data.description
-        }
-      ]
-    }
-  }
+          attribute_code: "description",
+          value: params.data.description,
+        },
+      ],
+    },
+  };
 }
 
 module.exports = {
-  transformData
-}
+  transformData,
+};

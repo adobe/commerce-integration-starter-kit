@@ -10,9 +10,9 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { getClient } = require('../oauth1a')
-const { Core } = require('@adobe/aio-sdk')
-const logger = Core.Logger('commerce-order-api-client', { level: 'info' })
+const { getClient } = require("../oauth1a");
+const { Core } = require("@adobe/aio-sdk");
+const logger = Core.Logger("commerce-order-api-client", { level: "info" });
 
 /**
  * This function call Adobe commerce rest API to create a product
@@ -23,23 +23,23 @@ const logger = Core.Logger('commerce-order-api-client', { level: 'info' })
  * @param {number} orderId - order id
  * @param {object} data - Adobe commerce api payload
  */
-async function addComment (baseUrl, params, orderId, data) {
+async function addComment(baseUrl, params, orderId, data) {
   const client = getClient(
     {
       url: baseUrl,
-      params
+      params,
     },
-    logger
-  )
+    logger,
+  );
 
   return await client.post(
     `orders/${orderId}/comments`,
     JSON.stringify(data),
-    '',
-    { 'Content-Type': 'application/json' }
-  )
+    "",
+    { "Content-Type": "application/json" },
+  );
 }
 
 module.exports = {
-  addComment
-}
+  addComment,
+};

@@ -47,7 +47,6 @@ To avoid the infinite loop, we should track which changes in a product entity ha
       1. If fingerprints are the same --> discard the event, as it has already been processed
       2. If different propagate the event.
 
-
 ```mermaid
 ---
 title: Infinite Loop 2
@@ -84,56 +83,62 @@ deactivate external/consumer
 
 ```
 
-
 ## Implementation example
 
-Implementation uses ```@adobe/aio-lib-state``` to maintain events that have been received in the AppBuilder app.
+Implementation uses `@adobe/aio-lib-state` to maintain events that have been received in the AppBuilder app.
 
 ```javascript
-
 // Import lib-state and infinite loop breaker
-const stateLib = require('@adobe/aio-lib-state')
-const { storeFingerPrint, isAPotentialInfiniteLoop } = require('../../../infinite-loop-breaker')
-
+const stateLib = require("@adobe/aio-lib-state");
+const {
+  storeFingerPrint,
+  isAPotentialInfiniteLoop,
+} = require("../../../infinite-loop-breaker");
 ```
 
 The consumer defines the list of events we want to avoid infinite loops.
 
 ```javascript
-
- // Detect infinite loop and break it
-    const infiniteLoopEventTypes = [
-      'com.adobe.commerce.observer.catalog_product_save_commit_after',
-      'com.adobe.commerce.observer.catalog_product_delete_commit_after'
-    ]
+// Detect infinite loop and break it
+const infiniteLoopEventTypes = [
+  "com.adobe.commerce.observer.catalog_product_save_commit_after",
+  "com.adobe.commerce.observer.catalog_product_delete_commit_after",
+];
 ```
 
 Define two functions:
-1. ```fnInfiniteLoopKey```: Returns a function to generate a key to identify that the event its related to an entity.
 
-2. ```fnFingerprint```: Returns a function to generate an object that would be used as fingerprint. It should includes data that may change.
+1. `fnInfiniteLoopKey`: Returns a function to generate a key to identify that the event its related to an entity.
+
+2. `fnFingerprint`: Returns a function to generate an object that would be used as fingerprint. It should includes data that may change.
 
 ```javascript
-  /**
-   * This function generates a function to genereate fingerprint for the data to be
-   * used in infinite loop detection based on params.
-   * @param {object} params Data received from the event
-   * @returns {Function} the function that generates the fingerprint
-   */
-  function fnFingerprint (params) {
-    return () => { return { product: params.data.value.sku, description: params.data.value.description } }
-  }
+/**
+ * This function generates a function to genereate fingerprint for the data to be
+ * used in infinite loop detection based on params.
+ * @param {object} params Data received from the event
+ * @returns {Function} the function that generates the fingerprint
+ */
+function fnFingerprint(params) {
+  return () => {
+    return {
+      product: params.data.value.sku,
+      description: params.data.value.description,
+    };
+  };
+}
 
-  /**
-   * This function generates a function to create a key for the infinite loop
-   * detection based on params.
-   * @param {object} params Data received from the event
-   * @returns {Function} the function that generates the keu
-   */
-  function fnInfiniteLoopKey (params) {
-    return () => { return `ilk_${params.data.value.sku}` }
-  }
-
+/**
+ * This function generates a function to create a key for the infinite loop
+ * detection based on params.
+ * @param {object} params Data received from the event
+ * @returns {Function} the function that generates the keu
+ */
+function fnInfiniteLoopKey(params) {
+  return () => {
+    return `ilk_${params.data.value.sku}`;
+  };
+}
 ```
 
 Check for infinite loop this way.
@@ -155,7 +160,7 @@ Check for infinite loop this way.
 If the event is processed, store the finger print
 
 ```javascript
-await storeFingerPrint(state, fnInfiniteLoopKey(params), fnFingerprint(params))
+await storeFingerPrint(state, fnInfiniteLoopKey(params), fnFingerprint(params));
 ```
 
 Fingerprints have a default TTL of 60s seconds.

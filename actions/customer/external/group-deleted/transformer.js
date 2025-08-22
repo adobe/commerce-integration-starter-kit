@@ -16,11 +16,11 @@ governing permissions and limitations under the License.
  * @param {object} params - Data received from Adobe commerce
  * @returns {number} - Returns transformed data object
  */
-function transformData (params) {
+function transformData(params) {
   // @TODO This is a sample implementation. Please adapt based on your needs
-  return params.data.id
+  return params.data.id;
 }
 
 module.exports = {
-  transformData
-}
+  transformData,
+};

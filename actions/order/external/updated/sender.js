@@ -10,8 +10,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { addComment } = require('../../commerce-order-api-client')
-const { HTTP_INTERNAL_ERROR } = require('../../../constants')
+const { addComment } = require("../../commerce-order-api-client");
+const { HTTP_INTERNAL_ERROR } = require("../../../constants");
 
 /**
  * This function send the order status updated data to the Adobe commerce REST API
@@ -21,28 +21,28 @@ const { HTTP_INTERNAL_ERROR } = require('../../../constants')
  * @param {object} transformed - transformed received data
  * @param {object} preProcessed - preprocessed result data
  */
-async function sendData (params, transformed, preProcessed) {
+async function sendData(params, transformed, preProcessed) {
   try {
     const response = await addComment(
       params.COMMERCE_BASE_URL,
       params,
       params.data.id,
-      transformed)
+      transformed,
+    );
 
     return {
       success: true,
-      message: response
-    }
+      message: response,
+    };
   } catch (error) {
     return {
       success: false,
       statusCode: error.response?.statusCode || HTTP_INTERNAL_ERROR,
-      message: error.message
-
-    }
+      message: error.message,
+    };
   }
 }
 
 module.exports = {
-  sendData
-}
+  sendData,
+};

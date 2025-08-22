@@ -1,2 +1,2 @@
-export * from './imsAuth';
-export * from './integrationAuth';
+export * from "./imsAuth";
+export * from "./integrationAuth";

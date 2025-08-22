@@ -10,9 +10,9 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { getClient } = require('../oauth1a')
-const { Core } = require('@adobe/aio-sdk')
-const logger = Core.Logger('commerce-product-api-client', { level: 'info' })
+const { getClient } = require("../oauth1a");
+const { Core } = require("@adobe/aio-sdk");
+const logger = Core.Logger("commerce-product-api-client", { level: "info" });
 
 /**
  * This function call Adobe commerce rest API to create a product
@@ -22,21 +22,18 @@ const logger = Core.Logger('commerce-product-api-client', { level: 'info' })
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
  */
-async function createProduct (baseUrl, params, data) {
+async function createProduct(baseUrl, params, data) {
   const client = getClient(
     {
       url: baseUrl,
-      params
+      params,
     },
-    logger
-  )
+    logger,
+  );
 
-  return await client.post(
-    'products',
-    JSON.stringify(data),
-    '',
-    { 'Content-Type': 'application/json' }
-  )
+  return await client.post("products", JSON.stringify(data), "", {
+    "Content-Type": "application/json",
+  });
 }
 
 /**
@@ -47,20 +44,20 @@ async function createProduct (baseUrl, params, data) {
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
  */
-async function updateProduct (baseUrl, params, data) {
+async function updateProduct(baseUrl, params, data) {
   const client = getClient(
     {
       url: baseUrl,
-      params
+      params,
     },
-    logger
-  )
+    logger,
+  );
   return await client.put(
-        `products/${data.product.sku}`,
-        JSON.stringify(data),
-        '',
-        { 'Content-Type': 'application/json' }
-  )
+    `products/${data.product.sku}`,
+    JSON.stringify(data),
+    "",
+    { "Content-Type": "application/json" },
+  );
 }
 
 /**
@@ -71,19 +68,19 @@ async function updateProduct (baseUrl, params, data) {
  * @param {object} params - Environment params from the IO Runtime request
  * @param {string} sku - Stock keeping unit
  */
-async function deleteProduct (baseUrl, params, sku) {
+async function deleteProduct(baseUrl, params, sku) {
   const client = getClient(
     {
       url: baseUrl,
-      params
+      params,
     },
-    logger
-  )
-  return await client.delete(`products/${sku}`)
+    logger,
+  );
+  return await client.delete(`products/${sku}`);
 }
 
 module.exports = {
   createProduct,
   updateProduct,
-  deleteProduct
-}
+  deleteProduct,
+};

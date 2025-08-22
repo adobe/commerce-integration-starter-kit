@@ -10,25 +10,25 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const action = require('../../../actions/starter-kit-info/index.js')
-describe('Given the starter kit info action', () => {
-  describe('When method main is defined', () => {
-    test('Then is an instance of Function', () => {
-      expect(action.main).toBeInstanceOf(Function)
-    })
-  })
-  describe('When invoked', () => {
-    test('The starter kit version is included in the response', async () => {
-      const params = {}
-      const response = await action.main(params)
+const action = require("../../../actions/starter-kit-info/index.js");
+describe("Given the starter kit info action", () => {
+  describe("When method main is defined", () => {
+    test("Then is an instance of Function", () => {
+      expect(action.main).toBeInstanceOf(Function);
+    });
+  });
+  describe("When invoked", () => {
+    test("The starter kit version is included in the response", async () => {
+      const params = {};
+      const response = await action.main(params);
 
-      expect(response).toHaveProperty('body.message.starter_kit_version')
-    })
-    test('The registrations are included in the response', async () => {
-      const params = {}
-      const response = await action.main(params)
+      expect(response).toHaveProperty("body.message.starter_kit_version");
+    });
+    test("The registrations are included in the response", async () => {
+      const params = {};
+      const response = await action.main(params);
 
-      expect(response).toHaveProperty('body.message.registrations')
-    })
-  })
-})
+      expect(response).toHaveProperty("body.message.registrations");
+    });
+  });
+});

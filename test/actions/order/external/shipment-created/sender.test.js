@@ -10,24 +10,26 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-jest.mock('../../../../../actions/order/commerce-shipment-api-client')
-const { createShipment } = require('../../../../../actions/order/commerce-shipment-api-client')
+jest.mock("../../../../../actions/order/commerce-shipment-api-client");
+const {
+  createShipment,
+} = require("../../../../../actions/order/commerce-shipment-api-client");
 
-const sender = require('../../../../../actions/order/external/shipment-created/sender')
+const sender = require("../../../../../actions/order/external/shipment-created/sender");
 
-describe('Given order external shipment created sender', () => {
-  describe('When method sendData is defined', () => {
-    test('Then is an instance of Function', () => {
-      expect(sender.sendData).toBeInstanceOf(Function)
-    })
-  })
-  describe('When method sendData is called', () => {
-    test('Then create order shipment is called', async () => {
-      const params = { data: { id: 99 } }
-      const transformed = {}
-      const preprocess = {}
-      await sender.sendData(params, transformed, preprocess)
-      expect(createShipment).toHaveBeenCalled()
-    })
-  })
-})
+describe("Given order external shipment created sender", () => {
+  describe("When method sendData is defined", () => {
+    test("Then is an instance of Function", () => {
+      expect(sender.sendData).toBeInstanceOf(Function);
+    });
+  });
+  describe("When method sendData is called", () => {
+    test("Then create order shipment is called", async () => {
+      const params = { data: { id: 99 } };
+      const transformed = {};
+      const preprocess = {};
+      await sender.sendData(params, transformed, preprocess);
+      expect(createShipment).toHaveBeenCalled();
+    });
+  });
+});

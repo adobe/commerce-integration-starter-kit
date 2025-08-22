@@ -10,29 +10,34 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const validator = require('../../../../../actions/customer/external/deleted/validator')
+const validator = require("../../../../../actions/customer/external/deleted/validator");
 
-describe('Given customer external deleted validator', () => {
-  describe('When method validateData is defined', () => {
-    test('Then is an instance of Function', () => {
-      expect(validator.validateData).toBeInstanceOf(Function)
-    })
-  })
-  describe('When data to validate is valid', () => {
+describe("Given customer external deleted validator", () => {
+  describe("When method validateData is defined", () => {
+    test("Then is an instance of Function", () => {
+      expect(validator.validateData).toBeInstanceOf(Function);
+    });
+  });
+  describe("When data to validate is valid", () => {
+    it.each([[{ data: { id: 1234 } }]])(
+      "Then for %o,  returns successful response",
+      (params) => {
+        const SUCCESSFUL_RESPONSE = { success: true };
+        expect(validator.validateData(params)).toMatchObject(
+          SUCCESSFUL_RESPONSE,
+        );
+      },
+    );
+  });
+  describe("When data to validate is not valid", () => {
     it.each([
-      [{ data: { id: 1234 } }]
-    ])('Then for %o,  returns successful response', (params) => {
-      const SUCCESSFUL_RESPONSE = { success: true }
-      expect(validator.validateData(params)).toMatchObject(SUCCESSFUL_RESPONSE)
-    })
-  })
-  describe('When data to validate is not valid', () => {
-    it.each([
-      [{ data: { id: 1234, name: 'John' } }], // additional properties
-      [{ data: { id: '1234' } }] // wrong type property
-    ])('Then for %o,  returns error response', (params) => {
-      const UNSUCCESSFUL_RESPONSE = { success: false }
-      expect(validator.validateData(params)).toMatchObject(UNSUCCESSFUL_RESPONSE)
-    })
-  })
-})
+      [{ data: { id: 1234, name: "John" } }], // additional properties
+      [{ data: { id: "1234" } }], // wrong type property
+    ])("Then for %o,  returns error response", (params) => {
+      const UNSUCCESSFUL_RESPONSE = { success: false };
+      expect(validator.validateData(params)).toMatchObject(
+        UNSUCCESSFUL_RESPONSE,
+      );
+    });
+  });
+});

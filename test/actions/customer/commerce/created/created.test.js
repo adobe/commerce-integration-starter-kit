@@ -10,48 +10,50 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const action = require('../../../../../actions/customer/commerce/created')
-jest.mock('../../../../../actions/customer/commerce/created/validator')
-const { validateData } = require('../../../../../actions/customer/commerce/created/validator')
+const action = require("../../../../../actions/customer/commerce/created");
+jest.mock("../../../../../actions/customer/commerce/created/validator");
+const {
+  validateData,
+} = require("../../../../../actions/customer/commerce/created/validator");
 
 beforeAll(() => {
-  process.env.__AIO_DEV = 'false'
-})
+  process.env.__AIO_DEV = "false";
+});
 
 afterEach(() => {
-  jest.clearAllMocks()
-  jest.resetModules()
-})
+  jest.clearAllMocks();
+  jest.resetModules();
+});
 
-describe('Given customer commerce created action', () => {
-  describe('When method main is defined', () => {
-    test('Then is an instance of Function', () => {
-      expect(action.main).toBeInstanceOf(Function)
-    })
-  })
-  describe('When invalid customer created event data is received', () => {
-    test('Then returns action error response', async () => {
+describe("Given customer commerce created action", () => {
+  describe("When method main is defined", () => {
+    test("Then is an instance of Function", () => {
+      expect(action.main).toBeInstanceOf(Function);
+    });
+  });
+  describe("When invalid customer created event data is received", () => {
+    test("Then returns action error response", async () => {
       const params = {
         data: {},
-        ENABLE_TELEMETRY: true
-      }
+        ENABLE_TELEMETRY: true,
+      };
 
-      const ERROR_MESSAGE = 'Invalid data'
+      const ERROR_MESSAGE = "Invalid data";
       validateData.mockReturnValue({
         success: false,
-        message: ERROR_MESSAGE
-      })
+        message: ERROR_MESSAGE,
+      });
 
-      const response = await action.main(params)
+      const response = await action.main(params);
 
       expect(response).toEqual({
         statusCode: 400,
         body: {
           success: false,
-          error: ERROR_MESSAGE
-        }
-      })
-    })
-  })
+          error: ERROR_MESSAGE,
+        },
+      });
+    });
+  });
   // @TODO Here you can add unit tests to cover the cases implemented in the customer created runtime action
-})
+});

@@ -10,37 +10,41 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const action = require('../../../../../actions/stock/commerce/consumer')
-jest.mock('openwhisk')
-const openwhisk = require('openwhisk')
-const { HTTP_BAD_REQUEST, HTTP_NOT_FOUND, HTTP_INTERNAL_ERROR } = require('../../../../../actions/constants')
-const Openwhisk = require('../../../../../actions/openwhisk')
+const action = require("../../../../../actions/stock/commerce/consumer");
+jest.mock("openwhisk");
+const openwhisk = require("openwhisk");
+const {
+  HTTP_BAD_REQUEST,
+  HTTP_NOT_FOUND,
+  HTTP_INTERNAL_ERROR,
+} = require("../../../../../actions/constants");
+const Openwhisk = require("../../../../../actions/openwhisk");
 
 afterEach(() => {
-  jest.clearAllMocks()
-  jest.resetModules()
-})
+  jest.clearAllMocks();
+  jest.resetModules();
+});
 
-describe('Given stock commerce consumer', () => {
-  describe('When method main is defined', () => {
-    test('Then is an instance of Function', () => {
-      expect(action.main).toBeInstanceOf(Function)
-    })
-  })
-  describe('When a valid stock item updated event is received', () => {
-    test('Then returns success response', async () => {
+describe("Given stock commerce consumer", () => {
+  describe("When method main is defined", () => {
+    test("Then is an instance of Function", () => {
+      expect(action.main).toBeInstanceOf(Function);
+    });
+  });
+  describe("When a valid stock item updated event is received", () => {
+    test("Then returns success response", async () => {
       const params = {
-        EVENT_PREFIX: 'test_app',
-        type: 'com.adobe.commerce.test_app.observer.cataloginventory_stock_item_save_commit_after',
+        EVENT_PREFIX: "test_app",
+        type: "com.adobe.commerce.test_app.observer.cataloginventory_stock_item_save_commit_after",
         data: {
           value: {
-            item_id: '1',
-            product_id: '1',
+            item_id: "1",
+            product_id: "1",
             stock_id: 1,
-            qty: 1
-          }
-        }
-      }
+            qty: 1,
+          },
+        },
+      };
 
       openwhisk.mockReturnValue({
         actions: {
@@ -49,81 +53,90 @@ describe('Given stock commerce consumer', () => {
               result: {
                 statusCode: 200,
                 body: {
-                  action: 'updated',
-                  success: true
-                }
-              }
-            }
-          })
-        }
-      })
+                  action: "updated",
+                  success: true,
+                },
+              },
+            },
+          }),
+        },
+      });
 
-      const response = await action.main(params)
+      const response = await action.main(params);
 
       expect(response).toEqual({
         statusCode: 200,
         body: {
           response: {
-            action: 'updated',
-            success: true
+            action: "updated",
+            success: true,
           },
-          type: 'com.adobe.commerce.test_app.observer.cataloginventory_stock_item_save_commit_after'
-        }
-      })
-    })
-  })
-  describe('When stock event type received is not supported', () => {
-    test('Then returns error response', async () => {
+          type: "com.adobe.commerce.test_app.observer.cataloginventory_stock_item_save_commit_after",
+        },
+      });
+    });
+  });
+  describe("When stock event type received is not supported", () => {
+    test("Then returns error response", async () => {
       const params = {
-        type: 'NOT_SUPPORTED_TYPE',
+        type: "NOT_SUPPORTED_TYPE",
         data: {
           value: {
-            item_id: '1',
-            product_id: '1',
+            item_id: "1",
+            product_id: "1",
             stock_id: 1,
-            qty: 1
-          }
-        }
-      }
-      const response = await action.main(params)
+            qty: 1,
+          },
+        },
+      };
+      const response = await action.main(params);
 
       expect(response).toEqual({
         error: {
           statusCode: HTTP_BAD_REQUEST,
           body: {
-            error: 'This case type is not supported: NOT_SUPPORTED_TYPE'
-          }
-        }
-      })
-    })
-  })
-  describe('When the downstream response success is false', () => {
+            error: "This case type is not supported: NOT_SUPPORTED_TYPE",
+          },
+        },
+      });
+    });
+  });
+  describe("When the downstream response success is false", () => {
     it.each([
-      [HTTP_BAD_REQUEST, { success: false, error: 'Invalid data' }],
-      [HTTP_NOT_FOUND, { success: false, error: 'Entity not found' }],
-      [HTTP_INTERNAL_ERROR, { success: false, error: 'Internal error' }]
-    ]
-    )('Then returns the status code %p and response', async (statusCode, response) => {
-      const type = 'com.adobe.commerce.test_app.observer.cataloginventory_stock_item_save_commit_after'
-      const ACTION_RESPONSE = {
-        response: {
-          result: {
-            body: response,
-            statusCode
-          }
-        }
-      }
-      const CONSUMER_RESPONSE = {
-        error: {
-          statusCode,
-          body: {
-            error: response.error
-          }
-        }
-      }
-      const params = { type, EVENT_PREFIX: 'test_app', data: { value: { customer_group_code: 'xxx' } } }
-      Openwhisk.prototype.invokeAction = jest.fn().mockResolvedValue(ACTION_RESPONSE)
-      expect(await action.main(params)).toMatchObject(CONSUMER_RESPONSE)
-    })
-  })
-})
+      [HTTP_BAD_REQUEST, { success: false, error: "Invalid data" }],
+      [HTTP_NOT_FOUND, { success: false, error: "Entity not found" }],
+      [HTTP_INTERNAL_ERROR, { success: false, error: "Internal error" }],
+    ])(
+      "Then returns the status code %p and response",
+      async (statusCode, response) => {
+        const type =
+          "com.adobe.commerce.test_app.observer.cataloginventory_stock_item_save_commit_after";
+        const ACTION_RESPONSE = {
+          response: {
+            result: {
+              body: response,
+              statusCode,
+            },
+          },
+        };
+        const CONSUMER_RESPONSE = {
+          error: {
+            statusCode,
+            body: {
+              error: response.error,
+            },
+          },
+        };
+        const params = {
+          type,
+          EVENT_PREFIX: "test_app",
+          data: { value: { customer_group_code: "xxx" } },
+        };
+        Openwhisk.prototype.invokeAction = jest
+          .fn()
+          .mockResolvedValue(ACTION_RESPONSE);
+        expect(await action.main(params)).toMatchObject(CONSUMER_RESPONSE);
+      },
+    );
+  });
+});

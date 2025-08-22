@@ -15,13 +15,11 @@ governing permissions and limitations under the License.
  * @param {Array} items - incoming items
  * @returns {Array} - transformed items
  */
-function transformItems (items) {
-  return items.map(item => (
-    {
-      order_item_id: item.orderItemId,
-      qty: item.qty
-    }
-  ))
+function transformItems(items) {
+  return items.map((item) => ({
+    order_item_id: item.orderItemId,
+    qty: item.qty,
+  }));
 }
 
 /**
@@ -30,14 +28,12 @@ function transformItems (items) {
  * @param {Array} tracks - incoming tracks
  * @returns {Array} - transformed tracks
  */
-function transformTracks (orderId, tracks) {
-  return tracks.map(track => (
-    {
-      track_number: track.trackNumber,
-      title: track.title,
-      carrier_code: track.carrierCode
-    }
-  ))
+function transformTracks(orderId, tracks) {
+  return tracks.map((track) => ({
+    track_number: track.trackNumber,
+    title: track.title,
+    carrier_code: track.carrierCode,
+  }));
 }
 
 /**
@@ -45,11 +41,11 @@ function transformTracks (orderId, tracks) {
  * @param {object} comment - incoming comment
  * @returns {object} - transformed comment
  */
-function transformComment (comment) {
+function transformComment(comment) {
   return {
     comment: comment.comment,
-    is_visible_on_front: comment.visibleOnFront ? 1 : 0
-  }
+    is_visible_on_front: comment.visibleOnFront ? 1 : 0,
+  };
 }
 
 /**
@@ -58,7 +54,7 @@ function transformComment (comment) {
  * @param {object} params - Data received from Adobe commerce
  * @returns {object} - Returns transformed data object
  */
-function transformData (params) {
+function transformData(params) {
   // @TODO This is a sample implementation. Please adapt based on your needs
   // @TODO Notice that the attribute_set_id may need to be changed
 
@@ -67,11 +63,11 @@ function transformData (params) {
     tracks: transformTracks(params.data.orderId, params.data.tracks),
     comment: transformComment(params.data.comment),
     extension_attributes: {
-      source_code: params.data.stockSourceCode
-    }
-  }
+      source_code: params.data.stockSourceCode,
+    },
+  };
 }
 
 module.exports = {
-  transformData
-}
+  transformData,
+};
