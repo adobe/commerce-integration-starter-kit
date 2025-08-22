@@ -10,22 +10,22 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-// @ts-expect-error
+// @ts-expect-error - simple-oauth2 is not typed
 import { ClientCredentials } from "simple-oauth2";
 
-export interface ImsAuthParams {
+export type ImsAuthParams = {
   host?: string;
   clientId: string;
   clientSecret: string;
-  scopes: Array<string>;
-}
+  scopes: string[];
+};
 
-interface ImsTokenResponse {
+type ImsTokenResponse = {
   access_token: string;
   token_type: string;
   expires_in: number;
   expires_at: string;
-}
+};
 
 /**
  * Generate access token to connect with Adobe tools (e.g. IO Events)

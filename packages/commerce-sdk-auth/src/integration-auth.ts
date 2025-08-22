@@ -1,11 +1,11 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
 
 import OAuth1a from "oauth-1.0a";
 
-export interface IntegrationAuthParams {
+export type IntegrationAuthParams = {
   consumerKey: string;
   consumerSecret: string;
-}
+};
 
 export function getOAuthHeader({
   consumerKey,
