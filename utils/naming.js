@@ -31,13 +31,14 @@ function labelSuffix(runtimeNamespace) {
  */
 function addSuffix(labelPrefix, environment) {
   if (!labelPrefix) {
-    throw Error("Cannot add suffix to undefined label");
+    throw new Error("Cannot add suffix to undefined label");
   }
   if (!environment?.AIO_runtime_namespace) {
-    throw Error(
+    throw new Error(
       "Unable to add suffix. AIO_runtime_namespace is undefined in the environment",
     );
   }
+
   return `${labelPrefix} - ${labelSuffix(environment.AIO_runtime_namespace)}`;
 }
 
@@ -96,14 +97,14 @@ function getEventName(eventName, environment) {
   }
 
   if (eventName.startsWith(prefix)) {
-    return prefix + eventPrefix + "." + eventName.slice(prefix.length);
+    return `${prefix}${eventPrefix}.${eventName.slice(prefix.length)}`;
   }
 
   if (eventName.startsWith("be-observer")) {
     return eventName;
   }
 
-  return eventPrefix + "." + eventName;
+  return `${eventPrefix}.${eventName}`;
 }
 
 module.exports = {
