@@ -19,7 +19,7 @@ const logger = Core.Logger("commerce-eventing-api-client", { level: "info" });
  * @param {string} baseUrl - Adobe Commerce REST API base URL
  * @param {object} params - Environment parameters for OAuth authentication
  * @param {object} data - Configuration payload to send to Adobe Commerce API
- * @returns {Promise<object>} Response from the Adobe Commerce API
+ * @returns Response from the Adobe Commerce API
  */
 async function updateConfiguration(baseUrl, params, data) {
   const client = getClient(
@@ -43,7 +43,7 @@ async function updateConfiguration(baseUrl, params, data) {
  * @param {string} baseUrl - Adobe Commerce REST API base URL
  * @param {object} params - Environment parameters for OAuth authentication
  * @param {object} data - Event subscription payload to send to Adobe Commerce API
- * @returns {Promise<object>} Response from the Adobe Commerce API
+ * @returns Response from the Adobe Commerce API
  */
 async function eventSubscribe(baseUrl, params, data) {
   const client = getClient(
@@ -65,7 +65,7 @@ async function eventSubscribe(baseUrl, params, data) {
 /**
  * This function calls Adobe commerce rest API to return list of all event providers configured for the Commerce instance
  *
- * @returns {object} - API response object
+ * @returns - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  */
@@ -87,7 +87,7 @@ async function getEventProviders(baseUrl, params) {
  * This function calls Adobe commerce rest API to register a new event provider in an Adobe Commerce instance.
  * The event provider must be created in the Adobe Developer Console before it can be registered in Adobe Commerce instance.
  *
- * @returns {object} - API response object
+ * @returns - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload

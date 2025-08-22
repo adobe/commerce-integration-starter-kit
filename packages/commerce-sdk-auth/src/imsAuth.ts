@@ -31,7 +31,7 @@ interface ImsTokenResponse {
  * Generate access token to connect with Adobe tools (e.g. IO Events)
  *
  * @param {object} params includes env parameters
- * @returns {Promise<ImsTokenResponse>} returns the access token
+ * @returns the access token
  * @throws {Error} in case of any failure
  */
 export async function getImsAccessToken({

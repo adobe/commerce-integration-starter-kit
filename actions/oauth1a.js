@@ -18,7 +18,7 @@ const {
 const { fromParams } = require("./auth");
 
 /**
- * @returns {string} - returns the bearer token
+ * @returns the bearer token
  * @param {string} token - access token
  */
 function withBearer(token) {
@@ -39,7 +39,7 @@ function createClient(options, authOptions, logger) {
   const serverUrl = options.url;
   const apiVersion = options.version;
 
-  let getAuthorizationHeaders = async (opts) => {
+  let getAuthorizationHeaders = (opts) => {
     throw new Error("getAuthorizationHeaders not implemented");
   };
 
@@ -58,7 +58,7 @@ function createClient(options, authOptions, logger) {
       secret: commerceOAuth1.accessTokenSecret,
     };
     const oauth = getOAuthHeader(commerceOAuth1);
-    getAuthorizationHeaders = async ({ url, method }) => {
+    getAuthorizationHeaders = ({ url, method }) => {
       return oauth.toHeader(
         oauth.authorize(
           {
@@ -119,7 +119,7 @@ function createClient(options, authOptions, logger) {
       body: loginData,
     });
 
-  instance.get = async (resourceUrl, requestToken = "") => {
+  instance.get = (resourceUrl, requestToken = "") => {
     const requestData = {
       url: createUrl(resourceUrl),
       method: "GET",
@@ -130,14 +130,14 @@ function createClient(options, authOptions, logger) {
   /**
    * This function create the full url
    *
-   * @returns {string} - generated url
+   * @returns - generated url
    * @param {string} resourceUrl - Adobe commerce rest API resource url
    */
   function createUrl(resourceUrl) {
-    return serverUrl + apiVersion + "/" + resourceUrl;
+    return `${serverUrl}${apiVersion}/${resourceUrl}`;
   }
 
-  instance.post = async (
+  instance.post = (
     resourceUrl,
     data,
     requestToken = "",
@@ -151,12 +151,7 @@ function createClient(options, authOptions, logger) {
     return apiCall(requestData, requestToken, customHeaders);
   };
 
-  instance.put = async (
-    resourceUrl,
-    data,
-    requestToken = "",
-    customHeaders = {},
-  ) => {
+  instance.put = (resourceUrl, data, requestToken = "", customHeaders = {}) => {
     const requestData = {
       url: createUrl(resourceUrl),
       method: "PUT",
@@ -165,7 +160,7 @@ function createClient(options, authOptions, logger) {
     return apiCall(requestData, requestToken, customHeaders);
   };
 
-  instance.delete = async (resourceUrl, requestToken = "") => {
+  instance.delete = (resourceUrl, requestToken = "") => {
     const requestData = {
       url: createUrl(resourceUrl),
       method: "DELETE",
@@ -185,6 +180,7 @@ function createClient(options, authOptions, logger) {
 function getClient(clientOptions, logger) {
   const { params, ...options } = clientOptions;
   options.version = "V1";
+
   return createClient(options, fromParams(params), logger);
 }
 

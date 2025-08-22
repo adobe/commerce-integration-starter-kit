@@ -39,7 +39,7 @@ const Openwhisk = require("../../../openwhisk");
 /**
  * This is the consumer of the events coming from Adobe Commerce related to customer entity.
  *
- * @returns {object} returns response object with status code, request data received and response of the invoked action
+ * @returns response object with status code, request data received and response of the invoked action
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main(params) {

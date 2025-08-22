@@ -15,18 +15,20 @@ const {
   stringParameters,
   checkMissingRequestInputs,
 } = require("../../../utils");
+
 const {
   HTTP_BAD_REQUEST,
   HTTP_OK,
   HTTP_INTERNAL_ERROR,
 } = require("../../../constants");
+
 const Openwhisk = require("../../../openwhisk");
 const { errorResponse, successResponse } = require("../../../responses");
 
 /**
  * This is the consumer of the events coming from Adobe Commerce related to stock entity.
  *
- * @returns {object} returns response object with status code, request data received and response of the invoked action
+ * @returns response object with status code, request data received and response of the invoked action
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main(params) {
@@ -53,7 +55,7 @@ async function main(params) {
       );
     }
 
-    logger.info("Params type: " + params.type);
+    logger.info(`Params type: ${params.type}`);
 
     switch (params.type) {
       case `com.adobe.commerce.${params.EVENT_PREFIX}.observer.cataloginventory_stock_item_save_commit_after`: {

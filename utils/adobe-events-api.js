@@ -67,7 +67,7 @@ async function getExistingRegistrationsData(
  * Gets existing registrations for the current project as a keyed object
  * @param {object} environment - Environment configuration containing needed parameters to call IO Event API
  * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<object>} Object mapping registration names to registration objects
+ * @returns Object mapping registration names to registration objects
  * @throws {Error} Throws exception if the API call fails
  */
 async function getExistingRegistrations(environment, authHeaders) {
@@ -88,7 +88,7 @@ async function getExistingRegistrations(environment, authHeaders) {
  * Gets the list of existing providers for the consumer organization
  * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL and IO_CONSUMER_ID
  * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<object>} Object mapping provider labels to provider objects
+ * @returns Object mapping provider labels to provider objects
  */
 async function getExistingProviders(environment, authHeaders) {
   // See: https://developer.adobe.com/events/docs/api#operation/getProvidersByConsumerOrgId
@@ -119,7 +119,7 @@ async function getExistingProviders(environment, authHeaders) {
  * @param {object} params - Parameters needed to make the call to Adobe IO Events
  * @param {object} authHeaders - Authentication headers including Adobe OAuth access token
  * @param {string} providerKey - Provider key used to find the provider (from onboarding/config/providers.json)
- * @returns {Promise<object>} Provider object if found, undefined otherwise
+ * @returns Provider object if found, undefined otherwise
  */
 async function getProviderByKey(params, authHeaders, providerKey) {
   const providers = await getExistingProviders(params, authHeaders);

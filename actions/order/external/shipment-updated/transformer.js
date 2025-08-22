@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 /**
  * Transforms incoming items
  * @param {Array} items - incoming items
- * @returns {Array} - transformed items
+ * @returns - transformed items
  */
 function transformItems(items) {
   return items.map((item) => ({
@@ -27,7 +27,7 @@ function transformItems(items) {
  * Transforms incoming tracks
  * @param {number} orderId - order id
  * @param {Array} tracks - incoming tracks
- * @returns {Array} - transformed tracks
+ * @returns - transformed tracks
  */
 function transformTracks(orderId, tracks) {
   return tracks.map((track) => ({
@@ -42,7 +42,7 @@ function transformTracks(orderId, tracks) {
 /**
  * Transforms incoming comments
  * @param {Array} comments - incoming comments
- * @returns {Array} - transformed comments
+ * @returns - transformed comments
  */
 function transformComments(comments) {
   return comments.map((comment) => ({
@@ -57,7 +57,7 @@ function transformComments(comments) {
  * This function transform the received shipment data from external back-office application to Adobe commerce
  *
  * @param {object} params - Data received from Adobe commerce
- * @returns {object} - Returns transformed data object
+ * @returns transformed data object
  */
 function transformData(params) {
   // @TODO This is a sample implementation. Please adapt based on your needs

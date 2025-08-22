@@ -24,9 +24,9 @@ const {
  * This web action is used to check stock of cart items on real time.
  *
  * @param {object} params - method params includes environment and request data
- * @returns {object} - response with success status and result
+ * @returns - response with success status and result
  */
-async function main(params) {
+function main(params) {
   const logger = Core.Logger("webhook-check-stock", {
     level: params.LOG_LEVEL || "info",
   });
@@ -40,7 +40,7 @@ async function main(params) {
       return webhookErrorResponse(validationResult.message);
     }
 
-    const checkAvailableStockResult = await checkAvailableStock(params.data);
+    const checkAvailableStockResult = checkAvailableStock(params.data);
     if (!checkAvailableStockResult.success) {
       logger.error(`${checkAvailableStockResult.message}`);
       return webhookErrorResponse(checkAvailableStockResult.message);

@@ -37,7 +37,7 @@ const PRODUCTS_QUERY = `
  *
  * @param {string} baseUrl - The GraphQL server endpoint
  * @param {object} headers - Headers for the client
- * @returns {object} - GraphQL client instance
+ * @returns - GraphQL client instance
  */
 function createGraphqlClient(baseUrl, headers = {}) {
   if (typeof baseUrl !== "string") {
@@ -57,7 +57,7 @@ function createGraphqlClient(baseUrl, headers = {}) {
 /**
  * This function call Adobe commerce graphql to obtain products
  *
- * @returns {object} - Response object
+ * @returns - Response object
  * @param {string} baseUrl - Adobe commerce graphql base url
  * @param {number} pageSize - Number of products to fetch per page
  * @param {number} currentPage - Current page number

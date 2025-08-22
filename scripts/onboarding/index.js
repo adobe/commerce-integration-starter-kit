@@ -87,7 +87,7 @@ function logConfigureEventingError(errorInfo) {
 
 /**
  * Main onboarding function that creates events providers, adds metadata, creates registrations, and configures Adobe I/O Events module in Commerce
- * @returns {Promise<object>} Object with providers and registrations on success, or void on error
+ * @returns Object with providers and registrations on success, or void on error
  */
 async function main() {
   const environmentResult = v.safeParse(ProcessEnvSchema, process.env);

@@ -17,7 +17,7 @@ const logger = Core.Logger("commerce-stock-api-client", { level: "info" });
 /**
  * This function call Adobe commerce rest API to update the stock of a sku in a source
  *
- * @returns {object} - API response object
+ * @returns - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload

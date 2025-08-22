@@ -16,7 +16,7 @@ const { checkMissingRequestInputs } = require("../../../actions/utils");
  * Validate the received information
  *
  * @param {object} params input parameters
- * @returns {object} returns the success status and error message
+ * @returns the success status and error message
  */
 function validateData(params) {
   const requiredParams = ["data.cart_id", "data.items"];

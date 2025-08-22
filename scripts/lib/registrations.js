@@ -23,7 +23,7 @@ const { makeError } = require("./helpers/errors");
  * @param {Array<{id: string, key: string, label: string}>} providers - List of provider objects
  * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID, OAUTH_CLIENT_ID
  * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<object>} Result object with registrations or error
+ * @returns Result object with registrations or error
  */
 async function main(clientRegistrations, providers, environment, authHeaders) {
   const result = [];

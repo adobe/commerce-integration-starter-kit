@@ -19,7 +19,7 @@ const {
  * This function transform the received customer data from Adobe commerce to external back-office application
  *
  * @param {object} data - Data received from Adobe commerce
- * @returns {object} - Returns transformed data object
+ * @returns transformed data object
  */
 function transformData(data) {
   // @Todo Here transform the data as needed for external back-office application API

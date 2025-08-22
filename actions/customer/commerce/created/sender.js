@@ -22,7 +22,7 @@ const {
  * @param {object} params - include the env params
  * @param {object} data - Customer data
  * @param {object} preProcessed - result of the pre-process logic if any
- * @returns {object} returns the sending result if needed for post process
+ * @returns the sending result if needed for post process
  */
 function sendData(params, data, preProcessed) {
   // @TODO Here add the logic to send the information to 3rd party

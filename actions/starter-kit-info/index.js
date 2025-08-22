@@ -20,10 +20,10 @@ const { HTTP_OK, HTTP_INTERNAL_ERROR } = require("../constants");
  * This is the starter kit info endpoint.
  * It returns the version of the starter kit and the registration data.
  *
- * @returns {object} returns starter kit version and registration data
+ * @returns starter kit version and registration data
  * @param {object} params - includes the env params
  */
-async function main(params) {
+function main(params) {
   const version = require("../../package.json").version;
   const registrations = require("../../scripts/onboarding/config/starter-kit-registrations.json");
 

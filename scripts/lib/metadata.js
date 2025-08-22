@@ -19,7 +19,7 @@ const { getEventName } = require("../../utils/naming");
 /**
  * Builds an array of provider events with their metadata
  * @param {object} providerEvents - Provider events configuration object
- * @returns {Array} Array of formatted event metadata
+ * @returns Array of formatted event metadata
  */
 function buildProviderData(providerEvents) {
   const events = [];
@@ -56,7 +56,7 @@ function base64EncodedSampleEvent(sampleEventTemplate) {
  * @param {string} providerId - Provider ID
  * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID
  * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<object>} Result object indicating success or error
+ * @returns Result object indicating success or error
  */
 async function addEventCodeToProvider(
   metadata,
@@ -124,7 +124,7 @@ async function addEventCodeToProvider(
  * @param {string} providerId - Provider ID
  * @param {object} environment - Environment configuration
  * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<object>} Result object indicating success or error
+ * @returns Result object indicating success or error
  */
 async function addMetadataToProvider(
   providerEvents,
@@ -158,7 +158,7 @@ async function addMetadataToProvider(
  * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL
  * @param {object} authHeaders - Authentication headers for API requests
  * @param {string|null} [next] - Next URL for pagination
- * @returns {Promise<object>} Result object with existing metadata or error
+ * @returns Result object with existing metadata or error
  */
 async function getExistingMetadata(
   providerId,
@@ -220,7 +220,7 @@ async function getExistingMetadata(
  * @param {Array<{id: string, key: string, label: string}>} providers - List of provider objects
  * @param {object} environment - Environment configuration
  * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<object>} Result object with operation outcome
+ * @returns Result object with operation outcome
  */
 async function main(clientRegistrations, providers, environment, authHeaders) {
   let currentProvider;

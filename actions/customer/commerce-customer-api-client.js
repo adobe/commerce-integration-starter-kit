@@ -17,7 +17,7 @@ const logger = Core.Logger("commerce-consumer-api-client", { level: "info" });
 /**
  * This function call Adobe commerce rest API to create a customer
  *
- * @returns {object} - API response object
+ * @returns - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
@@ -39,7 +39,7 @@ async function createCustomer(baseUrl, params, data) {
 /**
  * This function call Adobe commerce rest API to update a customer
  *
- * @returns {object} - API response object
+ * @returns - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
@@ -63,7 +63,7 @@ async function updateCustomer(baseUrl, params, data) {
 /**
  * This function call Adobe commerce rest API to delete a customer
  *
- * @returns {object} - API response object
+ * @returns - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {number} id - Id

@@ -29,9 +29,34 @@ const {
 } = require("../../../infinite-loop-breaker");
 
 /**
+ * This function generates a function to generate fingerprint for the data to be used in infinite loop detection based on params.
+ * @param {object} params Data received from the event
+ * @returns the function that generates the fingerprint
+ */
+function fnFingerprint(params) {
+  return () => {
+    return {
+      product: params.data.value.sku,
+      description: params.data.value.description,
+    };
+  };
+}
+
+/**
+ * This function generates a function to create a key for the infinite loop detection based on params.
+ * @param {object} params Data received from the event
+ * @returns the function that generates the keu
+ */
+function fnInfiniteLoopKey(params) {
+  return () => {
+    return `ilk_${params.data.value.sku}`;
+  };
+}
+
+/**
  * This is the consumer of the events coming from External back-office applications related to product entity.
  *
- * @returns {object} returns response object with status code, request data received and response of the invoked action
+ * @returns response object with status code, request data received and response of the invoked action
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main(params) {
@@ -143,31 +168,6 @@ async function main(params) {
   } catch (error) {
     logger.error(`Server error: ${error.message}`);
     return errorResponse(HTTP_INTERNAL_ERROR, error.message);
-  }
-
-  /**
-   * This function generates a function to generate fingerprint for the data to be used in infinite loop detection based on params.
-   * @param {object} params Data received from the event
-   * @returns {Function} the function that generates the fingerprint
-   */
-  function fnFingerprint(params) {
-    return () => {
-      return {
-        product: params.data.value.sku,
-        description: params.data.value.description,
-      };
-    };
-  }
-
-  /**
-   * This function generates a function to create a key for the infinite loop detection based on params.
-   * @param {object} params Data received from the event
-   * @returns {Function} the function that generates the keu
-   */
-  function fnInfiniteLoopKey(params) {
-    return () => {
-      return `ilk_${params.data.value.sku}`;
-    };
   }
 }
 

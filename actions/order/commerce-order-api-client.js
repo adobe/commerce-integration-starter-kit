@@ -17,7 +17,6 @@ const logger = Core.Logger("commerce-order-api-client", { level: "info" });
 /**
  * This function call Adobe commerce rest API to create a product
  *
- * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {number} orderId - order id

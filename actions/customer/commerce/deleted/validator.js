@@ -14,7 +14,7 @@ governing permissions and limitations under the License.
  * This function validate the customer data received
  *
  * @param {object} data - Received data from adobe commerce
- * @returns {object} - returns the result of validation object
+ * @returns the result of validation object
  */
 function validateData(data) {
   // @TODO Here add the logic to validate the received data

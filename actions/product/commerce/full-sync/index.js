@@ -24,11 +24,13 @@ const { preProcess } = require("./pre");
 const { sendData } = require("./sender");
 const { postProcess } = require("./post");
 
+const DEFAULT_PAGE_SIZE = 20;
+
 /**
  * This action is on charge of obtaining product information from Adobe Commerce and send it to external back-office application
  *
  * @param {object} params - includes the env params and configuration
- * @returns {object} returns response object with status code and result
+ * @returns response object with status code and result
  */
 async function main(params) {
   const logger = Core.Logger("product-commerce-full-sync", {
@@ -40,7 +42,7 @@ async function main(params) {
   try {
     logger.debug(`Received params: ${stringParameters(params)}`);
 
-    const pageSize = params.pageSize ?? 20;
+    const pageSize = params.pageSize ?? DEFAULT_PAGE_SIZE;
     let currentPage = 1;
     let totalPages = 1;
     const results = [];
@@ -71,11 +73,14 @@ async function main(params) {
       currentPage++;
     }
 
-    const message =
-      `Sync process ${hasErrors ? "completed with some errors" : "completed successfully"}. ` +
-      `Processed ${results.length} pages: ${results.filter((item) => item.success).length} succeeded, ` +
-      `${results.filter((item) => !item.success).length} failed. ` +
-      `Results: ${JSON.stringify(results.map(({ totalCount, ...rest }) => rest))}`;
+    const message = [
+      // biome-ignore lint/nursery/noUnnecessaryConditions: seems to be a false positive
+      `Sync process ${hasErrors ? "completed with some errors" : "completed successfully"}.`,
+      `Processed ${results.length} pages:`,
+      `\t${results.filter((item) => item.success).length} succeeded.`,
+      `\t${results.filter((item) => !item.success).length} failed.`,
+      `Results: ${JSON.stringify(results.map(({ totalCount, ...rest }) => rest))}`,
+    ].join("\n");
 
     logger.info("Product sync completed successfully");
     return actionSuccessResponse(message);
@@ -92,7 +97,7 @@ async function main(params) {
  * @param {number} pageSize - Number of items per page
  * @param {number} currentPage - Current page number
  * @param {object} logger - Logger instance for logging operations
- * @returns {object} Result of the page processing
+ * @returns Result of the page processing
  */
 async function processPage(params, pageSize, currentPage, logger) {
   try {
@@ -161,13 +166,23 @@ async function processPage(params, pageSize, currentPage, logger) {
  * @param {string} [message] - Error message if any
  * @param {number} [statusCode] - HTTP status code if any
  * @param {number} [totalCount] - Total count of products (only for the first page)
- * @returns {object} Result object
+ * @returns Result object
  */
 function createResult(page, success, message, statusCode, totalCount) {
   const result = { page, success };
-  if (message) result.message = message;
-  if (statusCode) result.statusCode = statusCode;
-  if (totalCount) result.totalCount = totalCount;
+
+  if (message) {
+    result.message = message;
+  }
+
+  if (statusCode) {
+    result.statusCode = statusCode;
+  }
+
+  if (totalCount) {
+    result.totalCount = totalCount;
+  }
+
   return result;
 }
 

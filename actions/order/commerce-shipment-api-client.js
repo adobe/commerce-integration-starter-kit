@@ -11,13 +11,13 @@ governing permissions and limitations under the License.
 */
 
 const { getClient } = require("../oauth1a");
+
 const { Core } = require("@adobe/aio-sdk");
 const logger = Core.Logger("commerce-shipment-api-client", { level: "info" });
 
 /**
  * This function call Adobe commerce rest API to create a shipment
  *
- * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {string} orderId - Adobe commerce order id
@@ -40,7 +40,6 @@ async function createShipment(baseUrl, params, orderId, data) {
 /**
  * This function call Adobe commerce rest API to update a shipment
  *
- * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload

@@ -16,7 +16,7 @@ const SEPARATOR = "-";
  * Get label suffix
  *
  * @param {string} runtimeNamespace - runtime namespace
- * @returns {string} - returns the suffix
+ * @returns the suffix
  */
 function labelSuffix(runtimeNamespace) {
   return runtimeNamespace.substring(runtimeNamespace.indexOf(SEPARATOR) + 1);
@@ -27,7 +27,7 @@ function labelSuffix(runtimeNamespace) {
  *
  * @param {string} labelPrefix - label prefix
  * @param {object} environment - environment params
- * @returns {string} - returns the string with the suffix
+ * @returns the string with the suffix
  */
 function addSuffix(labelPrefix, environment) {
   if (!labelPrefix) {
@@ -45,7 +45,7 @@ function addSuffix(labelPrefix, environment) {
  * Capitalize the first char of a given string
  *
  * @param {string} string the text to modify
- * @returns {string} string
+ * @returns string
  */
 function stringToUppercaseFirstChar(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -56,7 +56,7 @@ function stringToUppercaseFirstChar(string) {
  *
  * @param {string} providerKey provider key
  * @param {string} entityName entity name
- * @returns {string} the generated registration name
+ * @returns the generated registration name
  */
 function getRegistrationName(providerKey, entityName) {
   return `${stringToUppercaseFirstChar(providerKey)} ${stringToUppercaseFirstChar(entityName)} Sync`;
@@ -67,7 +67,7 @@ function getRegistrationName(providerKey, entityName) {
  *
  * @param {object} params action parameters
  * @param {string} providerKey the provider key (could be found in onboarding/config/providers.js)
- * @returns {string} returns the provider name
+ * @returns the provider name
  */
 function getProviderName(params, providerKey) {
   const providersList = require("../scripts/onboarding/config/providers.json");
@@ -83,7 +83,7 @@ function getProviderName(params, providerKey) {
  *
  * @param {string} eventName event name
  * @param {object} environment - environment params
- * @returns {string} returns the event name
+ * @returns the event name
  */
 function getEventName(eventName, environment) {
   const eventPrefix = environment.EVENT_PREFIX;

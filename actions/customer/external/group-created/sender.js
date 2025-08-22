@@ -18,7 +18,7 @@ const {
 /**
  * This function send the customer group created data to the Adobe commerce REST API
  *
- * @returns {object} - returns the result data of sending information to Adobe commerce
+ * @returns the result data of sending information to Adobe commerce
  * @param {object} params - include the env params
  * @param {object} transformed - transformed received data
  * @param {object} preProcessed - preprocessed result data

@@ -58,7 +58,7 @@ function stringParameters(params) {
 function getMissingKeys(obj, required) {
   return required.filter((r) => {
     const splits = r.split(".");
-    const last = splits[splits.length - 1];
+    const last = splits.at(-1);
 
     const traverse = splits
       .slice(0, -1)
@@ -105,11 +105,13 @@ function checkMissingRequestInputs(
   // check for missing parameters
   const missingParams = getMissingKeys(params, requiredParams);
   if (missingParams.length > 0) {
+    // biome-ignore lint/nursery/noUnnecessaryConditions: Seems to be a false positive.
     if (errorMessage) {
       errorMessage += " and ";
     } else {
       errorMessage = "";
     }
+
     errorMessage += `missing parameter(s) '${missingParams}'`;
   }
 

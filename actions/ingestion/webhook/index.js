@@ -14,6 +14,7 @@ const { Core, Events } = require("@adobe/aio-sdk");
 const { stringParameters } = require("../../../actions/utils");
 const { CloudEvent } = require("cloudevents");
 const uuid = require("uuid");
+
 const {
   HTTP_BAD_REQUEST,
   HTTP_OK,
@@ -22,11 +23,13 @@ const {
   BACKOFFICE_PROVIDER_KEY,
   PUBLISH_EVENT_SUCCESS,
 } = require("../../../actions/constants");
+
 const { getAdobeAccessToken } = require("../../../utils/adobe-auth");
 const { getProviderByKey } = require("../../../utils/adobe-events-api");
 const { validateData } = require("./validator");
 const { checkAuthentication } = require("./auth");
 const { errorResponse, successResponse } = require("../../responses");
+
 const {
   CommerceSdkValidationError,
 } = require("@adobe/aio-commerce-lib-core/error");
@@ -35,7 +38,7 @@ const {
  * This web action allow external back-office application publish event to IO event using custom authentication mechanism.
  *
  * @param {object} params - method params includes environment and request data
- * @returns {object} - response with success status and result
+ * @returns response with success status and result
  */
 async function main(params) {
   const logger = Core.Logger("ingestion-webhook", {
@@ -45,7 +48,7 @@ async function main(params) {
     logger.info("Start processing request");
     logger.debug(`Webhook main params: ${stringParameters(params)}`);
 
-    const authentication = await checkAuthentication(params);
+    const authentication = checkAuthentication(params);
     if (!authentication.success) {
       logger.error(
         `Authentication failed with error: ${authentication.message}`,
@@ -90,7 +93,7 @@ async function main(params) {
     const eventType = params.data.event;
     logger.info(`Process event data ${eventType}`);
     const cloudEvent = new CloudEvent({
-      source: "urn:uuid:" + provider.id,
+      source: `urn:uuid:${provider.id}`,
       type: eventType,
       datacontenttype: "application/json",
       data: params.data.value,

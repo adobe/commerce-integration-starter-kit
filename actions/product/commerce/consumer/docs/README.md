@@ -117,7 +117,7 @@ Define two functions:
  * This function generates a function to genereate fingerprint for the data to be
  * used in infinite loop detection based on params.
  * @param {object} params Data received from the event
- * @returns {Function} the function that generates the fingerprint
+ * @returns the function that generates the fingerprint
  */
 function fnFingerprint(params) {
   return () => {
@@ -132,7 +132,7 @@ function fnFingerprint(params) {
  * This function generates a function to create a key for the infinite loop
  * detection based on params.
  * @param {object} params Data received from the event
- * @returns {Function} the function that generates the keu
+ * @returns the function that generates the keu
  */
 function fnInfiniteLoopKey(params) {
   return () => {

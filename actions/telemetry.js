@@ -22,7 +22,7 @@ const telemetryConfig = defineTelemetryConfig((params, isDev) => {
 /**
  * Helper function used within the Starter Kit to determine if an instrumented action is successful.
  * @param {unknown} result - The result of the instrumented action.
- * @returns {boolean} - True if the action is successful, false otherwise.
+ * @returns - True if the action is successful, false otherwise.
  */
 function isOperationSuccessful(result) {
   if (

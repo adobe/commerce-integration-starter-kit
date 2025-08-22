@@ -16,7 +16,7 @@ governing permissions and limitations under the License.
  * @param {object} params - include the env params
  * @param {object} data - Customer data
  * @param {object} preProcessed - result of the pre-process logic if any
- * @returns {object} returns the sending result if needed for post process
+ * @returns the sending result if needed for post process
  * @throws {Error} - throws exception in case the process fail.
  */
 function sendData(params, data, preProcessed) {

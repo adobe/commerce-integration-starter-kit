@@ -28,7 +28,7 @@ const { errorResponse, successResponse } = require("../../../responses");
 /**
  * This is the consumer of the events coming from External back-office applications related to Customer entity.
  *
- * @returns {object} returns response object with status code, request data received and response of the invoked action
+ * @returns response object with status code, request data received and response of the invoked action
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main(params) {

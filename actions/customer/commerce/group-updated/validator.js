@@ -16,7 +16,7 @@ const { checkMissingRequestInputs } = require("../../../utils");
  * This function validate the customer group data received
  *
  * @param {object} data - Received data from adobe commerce
- * @returns {object} - returns the result of validation object
+ * @returns the result of validation object
  */
 function validateData(data) {
   const requiredParams = ["customer_group_code"];

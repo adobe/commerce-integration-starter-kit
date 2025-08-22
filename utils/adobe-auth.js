@@ -14,6 +14,7 @@ const {
   assertImsAuthParams,
   getImsAuthProvider,
 } = require("@adobe/aio-commerce-lib-auth");
+
 const DEFAULT_IMS_SCOPES = [
   "AdobeID",
   "openid",
@@ -29,7 +30,7 @@ const DEFAULT_IMS_SCOPES = [
 /**
  * Resolve IMS configuration from environment parameters
  * @param {object} params - Environment parameters containing ImsAuth configuration
- * @returns {object} IMS authentication configuration object
+ * @returns IMS authentication configuration object
  */
 function resolveImsConfig(params) {
   return {
@@ -48,9 +49,9 @@ function resolveImsConfig(params) {
 /**
  * Generate access token to connect with Adobe tools (e.g. IO Events)
  * @param {object} params includes env parameters
- * @returns {Promise<string>} returns the access token
+ * @returns the access token
  */
-async function getAdobeAccessToken(params) {
+function getAdobeAccessToken(params) {
   const config = resolveImsConfig(params);
 
   assertImsAuthParams(config);
@@ -62,9 +63,9 @@ async function getAdobeAccessToken(params) {
 /**
  * Get the access token headers for Adobe tools (e.g. IO Events)
  * @param {object} params - IMS authentication parameters
- * @returns {Promise<object>} returns the headers with access token
+ * @returns the headers with access token
  */
-async function getAdobeAccessHeaders(params) {
+function getAdobeAccessHeaders(params) {
   const config = resolveImsConfig(params);
   assertImsAuthParams(config);
   const imsAuthProvider = getImsAuthProvider(config);

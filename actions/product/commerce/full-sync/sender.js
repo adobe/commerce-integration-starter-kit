@@ -16,9 +16,9 @@ governing permissions and limitations under the License.
  * @param {object} params - include the env params
  * @param {object} data - Product data
  * @param {object} preProcessed - result of the pre-process logic if any
- * @returns {object} returns the sending result if needed for post process
+ * @returns the sending result if needed for post process
  */
-async function sendData(params, data, preProcessed) {
+function sendData(params, data, preProcessed) {
   // @TODO Here add the logic to send the information to 3rd party
   // @TODO Use params to retrieve need parameters from the environment
   // @TODO in case of error return { success: false, statusCode: <error status code>, message: '<error message>' }

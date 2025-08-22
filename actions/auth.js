@@ -16,7 +16,7 @@ const logger = Core.Logger("auth", { level: "info" });
  *
  * @param {object} params - Environment params from the IO Runtime request
  * @param {Array} expected - expected keys inside the params
- * @returns {Array} - returns the missing params
+ * @returns the missing params
  */
 function checkIfMissing(params, expected) {
   return expected
@@ -49,7 +49,7 @@ function validateParams(params, expected) {
 /**
  * This function returns the auth object based on the params
  * @param {object} params - Environment params from the IO Runtime request
- * @returns {object} - returns the auth object for the request
+ * @returns the auth object for the request
  * @throws {Error} - throws error if the params are missing
  */
 function fromParams(params) {

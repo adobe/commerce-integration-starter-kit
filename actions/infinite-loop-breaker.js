@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const crypto = require("crypto");
+const crypto = require("node:crypto");
 const { Core } = require("@adobe/aio-sdk");
 
 /** @constant {string} FINGERPRINT_ALGORITHM - The algorithm used to generate the fingerprint */
@@ -31,7 +31,7 @@ const DEFAULT_INFINITE_LOOP_BREAKER_TTL = 60; // seconds
  * @param {string | Function} infiniteLoopData.fingerprintFn - Function to generate the fingerprint
  * @param {Array} infiniteLoopData.eventTypes - The event types to include in the infinite loop check
  * @param {string} infiniteLoopData.event - The event to check for potential infinite loops
- * @returns {boolean} - Returns true if the event is a potential infinite loop
+ * @returns true if the event is a potential infinite loop
  */
 async function isAPotentialInfiniteLoop(
   state,
@@ -91,7 +91,7 @@ async function storeFingerPrint(state, keyFn, fingerprintFn, ttl) {
  * This function generates a fingerprint for the data
  *
  * @param {object} data - The data to generate the fingerprint
- * @returns {string} - The fingerprint
+ * @returns - The fingerprint
  */
 function fingerPrint(data) {
   const hash = crypto.createHash(FINGERPRINT_ALGORITHM);

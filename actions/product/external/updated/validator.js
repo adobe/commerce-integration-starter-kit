@@ -15,7 +15,7 @@ const Ajv = require("ajv");
 /**
  * This function validate the product data received from external back-office application
  *
- * @returns {object} - returns the result of validation object
+ * @returns the result of validation object
  * @param {object} params - Received data from adobe commerce
  */
 function validateData(params) {

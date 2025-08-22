@@ -19,7 +19,7 @@ const logger = Core.Logger("commerce-customer-group-api-client", {
 /**
  * This function call Adobe commerce rest API to create a customer group
  *
- * @returns {object} - API response object
+ * @returns - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
@@ -41,7 +41,7 @@ async function createCustomerGroup(baseUrl, params, data) {
 /**
  * This function call Adobe commerce rest API to update a customer group
  *
- * @returns {object} - API response object
+ * @returns - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
@@ -65,7 +65,7 @@ async function updateCustomerGroup(baseUrl, params, data) {
 /**
  * This function call Adobe commerce rest API to delete a customer group
  *
- * @returns {object} - API response object
+ * @returns - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {number} id - Id

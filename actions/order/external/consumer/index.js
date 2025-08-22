@@ -15,18 +15,20 @@ const {
   stringParameters,
   checkMissingRequestInputs,
 } = require("../../../utils");
+
 const {
   HTTP_INTERNAL_ERROR,
   HTTP_BAD_REQUEST,
   HTTP_OK,
 } = require("../../../constants");
+
 const Openwhisk = require("../../../openwhisk");
 const { errorResponse, successResponse } = require("../../../responses");
 
 /**
  * This is the consumer of the events coming from External back-office applications related to order status entity.
  *
- * @returns {object} returns response object with status code, request data received and response of the invoked action
+ * @returns response object with status code, request data received and response of the invoked action
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main(params) {
