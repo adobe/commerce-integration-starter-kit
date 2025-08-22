@@ -244,7 +244,7 @@ async function main(clientRegistrations, providers, environment, authHeaders) {
       const { existingMetadata } = existingMetadataResult;
 
       for (const [entityName, options] of Object.entries(clientRegistrations)) {
-        if (options !== undefined && options.includes(provider.key)) {
+        if (options?.includes(provider.key)) {
           if (providersEventsConfig[entityName]) {
             for (const [event, eventProps] of Object.entries(
               providersEventsConfig[entityName][provider.key],

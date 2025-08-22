@@ -48,13 +48,12 @@ function logOnboardingError(phase, errorInfo) {
     registrations: "REGISTRATIONS_ONBOARDING",
   };
 
+  const payloadError = payload ? formatError(payload) : "No additional details";
   const additionalDetails =
     CommerceSdkValidationError.isSdkError(payload) &&
     typeof payload?.display === "function"
       ? `\n${payload.display()}`
-      : payload
-        ? formatError(payload)
-        : "No additional details";
+      : payloadError;
 
   console.error(
     ansis.red("\nAn error occurred:\n"),

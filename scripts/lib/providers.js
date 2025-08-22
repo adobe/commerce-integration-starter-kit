@@ -14,8 +14,8 @@ require("dotenv").config();
 
 const fetch = require("node-fetch");
 const uuid = require("uuid");
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 const envPath = path.resolve(__dirname, "../../.env");
 
 const { makeError } = require("./helpers/errors");
@@ -25,6 +25,10 @@ const { addSuffix } = require("../../utils/naming");
 const { arrayItemsErrorFormat } = require("./helpers/errors");
 
 const providersEventsConfig = require("../onboarding/config/events.json");
+
+// Regex patterns defined at top level for performance
+const CRLF_PATTERN = /\r\n/g;
+const TRAILING_WHITESPACE_PATTERN = /\s+$/;
 
 /**
  * Creates an events provider via the I/O Management API
@@ -105,9 +109,11 @@ function hasSelection(selection, clientRegistrations) {
 function writeToEnvFile(providers) {
   // Read the existing .env content
   let envContent = fs.readFileSync(envPath, "utf8");
-  envContent = envContent.replace(/\r\n/g, "\n").replace(/\s+$/, "");
+  envContent = envContent
+    .replace(CRLF_PATTERN, "\n")
+    .replace(TRAILING_WHITESPACE_PATTERN, "");
 
-  providers.forEach((provider) => {
+  for (const provider of providers) {
     const providerType = provider.key.toUpperCase();
     const providerIdEnv = `${providerType}_PROVIDER_ID=${provider.id}`;
     const providerIdEnvRegex = new RegExp(
@@ -123,9 +129,10 @@ function writeToEnvFile(providers) {
     } else {
       envContent += `\n${providerIdEnv}`;
     }
-  });
+  }
+
   // Write back to the .env file
-  fs.writeFileSync(envPath, envContent.trim() + "\n", "utf8");
+  fs.writeFileSync(envPath, `${envContent.trim()}\n`, "utf8");
   console.log("Successfully updated .env file with provider id's");
 }
 
