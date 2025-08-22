@@ -33,6 +33,7 @@ const { errorResponse, successResponse } = require("../../responses");
 const {
   CommerceSdkValidationError,
 } = require("@adobe/aio-commerce-lib-core/error");
+const config = require("../../../extensibility.config.js");
 
 /**
  * This web action allow external back-office application publish event to IO event using custom authentication mechanism.
@@ -72,6 +73,7 @@ async function main(params) {
 
     logger.debug("Get existing registrations");
     const provider = await getProviderByKey(
+      config.eventing.providers,
       params,
       authHeaders,
       BACKOFFICE_PROVIDER_KEY,

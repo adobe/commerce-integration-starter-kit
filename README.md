@@ -186,33 +186,49 @@ application:
     #  ...
 ```
 
-### Deploy
-
-Run the following command to deploy the project; this will deploy the runtime actions needed for the onboarding step:
-
-```bash
-aio app deploy
-```
-
-You can confirm the success of the deployment in the Adobe Developer Console by navigating to the `Runtime` section on your workspace:
-![Alt text](docs/console-user-defined-actions.png "Workspace runtimes packages")
-
-### Onboarding
-
 #### Configure the event registrations
 
-By default, the registrations' config file creates all the registrations for all entities. You can edit the `./scripts/onboarding/custom/starter-kit-registrations.json` file if you don't need a registration.
-If you don't want to receive events from commerce, remove `commerce` from the entity array; for backoffice updates, remove `backoffice`.
-e.g., In the previous onboarding step (`Configure the project`), we commented on the product-backoffice package. In this case, we have to remove `backoffice` from the `product` entity:
+In previous iterations event registrations was configured in the `onboarding/config/starter-kit-registrations.json` file. In the latest version these configurations have been moved to the `app.config.yaml` file under the path `.application.events.registrations` and are deployed with the `aio app deploy` command or can be force deployed with `aio app deploy --force-events`.
 
-```json
-{
-  "product": ["commerce"],
-  "customer": ["commerce", "backoffice"],
-  "order": ["commerce", "backoffice"],
-  "stock": ["commerce", "backoffice"]
-}
+##### Configuring for Backoffice event registrations
+
+For example, if you want to add a new event registration to consume product events from a 3rd party system, you can add the following configuration:
+
+```yaml
+application:
+  # other configurations
+  events:
+  registrations:
+    3rd party product consumer:
+      description: Consumes product events from 3rd party systems
+      runtime_action: product-backoffice/consumer
+      events_of_interest:
+        - provider_metadata: 3rd_party_custom_events
+          event_codes:
+            - be-observer.catalog_product_create
 ```
+
+##### Configuring for Commerce event registrations
+
+For example, if you want to add a new event registration that consumed events from commerce, you can add the following configuration:
+
+> [!NOTE]
+> `<EVENT_PREFIX>` should be replaced with the actual EVENT_PREFIX set in your `.env` file.
+
+```yaml
+application:
+  # other configurations
+  events:
+  registrations:
+    Commerce customer events consumer:
+    description: Consumes customer events from Adobe Commerce
+    events_of_interest:
+      - provider_metadata: dx_commerce_events
+        event_codes:
+          - com.adobe.commerce.<EVENT_PREFIX>.observer.customer_save_commit_after
+```
+
+### Onboarding
 
 #### Execute the onboarding
 
@@ -251,6 +267,18 @@ Process of On-Boarding done successfully: [
 
 Check your App developer console to confirm the creation of the registrations:
 ![Alt text](docs/console-event-registrations.png "Workspace registrations")
+
+### Deploy
+
+Run the following command to deploy the project; this will deploy the runtime actions needed for the onboarding step:
+
+```bash
+aio app deploy
+aio app deploy --force-deploy --force-events # force redeploy and recreate event registrations
+```
+
+You can confirm the success of the deployment in the Adobe Developer Console by navigating to the `Runtime` section on your workspace:
+![Alt text](docs/console-user-defined-actions.png "Workspace runtimes packages")
 
 ### Complete the Adobe Commerce eventing configuration
 
@@ -317,6 +345,7 @@ The following code snapshot in the `app.config.yaml` file shows how to define a 
 ```yaml
 application:
   hooks:
+    pre-app-deploy: ./hooks/pre-app-deploy.js
     post-app-deploy: ./hooks/post-app-deploy.js
 ```
 
@@ -733,19 +762,23 @@ You can find more details about unit testing and an example in [Lesson 3: Testin
 
 The starter kit comes with predefined events for each entity. Sometimes, you may need to add a new event to an entity, e.g., a customer. To do this, follow the next steps:
 
-- Add the event to the `./onboarding/config/events.json` file under the related entity flow; for example, if the event is related to a customer and is coming from commerce, you should add it under entity customer -> commerce. e.g.,
-  ```json
-      "customer": {
-        "commerce": [
-          "com.adobe.commerce.observer.customer_save_commit_after",
-          "com.adobe.commerce.observer.customer_delete_commit_after",
-          "com.adobe.commerce.observer.customer_group_save_commit_after",
-          "com.adobe.commerce.observer.customer_group_delete_commit_after",
-          "com.adobe.commerce.THE_NEW_CUSTOMER_EVENT"
-        ],
-      ...
-      }
-  ```
+Add the event to the `extensibility.config.js` file at path `.eventing.subscriptions` under the related provider. See [Configure the event registrations](#configure-the-event-registrations) for more details about the configuration structure. For example, if the event is related to a product and is coming from commerce, you should add it under the commerce provider subscription. e.g.,
+
+```js
+{
+  subscriptions: [
+    {
+      providerKey: "commerce",
+      events: {
+        "com.adobe.commerce.observer.catalog_product_delete_commit_after": {
+          /* ... */
+        },
+      },
+    },
+  ];
+}
+```
+
 - Run the onboarding script:
   ```bash
   npm run onboard
@@ -778,7 +811,7 @@ The starter kit comes with predefined events for each entity. Sometimes, you may
 With these steps, you can consume the new event you added to the project.
 If you want to change an existing event, make the changes in the same places:
 
-- Edit the event in the `./onboarding/config/events.json` file
+- Edit the event in the `./scripts/onboarding/extensibility.config.js`file at the path `.eventing.subscriptions`
 - Modify the event in the consumer of the flow where the event belongs
 - Make changes to the operation action invoked by the consumer switch case.
 - Deploy your changes

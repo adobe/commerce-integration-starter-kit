@@ -25,7 +25,9 @@ const { HTTP_OK, HTTP_INTERNAL_ERROR } = require("../constants");
  */
 function main(params) {
   const version = require("../../package.json").version;
-  const registrations = require("../../scripts/onboarding/config/starter-kit-registrations.json");
+  const {
+    app: { registrations },
+  } = require("../../extensibility.config.js");
 
   // create a Logger
   const logger = Core.Logger("starter-kit-info", {

@@ -24,12 +24,12 @@ describe("onboarding index", () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
-    jest.clearAllMocks();
     jest.resetModules();
   });
 
   afterEach(() => {
     process.env = originalEnv;
+    jest.clearAllMocks();
   });
 
   test("should print an error when COMMERCE_BASE_URL, IO_PROJECT_ID, IO_CONSUMER_ID and IO_WORKSPACE_ID and EVENT_PREFIX are missing", async () => {
@@ -228,13 +228,6 @@ describe("onboarding index", () => {
       }),
     }));
 
-    jest.doMock("../../../scripts/lib/registrations", () => ({
-      main: jest.fn().mockResolvedValue({
-        success: true,
-        registrations: ["product", "customer", "order", "stock"],
-      }),
-    }));
-
     jest.doMock("../../../scripts/lib/configure-eventing", () => ({
       main: jest.fn().mockResolvedValue({
         success: true,
@@ -246,17 +239,6 @@ describe("onboarding index", () => {
       () => ({
         id: "test-workspace-id",
         name: "test-workspace",
-      }),
-      { virtual: true },
-    );
-
-    jest.doMock(
-      "../../../scripts/onboarding/config/starter-kit-registrations.json",
-      () => ({
-        product: ["commerce", "backoffice"],
-        customer: ["commerce"],
-        order: ["commerce"],
-        stock: ["commerce"],
       }),
       { virtual: true },
     );
@@ -282,6 +264,7 @@ describe("onboarding index", () => {
     const {
       main: onboardingMain,
     } = require("../../../scripts/onboarding/index");
+
     const result = await onboardingMain();
 
     // Verify the success flow
@@ -300,13 +283,6 @@ describe("onboarding index", () => {
         label: "Backoffice Provider - test",
       },
     ]);
-    expect(result.registrations).toEqual([
-      "product",
-      "customer",
-      "order",
-      "stock",
-    ]);
-
     // Verify console logs for success messages
     expect(consoleLogSpy).toHaveBeenCalledWith(
       "Starting the process of on-boarding based on your registration choices",
@@ -324,16 +300,5 @@ describe("onboarding index", () => {
 
     // Verify no errors were logged
     expect(consoleErrorSpy).not.toHaveBeenCalled();
-
-    // Clean up mocks
-    jest.dontMock("../../../utils/adobe-auth");
-    jest.dontMock("../../../scripts/lib/providers");
-    jest.dontMock("../../../scripts/lib/metadata");
-    jest.dontMock("../../../scripts/lib/registrations");
-    jest.dontMock("../../../scripts/lib/configure-eventing");
-    jest.dontMock("../../../scripts/onboarding/config/workspace.json");
-    jest.dontMock(
-      "../../../scripts/onboarding/config/starter-kit-registrations.json",
-    );
   });
 });

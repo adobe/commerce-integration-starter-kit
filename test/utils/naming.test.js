@@ -11,8 +11,6 @@ governing permissions and limitations under the License.
 */
 
 const naming = require("../../utils/naming.js");
-const providers = require("../../scripts/onboarding/config/providers.json");
-const events = require("../../scripts/onboarding/config/events.json");
 
 describe("Given naming file", () => {
   describe("When method addSufix is called with label parameter undefined", () => {
@@ -54,20 +52,5 @@ describe("Given naming file", () => {
         "Label - testProject-testWorkspace",
       );
     });
-  });
-  describe("When getRegistrationName is called", () => {
-    const cases = Object.keys(events).flatMap((entityName) =>
-      providers.map(({ key: providerKey }) => ({ providerKey, entityName })),
-    );
-
-    test.each(cases)(
-      "naming.getRegistrationName($providerKey, $entityName) returns strings with 25 or less chars",
-      ({ providerKey, entityName }) => {
-        const MAX_LENGTH = 25;
-        const result = naming.getRegistrationName(providerKey, entityName);
-
-        expect(result.length).toBeLessThanOrEqual(MAX_LENGTH);
-      },
-    );
   });
 });

@@ -17,6 +17,8 @@ const {
   CommerceSdkValidationError,
 } = require("@adobe/aio-commerce-lib-core/error");
 const v = require("valibot");
+const config = require("../../extensibility.config.js");
+const { upsertEnvFile } = require("../../utils/upsert-env");
 
 require("dotenv").config();
 
@@ -115,7 +117,6 @@ async function main() {
     "Starting the process of on-boarding based on your registration choices",
   );
 
-  const registrations = require("./config/starter-kit-registrations.json");
   let authHeaders;
 
   try {
@@ -147,7 +148,7 @@ async function main() {
   }
 
   const createProvidersResult = await require("../lib/providers").main(
-    registrations,
+    config,
     process.env,
     authHeaders,
   );
@@ -159,7 +160,7 @@ async function main() {
 
   const providers = createProvidersResult.result;
   const createProvidersMetadataResult = await require("../lib/metadata").main(
-    registrations,
+    config,
     providers,
     process.env,
     authHeaders,
@@ -170,21 +171,18 @@ async function main() {
     return;
   }
 
-  const registerEntityEventsResult = await require("../lib/registrations").main(
-    registrations,
-    providers,
-    process.env,
-    authHeaders,
-  );
-  if (!registerEntityEventsResult.success) {
-    logOnboardingError("registrations", registerEntityEventsResult.error);
-    return;
-  }
-
   console.log("Onboarding completed successfully:", providers);
   console.log(
     "Starting the process of configuring Adobe I/O Events module in Commerce...",
   );
+
+  upsertEnvFile(".env", {
+    COMMERCE_PROVIDER_ID: providers.find((p) => p.key === "commerce").id,
+    BACKOFFICE_PROVIDER_ID: providers.find((p) => p.key === "backoffice").id,
+    AIO_EVENTS_PROVIDERMETADATA_TO_PROVIDER_MAPPING: providers
+      .map((p) => `${p.providerMetadata}:${p.id}`)
+      .join(","),
+  });
 
   try {
     // eslint-disable-next-line node/no-missing-require,node/no-unpublished-require
@@ -194,6 +192,7 @@ async function main() {
     );
     const configureEventingResult =
       await require("../lib/configure-eventing").main(
+        providers,
         commerceProvider.id,
         commerceProvider.instanceId,
         workspaceConfiguration,
@@ -235,7 +234,6 @@ async function main() {
   );
   return {
     providers,
-    registrations: registerEntityEventsResult.registrations,
   };
 }
 

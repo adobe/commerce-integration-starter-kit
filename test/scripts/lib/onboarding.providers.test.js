@@ -11,39 +11,54 @@ governing permissions and limitations under the License.
 */
 
 jest.mock("node-fetch");
-jest.mock("node:path", () => {
-  const originalPath = jest.requireActual("node:path");
-  return {
-    ...originalPath,
-    resolve: jest.fn((...args) => {
-      if (args.includes("../../.env")) {
-        return originalPath.resolve(
-          __dirname,
-          "../../data/onboarding/.env_test",
-        );
-      }
-      return originalPath.resolve(...args);
-    }),
-  };
-});
+
+const {
+  SampleEventTemplate,
+} = require("../../../utils/sample-event-template.js");
 
 const fetch = require("node-fetch");
-const fs = require("node:fs");
-const path = require("node:path");
 const action = require("../../../scripts/lib/providers.js");
-const ACCESS_TOKEN = "token";
+
+const DEFAULT_AUTH_HEADERS = {
+  Authorization: "Bearer ezySOME_TOKEN",
+  "x-api-key": "CLIENT_ID",
+};
 const RUNTIME_NAMESPACE = "1340225-testOrg-testWorkspace";
 const PROVIDER_SUFFIX = "testOrg-testWorkspace";
 const ENVIRONMENT = { AIO_runtime_namespace: RUNTIME_NAMESPACE };
-const TEST_ENV_PATH = path.resolve(
-  __dirname,
-  "../../data/onboarding/.env_test",
-);
+
+const DEFAULT_PROVIDERS = [
+  {
+    key: "commerce",
+    label: "Commerce Provider",
+    description: "Commerce Provider that will receive events from commerce",
+    docs_url: null,
+  },
+  {
+    key: "backoffice",
+    label: "Backoffice Provider",
+    description: "Backoffice Provider that will receive events from commerce",
+    docs_url: null,
+  },
+];
+
+const DEFAULT_SUBSCRIPTIONS = [
+  {
+    providerKey: "commerce",
+    events: {
+      "com.adobe.commerce.observer.catalog_product_delete_commit_after": {
+        sampleEventTemplate: new SampleEventTemplate(
+          "com.adobe.commerce.observer.catalog_product_delete_commit_after",
+          {},
+        ),
+      },
+    },
+  },
+];
 
 beforeEach(() => {
   jest.resetModules();
   // Reset path.resolve mock calls
-  path.resolve.mockClear();
 });
 
 afterEach(() => {
@@ -189,6 +204,7 @@ describe("Given On-boarding providers file", () => {
             docs_url: "string",
             instance_id: "AC_INSTANCE_ID",
             publisher: "string",
+            provider_metadata: "dx_commerce_events",
             _embedded: {
               eventmetadata: [
                 {
@@ -288,6 +304,7 @@ describe("Given On-boarding providers file", () => {
             docs_url: "string",
             instance_id: "BO_INSTANCE_ID",
             publisher: "string",
+            provider_metadata: "3rd_party_custom_events",
             _embedded: {
               eventmetadata: [
                 {
@@ -382,11 +399,16 @@ describe("Given On-boarding providers file", () => {
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse);
 
-      const clientRegistrations = require("../../data/onboarding/providers/create_commerce_and_backoffice_providers.json");
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: {},
+          eventing: {
+            providers: DEFAULT_PROVIDERS,
+            subscriptions: DEFAULT_SUBSCRIPTIONS,
+          },
+        },
         ENVIRONMENT,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
 
       expect(response).toEqual({
@@ -397,12 +419,14 @@ describe("Given On-boarding providers file", () => {
             id: commerceProviderId,
             instanceId: "AC_INSTANCE_ID",
             label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "dx_commerce_events",
           },
           {
             key: "backoffice",
             id: backofficeProviderId,
             instanceId: "BO_INSTANCE_ID",
             label: `Backoffice Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "3rd_party_custom_events",
           },
         ],
       });
@@ -411,6 +435,7 @@ describe("Given On-boarding providers file", () => {
   describe("When commerce provider configured", () => {
     test("Then returns success response", async () => {
       const commerceProviderId = "COMMERCE_PROVIDER_ID";
+      const backofficeProviderId = "BACKOFFICE_PROVIDER_ID";
 
       const mockFetchGetExistingProvidersResponse = {
         ok: true,
@@ -419,12 +444,14 @@ describe("Given On-boarding providers file", () => {
             _embedded: {
               providers: [
                 {
-                  id: "string",
-                  label: "string",
+                  id: backofficeProviderId,
+                  label: `Backoffice Provider - ${PROVIDER_SUFFIX}`,
                   description: "string",
                   source: "string",
                   docs_url: "string",
                   publisher: "string",
+                  instance_id: "BO_INSTANCE_ID",
+                  provider_metadata: "3rd_party_custom_events",
                   _embedded: {
                     eventmetadata: [
                       {
@@ -540,6 +567,7 @@ describe("Given On-boarding providers file", () => {
             docs_url: "string",
             instance_id: "AC_INSTANCE_ID",
             publisher: "string",
+            provider_metadata: "dx_commerce_events",
             _embedded: {
               eventmetadata: [
                 {
@@ -632,11 +660,16 @@ describe("Given On-boarding providers file", () => {
         .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse);
 
-      const clientRegistrations = require("../../data/onboarding/providers/create_commerce_provider_only.json");
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: {},
+          eventing: {
+            providers: DEFAULT_PROVIDERS,
+            subscriptions: DEFAULT_SUBSCRIPTIONS,
+          },
+        },
         ENVIRONMENT,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
 
       expect(response).toEqual({
@@ -647,6 +680,14 @@ describe("Given On-boarding providers file", () => {
             id: commerceProviderId,
             instanceId: "AC_INSTANCE_ID",
             label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "dx_commerce_events",
+          },
+          {
+            key: "backoffice",
+            id: backofficeProviderId,
+            instanceId: "BO_INSTANCE_ID",
+            label: `Backoffice Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "3rd_party_custom_events",
           },
         ],
       });
@@ -655,6 +696,7 @@ describe("Given On-boarding providers file", () => {
   describe("When backoffice provider configured", () => {
     test("Then returns success response", async () => {
       const backofficeProviderId = "BACKOFFICE_PROVIDER_ID";
+      const commerceProviderId = "COMMERCE_PROVIDER_ID";
 
       const mockFetchGetExistingProvidersResponse = {
         ok: true,
@@ -663,12 +705,14 @@ describe("Given On-boarding providers file", () => {
             _embedded: {
               providers: [
                 {
-                  id: "string",
-                  label: "string",
+                  id: commerceProviderId,
+                  label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
                   description: "string",
                   source: "string",
                   docs_url: "string",
                   publisher: "string",
+                  instance_id: "AC_INSTANCE_ID",
+                  provider_metadata: "dx_commerce_events",
                   _embedded: {
                     eventmetadata: [
                       {
@@ -784,6 +828,7 @@ describe("Given On-boarding providers file", () => {
             docs_url: "string",
             instance_id: "BO_INSTANCE_ID",
             publisher: "string",
+            provider_metadata: "3rd_party_custom_events",
             _embedded: {
               eventmetadata: [
                 {
@@ -876,21 +921,33 @@ describe("Given On-boarding providers file", () => {
         .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse);
 
-      const clientRegistrations = require("../../data/onboarding/providers/create_backoffice_provider_only.json");
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: {},
+          eventing: {
+            providers: DEFAULT_PROVIDERS,
+            subscriptions: DEFAULT_SUBSCRIPTIONS,
+          },
+        },
         ENVIRONMENT,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
-
       expect(response).toEqual({
         success: true,
         result: [
+          {
+            key: "commerce",
+            id: commerceProviderId,
+            instanceId: "AC_INSTANCE_ID",
+            label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "dx_commerce_events",
+          },
           {
             key: "backoffice",
             id: backofficeProviderId,
             instanceId: "BO_INSTANCE_ID",
             label: `Backoffice Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "3rd_party_custom_events",
           },
         ],
       });
@@ -915,6 +972,7 @@ describe("Given On-boarding providers file", () => {
                   docs_url: "string",
                   instance_id: "AC_INSTANCE_ID",
                   publisher: "string",
+                  provider_metadata: "dx_commerce_events",
                   _embedded: {
                     eventmetadata: [
                       {
@@ -1030,6 +1088,7 @@ describe("Given On-boarding providers file", () => {
             docs_url: "string",
             instance_id: "BO_INSTANCE_ID",
             publisher: "string",
+            provider_metadata: "3rd_party_custom_events",
             _embedded: {
               eventmetadata: [
                 {
@@ -1122,11 +1181,16 @@ describe("Given On-boarding providers file", () => {
         .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse);
 
-      const clientRegistrations = require("../../data/onboarding/providers/create_commerce_and_backoffice_providers.json");
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: {},
+          eventing: {
+            providers: DEFAULT_PROVIDERS,
+            subscriptions: DEFAULT_SUBSCRIPTIONS,
+          },
+        },
         ENVIRONMENT,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
 
       expect(response).toEqual({
@@ -1137,12 +1201,14 @@ describe("Given On-boarding providers file", () => {
             id: commerceProviderId,
             instanceId: "AC_INSTANCE_ID",
             label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "dx_commerce_events",
           },
           {
             key: "backoffice",
             id: backofficeProviderId,
             instanceId: "BO_INSTANCE_ID",
             label: `Backoffice Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "3rd_party_custom_events",
           },
         ],
       });
@@ -1152,8 +1218,17 @@ describe("Given On-boarding providers file", () => {
     test("Then returns error response", async () => {
       const fakeError = new Error("fake");
       fetch.mockRejectedValue(fakeError);
-      const clientRegistrations = require("../../data/onboarding/providers/create_commerce_and_backoffice_providers.json");
-      const response = await action.main(clientRegistrations, ACCESS_TOKEN);
+      const response = await action.main(
+        {
+          app: {},
+          eventing: {
+            providers: DEFAULT_PROVIDERS,
+            subscriptions: DEFAULT_SUBSCRIPTIONS,
+          },
+        },
+        ENVIRONMENT,
+        DEFAULT_AUTH_HEADERS,
+      );
       expect(response).toEqual({
         success: false,
         error: {
@@ -1166,28 +1241,6 @@ describe("Given On-boarding providers file", () => {
               "Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL",
               "Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?",
             ],
-          },
-        },
-      });
-    });
-  });
-  describe("When configuration is invalid", () => {
-    test("Then returns error response", async () => {
-      const invalidClientRegistrations = require("../../data/onboarding/providers/missing_entities_client_registration.json");
-
-      const response = await action.main(
-        invalidClientRegistrations,
-        ACCESS_TOKEN,
-      );
-      expect(response).toEqual({
-        success: false,
-        error: {
-          label: "MISSING_REGISTRATIONS",
-          reason:
-            '└── Registration "customer" is required\n\nCheck that they are present in "/onboarding/config/starter-kit-registrations.json"',
-          payload: {
-            missingRegistrations: ["customer"],
-            requiredRegistrations: ["product", "customer", "order", "stock"],
           },
         },
       });
@@ -1325,7 +1378,6 @@ describe("Given On-boarding providers file", () => {
         .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse);
 
-      const clientRegistrations = require("../../data/onboarding/providers/create_commerce_and_backoffice_providers.json");
       const environment = {
         ...ENVIRONMENT,
         IO_MANAGEMENT_BASE_URL: "https://io-management.fake/",
@@ -1335,10 +1387,17 @@ describe("Given On-boarding providers file", () => {
       };
 
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: {},
+          eventing: {
+            providers: DEFAULT_PROVIDERS,
+            subscriptions: DEFAULT_SUBSCRIPTIONS,
+          },
+        },
         environment,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
+
       expect(response).toEqual({
         success: false,
         error: {
@@ -1354,63 +1413,6 @@ describe("Given On-boarding providers file", () => {
           },
         },
       });
-    });
-  });
-  describe("When writing provider IDs to env file", () => {
-    test("Then writes provider IDs correctly", async () => {
-      fs.writeFileSync(TEST_ENV_PATH, "", "utf8");
-
-      const commerceProviderId = "COMMERCE_PROVIDER_ID";
-      const mockFetchGetExistingProvidersResponse = {
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            _embedded: { providers: [] },
-          }),
-      };
-      const mockFetchCreateCommerceProviderResponse = {
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            id: commerceProviderId,
-            label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
-            instance_id: "AC_INSTANCE_ID",
-          }),
-      };
-
-      fetch
-        .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
-        .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse);
-
-      const clientRegistrations = {
-        product: ["commerce"],
-        customer: ["commerce"],
-        order: ["commerce"],
-        stock: ["commerce"],
-      };
-
-      const response = await action.main(
-        clientRegistrations,
-        ENVIRONMENT,
-        ACCESS_TOKEN,
-      );
-
-      expect(response).toEqual({
-        success: true,
-        result: [
-          {
-            key: "commerce",
-            id: commerceProviderId,
-            instanceId: "AC_INSTANCE_ID",
-            label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
-          },
-        ],
-      });
-
-      const envContent = fs.readFileSync(TEST_ENV_PATH, "utf8");
-      expect(envContent.trim()).toBe(
-        "COMMERCE_PROVIDER_ID=COMMERCE_PROVIDER_ID",
-      );
     });
   });
 });

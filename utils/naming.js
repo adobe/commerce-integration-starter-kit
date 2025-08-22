@@ -43,35 +43,14 @@ function addSuffix(labelPrefix, environment) {
 }
 
 /**
- * Capitalize the first char of a given string
- *
- * @param {string} string the text to modify
- * @returns string
- */
-function stringToUppercaseFirstChar(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-/**
- * Generate the registration name based on the provider key and entity name
- *
- * @param {string} providerKey provider key
- * @param {string} entityName entity name
- * @returns the generated registration name
- */
-function getRegistrationName(providerKey, entityName) {
-  return `${stringToUppercaseFirstChar(providerKey)} ${stringToUppercaseFirstChar(entityName)} Sync`;
-}
-
-/**
  * Generate the external backoffice provider name
  *
+ * @param {object} providersList
  * @param {object} params action parameters
- * @param {string} providerKey the provider key (could be found in onboarding/config/providers.js)
+ * @param {string} providerKey the provider key
  * @returns the provider name
  */
-function getProviderName(params, providerKey) {
-  const providersList = require("../scripts/onboarding/config/providers.json");
+function getProviderName(providersList, params, providerKey) {
   const backofficeProvider = providersList.find(
     (provider) => provider.key === providerKey,
   );
@@ -109,7 +88,6 @@ function getEventName(eventName, environment) {
 
 module.exports = {
   addSuffix,
-  getRegistrationName,
   getProviderName,
   getEventName,
 };
