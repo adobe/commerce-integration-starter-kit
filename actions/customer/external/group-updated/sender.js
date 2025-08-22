@@ -10,10 +10,10 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const { HTTP_INTERNAL_ERROR } = require("../../../constants");
 const {
   updateCustomerGroup,
 } = require("../../commerce-customer-group-api-client");
-const { HTTP_INTERNAL_ERROR } = require("../../../constants");
 
 /**
  * This function send the customer group updated data to the Adobe commerce REST API

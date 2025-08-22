@@ -25,12 +25,14 @@ function validateData(params) {
 
   const validate = ajv.compile(schema);
   const isValid = validate(data);
+
   if (!isValid) {
     return {
       success: false,
       message: `Data provided does not validate with the schema: ${JSON.stringify(data)} `,
     };
   }
+
   return {
     success: true,
   };

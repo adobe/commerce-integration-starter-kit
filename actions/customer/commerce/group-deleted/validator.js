@@ -21,6 +21,7 @@ const { checkMissingRequestInputs } = require("../../../utils");
 function validateData(data) {
   const requiredParams = ["customer_group_code"];
   const errorMessage = checkMissingRequestInputs(data, requiredParams, []);
+
   if (errorMessage) {
     return {
       success: false,

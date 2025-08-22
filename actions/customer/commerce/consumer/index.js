@@ -21,16 +21,19 @@ const {
   stringParameters,
   checkMissingRequestInputs,
 } = require("../../../utils");
+
 const {
   errorResponse,
   successResponse,
   isConsumerSuccessful,
 } = require("../../../responses");
+
 const {
   HTTP_BAD_REQUEST,
   HTTP_OK,
   HTTP_INTERNAL_ERROR,
 } = require("../../../constants");
+
 const Openwhisk = require("../../../openwhisk");
 
 /**
@@ -53,9 +56,7 @@ async function main(params) {
     logger.info("Start processing request");
     logger.debug(`Consumer main params: ${stringParameters(params)}`);
 
-    const requiredParams = ["type"];
-    const errorMessage = checkMissingRequestInputs(params, requiredParams, []);
-
+    const errorMessage = checkMissingRequestInputs(params, ["type"], []);
     if (errorMessage) {
       logger.error(`Invalid request parameters: ${errorMessage}`);
       return errorResponse(
@@ -64,29 +65,27 @@ async function main(params) {
       );
     }
 
-    logger.info("Params type: " + params.type);
+    logger.info(`Params type: ${params.type}`);
 
     switch (params.type) {
       case `com.adobe.commerce.${params.EVENT_PREFIX}.observer.customer_save_commit_after`: {
-        const requiredParams = [
-          "data.value.created_at",
-          "data.value.updated_at",
-        ];
-        const errorMessage = checkMissingRequestInputs(
+        const error = checkMissingRequestInputs(
           params,
-          requiredParams,
+          ["data.value.created_at", "data.value.updated_at"],
           [],
         );
-        if (errorMessage) {
-          logger.error(`Invalid request parameters: ${errorMessage}`);
+
+        if (error) {
+          logger.error(`Invalid request parameters: ${error}`);
           return errorResponse(
             HTTP_BAD_REQUEST,
-            `Invalid request parameters: ${errorMessage}`,
+            `Invalid request parameters: ${error}`,
           );
         }
 
         const createdAt = Date.parse(params.data.value.created_at);
         const updatedAt = Date.parse(params.data.value.updated_at);
+
         if (createdAt === updatedAt) {
           logger.info("Invoking created customer");
           const res = await openwhiskClient.invokeAction(
@@ -96,6 +95,7 @@ async function main(params) {
               __telemetryContext: contextCarrier,
             },
           );
+
           response = res?.response?.result?.body;
           statusCode = res?.response?.result?.statusCode;
         } else {
@@ -104,54 +104,64 @@ async function main(params) {
             "customer-commerce/updated",
             params.data.value,
           );
+
           response = res?.response?.result?.body;
           statusCode = res?.response?.result?.statusCode;
         }
+
         break;
       }
+
       case `com.adobe.commerce.${params.EVENT_PREFIX}.observer.customer_delete_commit_after`: {
         logger.info("Invoking delete customer");
         const res = await openwhiskClient.invokeAction(
           "customer-commerce/deleted",
           params.data.value,
         );
+
         response = res?.response?.result?.body;
         statusCode = res?.response?.result?.statusCode;
         break;
       }
+
       case `com.adobe.commerce.${params.EVENT_PREFIX}.observer.customer_group_save_commit_after`: {
         logger.info("Invoking update customer group");
         const updateRes = await openwhiskClient.invokeAction(
           "customer-commerce/group-updated",
           params.data.value,
         );
+
         response = updateRes?.response?.result?.body;
         statusCode = updateRes?.response?.result?.statusCode;
         break;
       }
+
       case `com.adobe.commerce.${params.EVENT_PREFIX}.observer.customer_group_delete_commit_after`: {
-        const requiredParams = ["data.value.customer_group_code"];
-        const errorMessage = checkMissingRequestInputs(
+        const error = checkMissingRequestInputs(
           params,
-          requiredParams,
+          ["data.value.customer_group_code"],
           [],
         );
-        if (errorMessage) {
-          logger.error(`Invalid request parameters: ${errorMessage}`);
+
+        if (error) {
+          logger.error(`Invalid request parameters: ${error}`);
           return errorResponse(
             HTTP_BAD_REQUEST,
-            `Invalid request parameters: ${errorMessage}`,
+            `Invalid request parameters: ${error}`,
           );
         }
+
         logger.info("Invoking delete customer group");
         const deleteRes = await openwhiskClient.invokeAction(
           "customer-commerce/group-deleted",
           params.data.value,
         );
+
         response = deleteRes?.response?.result?.body;
         statusCode = deleteRes?.response?.result?.statusCode;
         break;
       }
+
       default:
         logger.error(`Event type not found: ${params.type}`);
         return errorResponse(
