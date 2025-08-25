@@ -48,7 +48,7 @@
           "nursery": {
             "useMaxParams": "off"
           },
-          
+
           "suspicious": {
             // We use console to log information during the onboarding process.
             "noConsole": "off"

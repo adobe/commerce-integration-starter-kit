@@ -1,3 +1,4 @@
+const { HTTP_OK } = require("../../actions/constants");
 const { getClient } = require("../../actions/oauth1a");
 const nock = require("nock");
 
@@ -19,8 +20,8 @@ describe("getClient", () => {
     expect(client).toBeDefined();
   });
 
-  it("throw an error when authOptions are not declared", async () => {
-    return expect(async () => {
+  it("throw an error when authOptions are not declared", () => {
+    return expect(() => {
       getClient(
         {
           url: "http://localhost:9000/",
@@ -28,7 +29,7 @@ describe("getClient", () => {
         },
         console,
       );
-    }).rejects.toThrow(
+    }).toThrow(
       "Unknown auth type, supported IMS OAuth or Commerce OAuth1. Please review documented auth types",
     );
   });
@@ -56,7 +57,7 @@ describe("getClient", () => {
     })
       .matchHeader("accept", "application/json")
       .get("/V1/foo")
-      .reply(200, { success: true });
+      .reply(HTTP_OK, { success: true });
     expect(await client.get("foo", "")).toStrictEqual({
       success: true,
     });
@@ -78,7 +79,7 @@ describe("getClient", () => {
 
     const imsScope = nock("https://ims-na1.adobelogin.com", {})
       .post("/ims/token/v3")
-      .reply(200, {
+      .reply(HTTP_OK, {
         access_token: "TOKEN",
         token_type: "Bearer",
         expires_in: 86_000,
@@ -94,7 +95,7 @@ describe("getClient", () => {
     })
       .matchHeader("accept", "application/json")
       .get("/V1/foo")
-      .reply(200, { success: true });
+      .reply(HTTP_OK, { success: true });
 
     const result = await client.get("foo", "");
     expect(result).toStrictEqual({

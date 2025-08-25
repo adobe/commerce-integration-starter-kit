@@ -10,14 +10,15 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { main } = require("../../../scripts/onboarding/index");
+/** biome-ignore-all lint/suspicious/noEmptyBlockStatements: For testing purposes */
 
+const { main } = require("../../../scripts/onboarding/index");
 const ansis = require("ansis");
 
+const consoleLogSpy = jest.spyOn(console, "log").mockImplementation(() => {});
 const consoleErrorSpy = jest
   .spyOn(console, "error")
   .mockImplementation(() => {});
-const consoleLogSpy = jest.spyOn(console, "log").mockImplementation(() => {});
 
 describe("onboarding index", () => {
   const originalEnv = process.env;
@@ -275,9 +276,10 @@ describe("onboarding index", () => {
     jest.replaceProperty(process, "env", mockEnv);
     jest.resetModules();
 
-    const { main } = require("../../../scripts/onboarding/index");
-
-    const result = await main();
+    const {
+      main: onboardingMain,
+    } = require("../../../scripts/onboarding/index");
+    const result = await onboardingMain();
 
     // Verify the success flow
     expect(result).toBeDefined();

@@ -69,7 +69,8 @@ describe("Given stock external consumer", () => {
       "When type is %p, Then forwards the request to the %p action",
       async (type, action, data) => {
         const params = { type, data };
-        const invocation = (Openwhisk.prototype.invokeAction = jest.fn());
+        const invocation = jest.fn();
+        Openwhisk.prototype.invokeAction = invocation;
         await consumer.main(params);
         expect(invocation).toHaveBeenCalledWith(action, data);
       },

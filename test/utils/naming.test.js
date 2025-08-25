@@ -63,8 +63,10 @@ describe("Given naming file", () => {
     test.each(cases)(
       "naming.getRegistrationName($providerKey, $entityName) returns strings with 25 or less chars",
       ({ providerKey, entityName }) => {
+        const MAX_LENGTH = 25;
         const result = naming.getRegistrationName(providerKey, entityName);
-        expect(result.length).toBeLessThanOrEqual(25);
+
+        expect(result.length).toBeLessThanOrEqual(MAX_LENGTH);
       },
     );
   });

@@ -73,9 +73,10 @@ describe("Given order external consumer", () => {
       ],
     ])(
       "Then returns success response for %p action",
-      async (name, type, action, data) => {
+      async (_, type, action, data) => {
         const params = { type, data };
-        const invocation = (Openwhisk.prototype.invokeAction = jest.fn());
+        const invocation = jest.fn();
+        Openwhisk.prototype.invokeAction = invocation;
         await consumer.main(params);
         expect(invocation).toHaveBeenCalledWith(action, data);
       },

@@ -13,7 +13,6 @@ governing permissions and limitations under the License.
 jest.mock("node-fetch");
 const fetch = require("node-fetch");
 const action = require("../../../scripts/lib/registrations.js");
-const clientRegistrations = require("../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json");
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -861,12 +860,15 @@ describe("Given on-boarding registrations file", () => {
     test("Then returns error response", async () => {
       const fakeError = new Error("fake");
       fetch.mockRejectedValue(fakeError);
+
+      const clientRegistrations = require("../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json");
       const response = await action.main(
         clientRegistrations,
         DEFAULT_PROVIDERS,
         ENVIRONMENT,
         ACCESS_TOKEN,
       );
+
       expect(response).toEqual({
         success: false,
         error: {

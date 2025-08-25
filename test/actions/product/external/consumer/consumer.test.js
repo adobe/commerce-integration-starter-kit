@@ -11,28 +11,13 @@ governing permissions and limitations under the License.
 */
 
 jest.mock("@adobe/aio-lib-state", () => {
-  // Mock AdobeState class
   class AdobeStateMock {
-    async get() {
-      return;
-    } // or return { expiration: '', value: '' } if needed
-    async put() {
-      return "mock-key";
+    get() {
+      return Promise.resolve();
     }
-    async delete() {
-      return null;
-    }
-    async deleteAll() {
-      return { keys: 0 };
-    }
-    async any() {
-      return false;
-    }
-    async stats() {
-      return { bytesKeys: 0, bytesValues: 0, keys: 0 };
-    }
-    async *list() {
-      yield { keys: [] };
+
+    put() {
+      return Promise.resolve("mock-key");
     }
   }
   // The module exports both init and AdobeState
@@ -125,10 +110,11 @@ describe("Given product external consumer", () => {
       ],
     ])(
       "Then returns success response for %p action",
-      async (name, type, action, data) => {
+      async (_name, type, action, data) => {
         logger.debug("When product event received is valid");
         const params = { type, data };
-        const invocation = (Openwhisk.prototype.invokeAction = jest.fn());
+        const invocation = jest.fn();
+        Openwhisk.prototype.invokeAction = invocation;
         await consumer.main(params);
         expect(invocation).toHaveBeenCalledWith(action, data);
       },

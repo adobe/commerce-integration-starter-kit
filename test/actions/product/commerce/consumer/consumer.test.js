@@ -21,31 +21,15 @@ const {
 const Openwhisk = require("../../../../../actions/openwhisk");
 
 jest.mock("@adobe/aio-lib-state", () => {
-  // Mock AdobeState class
   class AdobeStateMock {
-    async get() {
-      return;
-    } // or return { expiration: '', value: '' } if needed
-    async put() {
+    get() {
+      return Promise.resolve();
+    }
+    put() {
       return "mock-key";
     }
-    async delete() {
-      return null;
-    }
-    async deleteAll() {
-      return { keys: 0 };
-    }
-    async any() {
-      return false;
-    }
-    async stats() {
-      return { bytesKeys: 0, bytesValues: 0, keys: 0 };
-    }
-    async *list() {
-      yield { keys: [] };
-    }
   }
-  // The module exports both init and AdobeState
+
   return {
     init: jest.fn().mockResolvedValue(new AdobeStateMock()),
     AdobeState: AdobeStateMock,
