@@ -13,7 +13,9 @@ governing permissions and limitations under the License.
 jest.mock("node-fetch");
 const fetch = require("node-fetch");
 const action = require("../../../scripts/lib/registrations.js");
-const clientRegistrations = require("../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json");
+const fixtures = require("./fixtures/registrations.js");
+
+const { DEFAULT_SUBSCRIPTIONS } = require("./fixtures/subscriptions.js");
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -33,7 +35,7 @@ const DEFAULT_PROVIDERS = [
   },
 ];
 
-DEFAULT_AUTH_HEADERS = {
+const DEFAULT_AUTH_HEADERS = {
   Authorization: "Bearer ezySOME_TOKEN",
   "x-api-key": "CLIENT_ID",
 };
