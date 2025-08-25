@@ -64,15 +64,16 @@
             "useMaxParams": "off"
           },
 
-          "correctness": {
-            // It's a scaffolding, functions are unimplemented (and thus parameters are unused) in purpose.
-            "noUnusedFunctionParameters": "off"
+          "suspicious": {
+            // Some placeholder functions most likely will be async (they invoke external systems), but they are unimplemented
+            // so they don't use await. This is left to warn, because implementers should be aware of this.
+            "useAwait": "warn"
           },
 
-          "suspicious": {
-            // Some placeholder functions most likely will be async (they invoke external systems)
-            // But they are unimplemented so they don't use await
-            "useAwait": "off"
+          "correctness": {
+            // It's a scaffolding, functions are unimplemented (and thus parameters are unused) in purpose.
+            // Left to warn, for the same reason as the `useAwait` rule.
+            "noUnusedFunctionParameters": "warn"
           }
         }
       }
