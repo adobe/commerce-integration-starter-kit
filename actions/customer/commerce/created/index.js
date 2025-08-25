@@ -36,7 +36,7 @@ const {
  * @returns response object with status code, request data received and response of the invoked action
  * @param {object} params - includes the env params, type and the data of the event
  */
-function main(params) {
+async function main(params) {
   const { logger } = getInstrumentationHelpers();
 
   logger.info("Start processing request");
@@ -57,7 +57,7 @@ function main(params) {
     const preProcessed = preProcess(params, transformedData);
 
     logger.debug(`Start sending data: ${JSON.stringify(params)}`);
-    const result = sendData(params, transformedData, preProcessed);
+    const result = await sendData(params, transformedData, preProcessed);
     if (!result.success) {
       logger.error(`Send data failed: ${result.message}`);
       return actionErrorResponse(result.statusCode, result.message);

@@ -24,7 +24,7 @@ const {
  * @param {object} preProcessed - result of the pre-process logic if any
  * @returns the sending result if needed for post process
  */
-function sendData(params, data, preProcessed) {
+async function sendData(params, data, preProcessed) {
   // @TODO Here add the logic to send the information to 3rd party
   // @TODO Use params to retrieve needed parameters from the environment
   // @TODO in case of error return { success: false, statusCode: <error status code>, message: '<error message>' }

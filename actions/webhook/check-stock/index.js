@@ -26,7 +26,7 @@ const {
  * @param {object} params - method params includes environment and request data
  * @returns - response with success status and result
  */
-function main(params) {
+async function main(params) {
   const logger = Core.Logger("webhook-check-stock", {
     level: params.LOG_LEVEL || "info",
   });
@@ -40,7 +40,7 @@ function main(params) {
       return webhookErrorResponse(validationResult.message);
     }
 
-    const checkAvailableStockResult = checkAvailableStock(params.data);
+    const checkAvailableStockResult = await checkAvailableStock(params.data);
     if (!checkAvailableStockResult.success) {
       logger.error(`${checkAvailableStockResult.message}`);
       return webhookErrorResponse(checkAvailableStockResult.message);

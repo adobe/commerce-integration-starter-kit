@@ -64,6 +64,12 @@
           "correctness": {
             // It's a scaffolding, functions are unimplemented (and thus parameters are unused) in purpose.
             "noUnusedFunctionParameters": "off"
+          },
+
+          "suspicious": {
+            // Some placeholder functions most likely will be async (they invoke external systems)
+            // But they are unimplemented so they don't use await
+            "useAwait": "off"
           }
         }
       }

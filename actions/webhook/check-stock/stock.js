@@ -15,7 +15,7 @@ governing permissions and limitations under the License.
  * @param {object} params include the parameters received in the runtime action
  * @returns success status and error message
  */
-function checkAvailableStock(params) {
+async function checkAvailableStock(params) {
   // @TODO implement the logic to check authentication with you external application
   // @TODO return { success: false, message: 'error message'} in case of failure
 

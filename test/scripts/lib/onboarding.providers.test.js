@@ -11,8 +11,8 @@ governing permissions and limitations under the License.
 */
 
 jest.mock("node-fetch");
-jest.mock("path", () => {
-  const originalPath = jest.requireActual("path");
+jest.mock("node:path", () => {
+  const originalPath = jest.requireActual("node:path");
   return {
     ...originalPath,
     resolve: jest.fn((...args) => {
@@ -28,8 +28,8 @@ jest.mock("path", () => {
 });
 
 const fetch = require("node-fetch");
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 const action = require("../../../scripts/lib/providers.js");
 const ACCESS_TOKEN = "token";
 const RUNTIME_NAMESPACE = "1340225-testOrg-testWorkspace";
