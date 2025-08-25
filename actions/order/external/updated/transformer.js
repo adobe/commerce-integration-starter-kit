@@ -14,19 +14,19 @@ governing permissions and limitations under the License.
  * This function transform the received order status data from external back-office application to Adobe commerce
  *
  * @param {object} params - Data received from Adobe commerce
- * @returns {object} - Returns transformed data object
+ * @returns transformed data object
  */
-function transformData (params) {
+function transformData(params) {
   // @TODO This is a sample implementation. Please adapt based on your needs
   return {
     statusHistory: {
       comment: `Order status changed to ${params.data.status}`,
       is_customer_notified: params.data?.notifyCustomer ? 1 : 0,
-      is_visible_on_front: 1
-    }
-  }
+      is_visible_on_front: 1,
+    },
+  };
 }
 
 module.exports = {
-  transformData
-}
+  transformData,
+};

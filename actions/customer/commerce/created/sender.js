@@ -10,8 +10,11 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { instrument, getInstrumentationHelpers } = require('@adobe/aio-lib-telemetry')
-const { isOperationSuccessful } = require('../../../telemetry')
+const { isOperationSuccessful } = require("../../../telemetry");
+const {
+  instrument,
+  getInstrumentationHelpers,
+} = require("@adobe/aio-lib-telemetry");
 
 /**
  * This function send the customer created dara to the external back-office application
@@ -19,22 +22,22 @@ const { isOperationSuccessful } = require('../../../telemetry')
  * @param {object} params - include the env params
  * @param {object} data - Customer data
  * @param {object} preProcessed - result of the pre-process logic if any
- * @returns {object} returns the sending result if needed for post process
+ * @returns the sending result if needed for post process
  */
-async function sendData (params, data, preProcessed) {
+async function sendData(params, data, preProcessed) {
   // @TODO Here add the logic to send the information to 3rd party
   // @TODO Use params to retrieve needed parameters from the environment
   // @TODO in case of error return { success: false, statusCode: <error status code>, message: '<error message>' }
-  const { currentSpan } = getInstrumentationHelpers()
-  currentSpan.addEvent('created.phase', { value: 'sendData' })
+  const { currentSpan } = getInstrumentationHelpers();
+  currentSpan.addEvent("created.phase", { value: "sendData" });
 
   return {
-    success: true
-  }
+    success: true,
+  };
 }
 
 module.exports = {
   sendData: instrument(sendData, {
-    isSuccessful: isOperationSuccessful
-  })
-}
+    isSuccessful: isOperationSuccessful,
+  }),
+};

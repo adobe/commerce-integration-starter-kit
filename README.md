@@ -3,6 +3,7 @@
 [![Node.js CI](https://github.com/adobe/commerce-integration-starter-kit/actions/workflows/deploy_node_stage.yml/badge.svg)](https://github.com/adobe/commerce-integration-starter-kit/actions/workflows/deploy_node_stage.yml)
 
 _Table of contents_:
+
 - [**Commerce Integration Starter Kit**](#commerce--integration-starter-kit)
   - [**Prerequisites**](#prerequisites)
   - [**Starter Kit first deploy \& onboarding**](#starter-kit-first-deploy--onboarding)
@@ -10,7 +11,6 @@ _Table of contents_:
   - [**Integrating OpenTelemetry**](#integrating-opentelemetry)
   - [**Included actions documentation**](#included-actions-documentation)
   - [**References**](#references)
-
 
 Welcome to Adobe Commerce Integration Starter Kit.
 
@@ -23,7 +23,9 @@ The public documentation can be found at [Adobe Developer Starter Kit docs](http
 ## Prerequisites
 
 ### Create App Builder project
+
 Go to the [Adobe developer console](https://developer.adobe.com/console) portal
+
 - Click on `Create project from template`
 - Select `App Builder`
 - Chose a name and title
@@ -41,8 +43,8 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
 > [!TIP]
 > Adobe Commerce as a Cloud Service API is only required when accessing to Adobe Commerce as a Cloud Service.
 
-
 ### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5)
+
 Install Adobe I/O Events for Adobe Commerce module in your commerce instance following this [documentation](https://developer.adobe.com/commerce/extensibility/events/installation/)
 
 > [!TIP]
@@ -50,9 +52,11 @@ Install Adobe I/O Events for Adobe Commerce module in your commerce instance fol
 > By upgrading the Adobe I/O Events for Adobe Commerce module to version 1.6.0 or greater, you will benefit from some additional automated steps during onboarding.
 
 ## Starter Kit first deploy & onboarding
+
 Following the next steps, you will deploy and onboard the starter kit for the first time. The onboarding process sets up event providers and registrations based on your selection.
 
 ### Download the project
+
 - Download and unzip the project
 - Copy the env file `cp env.dist .env`
 - Fill in the values following the comments on the env file.
@@ -61,10 +65,12 @@ Following the next steps, you will deploy and onboard the starter kit for the fi
 > When configuring the `COMMERCE_BASE_URL` environment variable, the format differs between PaaS and SaaS:
 >
 > For PaaS (On-Premise/Cloud):
+>
 > - Must include your base site URL + `/rest/` suffix
 > - Example: `https://[environment-name].us-4.magentosite.cloud/rest/`
 >
 > For SaaS:
+>
 > - Must be the REST API endpoint provided by Adobe Commerce
 > - Example: `https://na1-sandbox.api.commerce.adobe.com/[tenant-id]/`
 >
@@ -79,7 +85,9 @@ With the new announcement of **Adobe Commerce as a Cloud Service** (ACCS), reque
 - If you're using the new cloud service (SaaS) offering, you'll need to authenticate your requests using [Adobe Identity Management System](https://experienceleague.adobe.com/en/docs/experience-manager-learn/foundation/authentication/adobe-ims-authentication-technical-video-understand) (IMS).
 
 #### \[PaaS\] Commerce OAuth1 - Configure a new Integration in Commerce
+
 Configure a new Integration to secure the calls to Commerce from App Builder using OAuth by following these steps:
+
 - In the Commerce Admin, navigate to System > Extensions > Integrations.
 - Click the `Add New Integration` button. The following screen displays
   ![New Integration Screen](docs/new-integration.png "New Integration")
@@ -91,6 +99,7 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 - To configure the starter kit, you will need the integration details (consumer key, consumer secret, access token, and access token secret).
 
 Store the credentials in the `.env` file, these are the minimum required values:
+
 ```dotenv
 COMMERCE_CONSUMER_KEY=
 COMMERCE_CONSUMER_SECRET=
@@ -99,20 +108,25 @@ COMMERCE_ACCESS_TOKEN_SECRET=
 ```
 
 #### \[SaaS\] IMS OAuth - Add the OAuth Server to Server credentials to the environment
+
 Configure a new IMS OAuth Server to Server following this [documentation](https://developer.adobe.com/developer-console/docs/guides/authentication/ServerToServerAuthentication/implementation/#setting-up-the-oauth-server-to-server-credential/)
 
 Store the credentials in the `.env` file, these are the minimum required values:
+
 ```dotenv
 OAUTH_CLIENT_ID=<string> # Your client ID
 OAUTH_CLIENT_SECRET=<string> # Your client secret
 OAUTH_SCOPES=<array> # ['scope1', 'scope2']
 ```
+
 These are optional values that can be provided:
+
 ```dotenv
 OAUTH_HOST=<string> # default: https://ims-na1.adobelogin.com
 ```
 
 #### How to use one or another?
+
 The starter kit is designed to work with both offerings, but only one of them at the same time. By default, (and to prevent breaking changes) the SaaS offering is opt-in, which means that you will need to explicitly configure it in order to start using it. **OAuth1** will be the first authentication mechanism tried before **IMS**.
 
 - If you want to use PaaS follow the [first guide above](#paas-commerce-oauth1---configure-a-new-integration-in-commerce) and make sure your environment variables `COMMERCE_XXXX` are set correctly in the `.env` file.
@@ -123,24 +137,29 @@ The starter kit is designed to work with both offerings, but only one of them at
 > You'll notice that the `app.config.yaml` has both types of environment variables declared (those are the ones that end up in the runtime action context). The code is built to work regardless of the offering you've configured, so you shouldn't need to modify anything in that file unless you want to do some cleanup.
 
 ### Configure the project
+
 Install the npm dependencies using the command:
+
 ```bash
 npm install
 ```
 
 > [!NOTE]
-> #### Workspace packages (packages/**)
-> In the folder packages/** you will find workspace packages that are used in starter kit. These packages are not found on npm registry, so you will need to install them manually.
+>
+> #### Workspace packages (packages/\*\*)
+>
+> In the folder packages/\*\* you will find workspace packages that are used in starter kit. These packages are not found on npm registry, so you will need to install them manually.
+>
 > ```
 > ├── packages
 >      └── commerce-sdk-auth
 > ```
 >
 > Run `npm install` in the root directory and the `npm postinstall` script will automatically install and build the packages from the `packages/**` folder.
->
 
 This step will connect your starter kit project to the App builder project you created earlier.
 Ensure to select the proper Organization > Project > Workspace with the following commands:
+
 ```bash
 aio login
 aio console org select
@@ -149,12 +168,14 @@ aio console workspace select
 ```
 
 Sync your local application with the App Builder project using the following command:
+
 ```bash
 aio app use
 # Choose the option 'm' (merge)
 ```
 
 Edit the file `app.config.yaml` if you want to deploy specific entities by commenting on the entities you don't need (e.g., `product-backoffice` if you don't need to sync products from an external back-office application):
+
 ```yaml
 application:
   runtimeManifest:
@@ -163,10 +184,10 @@ application:
         license: Apache-2.0
         actions:
           $include: ./actions/product/commerce/actions.config.yaml
-    #  product-backoffice:
-    #    license: Apache-2.0
-    #    actions:
-    #      $include: ./actions/product/external/actions.config.yaml
+      #  product-backoffice:
+      #    license: Apache-2.0
+      #    actions:
+      #      $include: ./actions/product/external/actions.config.yaml
       customer-commerce:
         license: Apache-2.0
         actions:
@@ -179,18 +200,24 @@ application:
 ```
 
 ### Deploy
+
 Run the following command to deploy the project; this will deploy the runtime actions needed for the onboarding step:
+
 ```bash
 aio app deploy
 ```
+
 You can confirm the success of the deployment in the Adobe Developer Console by navigating to the `Runtime` section on your workspace:
 ![Alt text](docs/console-user-defined-actions.png "Workspace runtimes packages")
 
 ### Onboarding
+
 #### Configure the event registrations
+
 By default, the registrations' config file creates all the registrations for all entities. You can edit the `./scripts/onboarding/custom/starter-kit-registrations.json` file if you don't need a registration.
 If you don't want to receive events from commerce, remove `commerce` from the entity array; for backoffice updates, remove `backoffice`.
 e.g., In the previous onboarding step (`Configure the project`), we commented on the product-backoffice package. In this case, we have to remove `backoffice` from the `product` entity:
+
 ```json
 {
   "product": ["commerce"],
@@ -201,18 +228,22 @@ e.g., In the previous onboarding step (`Configure the project`), we commented on
 ```
 
 #### Execute the onboarding
+
 This step will generate the IO Events providers and the registrations for your starter kit project.
 If your Commerce instance Adobe I/O Events for Adobe Commerce module version 1.12.0 or greater, the module will also be automatically configured by the onboarding script and your commerce instance can connect to other event providers besides the default Commerce event provider registered in the system configuration.
 
 To start the process run the command:
+
 ```bash
 npm run onboard
 ```
 
 The console will return the provider's IDs and save this information:
+
 - You will need the commerce instance ID and provider ID to configure your commerce instance later.
 - You will need the backoffice provider id to send the events to the App builder project.
   e.g., of output:
+
 ```bash
 Process of On-Boarding done successfully: [
   {
@@ -230,9 +261,9 @@ Process of On-Boarding done successfully: [
 ]
 
 ```
+
 Check your App developer console to confirm the creation of the registrations:
 ![Alt text](docs/console-event-registrations.png "Workspace registrations")
-
 
 ### Complete the Adobe Commerce eventing configuration
 
@@ -246,12 +277,13 @@ You will configure your Adobe Commerce instance to send events to your App build
 > Follow the steps in the next section to validate that the configuration is correct or skip to the next section.
 
 To configure the provider in Commerce, do the following:
+
 - In the Adobe Commerce Admin, navigate to Stores > Settings > Configuration > Adobe Services > Adobe I/O Events > General configuration. The following screen displays.
   ![Alt text](docs/commerce-events-configuration.webp "Commerce eventing configuration")
 - Select `OAuth (Recommended)` from the `Adobe I/O Authorization Type` menu.
 - Copy the contents of the `<workspace-name>.json` (Workspace configuration JSON you downloaded in the previous step [`Create app builder project`](#create-app-builder-project)) into the `Adobe I/O Workspace Configuration` field.
 - Copy the commerce provider instance ID you saved in the previous step [`Execute the onboarding`](#execute-the-onboarding) into the `Adobe Commerce Instance ID` field.
-- Copy the commerce provider ID  you saved in the previous step [`Execute the onboarding`](#execute-the-onboarding) into the `Adobe I/O Event Provider ID` field.
+- Copy the commerce provider ID you saved in the previous step [`Execute the onboarding`](#execute-the-onboarding) into the `Adobe I/O Event Provider ID` field.
 - Click `Save Config`.
 - Enable Commerce Eventing by setting the `Enabled` menu to Yes. (Note: You must enable cron so that Commerce can send events to the endpoint.)
 - Enter the merchant's company name in the `Merchant ID` field. You must use alphanumeric and underscores only.
@@ -261,12 +293,15 @@ To configure the provider in Commerce, do the following:
 - Click `Save Config`.
 
 #### Subscribe to events in Adobe Commerce instance
+
 > [!TIP]
 >
 > If your Commerce instance Adobe I/O Events for Adobe Commerce module version is 1.6.0 or greater, run the commerce-event-subscribe script to automatically subscribe to the Commerce events in `scripts/commerce-event-subscribe/config/commerce-event-subscribe.json`
+>
 > ```bash
 > npm run commerce-event-subscribe
 > ```
+>
 > Otherwise, follow the steps below to subscribe to the events manually.
 
 To subscribe to events, follow this [documentation](https://developer.adobe.com/commerce/extensibility/events/configure-commerce/#subscribe-and-register-events).
@@ -275,10 +310,10 @@ For events of type 'plugin' you can also check this [documentation](https://deve
 Here are the events with the minimal required fields you need to subscribe to, it includes the REST API endpoints that could trigger this events:
 
 | Entity         | Event                                                  | Required fields             | REST API Ref                                                                                                                                                                                                                                                                                                                                                                                                                                |
-|----------------|--------------------------------------------------------|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -------------- | ------------------------------------------------------ | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Product        | observer.catalog_product_delete_commit_after           | sku                         | product [delete](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/productssku#operation/DeleteV1ProductsSku)                                                                                                                                                                                                                                                                                                                                 |
 | Product        | observer.catalog_product_save_commit_after             | sku, created_at, updated_at | product [create](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/products#operation/GetV1Products) / [update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/productssku#operation/PutV1ProductsSku)                                                                                                                                                                                                                                       |
-| Customer       | observer.customer_save_commit_after                    | created_at, updated_at      | customer  [create](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customers#operation/PostV1Customers) / [update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerscustomerId#operation/PutV1CustomersCustomerId)                                                                                                                                                                                                                  |
+| Customer       | observer.customer_save_commit_after                    | created_at, updated_at      | customer [create](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customers#operation/PostV1Customers) / [update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerscustomerId#operation/PutV1CustomersCustomerId)                                                                                                                                                                                                                   |
 | Customer       | observer.customer_delete_commit_after                  | entity_id                   | customer [delete](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerscustomerId#operation/DeleteV1CustomersCustomerId)                                                                                                                                                                                                                                                                                                                |
 | Customer group | observer.customer_group_save_commit_after              | customer_group_code         | customer group [create](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerGroups#operation/PostV1CustomerGroups) / [update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerGroupsid#operation/PutV1CustomerGroupsId)                                                                                                                                                                                                         |
 | Customer group | observer.customer_group_delete_commit_after            | customer_group_code         | customer group [delete](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerGroupsid#operation/DeleteV1CustomerGroupsId)                                                                                                                                                                                                                                                                                                                |
@@ -286,6 +321,7 @@ Here are the events with the minimal required fields you need to subscribe to, i
 | Stock          | observer.cataloginventory_stock_item_save_commit_after | product_id                  | product [stock update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/productsproductSkustockItemsitemId/#operation/PutV1ProductsProductSkuStockItemsItemId)                                                                                                                                                                                                                                                                               |
 
 ### Automating the execution of onboarding and event subscription
+
 App builder defines lifecycle event hooks that make possible to automatically execute custom code when a particular application lifecycle event happens.
 To learn more these hooks navigate to [App Builder application tooling lifecycle event hooks](https://developer.adobe.com/app-builder/docs/guides/app-hooks/).
 
@@ -303,11 +339,11 @@ If you plan to add more hooks to the application, you can define them in the `ho
 
 ## Development
 
-* [Project source code structure](#project-source-code-structure)
-* [Different types of actions included in the starter kit](#different-types-of-actions-included-in-the-starter-kit)
-* [Log management & forwarding](#log-management-and-forwarding)
-* [Testing](#testing)
-* [How to subscribe to a new event](#how-to-subscribe-to-a-new-event)
+- [Project source code structure](#project-source-code-structure)
+- [Different types of actions included in the starter kit](#different-types-of-actions-included-in-the-starter-kit)
+- [Log management & forwarding](#log-management-and-forwarding)
+- [Testing](#testing)
+- [How to subscribe to a new event](#how-to-subscribe-to-a-new-event)
 
 ### Project source code structure
 
@@ -394,16 +430,20 @@ Each individual `action` folder contains the following files:
   These files provide convenient extension points to introduce custom business logic before and after interacting with the target API.
 
 #### Pass `env` params to an `action`
+
 You can pass values from the environment to the action`params` object following:
 Add your parameter to .env file:
+
 ```bash
 HERE_YOUR_PARAM=any value
 ```
+
 Pass the required parameters to the action by configuring them in the `actions/{entity}/../actions.config.yaml` under `{action name} -> inputs` as follows:
+
 ```yaml
-{action name}:
+{ action name }:
   function: commerce/{action name}/index.js
-  web: 'no'
+  web: "no"
   runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug
@@ -414,19 +454,20 @@ Pass the required parameters to the action by configuring them in the `actions/{
 ```
 
 This parameter should be accessible on the params object
+
 ```javascript
 async function main(params) {
-  params.HERE_YOUR_PARAM
+  params.HERE_YOUR_PARAM;
 }
 ```
 
 ### Different types of actions included in the starter kit
 
-* [consumer](#consumer-action)
-* [event handler](#event-handler-action)
-* [event ingestion](#event-ingestion-action)
-* [synchronous webhook](#synchronous-webhook-actions)
-* [starter kit info](#starter-kit-info-action)
+- [consumer](#consumer-action)
+- [event handler](#event-handler-action)
+- [event ingestion](#event-ingestion-action)
+- [synchronous webhook](#synchronous-webhook-actions)
+- [starter kit info](#starter-kit-info-action)
 
 `consumer` and `event handler` actions are the two main types of actions defined by the starter kit
 to implement the business logic needed to synchronize data between the different systems being integrated.
@@ -452,18 +493,20 @@ When it receives an event that it does not know how to route, it is expected to 
 This will prevent the event handling from being retried.
 
 By default, the response of the `consumer` actions is the following:
+
 - success
+
   ```javascript
   // ./actions/responses.js#successResponse
   return {
     statusCode: 200,
     body: {
-      type: 'EVENT TYPE',
+      type: "EVENT TYPE",
       response: {
         // Response returned by the event handler action
-      }
-    }
-  }
+      },
+    },
+  };
   ```
 
 - failure
@@ -472,11 +515,11 @@ By default, the response of the `consumer` actions is the following:
   return {
     error: {
       statusCode: 400, // 404, 500, etc,
-      body : {
-        error: 'YOUR ERROR MESSAGE'
-      }
-    }
-  }
+      body: {
+        error: "YOUR ERROR MESSAGE",
+      },
+    },
+  };
   ```
 
 #### `event handler` action
@@ -495,15 +538,16 @@ so it properly reflects on the event registration `Debug Tracing` tab on the Ado
 By default, the response of the `event handler` actions is the following:
 
 - success
+
   ```javascript
   // ./actions/responses.js#actionSuccessResponse
   return {
     statusCode: 200,
     body: {
       success: true,
-      message: 'YOUR SUCCESS MESSAGE'
-    }
-  }
+      message: "YOUR SUCCESS MESSAGE",
+    },
+  };
   ```
 
 - failure
@@ -513,9 +557,9 @@ By default, the response of the `event handler` actions is the following:
     statusCode: 400, // 404, 500, etc
     body: {
       success: false,
-      error: 'YOUR ERROR MESSAGE'
-    }
-  }
+      error: "YOUR ERROR MESSAGE",
+    },
+  };
   ```
 
 #### `event ingestion` action
@@ -528,24 +572,27 @@ if the 3rd-party back-office application cannot fulfill the [Events Publishing A
 Additional details can be found at this [README](actions/ingestion/webhook/docs/README.md)
 
 To get the URL of the webhook, run the following command:
+
 ```bash
 aio runtime action get ingestion/webhook --url
 ```
 
 By default, the response of the `event ingestion` actions is the following:
+
 - success
+
   ```javascript
   // ./actions/responses.js#successResponse
   return {
     statusCode: 200,
     body: {
-      type: 'EVENT TYPE',
+      type: "EVENT TYPE",
       response: {
         success: true,
-        message: 'Event published successfully'
-      }
-    }
-  }
+        message: "Event published successfully",
+      },
+    },
+  };
   ```
 
 - failure
@@ -554,11 +601,11 @@ By default, the response of the `event ingestion` actions is the following:
   return {
     error: {
       statusCode: 400, // 404, 500, etc,
-      body : {
-        error: 'YOUR ERROR MESSAGE'
-      }
-    }
-  }
+      body: {
+        error: "YOUR ERROR MESSAGE",
+      },
+    },
+  };
   ```
 
 #### `synchronous webhook` actions
@@ -572,20 +619,23 @@ The [./actions/webhook/check-stock](./actions/webhook/check-stock) folder provid
 of a `synchronous webhook` action. Additional details can be found at this [README](actions/webhook/check-stock/docs/README.md)
 
 To get the URL of the webhook, run the following command:
+
 ```bash
 aio runtime action get webhook/check-stock --url
 ```
 
 By default, the response of the `synchronous webhook` actions is the following:
+
 - success
+
   ```javascript
   // ./actions/responses.js#webhookSuccessResponse
   return {
     statusCode: 200,
     body: {
-      op: 'success'
-    }
-  }
+      op: "success",
+    },
+  };
   ```
 
 - failure
@@ -594,11 +644,11 @@ By default, the response of the `synchronous webhook` actions is the following:
   return {
     error: {
       statusCode: 200,
-      body : {
-        op: 'exception'
-      }
-    }
-  }
+      body: {
+        op: "exception",
+      },
+    },
+  };
   ```
 
 Remember, these responses are adapted to [Commerce webhook module](https://developer.adobe.com/commerce/extensibility/webhooks/); in case you want to use a different approach, you can change the response implementation in the code as you need.
@@ -611,26 +661,30 @@ Remember, these responses are adapted to [Commerce webhook module](https://devel
 The source code for this action can be found at [./actions/starter-kit-info](./actions/starter-kit-info).
 
 This runtime action, when invoked, returns information about the starter-kit used to develop the project, such as
+
 - the starter kit version, and
 - the configured event registrations
 
 To get the URL of the webhook, run the following command:
+
 ```bash
 aio runtime action get starter-kit/info --url
 ```
 
 By default, the response of the `starter kit info` action is the following:
+
 - success
+
   ```javascript
   // ./actions/responses.js#actionSuccessResponse
   return {
     statusCode: HTTP_OK,
     body: {
       success: true,
-      registrations: 'REGISTERED REGISTRATIONS',
-      starter_kit_version: 'M.m.p-beta'
-    }
-  }
+      registrations: "REGISTERED REGISTRATIONS",
+      starter_kit_version: "M.m.p-beta",
+    },
+  };
   ```
 
 - failure
@@ -639,12 +693,12 @@ By default, the response of the `starter kit info` action is the following:
   return {
     error: {
       statusCode: 400, // 404, 500, etc,
-      body : {
+      body: {
         success: false,
-        error: 'ERROR MESSAGE'
-      }
-    }
-  }
+        error: "ERROR MESSAGE",
+      },
+    },
+  };
   ```
 
 ### Log management and forwarding
@@ -667,16 +721,15 @@ page describes the steps to set up the starter kit to forward logs to New Relic.
 The `stringParameters` in the `./actions/utils.js` file can be used to avoid secrets leaking when logging the parameters received by a runtime action.
 It will replace
 
-* the `authorization` header value with `<hidden>`, and
-* any parameters containing a term present in the `hidden` array with `<hidden>`
+- the `authorization` header value with `<hidden>`, and
+- any parameters containing a term present in the `hidden` array with `<hidden>`
 
 The default parameters to be hidden are:
+
 ```javascript
-const hidden = [
-  'secret',
-  'token'
-]
+const hidden = ["secret", "token"];
 ```
+
 Adjust these values to hide secrets passed as params to your runtime actions if needed.
 
 ### Testing
@@ -685,12 +738,14 @@ The starter kit provides unit tests for most of the runtime actions it includes.
 
 Additionally, unit tests for the onboarding script can be found in the `.test/onboarding` folder.
 
-The coverage report could be found in the  `.test/test-coverage` folder.
+The coverage report could be found in the `.test/test-coverage` folder.
 
 You can find more details about unit testing and an example in [Lesson 3: Testing a Serverless Action](https://developer.adobe.com/app-builder/docs/resources/barcode-reader/test/).
 
 ### How to subscribe to a new event
+
 The starter kit comes with predefined events for each entity. Sometimes, you may need to add a new event to an entity, e.g., a customer. To do this, follow the next steps:
+
 - Add the event to the `./onboarding/config/events.json` file under the related entity flow; for example, if the event is related to a customer and is coming from commerce, you should add it under entity customer -> commerce. e.g.,
   ```json
       "customer": {
@@ -713,7 +768,7 @@ The starter kit comes with predefined events for each entity. Sometimes, you may
   ```yaml
   NEW_OPERATION:
     function: NEW_OPERATION/index.js
-    web: 'no'
+    web: "no"
     runtime: nodejs:22
     inputs:
       LOG_LEVEL: debug
@@ -735,6 +790,7 @@ The starter kit comes with predefined events for each entity. Sometimes, you may
 
 With these steps, you can consume the new event you added to the project.
 If you want to change an existing event, make the changes in the same places:
+
 - Edit the event in the `./onboarding/config/events.json` file
 - Modify the event in the consumer of the flow where the event belongs
 - Make changes to the operation action invoked by the consumer switch case.
@@ -743,7 +799,7 @@ If you want to change an existing event, make the changes in the same places:
 ## Integrating OpenTelemetry
 
 > [!NOTE]
-The starter kit includes the `@adobe/aio-lib-telemetry` package by default. Find it on NPM [here](https://www.npmjs.com/package/@adobe/aio-lib-telemetry).
+> The starter kit includes the `@adobe/aio-lib-telemetry` package by default. Find it on NPM [here](https://www.npmjs.com/package/@adobe/aio-lib-telemetry).
 
 This package enables easy instrumentation of your actions with OpenTelemetry to collect comprehensive telemetry data:
 
@@ -769,6 +825,7 @@ The integration within the `customer/commerce` workflow facilitates three key si
 We provide a Docker Compose configuration out of the box for running a local telemetry stack, which follows the [**Grafana** use case](https://github.com/adobe/aio-lib-telemetry/blob/main/docs/use-cases/grafana.md#), documented within the `@adobe/aio-lib-telemetry` package.
 
 To spin up the telemetry stack, run the following command:
+
 ```bash
 docker compose up
 ```
@@ -778,11 +835,15 @@ Once running, the stack will collect and forward telemetry signals from all your
 Check out the linked guide to learn how to set up Grafana for visualizing your telemetry data. The guide also covers how to use the included cloudflared service to tunnel telemetry data from your deployed App Builder runtime actions in the cloud back to your local environment.
 
 ## Included actions documentation
+
 ### External back-office ingestion webhook
+
 - [Ingestion webhook consumer](actions/ingestion/webhook/docs/README.md)
 
 ### Product entity
+
 #### Commerce to third party
+
 - [Product created in commerce](actions/product/commerce/created/docs/README.md)
 - [Product updated in commerce](actions/product/commerce/updated/docs/README.md)
 - [Product deleted in commerce](actions/product/commerce/deleted/docs/README.md)
@@ -790,13 +851,16 @@ Check out the linked guide to learn how to set up Grafana for visualizing your t
 - [Product Infinite Loop breaker](actions/product/commerce/consumer/docs/README.md)
 
 #### Third party to Commerce
+
 - [Product created in third party](actions/product/external/created/docs/README.md)
 - [Product updated in third party](actions/product/external/updated/docs/README.md)
 - [Product deleted in third party](actions/product/external/deleted/docs/README.md)
 - [Product Infinite loop breaker](actions/product/external/consumer/docs/README.md)
 
 ### Customer entity
+
 #### Commerce to third party
+
 - [Customer created in commerce](actions/customer/commerce/created/docs/README.md)
 - [Customer updated in commerce](actions/customer/commerce/updated/docs/README.md)
 - [Customer deleted in commerce](actions/customer/commerce/deleted/docs/README.md)
@@ -804,6 +868,7 @@ Check out the linked guide to learn how to set up Grafana for visualizing your t
 - [Customer group deleted in commerce](actions/customer/commerce/group-deleted/docs/README.md)
 
 #### Third party to Commerce
+
 - [Customer created in third party](actions/customer/external/created/docs/README.md)
 - [Customer updated in third party](actions/customer/external/updated/docs/README.md)
 - [Customer deleted in third party](actions/customer/external/deleted/docs/README.md)
@@ -812,21 +877,28 @@ Check out the linked guide to learn how to set up Grafana for visualizing your t
 - [Customer group deleted in third party](actions/customer/external/group-deleted/docs/README.md)
 
 ### Order entity
+
 #### Commerce to third party
+
 - [Order created in commerce](actions/order/commerce/created/docs/README.md)
 - [Order updated in commerce](actions/order/commerce/updated/docs/README.md)
 
 #### Third party to Commerce
+
 - [Order updated in third party](actions/order/external/updated/docs/README.md)
 
 ### Stock entity
+
 #### Commerce to third party
+
 - [Stock updated in commerce](actions/stock/commerce/updated/docs/README.md)
 
 #### Third party to Commerce
+
 - [Stock updated in third party](actions/stock/external/updated/docs/README.md)
 
 ## References
+
 - [Adobe Commerce Extensibility](https://developer.adobe.com/commerce/extensibility/)
 - [Adobe developer console](https://developer.adobe.com/developer-console/docs/guides/)
 - [Adobe App Builder](https://developer.adobe.com/app-builder/docs/overview/)

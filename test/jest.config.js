@@ -15,25 +15,21 @@ module.exports = {
   verbose: false,
   silent: true,
   collectCoverageFrom: [
-    '../actions/**/*.js',
-    '../onboarding/**/*.js',
-    '../utils/**/*.js'
+    "../actions/**/*.js",
+    "../onboarding/**/*.js",
+    "../utils/**/*.js",
   ],
-  coverageDirectory: 'test-coverage',
-  coverageReporters: ['text-summary', 'html'],
+  coverageDirectory: "test-coverage",
+  coverageReporters: ["text-summary", "html"],
   coverageThreshold: {
     global: {
       branches: 65,
       functions: 50,
       lines: 80,
-      statements: 80
-    }
+      statements: 80,
+    },
   },
-  reporters: [
-    'default'
-  ],
-  testEnvironment: 'node',
-  setupFilesAfterEnv: [
-    './jest.setup.js'
-  ]
-}
+  reporters: ["default"],
+  testEnvironment: "node",
+  setupFilesAfterEnv: ["./jest.setup.js"],
+};

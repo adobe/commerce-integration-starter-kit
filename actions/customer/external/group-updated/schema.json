@@ -3,7 +3,7 @@
   "properties": {
     "id": { "type": "number" },
     "name": { "type": "string" },
-    "taxClassId": {"type":  "number"}
+    "taxClassId": { "type": "number" }
   },
   "required": ["id", "name", "taxClassId"],
   "additionalProperties": true

@@ -2,8 +2,8 @@
   "type": "object",
   "properties": {
     "name": { "type": "string" },
-    "lastname": {"type": "string"},
-    "email": {"type":  "string"}
+    "lastname": { "type": "string" },
+    "email": { "type": "string" }
   },
   "required": ["name", "lastname", "email"],
   "additionalProperties": true

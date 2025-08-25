@@ -10,6 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-process.env.CI = true
+const TEST_TIMEOUT = 30_000;
 
-jest.setTimeout(30000)
+process.env.CI = true;
+jest.setTimeout(TEST_TIMEOUT);

@@ -8,6 +8,7 @@ The response of this runtime is adapted for [Commerce webhook module](https://de
 # Input information
 
 Here is the payload JSON example:
+
 ```json
 {
   "data": {
@@ -24,33 +25,39 @@ Here is the payload JSON example:
 ```
 
 ## Validation
+
 The parameters (data, data.cart_id, and data.items) are required. The validation logic is found on the file `webhook\check-stock\validator.js`. If needed, you can add more validations to the `validateData` method in this file.
 
 ## Check available stock
+
 This runtime uses the method checkAvailableStock() in the file `webhook\check-stock\stock.js`. You must implement the method's logic to check the stock availability for the items received in `params`.
 The method should return the following in the case of:
 
 **Items stock available:**
-```javascript
-return {
-  success: false
-}
-```
 
-**Items stock not available:**
 ```javascript
 return {
   success: false,
-  message: 'Some custom error like stock not available for items.'
-}
+};
+```
+
+**Items stock not available:**
+
+```javascript
+return {
+  success: false,
+  message: "Some custom error like stock not available for items.",
+};
 ```
 
 ## Use extra env parameters
+
 You can access any needed environment parameter from `params`. Add the required parameter in the `actions/webhook/check-stock/actions.config.yaml` under `check-stock -> inputs` as follows:
+
 ```yaml
 check-stock:
   function: check-stock/index.js
-  web: 'yes'
+  web: "yes"
   runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug

@@ -10,34 +10,31 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { getClient } = require('../oauth1a')
-const { Core } = require('@adobe/aio-sdk')
-const logger = Core.Logger('commerce-stock-api-client', { level: 'info' })
+const { getClient } = require("../oauth1a");
+const { Core } = require("@adobe/aio-sdk");
+const logger = Core.Logger("commerce-stock-api-client", { level: "info" });
 
 /**
  * This function call Adobe commerce rest API to update the stock of a sku in a source
  *
- * @returns {object} - API response object
+ * @returns - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
  */
-async function updateStock (baseUrl, params, data) {
+async function updateStock(baseUrl, params, data) {
   const client = getClient(
     {
       url: baseUrl,
-      params
+      params,
     },
-    logger
-  )
-  return await client.post(
-    'inventory/source-items',
-    JSON.stringify(data),
-    '',
-    { 'Content-Type': 'application/json' }
-  )
+    logger,
+  );
+  return await client.post("inventory/source-items", JSON.stringify(data), "", {
+    "Content-Type": "application/json",
+  });
 }
 
 module.exports = {
-  updateStock
-}
+  updateStock,
+};

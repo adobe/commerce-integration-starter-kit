@@ -10,32 +10,32 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { checkMissingRequestInputs } = require('../../../actions/utils')
+const { checkMissingRequestInputs } = require("../../../actions/utils");
 
 /**
  * Validate the received information
  *
  * @param {object} params input parameters
- * @returns {object} returns the success status and error message
+ * @returns the success status and error message
  */
-function validateData (params) {
-  const requiredParams = ['data.cart_id', 'data.items']
-  const errorMessage = checkMissingRequestInputs(params, requiredParams, [])
+function validateData(params) {
+  const requiredParams = ["data.cart_id", "data.items"];
+  const errorMessage = checkMissingRequestInputs(params, requiredParams, []);
 
   if (errorMessage) {
     return {
       success: false,
-      message: errorMessage
-    }
+      message: errorMessage,
+    };
   }
 
   // @TODO Add any other validation you consider necessary here
 
   return {
-    success: true
-  }
+    success: true,
+  };
 }
 
 module.exports = {
-  validateData
-}
+  validateData,
+};

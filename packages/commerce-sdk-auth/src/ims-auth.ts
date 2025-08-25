@@ -10,37 +10,36 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-// @ts-ignore
-import { ClientCredentials } from 'simple-oauth2';
+// @ts-expect-error - simple-oauth2 is not typed
+import { ClientCredentials } from "simple-oauth2";
 
-export interface ImsAuthParams {
+export type ImsAuthParams = {
   host?: string;
   clientId: string;
   clientSecret: string;
-  scopes: Array<string>;
-}
+  scopes: string[];
+};
 
-interface ImsTokenResponse {
+type ImsTokenResponse = {
   access_token: string;
   token_type: string;
   expires_in: number;
   expires_at: string;
-}
+};
 
 /**
  * Generate access token to connect with Adobe tools (e.g. IO Events)
  *
  * @param {object} params includes env parameters
- * @returns {Promise<ImsTokenResponse>} returns the access token
+ * @returns the access token
  * @throws {Error} in case of any failure
  */
 export async function getImsAccessToken({
   clientId,
   clientSecret,
-  host = 'https://ims-na1.adobelogin.com',
+  host = "https://ims-na1.adobelogin.com",
   scopes,
 }: ImsAuthParams): Promise<ImsTokenResponse> {
-
   const config = {
     client: {
       id: clientId,
@@ -48,11 +47,11 @@ export async function getImsAccessToken({
     },
     auth: {
       tokenHost: host,
-      tokenPath: '/ims/token/v3',
+      tokenPath: "/ims/token/v3",
     },
     options: {
-      bodyFormat: 'form',
-      authorizationMethod: 'body',
+      bodyFormat: "form",
+      authorizationMethod: "body",
     },
   };
 

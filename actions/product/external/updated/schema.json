@@ -3,8 +3,8 @@
   "properties": {
     "sku": { "type": "string" },
     "name": { "type": "string" },
-    "price": {"type":  "number"},
-    "description": {"type":  "string"}
+    "price": { "type": "number" },
+    "description": { "type": "string" }
   },
   "required": ["sku", "name", "price", "description"],
   "additionalProperties": true

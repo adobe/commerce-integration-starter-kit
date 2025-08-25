@@ -10,61 +10,54 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { getClient } = require('../oauth1a')
-const { Core } = require('@adobe/aio-sdk')
-const logger = Core.Logger('commerce-shipment-api-client', { level: 'info' })
+const { getClient } = require("../oauth1a");
+
+const { Core } = require("@adobe/aio-sdk");
+const logger = Core.Logger("commerce-shipment-api-client", { level: "info" });
 
 /**
  * This function call Adobe commerce rest API to create a shipment
  *
- * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {string} orderId - Adobe commerce order id
  * @param {object} data - Adobe commerce api payload
  */
-async function createShipment (baseUrl, params, orderId, data) {
+async function createShipment(baseUrl, params, orderId, data) {
   const client = getClient(
     {
       url: baseUrl,
-      params
+      params,
     },
-    logger
-  )
+    logger,
+  );
 
-  return await client.post(
-    `order/${orderId}/ship`,
-    JSON.stringify(data),
-    '',
-    { 'Content-Type': 'application/json' }
-  )
+  return await client.post(`order/${orderId}/ship`, JSON.stringify(data), "", {
+    "Content-Type": "application/json",
+  });
 }
 
 /**
  * This function call Adobe commerce rest API to update a shipment
  *
- * @returns {object} - API response object
  * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
  */
-async function updateShipment (baseUrl, params, data) {
+async function updateShipment(baseUrl, params, data) {
   const client = getClient(
     {
       url: baseUrl,
-      params
+      params,
     },
-    logger
-  )
-  return await client.post(
-    'shipment',
-    JSON.stringify(data),
-    '',
-    { 'Content-Type': 'application/json' }
-  )
+    logger,
+  );
+  return await client.post("shipment", JSON.stringify(data), "", {
+    "Content-Type": "application/json",
+  });
 }
 
 module.exports = {
   createShipment,
-  updateShipment
-}
+  updateShipment,
+};

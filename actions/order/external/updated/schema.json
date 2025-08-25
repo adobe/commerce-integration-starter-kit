@@ -3,7 +3,7 @@
   "properties": {
     "id": { "type": "integer" },
     "status": { "type": "string" },
-    "notifyCustomer": { "type":  "boolean"}
+    "notifyCustomer": { "type": "boolean" }
   },
   "required": ["id", "status"],
   "additionalProperties": true

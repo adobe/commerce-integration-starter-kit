@@ -14,19 +14,19 @@ governing permissions and limitations under the License.
  * This function transform the received customer group data from external back-office application to Adobe commerce
  *
  * @param {object} params - Data received from Adobe commerce
- * @returns {object} - Returns transformed data object
+ * @returns transformed data object
  */
-function transformData (params) {
+function transformData(params) {
   // @TODO This is a sample implementation. Please adapt based on your needs
   // @TODO Notice that the attribute_set_id may need to be changed
   return {
     group: {
       code: params.data.name,
-      tax_class_id: params.data.taxClassId
-    }
-  }
+      tax_class_id: params.data.taxClassId,
+    },
+  };
 }
 
 module.exports = {
-  transformData
-}
+  transformData,
+};

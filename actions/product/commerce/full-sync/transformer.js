@@ -14,15 +14,15 @@ governing permissions and limitations under the License.
  * This function transform the received product data from Adobe commerce to external back-office application
  *
  * @param {object} data - Data received from Adobe commerce
- * @returns {object} - Returns transformed data object
+ * @returns transformed data object
  */
-function transformData (data) {
+function transformData(data) {
   // @TODO Here transform the data as needed for 3rd party API
-  const transformedData = data
+  const transformedData = data;
 
-  return transformedData
+  return transformedData;
 }
 
 module.exports = {
-  transformData
-}
+  transformData,
+};

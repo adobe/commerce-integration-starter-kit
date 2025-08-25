@@ -13,6 +13,7 @@
   },
 
   "javascript": {
+    "globals": ["jest"],
     "formatter": {
       "arrowParentheses": "always",
       "bracketSameLine": true,
@@ -25,11 +26,59 @@
 
   "linter": {
     "rules": {
+      "style": {
+        // This only applies to TypeScript, which we don't use yet.
+        "useReadonlyClassProperties": "off"
+      },
       "performance": {
         "noNamespaceImport": "off"
       }
     }
   },
+
+  "overrides": [
+    {
+      "includes": ["scripts/**/*.js"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off"
+          },
+
+          "nursery": {
+            "useMaxParams": "off"
+          },
+
+          "suspicious": {
+            // We use console to log information during the onboarding process.
+            "noConsole": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["actions/**/*.js"],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "useMaxParams": "off"
+          },
+
+          "suspicious": {
+            // Some placeholder functions most likely will be async (they invoke external systems), but they are unimplemented
+            // so they don't use await. This is left to warn, because implementers should be aware of this.
+            "useAwait": "warn"
+          },
+
+          "correctness": {
+            // It's a scaffolding, functions are unimplemented (and thus parameters are unused) in purpose.
+            // Left to warn, for the same reason as the `useAwait` rule.
+            "noUnusedFunctionParameters": "warn"
+          }
+        }
+      }
+    }
+  ],
 
   "assist": {
     "enabled": true,

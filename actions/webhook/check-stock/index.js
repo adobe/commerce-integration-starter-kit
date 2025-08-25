@@ -10,43 +10,48 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { Core } = require('@adobe/aio-sdk')
-const { HTTP_OK } = require('../../../actions/constants')
-const { validateData } = require('./validator')
-const { checkAvailableStock } = require('./stock')
-const { stringParameters } = require('../../utils')
-const { webhookErrorResponse, webhookSuccessResponse } = require('../../responses')
+const { Core } = require("@adobe/aio-sdk");
+const { HTTP_OK } = require("../../../actions/constants");
+const { validateData } = require("./validator");
+const { checkAvailableStock } = require("./stock");
+const { stringParameters } = require("../../utils");
+const {
+  webhookErrorResponse,
+  webhookSuccessResponse,
+} = require("../../responses");
 
 /**
  * This web action is used to check stock of cart items on real time.
  *
  * @param {object} params - method params includes environment and request data
- * @returns {object} - response with success status and result
+ * @returns - response with success status and result
  */
-async function main (params) {
-  const logger = Core.Logger('webhook-check-stock', { level: params.LOG_LEVEL || 'info' })
+async function main(params) {
+  const logger = Core.Logger("webhook-check-stock", {
+    level: params.LOG_LEVEL || "info",
+  });
   try {
-    logger.info('Start processing request')
-    logger.debug(`Webhook main params: ${stringParameters(params)}`)
+    logger.info("Start processing request");
+    logger.debug(`Webhook main params: ${stringParameters(params)}`);
 
-    const validationResult = validateData(params)
+    const validationResult = validateData(params);
     if (!validationResult.success) {
-      logger.error(`Validation failed with error: ${validationResult.message}`)
-      return webhookErrorResponse(validationResult.message)
+      logger.error(`Validation failed with error: ${validationResult.message}`);
+      return webhookErrorResponse(validationResult.message);
     }
 
-    const checkAvailableStockResult = await checkAvailableStock(params.data)
+    const checkAvailableStockResult = await checkAvailableStock(params.data);
     if (!checkAvailableStockResult.success) {
-      logger.error(`${checkAvailableStockResult.message}`)
-      return webhookErrorResponse(checkAvailableStockResult.message)
+      logger.error(`Stock check failed: ${checkAvailableStockResult.message}`);
+      return webhookErrorResponse(checkAvailableStockResult.message);
     }
 
-    logger.info(`Successful request: ${HTTP_OK}`)
-    return webhookSuccessResponse()
+    logger.info(`Successful request: ${HTTP_OK}`);
+    return webhookSuccessResponse();
   } catch (error) {
-    logger.error(`Server error: ${error.message}`, error)
-    return webhookErrorResponse(error.message)
+    logger.error(`Server error: ${error.message}`, error);
+    return webhookErrorResponse(error.message);
   }
 }
 
-exports.main = main
+exports.main = main;

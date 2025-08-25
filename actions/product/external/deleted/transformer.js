@@ -14,13 +14,13 @@ governing permissions and limitations under the License.
  * This function transform the received product data from external back-office application to Adobe commerce
  *
  * @param {object} params - Data received from Adobe commerce
- * @returns {number} - Returns transformed data object
+ * @returns transformed data object
  */
-function transformData (params) {
+function transformData(params) {
   // @TODO This is a sample implementation. Please adapt based on your needs
-  return params.data.sku
+  return params.data.sku;
 }
 
 module.exports = {
-  transformData
-}
+  transformData,
+};

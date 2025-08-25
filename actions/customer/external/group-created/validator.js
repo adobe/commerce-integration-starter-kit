@@ -10,32 +10,32 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const Ajv = require('ajv')
+const Ajv = require("ajv");
 
 /**
  * This function validate the customer group data received from external back-office application
  *
- * @returns {object} - returns the result of validation object
+ * @returns the result of validation object
  * @param {object} params - Received data from adobe commerce
  */
-function validateData (params) {
-  const data = params.data
-  const ajv = new Ajv()
-  const schema = require('./schema.json')
+function validateData(params) {
+  const data = params.data;
+  const ajv = new Ajv();
+  const schema = require("./schema.json");
 
-  const validate = ajv.compile(schema)
-  const isValid = validate(data)
+  const validate = ajv.compile(schema);
+  const isValid = validate(data);
   if (!isValid) {
     return {
       success: false,
-      message: `Data provided does not validate with the schema: ${JSON.stringify(data)}`
-    }
+      message: `Data provided does not validate with the schema: ${JSON.stringify(data)}`,
+    };
   }
   return {
-    success: true
-  }
+    success: true,
+  };
 }
 
 module.exports = {
-  validateData
-}
+  validateData,
+};

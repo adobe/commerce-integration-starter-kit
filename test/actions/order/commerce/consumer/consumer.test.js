@@ -10,43 +10,43 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const action = require('../../../../../actions/order/commerce/consumer')
-jest.mock('openwhisk')
-const openwhisk = require('openwhisk')
-const { HTTP_BAD_REQUEST } = require('../../../../../actions/constants')
+const action = require("../../../../../actions/order/commerce/consumer");
+jest.mock("openwhisk");
+const openwhisk = require("openwhisk");
+const { HTTP_BAD_REQUEST } = require("../../../../../actions/constants");
 
 afterEach(() => {
-  jest.clearAllMocks()
-  jest.resetModules()
-})
+  jest.clearAllMocks();
+  jest.resetModules();
+});
 
-describe('Given order commerce consumer', () => {
-  describe('When method main is defined', () => {
-    test('Then is an instance of Function', () => {
-      expect(action.main).toBeInstanceOf(Function)
-    })
-  })
-  describe('When a valid order created event is received', () => {
-    test('Then returns success response', async () => {
+describe("Given order commerce consumer", () => {
+  describe("When method main is defined", () => {
+    test("Then is an instance of Function", () => {
+      expect(action.main).toBeInstanceOf(Function);
+    });
+  });
+  describe("When a valid order created event is received", () => {
+    test("Then returns success response", async () => {
       const params = {
-        API_HOST: 'API_HOST',
-        API_AUTH: 'API_AUTH',
-        EVENT_PREFIX: 'test_app',
-        type: 'com.adobe.commerce.test_app.observer.sales_order_save_commit_after',
+        API_HOST: "API_HOST",
+        API_AUTH: "API_AUTH",
+        EVENT_PREFIX: "test_app",
+        type: "com.adobe.commerce.test_app.observer.sales_order_save_commit_after",
         data: {
           value: {
-            real_order_id: 'ORDER_ID',
-            increment_id: 'ORDER_INCREMENTAL_ID',
+            real_order_id: "ORDER_ID",
+            increment_id: "ORDER_INCREMENTAL_ID",
             items: [
               {
-                item_id: 'ITEM_ID'
-              }
+                item_id: "ITEM_ID",
+              },
             ],
-            created_at: '2000-01-01',
-            updated_at: '2000-01-01'
-          }
-        }
-      }
+            created_at: "2000-01-01",
+            updated_at: "2000-01-01",
+          },
+        },
+      };
 
       openwhisk.mockReturnValue({
         actions: {
@@ -55,46 +55,46 @@ describe('Given order commerce consumer', () => {
               result: {
                 statusCode: 200,
                 body: {
-                  success: true
-                }
-              }
-            }
-          })
-        }
-      })
+                  success: true,
+                },
+              },
+            },
+          }),
+        },
+      });
 
-      const response = await action.main(params)
+      const response = await action.main(params);
 
       expect(response).toEqual({
         statusCode: 200,
         body: {
           response: {
-            success: true
+            success: true,
           },
-          type: 'com.adobe.commerce.test_app.observer.sales_order_save_commit_after'
-        }
-      })
-    })
-  })
-  describe('When a valid order updated event is received', () => {
-    test('Then returns success response', async () => {
+          type: "com.adobe.commerce.test_app.observer.sales_order_save_commit_after",
+        },
+      });
+    });
+  });
+  describe("When a valid order updated event is received", () => {
+    test("Then returns success response", async () => {
       const params = {
-        EVENT_PREFIX: 'test_app',
-        type: 'com.adobe.commerce.test_app.observer.sales_order_save_commit_after',
+        EVENT_PREFIX: "test_app",
+        type: "com.adobe.commerce.test_app.observer.sales_order_save_commit_after",
         data: {
           value: {
-            real_order_id: 'ORDER_ID',
-            increment_id: 'ORDER_INCREMENTAL_ID',
+            real_order_id: "ORDER_ID",
+            increment_id: "ORDER_INCREMENTAL_ID",
             items: [
               {
-                item_id: 'ITEM_ID'
-              }
+                item_id: "ITEM_ID",
+              },
             ],
-            created_at: '2000-01-01',
-            updated_at: '2000-01-01'
-          }
-        }
-      }
+            created_at: "2000-01-01",
+            updated_at: "2000-01-01",
+          },
+        },
+      };
 
       openwhisk.mockReturnValue({
         actions: {
@@ -103,72 +103,72 @@ describe('Given order commerce consumer', () => {
               result: {
                 statusCode: 200,
                 body: {
-                  success: true
-                }
-              }
-            }
-          })
-        }
-      })
+                  success: true,
+                },
+              },
+            },
+          }),
+        },
+      });
 
-      const response = await action.main(params)
+      const response = await action.main(params);
 
       expect(response).toEqual({
         statusCode: 200,
         body: {
           response: {
-            success: true
+            success: true,
           },
-          type: 'com.adobe.commerce.test_app.observer.sales_order_save_commit_after'
-        }
-      })
-    })
-  })
-  describe('When an invalid order event is received', () => {
-    test('Then returns error response', async () => {
-      const params = {}
-      const response = await action.main(params)
+          type: "com.adobe.commerce.test_app.observer.sales_order_save_commit_after",
+        },
+      });
+    });
+  });
+  describe("When an invalid order event is received", () => {
+    test("Then returns error response", async () => {
+      const params = {};
+      const response = await action.main(params);
 
       expect(response).toEqual({
         error: {
           statusCode: 400,
           body: {
-            error: "Invalid request parameters: missing parameter(s) 'type,data.value.created_at,data.value.updated_at'"
-          }
-        }
-      })
-    })
-  })
-  describe('When order event type received is not supported', () => {
-    test('Then returns error response',
-      async () => {
-        const params = {
-          EVENT_PREFIX: 'test_app',
-          type: 'NOT_SUPPORTED_TYPE',
-          data: {
-            value: {
-              real_order_id: 'ORDER_ID',
-              increment_id: 'ORDER_INCREMENTAL_ID',
-              items: [
-                {
-                  item_id: 'ITEM_ID'
-                }
-              ],
-              created_at: '2000-01-01',
-              updated_at: '2000-01-01'
-            }
-          }
-        }
-        const response = await action.main(params)
+            error:
+              "Invalid request parameters: missing parameter(s) 'type,data.value.created_at,data.value.updated_at'",
+          },
+        },
+      });
+    });
+  });
+  describe("When order event type received is not supported", () => {
+    test("Then returns error response", async () => {
+      const params = {
+        EVENT_PREFIX: "test_app",
+        type: "NOT_SUPPORTED_TYPE",
+        data: {
+          value: {
+            real_order_id: "ORDER_ID",
+            increment_id: "ORDER_INCREMENTAL_ID",
+            items: [
+              {
+                item_id: "ITEM_ID",
+              },
+            ],
+            created_at: "2000-01-01",
+            updated_at: "2000-01-01",
+          },
+        },
+      };
+      const response = await action.main(params);
 
-        expect(response).toEqual({
-          error: {
-            statusCode: HTTP_BAD_REQUEST,
-            body: {
-              error: 'This case type is not supported: NOT_SUPPORTED_TYPE'
-            }
-          }
-        })
-      })
-  })
-})
+      expect(response).toEqual({
+        error: {
+          statusCode: HTTP_BAD_REQUEST,
+          body: {
+            error: "This case type is not supported: NOT_SUPPORTED_TYPE",
+          },
+        },
+      });
+    });
+  });
+});

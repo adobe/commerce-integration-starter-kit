@@ -10,42 +10,44 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const fetch = require('node-fetch')
+const fetch = require("node-fetch");
 
-const { makeError } = require('./helpers/errors')
-const providersEventsConfig = require('../onboarding/config/events.json')
-const { getEventName } = require('../../utils/naming')
+const { makeError } = require("./helpers/errors");
+const providersEventsConfig = require("../onboarding/config/events.json");
+const { getEventName } = require("../../utils/naming");
 
 /**
  * Builds an array of provider events with their metadata
  * @param {object} providerEvents - Provider events configuration object
- * @returns {Array} Array of formatted event metadata
+ * @returns Array of formatted event metadata
  */
-function buildProviderData (providerEvents) {
-  const events = []
+function buildProviderData(providerEvents) {
+  const events = [];
 
-  for (const [event, { sampleEventTemplate }] of Object.entries(providerEvents)) {
+  for (const [event, { sampleEventTemplate }] of Object.entries(
+    providerEvents,
+  )) {
     events.push({
       eventCode: event,
       label: event,
       description: event,
-      sampleEventTemplate
-    })
+      sampleEventTemplate,
+    });
   }
 
-  return events
+  return events;
 }
 
 /**
  * Encodes a sample event template to base64 string
  * @param {object} sampleEventTemplate - Sample event template object
- * @returns {string|null} Base64 encoded string of the template or null if invalid
+ * @returns Base64 encoded string of the template or null if invalid
  */
-function base64EncodedSampleEvent (sampleEventTemplate) {
-  if (!sampleEventTemplate || typeof sampleEventTemplate !== 'object') {
-    return null
+function base64EncodedSampleEvent(sampleEventTemplate) {
+  if (!sampleEventTemplate || typeof sampleEventTemplate !== "object") {
+    return null;
   }
-  return Buffer.from(JSON.stringify(sampleEventTemplate)).toString('base64')
+  return Buffer.from(JSON.stringify(sampleEventTemplate)).toString("base64");
 }
 
 /**
@@ -54,59 +56,66 @@ function base64EncodedSampleEvent (sampleEventTemplate) {
  * @param {string} providerId - Provider ID
  * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID
  * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<object>} Result object indicating success or error
+ * @returns Result object indicating success or error
  */
-async function addEventCodeToProvider (metadata, providerId, environment, authHeaders) {
-  console.log(`Trying to create metadata for ${metadata?.eventCode} to provider ${providerId}`)
+async function addEventCodeToProvider(
+  metadata,
+  providerId,
+  environment,
+  authHeaders,
+) {
+  console.log(
+    `Trying to create metadata for ${metadata?.eventCode} to provider ${providerId}`,
+  );
 
-  const { eventCode, label, description, sampleEventTemplate } = metadata
-  const sampleEvent = base64EncodedSampleEvent(sampleEventTemplate)
+  const { eventCode, label, description, sampleEventTemplate } = metadata;
+  const sampleEvent = base64EncodedSampleEvent(sampleEventTemplate);
   const body = {
     // eslint-disable-next-line camelcase
     event_code: eventCode,
     label,
     description,
-    ...(sampleEvent ? { sample_event_template: sampleEvent } : {})
-  }
+    ...(sampleEvent ? { sample_event_template: sampleEvent } : {}),
+  };
 
-  const url = `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers/${providerId}/eventmetadata`
+  const url = `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers/${providerId}/eventmetadata`;
   const addEventMetadataReq = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'content-type': 'application/json',
-      Accept: 'application/hal+json',
-      ...authHeaders
+      "content-type": "application/json",
+      Accept: "application/hal+json",
+      ...authHeaders,
     },
-    body: JSON.stringify(body)
-  })
+    body: JSON.stringify(body),
+  });
 
-  const result = await addEventMetadataReq.json()
+  const result = await addEventMetadataReq.json();
 
-  if (!(addEventMetadataReq.ok)) {
+  if (!addEventMetadataReq.ok) {
     return makeError(
-      'ADD_EVENT_CODE_TO_PROVIDER_FAILED',
+      "ADD_EVENT_CODE_TO_PROVIDER_FAILED",
       `I/O Management API: call to ${url} returned a non-2XX status code`,
       {
         response: result,
-        code: addEventMetadataReq.status
-      }
-    )
+        code: addEventMetadataReq.status,
+      },
+    );
   }
 
   if (result?.reason) {
     return makeError(
-      'ADD_EVENT_CODE_TO_PROVIDER_FAILED',
+      "ADD_EVENT_CODE_TO_PROVIDER_FAILED",
       `I/O Management API: call to ${url} did not return the expected response`,
       {
         response: result,
-        code: addEventMetadataReq.status
-      }
-    )
+        code: addEventMetadataReq.status,
+      },
+    );
   }
 
   return {
-    success: true
-  }
+    success: true,
+  };
 }
 
 /**
@@ -115,22 +124,32 @@ async function addEventCodeToProvider (metadata, providerId, environment, authHe
  * @param {string} providerId - Provider ID
  * @param {object} environment - Environment configuration
  * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<object>} Result object indicating success or error
+ * @returns Result object indicating success or error
  */
-async function addMetadataToProvider (providerEvents, providerId, environment, authHeaders) {
-  const commerceProviderMetadata = buildProviderData(providerEvents)
+async function addMetadataToProvider(
+  providerEvents,
+  providerId,
+  environment,
+  authHeaders,
+) {
+  const commerceProviderMetadata = buildProviderData(providerEvents);
 
   for (const metadata of commerceProviderMetadata) {
-    const result = await addEventCodeToProvider(metadata, providerId, environment, authHeaders)
+    const result = await addEventCodeToProvider(
+      metadata,
+      providerId,
+      environment,
+      authHeaders,
+    );
 
     if (!result.success) {
-      return result
+      return result;
     }
   }
 
   return {
-    success: true
-  }
+    success: true,
+  };
 }
 
 /**
@@ -139,50 +158,60 @@ async function addMetadataToProvider (providerEvents, providerId, environment, a
  * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL
  * @param {object} authHeaders - Authentication headers for API requests
  * @param {string|null} [next] - Next URL for pagination
- * @returns {Promise<object>} Result object with existing metadata or error
+ * @returns Result object with existing metadata or error
  */
-async function getExistingMetadata (providerId, environment, authHeaders, next = null) {
-  const url = `${environment.IO_MANAGEMENT_BASE_URL}providers/${providerId}/eventmetadata`
-  const fetchUrl = next ?? url
+async function getExistingMetadata(
+  providerId,
+  environment,
+  authHeaders,
+  next = null,
+) {
+  const url = `${environment.IO_MANAGEMENT_BASE_URL}providers/${providerId}/eventmetadata`;
+  const fetchUrl = next ?? url;
   const getExistingMetadataReq = await fetch(fetchUrl, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'content-type': 'application/json',
-      Accept: 'application/hal+json',
-      ...authHeaders
-    }
-  })
+      "content-type": "application/json",
+      Accept: "application/hal+json",
+      ...authHeaders,
+    },
+  });
 
-  if (!(getExistingMetadataReq.ok)) {
-    const result = await getExistingMetadataReq.json()
+  if (!getExistingMetadataReq.ok) {
+    const result = await getExistingMetadataReq.json();
     return makeError(
-      'GET_EXISTING_METADATA_FAILED',
+      "GET_EXISTING_METADATA_FAILED",
       `I/O Management API: call to ${url} returned a non-2XX status code`,
       {
         response: result,
-        code: getExistingMetadataReq.status
-      }
-    )
+        code: getExistingMetadataReq.status,
+      },
+    );
   }
 
-  const getExistingMetadataResult = await getExistingMetadataReq.json()
-  const existingMetadata = []
+  const getExistingMetadataResult = await getExistingMetadataReq.json();
+  const existingMetadata = [];
 
   if (getExistingMetadataResult?._embedded?.eventmetadata) {
     for (const event of getExistingMetadataResult._embedded.eventmetadata) {
-      existingMetadata[event.event_code] = event
+      existingMetadata[event.event_code] = event;
     }
   }
 
   if (getExistingMetadataResult?._links?.next) {
-    const data = await getExistingMetadata(providerId, environment, authHeaders, getExistingMetadataResult._links.next)
-    existingMetadata.push(...data)
+    const data = await getExistingMetadata(
+      providerId,
+      environment,
+      authHeaders,
+      getExistingMetadataResult._links.next,
+    );
+    existingMetadata.push(...data);
   }
 
   return {
     success: true,
-    existingMetadata
-  }
+    existingMetadata,
+  };
 }
 
 /**
@@ -191,74 +220,87 @@ async function getExistingMetadata (providerId, environment, authHeaders, next =
  * @param {Array<{id: string, key: string, label: string}>} providers - List of provider objects
  * @param {object} environment - Environment configuration
  * @param {object} authHeaders - Authentication headers for API requests
- * @returns {Promise<object>} Result object with operation outcome
+ * @returns Result object with operation outcome
  */
-async function main (clientRegistrations, providers, environment, authHeaders) {
-  let currentProvider
-  let eventName
+async function main(clientRegistrations, providers, environment, authHeaders) {
+  let currentProvider;
+  let eventName;
   try {
-    let providersEvents = {}
+    let providersEvents = {};
 
-    const result = []
+    const result = [];
     for (const provider of providers) {
-      currentProvider = provider
-      const existingMetadataResult = await getExistingMetadata(provider.id, environment, authHeaders)
+      currentProvider = provider;
+      const existingMetadataResult = await getExistingMetadata(
+        provider.id,
+        environment,
+        authHeaders,
+      );
 
       if (!existingMetadataResult.success) {
-        return existingMetadataResult
+        return existingMetadataResult;
       }
 
-      const { existingMetadata } = existingMetadataResult
+      const { existingMetadata } = existingMetadataResult;
 
       for (const [entityName, options] of Object.entries(clientRegistrations)) {
-        if (options !== undefined && options.includes(provider.key)) {
+        if (options?.includes(provider.key)) {
           if (providersEventsConfig[entityName]) {
-            for (const [event, eventProps] of Object.entries(providersEventsConfig[entityName][provider.key])) {
-              eventName = getEventName(event, environment)
+            for (const [event, eventProps] of Object.entries(
+              providersEventsConfig[entityName][provider.key],
+            )) {
+              eventName = getEventName(event, environment);
               if (existingMetadata[eventName]) {
-                console.log(`Skipping, Metadata event code ${eventName} already exists!`)
-                continue
+                console.log(
+                  `Skipping, Metadata event code ${eventName} already exists!`,
+                );
+                continue;
               }
               providersEvents = {
                 ...providersEvents,
-                [eventName]: eventProps
-              }
+                [eventName]: eventProps,
+              };
             }
           }
 
           result.push({
             entity: entityName,
-            label: provider.label
-          })
+            label: provider.label,
+          });
         }
       }
 
-      const addMetadataResult = await addMetadataToProvider(providersEvents, provider.id, environment, authHeaders)
+      const addMetadataResult = await addMetadataToProvider(
+        providersEvents,
+        provider.id,
+        environment,
+        authHeaders,
+      );
       if (!addMetadataResult.success) {
-        return addMetadataResult
+        return addMetadataResult;
       }
     }
 
     return {
       success: true,
-      result
-    }
+      result,
+    };
   } catch (error) {
     const hints = [
-      'Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL',
-      'Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?'
-    ]
+      "Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL",
+      "Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?",
+    ];
 
     return makeError(
-      'UNEXPECTED_ERROR',
-      'Unexpected error occurred while adding metadata to provider',
+      "UNEXPECTED_ERROR",
+      "Unexpected error occurred while adding metadata to provider",
       {
         error,
         provider: currentProvider,
-        hints: hints.length > 0 ? hints : undefined
-      }
-    )
+        hints: hints.length > 0 ? hints : undefined,
+      },
+    );
   }
 }
 
-exports.main = main
+exports.main = main;

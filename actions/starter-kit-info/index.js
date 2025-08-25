@@ -10,9 +10,9 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { Core } = require('@adobe/aio-sdk')
-const { actionSuccessResponse, actionErrorResponse } = require('../responses')
-const { HTTP_OK, HTTP_INTERNAL_ERROR } = require('../constants')
+const { Core } = require("@adobe/aio-sdk");
+const { actionSuccessResponse, actionErrorResponse } = require("../responses");
+const { HTTP_OK, HTTP_INTERNAL_ERROR } = require("../constants");
 
 /**
  * Please DO NOT DELETE this action; future functionalities planned for upcoming starter kit releases may stop working.
@@ -20,32 +20,37 @@ const { HTTP_OK, HTTP_INTERNAL_ERROR } = require('../constants')
  * This is the starter kit info endpoint.
  * It returns the version of the starter kit and the registration data.
  *
- * @returns {object} returns starter kit version and registration data
+ * @returns starter kit version and registration data
  * @param {object} params - includes the env params
  */
-async function main (params) {
-  const version = require('../../package.json').version
-  const registrations = require('../../scripts/onboarding/config/starter-kit-registrations.json')
+function main(params) {
+  const version = require("../../package.json").version;
+  const registrations = require("../../scripts/onboarding/config/starter-kit-registrations.json");
 
   // create a Logger
-  const logger = Core.Logger('starter-kit-info', { level: params.LOG_LEVEL || 'info' })
+  const logger = Core.Logger("starter-kit-info", {
+    level: params.LOG_LEVEL || "info",
+  });
 
   try {
     // 'info' is the default level if not set
-    logger.info('Calling the starter kit info action')
+    logger.info("Calling the starter kit info action");
 
     // log the response status code
-    logger.info(`Successful request: ${HTTP_OK}`)
+    logger.info(`Successful request: ${HTTP_OK}`);
     return actionSuccessResponse({
       starter_kit_version: version,
-      registrations
-    })
+      registrations,
+    });
   } catch (error) {
     // log any server errors
-    logger.error(error)
+    logger.error(error);
     // return with 500
-    return actionErrorResponse(HTTP_INTERNAL_ERROR, `Server error: ${error.message}`)
+    return actionErrorResponse(
+      HTTP_INTERNAL_ERROR,
+      `Server error: ${error.message}`,
+    );
   }
 }
 
-exports.main = main
+exports.main = main;

@@ -10,16 +10,16 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const SEPARATOR = '-'
+const SEPARATOR = "-";
 
 /**
  * Get label suffix
  *
  * @param {string} runtimeNamespace - runtime namespace
- * @returns {string} - returns the suffix
+ * @returns the suffix
  */
-function labelSuffix (runtimeNamespace) {
-  return runtimeNamespace.substring(runtimeNamespace.indexOf(SEPARATOR) + 1)
+function labelSuffix(runtimeNamespace) {
+  return runtimeNamespace.substring(runtimeNamespace.indexOf(SEPARATOR) + 1);
 }
 
 /**
@@ -27,26 +27,29 @@ function labelSuffix (runtimeNamespace) {
  *
  * @param {string} labelPrefix - label prefix
  * @param {object} environment - environment params
- * @returns {string} - returns the string with the suffix
+ * @returns the string with the suffix
  */
-function addSuffix (labelPrefix, environment) {
+function addSuffix(labelPrefix, environment) {
   if (!labelPrefix) {
-    throw Error('Cannot add suffix to undefined label')
+    throw new Error("Cannot add suffix to undefined label");
   }
   if (!environment?.AIO_runtime_namespace) {
-    throw Error('Unable to add suffix. AIO_runtime_namespace is undefined in the environment')
+    throw new Error(
+      "Unable to add suffix. AIO_runtime_namespace is undefined in the environment",
+    );
   }
-  return `${labelPrefix} - ${labelSuffix(environment.AIO_runtime_namespace)}`
+
+  return `${labelPrefix} - ${labelSuffix(environment.AIO_runtime_namespace)}`;
 }
 
 /**
  * Capitalize the first char of a given string
  *
  * @param {string} string the text to modify
- * @returns {string} string
+ * @returns string
  */
-function stringToUppercaseFirstChar (string) {
-  return string.charAt(0).toUpperCase() + string.slice(1)
+function stringToUppercaseFirstChar(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 /**
@@ -54,10 +57,10 @@ function stringToUppercaseFirstChar (string) {
  *
  * @param {string} providerKey provider key
  * @param {string} entityName entity name
- * @returns {string} the generated registration name
+ * @returns the generated registration name
  */
-function getRegistrationName (providerKey, entityName) {
-  return `${stringToUppercaseFirstChar(providerKey)} ${stringToUppercaseFirstChar(entityName)} Sync`
+function getRegistrationName(providerKey, entityName) {
+  return `${stringToUppercaseFirstChar(providerKey)} ${stringToUppercaseFirstChar(entityName)} Sync`;
 }
 
 /**
@@ -65,13 +68,15 @@ function getRegistrationName (providerKey, entityName) {
  *
  * @param {object} params action parameters
  * @param {string} providerKey the provider key (could be found in onboarding/config/providers.js)
- * @returns {string} returns the provider name
+ * @returns the provider name
  */
-function getProviderName (params, providerKey) {
-  const providersList = require('../scripts/onboarding/config/providers.json')
-  const backofficeProvider = providersList.find(provider => provider.key === providerKey)
+function getProviderName(params, providerKey) {
+  const providersList = require("../scripts/onboarding/config/providers.json");
+  const backofficeProvider = providersList.find(
+    (provider) => provider.key === providerKey,
+  );
 
-  return addSuffix(backofficeProvider.label, params)
+  return addSuffix(backofficeProvider.label, params);
 }
 
 /**
@@ -79,30 +84,32 @@ function getProviderName (params, providerKey) {
  *
  * @param {string} eventName event name
  * @param {object} environment - environment params
- * @returns {string} returns the event name
+ * @returns the event name
  */
-function getEventName (eventName, environment) {
-  const eventPrefix = environment.EVENT_PREFIX
-  const prefix = 'com.adobe.commerce.'
+function getEventName(eventName, environment) {
+  const eventPrefix = environment.EVENT_PREFIX;
+  const prefix = "com.adobe.commerce.";
 
   if (!eventPrefix) {
-    throw new Error('EVENT_PREFIX is required but was not provided in .env file.')
+    throw new Error(
+      "EVENT_PREFIX is required but was not provided in .env file.",
+    );
   }
 
   if (eventName.startsWith(prefix)) {
-    return prefix + eventPrefix + '.' + eventName.slice(prefix.length)
+    return `${prefix}${eventPrefix}.${eventName.slice(prefix.length)}`;
   }
 
-  if (eventName.startsWith('be-observer')) {
-    return eventName
+  if (eventName.startsWith("be-observer")) {
+    return eventName;
   }
 
-  return eventPrefix + '.' + eventName
+  return `${eventPrefix}.${eventName}`;
 }
 
 module.exports = {
   addSuffix,
   getRegistrationName,
   getProviderName,
-  getEventName
-}
+  getEventName,
+};

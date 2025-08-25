@@ -10,40 +10,40 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-jest.mock('openwhisk')
-const openwhisk = require('openwhisk')
-const Openwhisk = require('../../actions/openwhisk')
+jest.mock("openwhisk");
+const openwhisk = require("openwhisk");
+const Openwhisk = require("../../actions/openwhisk");
 
 afterEach(() => {
-  jest.clearAllMocks()
-  jest.resetModules()
-})
+  jest.clearAllMocks();
+  jest.resetModules();
+});
 
-describe('Given Openwhisk class', () => {
-  describe('When action is invoked', () => {
-    test('then returns action response', async () => {
+describe("Given Openwhisk class", () => {
+  describe("When action is invoked", () => {
+    test("then returns action response", async () => {
       const expectedResponse = {
         response: {
           result: {
             statusCode: 200,
             body: {
-              action: 'test',
-              success: true
-            }
-          }
-        }
-      }
+              action: "test",
+              success: true,
+            },
+          },
+        },
+      };
 
       openwhisk.mockReturnValue({
         actions: {
-          invoke: jest.fn().mockResolvedValue(expectedResponse)
-        }
-      })
+          invoke: jest.fn().mockResolvedValue(expectedResponse),
+        },
+      });
 
-      const client = new Openwhisk('API_HOST', 'API_AUTH')
-      const response = await client.invokeAction('test', {})
+      const client = new Openwhisk("API_HOST", "API_AUTH");
+      const response = await client.invokeAction("test", {});
 
-      expect(response).toEqual(expectedResponse)
-    })
-  })
-})
+      expect(response).toEqual(expectedResponse);
+    });
+  });
+});

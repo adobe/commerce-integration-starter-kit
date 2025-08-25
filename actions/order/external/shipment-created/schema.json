@@ -1,14 +1,14 @@
 {
   "type": "object",
   "properties": {
-    "orderId": { "type":  "number" },
+    "orderId": { "type": "number" },
     "items": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "orderItemId": { "type":  "number" },
-          "qty": { "type":  "number" }
+          "orderItemId": { "type": "number" },
+          "qty": { "type": "number" }
         },
         "required": ["orderItemId", "qty"],
         "additionalProperties": false
@@ -19,24 +19,24 @@
       "items": {
         "type": "object",
         "properties": {
-          "trackNumber": { "type":  "string" },
-          "title": { "type":  "string" },
-          "carrierCode": { "type":  "string" }
+          "trackNumber": { "type": "string" },
+          "title": { "type": "string" },
+          "carrierCode": { "type": "string" }
         },
         "required": ["trackNumber", "title", "carrierCode"],
         "additionalProperties": false
       }
     },
-    "comment" : {
-        "type": "object",
-        "properties": {
-          "comment": { "type":  "string" },
-          "visibleOnFront": { "type":  "boolean" }
-        },
-        "required": ["comment", "visibleOnFront"],
-        "additionalProperties": false
+    "comment": {
+      "type": "object",
+      "properties": {
+        "comment": { "type": "string" },
+        "visibleOnFront": { "type": "boolean" }
+      },
+      "required": ["comment", "visibleOnFront"],
+      "additionalProperties": false
     },
-    "stockSourceCode": { "type":  "string" }
+    "stockSourceCode": { "type": "string" }
   },
   "required": ["orderId", "items", "tracks", "comment", "stockSourceCode"],
   "additionalProperties": false

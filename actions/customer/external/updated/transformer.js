@@ -14,9 +14,9 @@ governing permissions and limitations under the License.
  * This function transform the received customer data from external back-office application to Adobe commerce
  *
  * @param {object} params - Data received from Adobe commerce
- * @returns {object} - Returns transformed data object
+ * @returns transformed data object
  */
-function transformData (params) {
+function transformData(params) {
   // This is a sample implementation. Please adapt based on your needs
   // Notice that the attribute_set_id may need to be changed
   return {
@@ -24,11 +24,11 @@ function transformData (params) {
       id: params.data.id,
       firstname: params.data.name,
       lastname: params.data.lastname,
-      email: params.data.email
-    }
-  }
+      email: params.data.email,
+    },
+  };
 }
 
 module.exports = {
-  transformData
-}
+  transformData,
+};

@@ -5,10 +5,10 @@
     "properties": {
       "sku": { "type": "string" },
       "source": { "type": "string" },
-      "quantity": { "type":  "number" },
+      "quantity": { "type": "number" },
       "outOfStock": { "type": "boolean" }
     },
-    "required": [ "sku", "source", "quantity", "outOfStock" ],
+    "required": ["sku", "source", "quantity", "outOfStock"],
     "additionalProperties": true
   }
 }

@@ -10,80 +10,88 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-jest.mock('../../../../../actions/order/external/shipment-created/validator')
-const { validateData } = require('../../../../../actions/order/external/shipment-created/validator')
+jest.mock("../../../../../actions/order/external/shipment-created/validator");
+const {
+  validateData,
+} = require("../../../../../actions/order/external/shipment-created/validator");
 
-jest.mock('../../../../../actions/order/external/shipment-created/transformer')
+jest.mock("../../../../../actions/order/external/shipment-created/transformer");
 
-jest.mock('../../../../../actions/order/external/shipment-created/sender')
-const { sendData } = require('../../../../../actions/order/external/shipment-created/sender')
+jest.mock("../../../../../actions/order/external/shipment-created/sender");
+const {
+  sendData,
+} = require("../../../../../actions/order/external/shipment-created/sender");
 
-const action = require('../../../../../actions/order/external/shipment-created')
-const { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR, HTTP_OK } = require('../../../../../actions/constants')
+const action = require("../../../../../actions/order/external/shipment-created");
+const {
+  HTTP_BAD_REQUEST,
+  HTTP_INTERNAL_ERROR,
+  HTTP_OK,
+} = require("../../../../../actions/constants");
 
-describe('Given order external shipment created action', () => {
-  describe('When method main is defined', () => {
-    test('Then is an instance of Function', () => {
-      expect(action.main).toBeInstanceOf(Function)
-    })
-  })
-  describe('When order shipment event data is invalid', () => {
-    test('Then returns action error response', async () => {
-      const IGNORED_PARAMS = { data: {} }
+describe("Given order external shipment created action", () => {
+  describe("When method main is defined", () => {
+    test("Then is an instance of Function", () => {
+      expect(action.main).toBeInstanceOf(Function);
+    });
+  });
+  describe("When order shipment event data is invalid", () => {
+    test("Then returns action error response", async () => {
+      const IGNORED_PARAMS = { data: {} };
       const FAILED_VALIDATION_RESPONSE = {
         success: false,
-        message: 'Data provided does not validate with the schema'
-      }
+        message: "Data provided does not validate with the schema",
+      };
       const ERROR_RESPONSE = {
         statusCode: HTTP_BAD_REQUEST,
         body: {
           success: false,
-          error: 'Data provided does not validate with the schema'
-        }
-      }
-      validateData.mockReturnValue(FAILED_VALIDATION_RESPONSE)
-      expect(await action.main(IGNORED_PARAMS)).toMatchObject(ERROR_RESPONSE)
-    })
-  })
-  describe('When an exception is thrown', () => {
-    test('Then returns action error response', async () => {
-      const IGNORED_PARAMS = { data: {} }
+          error: "Data provided does not validate with the schema",
+        },
+      };
+      validateData.mockReturnValue(FAILED_VALIDATION_RESPONSE);
+      expect(await action.main(IGNORED_PARAMS)).toMatchObject(ERROR_RESPONSE);
+    });
+  });
+  describe("When an exception is thrown", () => {
+    test("Then returns action error response", async () => {
+      const IGNORED_PARAMS = { data: {} };
       const SUCCESSFUL_VALIDATION_RESPONSE = {
-        success: true
-      }
-      const ERROR = new Error('generic error')
+        success: true,
+      };
+      const ERROR = new Error("generic error");
       const ERROR_RESPONSE = {
         statusCode: HTTP_INTERNAL_ERROR,
         body: {
           success: false,
-          error: ERROR.message
-        }
-      }
-      validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE)
-      sendData.mockRejectedValue(ERROR)
-      expect(await action.main(IGNORED_PARAMS)).toMatchObject(ERROR_RESPONSE)
-    })
-  })
-  describe('When order shipment event data is valid', () => {
-    test('Then returns action success response', async () => {
-      const IGNORED_PARAMS = { data: {} }
+          error: ERROR.message,
+        },
+      };
+      validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE);
+      sendData.mockRejectedValue(ERROR);
+      expect(await action.main(IGNORED_PARAMS)).toMatchObject(ERROR_RESPONSE);
+    });
+  });
+  describe("When order shipment event data is valid", () => {
+    test("Then returns action success response", async () => {
+      const IGNORED_PARAMS = { data: {} };
 
       const SUCCESSFUL_VALIDATION_RESPONSE = {
-        success: true
-      }
+        success: true,
+      };
       const SUCCESSFUL_SEND_DATA_RESPONSE = {
         success: true,
-        response: 'anything'
-      }
+        response: "anything",
+      };
       const SUCCESS_RESPONSE = {
         statusCode: HTTP_OK,
         body: {
-          success: true
-        }
-      }
-      validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE)
-      sendData.mockReturnValue(SUCCESSFUL_SEND_DATA_RESPONSE)
-      expect(await action.main(IGNORED_PARAMS)).toMatchObject(SUCCESS_RESPONSE)
-    })
-  })
-})
+          success: true,
+        },
+      };
+      validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE);
+      sendData.mockReturnValue(SUCCESSFUL_SEND_DATA_RESPONSE);
+      expect(await action.main(IGNORED_PARAMS)).toMatchObject(SUCCESS_RESPONSE);
+    });
+  });
+});

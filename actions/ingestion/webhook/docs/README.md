@@ -1,6 +1,7 @@
 # Publish external back-office events through ingestion webhook.
 
 It is an alternative method to deliver events for scenarios where the calling system cannot produce a request to interact directly with the event provider, such as:
+
 - The client cannot add custom headers to the request
 
 This runtime action exposes a web entry point to an external back office application for publishing information to IO events.
@@ -10,11 +11,14 @@ This runtime action exposes a web entry point to an external back office applica
 ![Alt text](BackofficeEventsIngestionWebhook.png "Title")
 
 # Input information
+
 Data parameters hold the event information to publish; each event must include entity, event, and value. The value parameter contains the data to send through the event.
+
 - The entities available are [product, customer, customer-group, order, shipment, stock]
 - The list of events available by an entity can be found in the file `onboarding/config/events.json` under the `backoffice` sections.
 
 Here is the payload JSON sample:
+
 ```json
 {
   "data": {
@@ -31,14 +35,17 @@ Here is the payload JSON sample:
 ```
 
 ## Authentication
+
 The webhook is not authenticated by default; you must implement your authentication check on the file `ingestion/auth.js` method checkAuthentication(params).
 
 ## Use extra env parameters
+
 You can access any needed environment parameter from `params`. Add the required parameter in the `actions/ingestion/webhook/actions.config.yaml` under `webhook -> inputs` as follows:
+
 ```yaml
 webhook:
   function: ./consumer/index.js
-  web: 'no'
+  web: "no"
   runtime: nodejs:22
   inputs:
     LOG_LEVEL: debug

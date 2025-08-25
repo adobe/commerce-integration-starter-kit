@@ -10,54 +10,70 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { assertImsAuthParams, getImsAuthProvider } = require('@adobe/aio-commerce-lib-auth')
-const DEFAULT_IMS_SCOPES = ['AdobeID', 'openid', 'read_organizations', 'additional_info.projectedProductContext', 'additional_info.roles', 'adobeio_api', 'read_client_secret', 'manage_client_secrets', 'commerce.accs']
+const {
+  assertImsAuthParams,
+  getImsAuthProvider,
+} = require("@adobe/aio-commerce-lib-auth");
+
+const DEFAULT_IMS_SCOPES = [
+  "AdobeID",
+  "openid",
+  "read_organizations",
+  "additional_info.projectedProductContext",
+  "additional_info.roles",
+  "adobeio_api",
+  "read_client_secret",
+  "manage_client_secrets",
+  "commerce.accs",
+];
 
 /**
  * Resolve IMS configuration from environment parameters
  * @param {object} params - Environment parameters containing ImsAuth configuration
- * @returns {object} IMS authentication configuration object
+ * @returns IMS authentication configuration object
  */
-function resolveImsConfig (params) {
+function resolveImsConfig(params) {
   return {
     clientId: params.OAUTH_CLIENT_ID,
-    clientSecrets: params.OAUTH_CLIENT_SECRET ? [params.OAUTH_CLIENT_SECRET] : [],
+    clientSecrets: params.OAUTH_CLIENT_SECRET
+      ? [params.OAUTH_CLIENT_SECRET]
+      : [],
     technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
     technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
     imsOrgId: params.OAUTH_ORG_ID,
     scopes: DEFAULT_IMS_SCOPES,
-    environment: params.AIO_CLI_ENV || 'prod'
-  }
+    environment: params.AIO_CLI_ENV || "prod",
+  };
 }
 
 /**
  * Generate access token to connect with Adobe tools (e.g. IO Events)
  * @param {object} params includes env parameters
- * @returns {Promise<string>} returns the access token
+ * @returns the access token
  */
-async function getAdobeAccessToken (params) {
-  const config = resolveImsConfig(params)
+function getAdobeAccessToken(params) {
+  const config = resolveImsConfig(params);
 
-  assertImsAuthParams(config)
-  const imsAuthProvider = getImsAuthProvider(config)
+  assertImsAuthParams(config);
+  const imsAuthProvider = getImsAuthProvider(config);
 
-  return imsAuthProvider.getAccessToken()
+  return imsAuthProvider.getAccessToken();
 }
 
 /**
  * Get the access token headers for Adobe tools (e.g. IO Events)
  * @param {object} params - IMS authentication parameters
- * @returns {Promise<object>} returns the headers with access token
+ * @returns the headers with access token
  */
-async function getAdobeAccessHeaders (params) {
-  const config = resolveImsConfig(params)
-  assertImsAuthParams(config)
-  const imsAuthProvider = getImsAuthProvider(config)
+function getAdobeAccessHeaders(params) {
+  const config = resolveImsConfig(params);
+  assertImsAuthParams(config);
+  const imsAuthProvider = getImsAuthProvider(config);
 
-  return imsAuthProvider.getHeaders()
+  return imsAuthProvider.getHeaders();
 }
 
 module.exports = {
   getAdobeAccessToken,
-  getAdobeAccessHeaders
-}
+  getAdobeAccessHeaders,
+};
