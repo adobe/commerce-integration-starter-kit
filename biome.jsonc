@@ -13,6 +13,7 @@
   },
 
   "javascript": {
+    "globals": ["jest"],
     "formatter": {
       "arrowParentheses": "always",
       "bracketSameLine": true,
@@ -43,9 +44,11 @@
           "complexity": {
             "noExcessiveCognitiveComplexity": "off"
           },
+
           "nursery": {
             "useMaxParams": "off"
           },
+          
           "suspicious": {
             // We use console to log information during the onboarding process.
             "noConsole": "off"
@@ -60,7 +63,7 @@
           "nursery": {
             "useMaxParams": "off"
           },
-          
+
           "correctness": {
             // It's a scaffolding, functions are unimplemented (and thus parameters are unused) in purpose.
             "noUnusedFunctionParameters": "off"

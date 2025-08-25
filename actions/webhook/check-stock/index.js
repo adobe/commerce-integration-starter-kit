@@ -42,7 +42,7 @@ async function main(params) {
 
     const checkAvailableStockResult = await checkAvailableStock(params.data);
     if (!checkAvailableStockResult.success) {
-      logger.error(`${checkAvailableStockResult.message}`);
+      logger.error(`Stock check failed: ${checkAvailableStockResult.message}`);
       return webhookErrorResponse(checkAvailableStockResult.message);
     }
 

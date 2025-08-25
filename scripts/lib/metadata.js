@@ -41,7 +41,7 @@ function buildProviderData(providerEvents) {
 /**
  * Encodes a sample event template to base64 string
  * @param {object} sampleEventTemplate - Sample event template object
- * @returns {string|null} Base64 encoded string of the template or null if invalid
+ * @returns Base64 encoded string of the template or null if invalid
  */
 function base64EncodedSampleEvent(sampleEventTemplate) {
   if (!sampleEventTemplate || typeof sampleEventTemplate !== "object") {

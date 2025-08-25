@@ -191,7 +191,9 @@ describe("Given external backoffice events ingestion webhook", () => {
           getAccessToken: () => {
             throw new Error("fake error");
           },
-          getHeaders: () => {},
+          getHeaders: () => {
+            return {};
+          },
         };
       });
 

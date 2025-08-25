@@ -117,7 +117,7 @@ async function main(clientRegistrations, providers, environment, authHeaders) {
  * @param {string} providerKey - Provider key identifier
  * @param {Array<{provider_id: string, event_code: string}>} events - Array of events to register
  * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID, OAUTH_CLIENT_ID
- * @returns {Promise<{success: boolean, result?: {id: string, registration_id: string, name: string, enabled: boolean}, error?: {label: string, reason: string, payload: object}}>} Result object with registration details or error
+ * @returns  Result object with registration details or error
  */
 async function createRequestRegistration(
   authHeaders,
