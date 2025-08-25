@@ -14,18 +14,25 @@ const fetch = require("node-fetch");
 const { getExistingRegistrations } = require("../../utils/adobe-events-api");
 const { getRegistrationName } = require("../../utils/naming");
 const { getEventName } = require("../../utils/naming");
-const providersEventsConfig = require("../onboarding/config/events.json");
 const { makeError } = require("./helpers/errors");
 
 /**
- * Creates event registrations based on client selections from custom/starter-kit-registrations.json
- * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
- * @param {Array<{id: string, key: string, label: string}>} providers - List of provider objects
- * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID, OAUTH_CLIENT_ID
+ * Creates event registrations based on unified config.js
+ * @param {object} config - Unified configuration object containing registrations, providers and subscriptions
+ * @param {Array} providers - List of provider objects
+ * @param {object} environment - Environment variables
  * @param {object} authHeaders - Authentication headers for API requests
  * @returns Result object with registrations or error
  */
-async function main(clientRegistrations, providers, environment, authHeaders) {
+async function main(
+  {
+    app: { registrations: clientRegistrations },
+    eventing: { subscriptions: providersEventsConfig },
+  },
+  providers,
+  environment,
+  authHeaders,
+) {
   const result = [];
 
   try {
@@ -42,7 +49,6 @@ async function main(clientRegistrations, providers, environment, authHeaders) {
         if (!options.includes(provider.key)) {
           continue;
         }
-
         const registrationName = getRegistrationName(provider.key, entityName);
         if (existingRegistrations[registrationName]) {
           console.log(

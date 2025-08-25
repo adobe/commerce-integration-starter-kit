@@ -33,7 +33,10 @@ const DEFAULT_PROVIDERS = [
   },
 ];
 
-const ACCESS_TOKEN = "token";
+DEFAULT_AUTH_HEADERS = {
+  Authorization: "Bearer ezySOME_TOKEN",
+  "x-api-key": "CLIENT_ID",
+};
 const ENVIRONMENT = {
   EVENT_PREFIX: "test-project",
 };
@@ -251,12 +254,17 @@ describe("Given on-boarding registrations file", () => {
           mockFetchCreateProductBackofficeRegistrationResponse,
         );
 
-      const clientRegistrations = require("../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json");
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: {
+            registrations:
+              fixtures.CREATE_COMMERCE_AND_BACKOFFICE_REGISTRATIONS,
+          },
+          eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
+        },
         DEFAULT_PROVIDERS,
         ENVIRONMENT,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
 
       expect(response).toEqual({
@@ -448,12 +456,14 @@ describe("Given on-boarding registrations file", () => {
           mockFetchCreateProductCommerceRegistrationResponse,
         );
 
-      const clientRegistrations = require("../../data/onboarding/registrations/create_only_commerce_registrations.json");
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: { registrations: fixtures.CREATE_ONLY_COMMERCE_REGISTRATIONS },
+          eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
+        },
         DEFAULT_PROVIDERS,
         ENVIRONMENT,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
 
       expect(response).toEqual({
@@ -639,12 +649,14 @@ describe("Given on-boarding registrations file", () => {
           mockFetchCreateProductBackofficeRegistrationResponse,
         );
 
-      const clientRegistrations = require("../../data/onboarding/registrations/create_only_backoffice_registrations.json");
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: { registrations: fixtures.CREATE_ONLY_BACKOFFICE_REGISTRATIONS },
+          eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
+        },
         DEFAULT_PROVIDERS,
         ENVIRONMENT,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
 
       expect(response).toEqual({
@@ -830,12 +842,17 @@ describe("Given on-boarding registrations file", () => {
           mockFetchCreateProductBackofficeRegistrationResponse,
         );
 
-      const clientRegistrations = require("../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json");
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: {
+            registrations:
+              fixtures.CREATE_COMMERCE_AND_BACKOFFICE_REGISTRATIONS,
+          },
+          eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
+        },
         DEFAULT_PROVIDERS,
         ENVIRONMENT,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
 
       expect(response).toEqual({
@@ -861,12 +878,18 @@ describe("Given on-boarding registrations file", () => {
     test("Then returns error response", async () => {
       const fakeError = new Error("fake");
       fetch.mockRejectedValue(fakeError);
-
-      const clientRegistrations = require("../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json");      const response = await action.main(
-        clientRegistrations,
-        DEFAULT_PROVIDERS,
+      const response = await action.main(
+        {
+          app: {
+            registrations:
+              fixtures.CREATE_COMMERCE_AND_BACKOFFICE_REGISTRATIONS,
+          },
+          eventing: {
+            providers: DEFAULT_PROVIDERS,
+          },
+        },
         ENVIRONMENT,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
       expect(response).toEqual({
         success: false,
@@ -898,7 +921,6 @@ describe("Given on-boarding registrations file", () => {
 
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
-      const clientRegistrations = require("../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json");
       const environment = {
         ...ENVIRONMENT,
         IO_MANAGEMENT_BASE_URL: "https://io-management.fake/",
@@ -908,12 +930,14 @@ describe("Given on-boarding registrations file", () => {
       };
 
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: { registrations: fixtures.CREATE_ONLY_COMMERCE_REGISTRATIONS },
+          eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
+        },
         DEFAULT_PROVIDERS,
         environment,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
-
       expect(response).toEqual({
         success: false,
         error: {

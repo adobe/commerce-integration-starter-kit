@@ -24,12 +24,12 @@ describe("onboarding index", () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
-    jest.clearAllMocks();
     jest.resetModules();
   });
 
   afterEach(() => {
     process.env = originalEnv;
+    jest.clearAllMocks();
   });
 
   test("should print an error when COMMERCE_BASE_URL, IO_PROJECT_ID, IO_CONSUMER_ID and IO_WORKSPACE_ID and EVENT_PREFIX are missing", async () => {
@@ -248,17 +248,6 @@ describe("onboarding index", () => {
       { virtual: true },
     );
 
-    jest.doMock(
-      "../../../scripts/onboarding/config/starter-kit-registrations.json",
-      () => ({
-        product: ["commerce", "backoffice"],
-        customer: ["commerce"],
-        order: ["commerce"],
-        stock: ["commerce"],
-      }),
-      { virtual: true },
-    );
-
     // Set up required environment variables
     const mockEnv = {
       COMMERCE_BASE_URL: "https://commerce.test/",
@@ -322,16 +311,5 @@ describe("onboarding index", () => {
 
     // Verify no errors were logged
     expect(consoleErrorSpy).not.toHaveBeenCalled();
-
-    // Clean up mocks
-    jest.dontMock("../../../utils/adobe-auth");
-    jest.dontMock("../../../scripts/lib/providers");
-    jest.dontMock("../../../scripts/lib/metadata");
-    jest.dontMock("../../../scripts/lib/registrations");
-    jest.dontMock("../../../scripts/lib/configure-eventing");
-    jest.dontMock("../../../scripts/onboarding/config/workspace.json");
-    jest.dontMock(
-      "../../../scripts/onboarding/config/starter-kit-registrations.json",
-    );
   });
 });

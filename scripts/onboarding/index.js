@@ -17,6 +17,7 @@ const {
   CommerceSdkValidationError,
 } = require("@adobe/aio-commerce-lib-core/error");
 const v = require("valibot");
+const config = require("./config.js");
 
 require("dotenv").config();
 
@@ -115,7 +116,10 @@ async function main() {
     "Starting the process of on-boarding based on your registration choices",
   );
 
-  const registrations = require("./config/starter-kit-registrations.json");
+  const {
+    app: { registrations: registrationsConfig },
+    eventing: { providers: providersConfig },
+  } = config;
   let authHeaders;
 
   try {
@@ -146,7 +150,7 @@ async function main() {
   }
 
   const createProvidersResult = await require("../lib/providers").main(
-    registrations,
+    config,
     process.env,
     authHeaders,
   );
@@ -158,7 +162,7 @@ async function main() {
 
   const providers = createProvidersResult.result;
   const createProvidersMetadataResult = await require("../lib/metadata").main(
-    registrations,
+    config,
     providers,
     process.env,
     authHeaders,
@@ -170,7 +174,7 @@ async function main() {
   }
 
   const registerEntityEventsResult = await require("../lib/registrations").main(
-    registrations,
+    config,
     providers,
     process.env,
     authHeaders,
@@ -193,6 +197,7 @@ async function main() {
     );
     const configureEventingResult =
       await require("../lib/configure-eventing").main(
+        providers,
         commerceProvider.id,
         commerceProvider.instanceId,
         workspaceConfiguration,

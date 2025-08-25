@@ -214,17 +214,30 @@ You can confirm the success of the deployment in the Adobe Developer Console by 
 
 #### Configure the event registrations
 
-By default, the registrations' config file creates all the registrations for all entities. You can edit the `./scripts/onboarding/custom/starter-kit-registrations.json` file if you don't need a registration.
+By default, the config file creates all the registrations for all entities. You can edit the `./scripts/onboarding/config.js` file at path `.app.registrations` if you don't need a registration.
 If you don't want to receive events from commerce, remove `commerce` from the entity array; for backoffice updates, remove `backoffice`.
 e.g., In the previous onboarding step (`Configure the project`), we commented on the product-backoffice package. In this case, we have to remove `backoffice` from the `product` entity:
 
-```json
-{
-  "product": ["commerce"],
-  "customer": ["commerce", "backoffice"],
-  "order": ["commerce", "backoffice"],
-  "stock": ["commerce", "backoffice"]
-}
+```javascript
+// In ./scripts/onboarding/config.js
+module.exports = {
+  app: {
+    registrations: {
+      product: ["commerce"],
+      customer: ["commerce", "backoffice"],
+      order: ["commerce", "backoffice"],
+      stock: ["commerce", "backoffice"],
+    },
+  },
+  eventing: {
+    providers: [
+      // ... providers configuration
+    ],
+    subscriptions: {
+      // ... event subscriptions configuration
+    },
+  },
+};
 ```
 
 #### Execute the onboarding
@@ -745,20 +758,21 @@ You can find more details about unit testing and an example in [Lesson 3: Testin
 ### How to subscribe to a new event
 
 The starter kit comes with predefined events for each entity. Sometimes, you may need to add a new event to an entity, e.g., a customer. To do this, follow the next steps:
+Add the event to the `./scripts/onboarding/config.js` file at path `.eventing.subscriptions` under the related entity flow; for example, if the event is related to a customer and is coming from commerce, you should add it under entity customer -> commerce. e.g.,
 
-- Add the event to the `./onboarding/config/events.json` file under the related entity flow; for example, if the event is related to a customer and is coming from commerce, you should add it under entity customer -> commerce. e.g.,
-  ```json
-      "customer": {
-        "commerce": [
-          "com.adobe.commerce.observer.customer_save_commit_after",
-          "com.adobe.commerce.observer.customer_delete_commit_after",
-          "com.adobe.commerce.observer.customer_group_save_commit_after",
-          "com.adobe.commerce.observer.customer_group_delete_commit_after",
-          "com.adobe.commerce.THE_NEW_CUSTOMER_EVENT"
-        ],
-      ...
-      }
-  ```
+```json
+    "customer": {
+      "commerce": [
+        "com.adobe.commerce.observer.customer_save_commit_after",
+        "com.adobe.commerce.observer.customer_delete_commit_after",
+        "com.adobe.commerce.observer.customer_group_save_commit_after",
+        "com.adobe.commerce.observer.customer_group_delete_commit_after",
+        "com.adobe.commerce.THE_NEW_CUSTOMER_EVENT"
+      ],
+    ...
+    }
+```
+
 - Run the onboarding script:
   ```bash
   npm run onboard
@@ -791,7 +805,7 @@ The starter kit comes with predefined events for each entity. Sometimes, you may
 With these steps, you can consume the new event you added to the project.
 If you want to change an existing event, make the changes in the same places:
 
-- Edit the event in the `./onboarding/config/events.json` file
+- Edit the event in the `./scripts/onboarding/config.js`file at the path `.eventing.subscriptions`
 - Modify the event in the consumer of the flow where the event belongs
 - Make changes to the operation action invoked by the consumer switch case.
 - Deploy your changes

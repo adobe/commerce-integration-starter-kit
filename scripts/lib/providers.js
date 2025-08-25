@@ -24,12 +24,9 @@ const { getExistingProviders } = require("../../utils/adobe-events-api");
 const { addSuffix } = require("../../utils/naming");
 const { arrayItemsErrorFormat } = require("./helpers/errors");
 
-const providersEventsConfig = require("../onboarding/config/events.json");
-
 // Regex patterns defined at top level for performance
 const CRLF_PATTERN = /\r\n/g;
 const TRAILING_WHITESPACE_PATTERN = /\s+$/;
-const providersEventsConfig = require("../onboarding/config/events.json");
 
 /**
  * Creates an events provider via the I/O Management API
@@ -138,24 +135,25 @@ function writeToEnvFile(providers) {
 }
 
 /**
- * Main function to create events providers based on config/providers.json and client registrations
- * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
- * @param {object} environment - Environment configuration
+ * Main function to create events providers based on unified config.js
+ * @param {object} config - Unified configuration object containing registrations, providers and subscriptions
+ * @param {object} environment - Environment variables
  * @param {object} authHeaders - Authentication headers for API requests
  * @returns Result object with created providers or error
  */
-async function main(clientRegistrations, environment, authHeaders) {
-  // Load predefined provider, providerEvents and clientRegistrations
-  const providersList = require("../onboarding/config/providers.json");
+async function main(
+  { app: { registrations }, eventing: { providers, subscriptions } },
+  environment,
+  authHeaders,
+) {
   let currentProvider;
-
   try {
-    console.log("Start process of creating providers: ", providersEventsConfig);
+    console.log("Start process of creating providers: ", subscriptions);
 
     // Validate client registration selection
     const requiredRegistrations = ["product", "customer", "order", "stock"];
     const missingRegistrations = getMissingKeys(
-      clientRegistrations,
+      registrations,
       requiredRegistrations,
     );
 
@@ -165,7 +163,7 @@ async function main(clientRegistrations, environment, authHeaders) {
           missingRegistrations,
           (item) => `Registration "${item}" is required`,
         ),
-        '\nCheck that they are present in "/onboarding/config/starter-kit-registrations.json"',
+        '\nCheck that they are present in "/onboarding/config.js"',
       ];
 
       const reason = lines.join("\n");
@@ -181,32 +179,30 @@ async function main(clientRegistrations, environment, authHeaders) {
     );
     const result = [];
 
-    for (const provider of providersList) {
+    for (const provider of providers) {
       currentProvider = provider;
-      provider.label = addSuffix(provider.label, environment);
-      const isProviderSelectedByClient = hasSelection(
-        provider.key,
-        clientRegistrations,
-      );
+      const key = provider.key;
+      const label = addSuffix(provider.label, environment);
+      const isProviderSelectedByClient = hasSelection(key, registrations);
 
       if (isProviderSelectedByClient) {
-        const persistedProvider = existingProviders[provider.label];
+        const persistedProvider = existingProviders[label];
 
         if (persistedProvider) {
           console.log(
-            `Skipping creation of "${provider.label}" creation, provider already exists`,
+            `Skipping creation of "${label}" creation, provider already exists`,
           );
           result.push({
-            key: provider.key,
+            key,
             id: persistedProvider.id,
             instanceId: persistedProvider.instance_id,
-            label: provider.label,
+            label,
           });
 
           continue;
         }
 
-        console.log("Creating provider with:", provider.label);
+        console.log("Creating provider with:", label);
         console.log("Provider information:", provider);
 
         const createProviderResult = await createProvider(
@@ -219,10 +215,10 @@ async function main(clientRegistrations, environment, authHeaders) {
         }
 
         result.push({
-          key: provider.key,
+          key,
           id: createProviderResult.provider?.id,
           instanceId: createProviderResult.provider?.instance_id,
-          label: provider.label,
+          label,
         });
       }
     }

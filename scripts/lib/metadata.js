@@ -13,7 +13,6 @@ governing permissions and limitations under the License.
 const fetch = require("node-fetch");
 
 const { makeError } = require("./helpers/errors");
-const providersEventsConfig = require("../onboarding/config/events.json");
 const { getEventName } = require("../../utils/naming");
 
 /**
@@ -215,16 +214,20 @@ async function getExistingMetadata(
 }
 
 /**
- * Main function to add metadata events codes from config/events.json to corresponding providers
- * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
- * @param {Array<{id: string, key: string, label: string}>} providers - List of provider objects
- * @param {object} environment - Environment configuration
+ * Main function to add metadata events codes from unified config.js to corresponding providers
+ * @param {object} config - Unified configuration object containing registrations, providers and subscriptions
+ * @param {Array} providers - List of provider objects
+ * @param {object} environment - Environment variables
  * @param {object} authHeaders - Authentication headers for API requests
  * @returns Result object with operation outcome
  */
-async function main(clientRegistrations, providers, environment, authHeaders) {
-  let currentProvider;
-  let eventName;
+async function main(
+  { app: { registrations }, eventing: { subscriptions } },
+  providers,
+  environment,
+  authHeaders,
+) {
+  let currentProvider, eventName;
   try {
     let providersEvents = {};
 
@@ -243,11 +246,11 @@ async function main(clientRegistrations, providers, environment, authHeaders) {
 
       const { existingMetadata } = existingMetadataResult;
 
-      for (const [entityName, options] of Object.entries(clientRegistrations)) {
-        if (options?.includes(provider.key)) {
-          if (providersEventsConfig[entityName]) {
+      for (const [entityName, options] of Object.entries(registrations)) {
+        if (options !== undefined && options.includes(provider.key)) {
+          if (subscriptions[entityName]) {
             for (const [event, eventProps] of Object.entries(
-              providersEventsConfig[entityName][provider.key],
+              subscriptions[entityName][provider.key],
             )) {
               eventName = getEventName(event, environment);
               if (existingMetadata[eventName]) {
