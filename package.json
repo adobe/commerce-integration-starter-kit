@@ -60,7 +60,8 @@
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
-      "npm run code:lint:fix"
+      "npm run code:lint:fix",
+      "npm run code:format:fix"
     ],
     "*.md": [
       "npm run docs:format:fix"
