@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { getClient } = require("../../actions/oauth1a");
+const { getClient } = require("../../actions/http-client");
 const { Core } = require("@adobe/aio-sdk");
 const logger = Core.Logger("commerce-eventing-api-client", { level: "info" });
 
@@ -22,7 +22,7 @@ const logger = Core.Logger("commerce-eventing-api-client", { level: "info" });
  * @returns Response from the Adobe Commerce API
  */
 async function updateConfiguration(baseUrl, params, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
@@ -33,7 +33,6 @@ async function updateConfiguration(baseUrl, params, data) {
   return await client.put(
     "eventing/updateConfiguration",
     JSON.stringify(data),
-    "",
     { "Content-Type": "application/json" },
   );
 }
@@ -46,7 +45,7 @@ async function updateConfiguration(baseUrl, params, data) {
  * @returns Response from the Adobe Commerce API
  */
 async function eventSubscribe(baseUrl, params, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
@@ -54,12 +53,9 @@ async function eventSubscribe(baseUrl, params, data) {
     logger,
   );
 
-  return await client.post(
-    "eventing/eventSubscribe",
-    JSON.stringify(data),
-    "",
-    { "Content-Type": "application/json" },
-  );
+  return await client.post("eventing/eventSubscribe", JSON.stringify(data), {
+    "Content-Type": "application/json",
+  });
 }
 
 /**
@@ -70,7 +66,7 @@ async function eventSubscribe(baseUrl, params, data) {
  * @param {object} params - Environment params from the IO Runtime request
  */
 async function getEventProviders(baseUrl, params) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
@@ -93,7 +89,7 @@ async function getEventProviders(baseUrl, params) {
  * @param {object} data - Adobe commerce api payload
  */
 async function addEventProvider(baseUrl, params, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
@@ -101,7 +97,7 @@ async function addEventProvider(baseUrl, params, data) {
     logger,
   );
 
-  return await client.post("eventing/eventProvider", JSON.stringify(data), "", {
+  return await client.post("eventing/eventProvider", JSON.stringify(data), {
     "Content-Type": "application/json",
   });
 }

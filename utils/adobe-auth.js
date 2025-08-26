@@ -13,19 +13,64 @@ governing permissions and limitations under the License.
 const {
   assertImsAuthParams,
   getImsAuthProvider,
+  assertIntegrationAuthParams,
+  getIntegrationAuthProvider,
 } = require("@adobe/aio-commerce-lib-auth");
 
-const DEFAULT_IMS_SCOPES = [
-  "AdobeID",
-  "openid",
-  "read_organizations",
-  "additional_info.projectedProductContext",
-  "additional_info.roles",
-  "adobeio_api",
-  "read_client_secret",
-  "manage_client_secrets",
-  "commerce.accs",
-];
+const {
+  CommerceSdkValidationError,
+} = require("@adobe/aio-commerce-lib-core/error");
+
+const v = require("valibot");
+
+const MinArrayScope = v.pipe(
+  v.array(v.string(), "Expected an array of strings"),
+  v.minLength(1, "At least one scope must be provided"),
+);
+
+const JsonArray = v.message(
+  v.pipe(
+    v.string("Expected a JSON string"),
+    v.nonEmpty("Empty string is not a valid JSON array"),
+    v.parseJson(),
+    MinArrayScope,
+  ),
+  "Invalid JSON array format",
+);
+
+const SIMPLE_STRING_REGEX = /^[\w.-]+(,\s*[\w.-]+)*$/;
+const ValidSimpleString = v.pipe(
+  v.string("Expected a comma-separated string"),
+  v.regex(
+    SIMPLE_STRING_REGEX,
+    "Scopes must be comma-separated values containing only letters, numbers, underscores, hyphens, and periods",
+  ),
+);
+
+const SimpleStringArray = v.pipe(
+  ValidSimpleString,
+  v.transform((value) => {
+    return value.split(",").map((s) => s.trim());
+  }),
+  MinArrayScope,
+);
+
+const ScopesSchema = v.message(
+  v.union([JsonArray, SimpleStringArray, MinArrayScope]),
+  "Scopes can only be either a valid Array, JSON Array or comma-separated string",
+);
+
+function resolveScopes(scopes) {
+  const result = v.safeParse(ScopesSchema, scopes);
+
+  if (result.success) {
+    return result.output;
+  }
+
+  throw new CommerceSdkValidationError("Invalid scopes format", {
+    issues: result.issues,
+  });
+}
 
 /**
  * Resolve IMS configuration from environment parameters
@@ -33,6 +78,12 @@ const DEFAULT_IMS_SCOPES = [
  * @returns IMS authentication configuration object
  */
 function resolveImsConfig(params) {
+  // scopes will be defaulted to empty array if not provided
+  // this will lead to the CommerceSdkValidationError error
+  const scopes = params.OAUTH_SCOPES
+    ? (resolveScopes(params.OAUTH_SCOPES) ?? [])
+    : [];
+
   return {
     clientId: params.OAUTH_CLIENT_ID,
     clientSecrets: params.OAUTH_CLIENT_SECRET
@@ -41,39 +92,59 @@ function resolveImsConfig(params) {
     technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
     technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
     imsOrgId: params.OAUTH_ORG_ID,
-    scopes: DEFAULT_IMS_SCOPES,
+    scopes,
     environment: params.AIO_CLI_ENV || "prod",
   };
 }
 
 /**
- * Generate access token to connect with Adobe tools (e.g. IO Events)
- * @param {object} params includes env parameters
- * @returns the access token
+ * Resolve Commerce Integration configuration from environment parameters
+ * @param params
+ * @returns Commerce OAuth1 config object
  */
-function getAdobeAccessToken(params) {
-  const config = resolveImsConfig(params);
-
-  assertImsAuthParams(config);
-  const imsAuthProvider = getImsAuthProvider(config);
-
-  return imsAuthProvider.getAccessToken();
+function resolveIntegrationConfig(params) {
+  return {
+    consumerKey: params.COMMERCE_CONSUMER_KEY,
+    consumerSecret: params.COMMERCE_CONSUMER_SECRET,
+    accessToken: params.COMMERCE_ACCESS_TOKEN,
+    accessTokenSecret: params.COMMERCE_ACCESS_TOKEN_SECRET,
+  };
 }
 
-/**
- * Get the access token headers for Adobe tools (e.g. IO Events)
- * @param {object} params - IMS authentication parameters
- * @returns the headers with access token
- */
-function getAdobeAccessHeaders(params) {
-  const config = resolveImsConfig(params);
-  assertImsAuthParams(config);
-  const imsAuthProvider = getImsAuthProvider(config);
+async function createIntegrationProvider(configOrResolver) {
+  const config = await Promise.resolve(
+    typeof configOrResolver === "function"
+      ? configOrResolver()
+      : configOrResolver,
+  );
 
-  return imsAuthProvider.getHeaders();
+  assertIntegrationAuthParams(config);
+  return getIntegrationAuthProvider(config);
+}
+
+async function createImsProvider(configOrResolver) {
+  const config = await Promise.resolve(
+    typeof configOrResolver === "function"
+      ? configOrResolver()
+      : configOrResolver,
+  );
+
+  assertImsAuthParams(config);
+  return getImsAuthProvider(config);
+}
+
+function integrationProviderWithEnvResolver(env) {
+  return createIntegrationProvider(resolveIntegrationConfig(env));
+}
+
+function imsProviderWithEnvResolver(env) {
+  return createImsProvider(resolveImsConfig(env));
 }
 
 module.exports = {
-  getAdobeAccessToken,
-  getAdobeAccessHeaders,
+  createImsProvider,
+  createIntegrationProvider,
+  imsProviderWithEnvResolver,
+  integrationProviderWithEnvResolver,
+  resolveScopes,
 };

@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { getClient } = require("../oauth1a");
+const { getClient } = require("../http-client");
 const { Core } = require("@adobe/aio-sdk");
 const logger = Core.Logger("commerce-stock-api-client", { level: "info" });
 
@@ -23,14 +23,14 @@ const logger = Core.Logger("commerce-stock-api-client", { level: "info" });
  * @param {object} data - Adobe commerce api payload
  */
 async function updateStock(baseUrl, params, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
     },
     logger,
   );
-  return await client.post("inventory/source-items", JSON.stringify(data), "", {
+  return await client.post("inventory/source-items", JSON.stringify(data), {
     "Content-Type": "application/json",
   });
 }

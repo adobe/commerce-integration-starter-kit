@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { getClient } = require("../oauth1a");
+const { getClient } = require("../http-client");
 const { Core } = require("@adobe/aio-sdk");
 const logger = Core.Logger("commerce-consumer-api-client", { level: "info" });
 
@@ -23,7 +23,7 @@ const logger = Core.Logger("commerce-consumer-api-client", { level: "info" });
  * @param {object} data - Adobe commerce api payload
  */
 async function createCustomer(baseUrl, params, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
@@ -31,7 +31,7 @@ async function createCustomer(baseUrl, params, data) {
     logger,
   );
 
-  return await client.post("customers", JSON.stringify(data), "", {
+  return await client.post("customers", JSON.stringify(data), {
     "Content-Type": "application/json",
   });
 }
@@ -45,7 +45,7 @@ async function createCustomer(baseUrl, params, data) {
  * @param {object} data - Adobe commerce api payload
  */
 async function updateCustomer(baseUrl, params, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
@@ -55,7 +55,6 @@ async function updateCustomer(baseUrl, params, data) {
   return await client.put(
     `customers/${data.customer.id}`,
     JSON.stringify(data),
-    "",
     { "Content-Type": "application/json" },
   );
 }
@@ -69,7 +68,7 @@ async function updateCustomer(baseUrl, params, data) {
  * @param {number} id - Id
  */
 async function deleteCustomer(baseUrl, params, id) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
