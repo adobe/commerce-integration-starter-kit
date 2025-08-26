@@ -11,74 +11,54 @@ governing permissions and limitations under the License.
 */
 
 const got = require("got");
-const {
-  getImsAccessToken,
-  getOAuthHeader,
-} = require("@adobe/commerce-sdk-auth");
 const { fromParams } = require("./auth");
+const {
+  getImsAuthProvider,
+  getIntegrationAuthProvider,
+} = require("@adobe/aio-commerce-lib-auth");
 
-/**
- * @returns the bearer token
- * @param {string} token - access token
- */
-function withBearer(token) {
-  return `Bearer ${token}`;
+function getAuthProvider(params) {
+  const authOptions = fromParams(params);
+
+  if (authOptions?.ims) {
+    const imsProvider = getImsAuthProvider(authOptions.ims);
+    return () => {
+      return imsProvider.getAccessToken();
+    };
+  }
+
+  if (authOptions?.commerceOAuth1) {
+    const integrationProvider = getIntegrationAuthProvider(
+      authOptions.commerceOAuth1,
+    );
+    return ({ method, url }) => {
+      return integrationProvider.getHeaders(method, url);
+    };
+  }
 }
 
 /**
  * This function return the Adobe commerce OAuth client
  *
  * @param {object} options - include the information to configure oauth
- * @param {object} authOptions - 'IMS' or 'COMMERCE'
+ * @param {object} getAuthorizationHeaders - authProvider
  * @param {object} logger - Logger
  */
-function createClient(options, authOptions, logger) {
+function createClient(options, getAuthorizationHeaders, logger) {
   const instance = {};
 
   // Remove trailing slash if any
   const serverUrl = options.url;
   const apiVersion = options.version;
 
-  let getAuthorizationHeaders = (opts) => {
-    throw new Error("getAuthorizationHeaders not implemented");
-  };
-
-  if (authOptions?.ims) {
-    const { ims } = authOptions;
-    getAuthorizationHeaders = async (_opts) => {
-      const imsResponse = await getImsAccessToken(ims);
-      return {
-        Authorization: withBearer(imsResponse.access_token),
-      };
-    };
-  } else if (authOptions?.commerceOAuth1) {
-    const { commerceOAuth1 } = authOptions;
-    const oauthToken = {
-      key: commerceOAuth1.accessToken,
-      secret: commerceOAuth1.accessTokenSecret,
-    };
-    const oauth = getOAuthHeader(commerceOAuth1);
-    getAuthorizationHeaders = ({ url, method }) => {
-      return oauth.toHeader(
-        oauth.authorize(
-          {
-            url,
-            method,
-          },
-          oauthToken,
-        ),
-      );
-    };
-  }
-
   /**
    * This function make the call to the api
    *
    * @param {object} requestData - include the request data
-   * @param {string} requestToken - access token
+   * @param {string} _requestToken - access token
    * @param {object} customHeaders - include custom headers
    */
-  async function apiCall(requestData, requestToken = "", customHeaders = {}) {
+  async function apiCall(requestData, _requestToken = "", customHeaders = {}) {
     try {
       logger.debug(
         "Fetching URL: " +
@@ -87,18 +67,13 @@ function createClient(options, authOptions, logger) {
           requestData.method,
       );
 
-      let authHeaders = {};
-
-      if (requestToken.length > 0) {
-        authHeaders = { Authorization: withBearer(requestToken) };
-      } else {
-        authHeaders = await getAuthorizationHeaders(requestData);
-      }
+      const authHeaders = await getAuthorizationHeaders(requestData);
 
       const headers = {
         ...customHeaders,
         ...authHeaders,
       };
+
       return await got(requestData.url, {
         http2: true,
         method: requestData.method,
@@ -181,7 +156,7 @@ function getClient(clientOptions, logger) {
   const { params, ...options } = clientOptions;
   options.version = "V1";
 
-  return createClient(options, fromParams(params), logger);
+  return createClient(options, getAuthProvider(fromParams(params)), logger);
 }
 
 module.exports = {

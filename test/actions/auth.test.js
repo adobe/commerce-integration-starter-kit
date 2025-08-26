@@ -1,32 +1,4 @@
-const { validateParams, fromParams } = require("../..//actions/auth");
-
-describe("validateParams", () => {
-  it("should throw error if missing params", () => {
-    const params = {
-      OAUTH_CLIENT_ID: "client-id",
-    };
-
-    expect(() => {
-      validateParams(params, ["OAUTH_CLIENT_ID", "OAUTH_CLIENT_SECRET"]);
-    }).toThrow("Expected parameters are missing OAUTH_CLIENT_SECRET");
-  });
-
-  it("should not throw error if params are not missing", () => {
-    const params = {
-      OAUTH_CLIENT_ID: "client-id",
-      OAUTH_CLIENT_SECRET: "client-secret",
-      OAUTH_SCOPES: ["scope1", "scope2"],
-    };
-
-    expect(() => {
-      validateParams(params, [
-        "OAUTH_CLIENT_ID",
-        "OAUTH_CLIENT_SECRET",
-        "OAUTH_SCOPES",
-      ]);
-    }).not.toThrow();
-  });
-});
+const { fromParams } = require("../..//actions/auth");
 
 describe("fromParams", () => {
   it("can extract IMS params", () => {
@@ -34,13 +6,20 @@ describe("fromParams", () => {
       OAUTH_CLIENT_ID: "client-id",
       OAUTH_CLIENT_SECRET: "client-secret",
       OAUTH_SCOPES: ["scope1", "scope2"],
+      OAUTH_TECHNICAL_ACCOUNT_EMAIL: "test@example.com",
+      OAUTH_TECHNICAL_ACCOUNT_ID: "tech-account-id",
+      OAUTH_ORG_ID: "org-id",
     };
 
     expect(fromParams(params)).toEqual({
       ims: {
         clientId: "client-id",
-        clientSecret: "client-secret",
+        clientSecrets: ["client-secret"],
+        imsOrgId: "org-id",
         scopes: ["scope1", "scope2"],
+        environment: "prod",
+        technicalAccountEmail: "test@example.com",
+        technicalAccountId: "tech-account-id",
       },
     });
   });

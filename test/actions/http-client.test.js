@@ -1,5 +1,5 @@
 const { HTTP_OK } = require("../../actions/constants");
-const { getClient } = require("../../actions/oauth1a");
+const { getClient } = require("../../actions/http-client");
 const nock = require("nock");
 
 describe("getClient", () => {
