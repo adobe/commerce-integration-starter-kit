@@ -169,17 +169,6 @@ async function main() {
     return;
   }
 
-  const registerEntityEventsResult = await require("../lib/registrations").main(
-    config,
-    providers,
-    process.env,
-    authHeaders,
-  );
-  if (!registerEntityEventsResult.success) {
-    logOnboardingError("registrations", registerEntityEventsResult.error);
-    return;
-  }
-
   console.log("Onboarding completed successfully:", providers);
   console.log(
     "Starting the process of configuring Adobe I/O Events module in Commerce...",
@@ -236,7 +225,6 @@ async function main() {
   );
   return {
     providers,
-    registrations: registerEntityEventsResult.registrations,
   };
 }
 

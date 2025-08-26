@@ -1,10 +1,11 @@
 module.exports = {
   app: {
-    registrations: {
-      product: ["commerce", "backoffice"],
-      customer: ["commerce", "backoffice"],
-      order: ["commerce", "backoffice"],
-      stock: ["commerce", "backoffice"],
+    meta: {
+      // Can be used by Admin UI SDK for `extension-manifest.json`.
+      slug: "my-oope-app",
+      version: "1.0.0",
+      displayName: "My OOPE App",
+      description: "My OOPE App Description",
     },
   },
   adminUi: {},

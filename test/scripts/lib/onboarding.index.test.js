@@ -226,13 +226,6 @@ describe("onboarding index", () => {
       }),
     }));
 
-    jest.doMock("../../../scripts/lib/registrations", () => ({
-      main: jest.fn().mockResolvedValue({
-        success: true,
-        registrations: ["product", "customer", "order", "stock"],
-      }),
-    }));
-
     jest.doMock("../../../scripts/lib/configure-eventing", () => ({
       main: jest.fn().mockResolvedValue({
         success: true,
@@ -287,13 +280,6 @@ describe("onboarding index", () => {
         label: "Backoffice Provider - test",
       },
     ]);
-    expect(result.registrations).toEqual([
-      "product",
-      "customer",
-      "order",
-      "stock",
-    ]);
-
     // Verify console logs for success messages
     expect(consoleLogSpy).toHaveBeenCalledWith(
       "Starting the process of on-boarding based on your registration choices",
