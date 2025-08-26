@@ -17,7 +17,7 @@ const {
   CommerceSdkValidationError,
 } = require("@adobe/aio-commerce-lib-core/error");
 const v = require("valibot");
-const config = require("./config.js");
+const config = require("../../extensibility.config.js");
 
 require("dotenv").config();
 
@@ -116,10 +116,6 @@ async function main() {
     "Starting the process of on-boarding based on your registration choices",
   );
 
-  const {
-    app: { registrations: registrationsConfig },
-    eventing: { providers: providersConfig },
-  } = config;
   let authHeaders;
 
   try {

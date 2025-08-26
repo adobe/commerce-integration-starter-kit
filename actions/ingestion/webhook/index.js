@@ -33,7 +33,7 @@ const { errorResponse, successResponse } = require("../../responses");
 const {
   CommerceSdkValidationError,
 } = require("@adobe/aio-commerce-lib-core/error");
-const config = require("../../../scripts/onboarding/config.js");
+const config = require("../../../extensibility.config.js");
 
 /**
  * This web action allow external back-office application publish event to IO event using custom authentication mechanism.

@@ -27,7 +27,7 @@ function main(params) {
   const version = require("../../package.json").version;
   const {
     app: { registrations },
-  } = require("../../scripts/onboarding/config.js");
+  } = require("../../extensibility.config.js");
 
   // create a Logger
   const logger = Core.Logger("starter-kit-info", {
