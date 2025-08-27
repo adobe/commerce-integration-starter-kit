@@ -217,7 +217,6 @@ async function main(
 ) {
   let currentProvider;
   try {
-    const result = [];
     for (const provider of providers) {
       let providersEvents = {};
       currentProvider = provider;
@@ -270,7 +269,6 @@ async function main(
 
     return {
       success: true,
-      result,
     };
   } catch (error) {
     const hints = [

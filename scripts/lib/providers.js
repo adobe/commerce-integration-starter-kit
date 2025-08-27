@@ -127,7 +127,6 @@ async function main(
           id: persistedProvider.id,
           instanceId: persistedProvider.instance_id,
           label,
-          providerMetadata: persistedProvider.provider_metadata,
         });
 
         continue;
@@ -153,7 +152,6 @@ async function main(
         id: createProviderResult.provider?.id,
         instanceId: createProviderResult.provider?.instance_id,
         label,
-        providerMetadata: createProviderResult.provider?.provider_metadata,
       });
     }
 

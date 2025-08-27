@@ -22,7 +22,7 @@ const ENVIRONMENT = {
 };
 
 const fixtures = require("./fixtures/metadata.js");
-const { DEFAULT_SUBSCRIPTIONS } = require("./fixtures/subscriptions.js");
+const { SampleEventTemplate } = require("../../../utils/sample-event-template");
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -39,6 +39,20 @@ const DEFAULT_PROVIDERS = [
     key: "backoffice",
     id: "BACKOFFICE_PROVIDER_ID",
     label: "Backoffice Provider",
+  },
+];
+
+const DEFAULT_SUBSCRIPTIONS = [
+  {
+    providerKey: "commerce",
+    events: {
+      "com.adobe.commerce.observer.catalog_product_delete_commit_after": {
+        sampleEventTemplate: new SampleEventTemplate(
+          "com.adobe.commerce.observer.catalog_product_delete_commit_after",
+          {},
+        ),
+      },
+    },
   },
 ];
 
@@ -83,16 +97,6 @@ describe("Given on-boarding metadata file", () => {
       );
       expect(response).toEqual({
         success: true,
-        result: [
-          {
-            entity: "product",
-            label: "Commerce Provider",
-          },
-          {
-            entity: "product",
-            label: "Backoffice Provider",
-          },
-        ],
       });
     });
   });
@@ -132,12 +136,6 @@ describe("Given on-boarding metadata file", () => {
 
       expect(response).toEqual({
         success: true,
-        result: [
-          {
-            entity: "product",
-            label: "Commerce Provider",
-          },
-        ],
       });
     });
   });
@@ -176,12 +174,6 @@ describe("Given on-boarding metadata file", () => {
 
       expect(response).toEqual({
         success: true,
-        result: [
-          {
-            entity: "product",
-            label: "Backoffice Provider",
-          },
-        ],
       });
     });
   });
