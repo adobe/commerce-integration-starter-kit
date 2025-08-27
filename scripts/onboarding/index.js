@@ -18,6 +18,7 @@ const {
 } = require("@adobe/aio-commerce-lib-core/error");
 const v = require("valibot");
 const config = require("../../extensibility.config.js");
+const { upsertEnvFile } = require("../../utils/upsert-env");
 
 require("dotenv").config();
 
@@ -173,6 +174,14 @@ async function main() {
   console.log(
     "Starting the process of configuring Adobe I/O Events module in Commerce...",
   );
+
+  upsertEnvFile(".env", {
+    COMMERCE_PROVIDER_ID: providers.find((p) => p.key === "commerce").id,
+    BACKOFFICE_PROVIDER_ID: providers.find((p) => p.key === "backoffice").id,
+    AIO_EVENTS_PROVIDERMETADATA_TO_PROVIDER_MAPPING: providers
+      .map((p) => `${p.providerMetadata}:${p.id}`)
+      .join(","),
+  });
 
   try {
     // eslint-disable-next-line node/no-missing-require,node/no-unpublished-require

@@ -13,7 +13,6 @@ governing permissions and limitations under the License.
 const fetch = require("node-fetch");
 
 const { makeError } = require("./helpers/errors");
-const { getEventName } = require("../../utils/naming");
 
 /**
  * Builds an array of provider events with their metadata
@@ -22,7 +21,6 @@ const { getEventName } = require("../../utils/naming");
  */
 function buildProviderData(providerEvents) {
   const events = [];
-
   for (const [event, { sampleEventTemplate }] of Object.entries(
     providerEvents,
   )) {
@@ -35,18 +33,6 @@ function buildProviderData(providerEvents) {
   }
 
   return events;
-}
-
-/**
- * Encodes a sample event template to base64 string
- * @param {object} sampleEventTemplate - Sample event template object
- * @returns Base64 encoded string of the template or null if invalid
- */
-function base64EncodedSampleEvent(sampleEventTemplate) {
-  if (!sampleEventTemplate || typeof sampleEventTemplate !== "object") {
-    return null;
-  }
-  return Buffer.from(JSON.stringify(sampleEventTemplate)).toString("base64");
 }
 
 /**
@@ -68,7 +54,8 @@ async function addEventCodeToProvider(
   );
 
   const { eventCode, label, description, sampleEventTemplate } = metadata;
-  const sampleEvent = base64EncodedSampleEvent(sampleEventTemplate);
+
+  const sampleEvent = sampleEventTemplate.toBase64();
   const body = {
     // eslint-disable-next-line camelcase
     event_code: eventCode,
@@ -222,17 +209,16 @@ async function getExistingMetadata(
  * @returns Result object with operation outcome
  */
 async function main(
-  { app: { registrations }, eventing: { subscriptions } },
+  { eventing: { subscriptions } },
   providers,
   environment,
   authHeaders,
 ) {
-  let currentProvider, eventName;
+  let currentProvider;
   try {
-    let providersEvents = {};
-
     const result = [];
     for (const provider of providers) {
+      let providersEvents = {};
       currentProvider = provider;
       const existingMetadataResult = await getExistingMetadata(
         provider.id,
@@ -246,30 +232,25 @@ async function main(
 
       const { existingMetadata } = existingMetadataResult;
 
-      for (const [entityName, options] of Object.entries(registrations)) {
-        if (options !== undefined && options.includes(provider.key)) {
-          if (subscriptions[entityName]) {
-            for (const [event, eventProps] of Object.entries(
-              subscriptions[entityName][provider.key],
-            )) {
-              eventName = getEventName(event, environment);
-              if (existingMetadata[eventName]) {
-                console.log(
-                  `Skipping, Metadata event code ${eventName} already exists!`,
-                );
-                continue;
-              }
-              providersEvents = {
-                ...providersEvents,
-                [eventName]: eventProps,
-              };
-            }
+      for (const subscription of subscriptions) {
+        if (subscription.providerKey !== provider.key) {
+          continue;
+        }
+
+        for (const [eventCode, options] of Object.entries(
+          subscription.events,
+        )) {
+          if (existingMetadata[eventCode]) {
+            console.log(
+              `Skipping, Metadata event code ${eventCode} already exists!`,
+            );
+            continue;
           }
 
-          result.push({
-            entity: entityName,
-            label: provider.label,
-          });
+          providersEvents = {
+            ...providersEvents,
+            [eventCode]: options,
+          };
         }
       }
 
@@ -279,6 +260,7 @@ async function main(
         environment,
         authHeaders,
       );
+
       if (!addMetadataResult.success) {
         return addMetadataResult;
       }

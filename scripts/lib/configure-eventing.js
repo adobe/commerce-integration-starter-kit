@@ -62,6 +62,7 @@ async function main(
 
     if (!isNonDefaultProviderAdded) {
       await addCommerceEventProvider(
+        providersList,
         providerId,
         instanceId,
         workspaceConfiguration,
@@ -103,12 +104,14 @@ async function main(
 /**
  * Adds the event provider to the commerce instance.
  *
+ * @param {Array} providersList - providers
  * @param {string} providerId - provider id
  * @param {string} instanceId - instance id
  * @param {object} workspaceConfiguration - workspace configuration
  * @param {object} environment - environment variables
  */
 async function addCommerceEventProvider(
+  providersList,
   providerId,
   instanceId,
   workspaceConfiguration,
