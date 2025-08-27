@@ -199,35 +199,49 @@ application:
     #  ...
 ```
 
-### Onboarding
-
 #### Configure the event registrations
 
-By default, the config file creates all the registrations for all entities. You can edit the `./extensibility.config.js` file at path `.app.registrations` if you don't need a registration.
-If you don't want to receive events from commerce, remove `commerce` from the entity array; for backoffice updates, remove `backoffice`.
-e.g., In the previous onboarding step (`Configure the project`), we commented on the product-backoffice package. In this case, we have to remove `backoffice` from the `product` entity:
+In previous iterations event registrations was configured in the `onboarding/config/starter-kit-registrations.json` file. In the latest version these configurations have been moved to the `app.config.yaml` file under the path `.application.events.registrations` and are deployed with the `aio app deploy` command or can be force deployed with `aio app deploy --force-events`.
 
-```javascript
-// In ./scripts/onboarding/extensibility.config.js
-module.exports = {
-  app: {
-    registrations: {
-      product: ["commerce"],
-      customer: ["commerce", "backoffice"],
-      order: ["commerce", "backoffice"],
-      stock: ["commerce", "backoffice"],
-    },
-  },
-  eventing: {
-    providers: [
-      // ... providers configuration
-    ],
-    subscriptions: {
-      // ... event subscriptions configuration
-    },
-  },
-};
+##### Configuring for Backoffice event registrations
+
+For example, if you want to add a new event registration to consume product events from a 3rd party system, you can add the following configuration:
+
+```yaml
+application:
+  # other configurations
+  events:
+  registrations:
+    3rd party product consumer:
+      description: Consumes product events from 3rd party systems
+      runtime_action: product-backoffice/consumer
+      events_of_interest:
+        - provider_metadata: 3rd_party_custom_events
+          event_codes:
+            - be-observer.catalog_product_create
 ```
+
+##### Configuring for Commerce event registrations
+
+For example, if you want to add a new event registration that consumed events from commerce, you can add the following configuration:
+
+> [!NOTE]
+> `<EVENT_PREFIX>` should be replaced with the actual EVENT_PREFIX set in your `.env` file.
+
+```yaml
+application:
+  # other configurations
+  events:
+  registrations:
+    Commerce customer events consumer:
+    description: Consumes customer events from Adobe Commerce
+    events_of_interest:
+      - provider_metadata: dx_commerce_events
+        event_codes:
+          - com.adobe.commerce.<EVENT_PREFIX>.observer.customer_save_commit_after
+```
+
+### Onboarding
 
 #### Execute the onboarding
 
