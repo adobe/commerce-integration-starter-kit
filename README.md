@@ -774,19 +774,22 @@ You can find more details about unit testing and an example in [Lesson 3: Testin
 ### How to subscribe to a new event
 
 The starter kit comes with predefined events for each entity. Sometimes, you may need to add a new event to an entity, e.g., a customer. To do this, follow the next steps:
-Add the event to the `./scripts/onboarding/extensibility.config.js` file at path `.eventing.subscriptions` under the related entity flow; for example, if the event is related to a customer and is coming from commerce, you should add it under entity customer -> commerce. e.g.,
 
-```json
-    "customer": {
-      "commerce": [
-        "com.adobe.commerce.observer.customer_save_commit_after",
-        "com.adobe.commerce.observer.customer_delete_commit_after",
-        "com.adobe.commerce.observer.customer_group_save_commit_after",
-        "com.adobe.commerce.observer.customer_group_delete_commit_after",
-        "com.adobe.commerce.THE_NEW_CUSTOMER_EVENT"
-      ],
-    ...
-    }
+Add the event to the `extensibility.config.js` file at path `.eventing.subscriptions` under the related provider. See [Configure the event registrations](#configure-the-event-registrations) for more details about the configuration structure. For example, if the event is related to a product and is coming from commerce, you should add it under the commerce provider subscription. e.g.,
+
+```js
+{
+  subscriptions: [
+    {
+      providerKey: "commerce",
+      events: {
+        "com.adobe.commerce.observer.catalog_product_delete_commit_after": {
+          /* ... */
+        },
+      },
+    },
+  ];
+}
 ```
 
 - Run the onboarding script:
