@@ -199,17 +199,6 @@ application:
     #  ...
 ```
 
-### Deploy
-
-Run the following command to deploy the project; this will deploy the runtime actions needed for the onboarding step:
-
-```bash
-aio app deploy
-```
-
-You can confirm the success of the deployment in the Adobe Developer Console by navigating to the `Runtime` section on your workspace:
-![Alt text](docs/console-user-defined-actions.png "Workspace runtimes packages")
-
 ### Onboarding
 
 #### Configure the event registrations
@@ -278,6 +267,18 @@ Process of On-Boarding done successfully: [
 Check your App developer console to confirm the creation of the registrations:
 ![Alt text](docs/console-event-registrations.png "Workspace registrations")
 
+### Deploy
+
+Run the following command to deploy the project; this will deploy the runtime actions needed for the onboarding step:
+
+```bash
+aio app deploy
+aio app deploy --force-deploy --force-events # force redeploy and recreate event registrations
+```
+
+You can confirm the success of the deployment in the Adobe Developer Console by navigating to the `Runtime` section on your workspace:
+![Alt text](docs/console-user-defined-actions.png "Workspace runtimes packages")
+
 ### Complete the Adobe Commerce eventing configuration
 
 You will configure your Adobe Commerce instance to send events to your App builder project using the following steps
@@ -343,6 +344,7 @@ The following code snapshot in the `app.config.yaml` file shows how to define a 
 ```yaml
 application:
   hooks:
+    pre-app-deploy: ./hooks/pre-app-deploy.js
     post-app-deploy: ./hooks/post-app-deploy.js
 ```
 
