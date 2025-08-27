@@ -204,6 +204,7 @@ describe("Given On-boarding providers file", () => {
             docs_url: "string",
             instance_id: "AC_INSTANCE_ID",
             publisher: "string",
+            provider_metadata: "dx_commerce_events",
             _embedded: {
               eventmetadata: [
                 {
@@ -303,6 +304,7 @@ describe("Given On-boarding providers file", () => {
             docs_url: "string",
             instance_id: "BO_INSTANCE_ID",
             publisher: "string",
+            provider_metadata: "3rd_party_custom_events",
             _embedded: {
               eventmetadata: [
                 {
@@ -417,12 +419,14 @@ describe("Given On-boarding providers file", () => {
             id: commerceProviderId,
             instanceId: "AC_INSTANCE_ID",
             label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "dx_commerce_events",
           },
           {
             key: "backoffice",
             id: backofficeProviderId,
             instanceId: "BO_INSTANCE_ID",
             label: `Backoffice Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "3rd_party_custom_events",
           },
         ],
       });
@@ -447,6 +451,7 @@ describe("Given On-boarding providers file", () => {
                   docs_url: "string",
                   publisher: "string",
                   instance_id: "BO_INSTANCE_ID",
+                  provider_metadata: "3rd_party_custom_events",
                   _embedded: {
                     eventmetadata: [
                       {
@@ -562,6 +567,7 @@ describe("Given On-boarding providers file", () => {
             docs_url: "string",
             instance_id: "AC_INSTANCE_ID",
             publisher: "string",
+            provider_metadata: "dx_commerce_events",
             _embedded: {
               eventmetadata: [
                 {
@@ -674,12 +680,14 @@ describe("Given On-boarding providers file", () => {
             id: commerceProviderId,
             instanceId: "AC_INSTANCE_ID",
             label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "dx_commerce_events",
           },
           {
             key: "backoffice",
             id: backofficeProviderId,
             instanceId: "BO_INSTANCE_ID",
             label: `Backoffice Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "3rd_party_custom_events",
           },
         ],
       });
@@ -704,6 +712,7 @@ describe("Given On-boarding providers file", () => {
                   docs_url: "string",
                   publisher: "string",
                   instance_id: "AC_INSTANCE_ID",
+                  provider_metadata: "dx_commerce_events",
                   _embedded: {
                     eventmetadata: [
                       {
@@ -819,7 +828,7 @@ describe("Given On-boarding providers file", () => {
             docs_url: "string",
             instance_id: "BO_INSTANCE_ID",
             publisher: "string",
-            provider_metadata: "3rd_party_systems",
+            provider_metadata: "3rd_party_custom_events",
             _embedded: {
               eventmetadata: [
                 {
@@ -931,12 +940,14 @@ describe("Given On-boarding providers file", () => {
             id: commerceProviderId,
             instanceId: "AC_INSTANCE_ID",
             label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "dx_commerce_events",
           },
           {
             key: "backoffice",
             id: backofficeProviderId,
             instanceId: "BO_INSTANCE_ID",
             label: `Backoffice Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "3rd_party_custom_events",
           },
         ],
       });
@@ -1077,7 +1088,7 @@ describe("Given On-boarding providers file", () => {
             docs_url: "string",
             instance_id: "BO_INSTANCE_ID",
             publisher: "string",
-            provider_metadata: "3rd_party_systems",
+            provider_metadata: "3rd_party_custom_events",
             _embedded: {
               eventmetadata: [
                 {
@@ -1190,12 +1201,14 @@ describe("Given On-boarding providers file", () => {
             id: commerceProviderId,
             instanceId: "AC_INSTANCE_ID",
             label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "dx_commerce_events",
           },
           {
             key: "backoffice",
             id: backofficeProviderId,
             instanceId: "BO_INSTANCE_ID",
             label: `Backoffice Provider - ${PROVIDER_SUFFIX}`,
+            providerMetadata: "3rd_party_custom_events",
           },
         ],
       });

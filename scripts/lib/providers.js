@@ -127,13 +127,11 @@ async function main(
           id: persistedProvider.id,
           instanceId: persistedProvider.instance_id,
           label,
+          providerMetadata: persistedProvider.provider_metadata,
         });
 
         continue;
       }
-
-      console.log("Creating provider with:", label);
-      console.log("Provider information:", provider);
 
       const createProviderResult = await createProvider(
         environment,
@@ -152,11 +150,10 @@ async function main(
         id: createProviderResult.provider?.id,
         instanceId: createProviderResult.provider?.instance_id,
         label,
+        providerMetadata: createProviderResult.provider?.provider_metadata,
       });
     }
 
-    // update the env file with provider ID
-    // writeToEnvFile(result);
     for (const provider of result) {
       console.log(
         `Defining the provider with key: ${provider.key} as: ${provider.id}`,
