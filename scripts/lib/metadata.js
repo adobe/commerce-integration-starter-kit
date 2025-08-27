@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 const fetch = require("node-fetch");
 
 const { makeError } = require("./helpers/errors");
+const { getEventName } = require("../../utils/naming");
 
 /**
  * Builds an array of provider events with their metadata
@@ -240,16 +241,17 @@ async function main(
         for (const [eventCode, options] of Object.entries(
           subscription.events,
         )) {
-          if (existingMetadata[eventCode]) {
+          const eventName = getEventName(eventCode, environment);
+          if (existingMetadata[eventName]) {
             console.log(
-              `Skipping, Metadata event code ${eventCode} already exists!`,
+              `Skipping, Metadata event code ${eventName} already exists!`,
             );
             continue;
           }
 
           providersEvents = {
             ...providersEvents,
-            [eventCode]: options,
+            [eventName]: options,
           };
         }
       }
