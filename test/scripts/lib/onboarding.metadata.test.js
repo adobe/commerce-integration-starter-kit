@@ -13,10 +13,16 @@ governing permissions and limitations under the License.
 jest.mock("node-fetch");
 const fetch = require("node-fetch");
 const action = require("../../../scripts/lib/metadata.js");
-const ACCESS_TOKEN = "token";
+const DEFAULT_AUTH_HEADERS = {
+  Authorization: "Bearer ezySOME_TOKEN",
+  "x-api-key": "CLIENT_ID",
+};
 const ENVIRONMENT = {
   EVENT_PREFIX: "test-project",
 };
+
+const fixtures = require("./fixtures/metadata.js");
+const { SampleEventTemplate } = require("../../../utils/sample-event-template");
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -33,6 +39,20 @@ const DEFAULT_PROVIDERS = [
     key: "backoffice",
     id: "BACKOFFICE_PROVIDER_ID",
     label: "Backoffice Provider",
+  },
+];
+
+const DEFAULT_SUBSCRIPTIONS = [
+  {
+    providerKey: "commerce",
+    events: {
+      "com.adobe.commerce.observer.catalog_product_delete_commit_after": {
+        sampleEventTemplate: new SampleEventTemplate(
+          "com.adobe.commerce.observer.catalog_product_delete_commit_after",
+          {},
+        ),
+      },
+    },
   },
 ];
 
@@ -63,26 +83,20 @@ describe("Given on-boarding metadata file", () => {
       };
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
-      const clientRegistrations = require("../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json");
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: {
+            registrations:
+              fixtures.CREATE_COMMERCE_AND_BACKOFFICE_PROVIDERS_METADATA,
+          },
+          eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
+        },
         DEFAULT_PROVIDERS,
         ENVIRONMENT,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
-
       expect(response).toEqual({
         success: true,
-        result: [
-          {
-            entity: "product",
-            label: "Commerce Provider",
-          },
-          {
-            entity: "product",
-            label: "Backoffice Provider",
-          },
-        ],
       });
     });
   });
@@ -108,22 +122,20 @@ describe("Given on-boarding metadata file", () => {
 
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
-      const clientRegistrations = require("../../data/onboarding/metadata/create_only_commerce_providers_metadata.json");
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: {
+            registrations: fixtures.CREATE_ONLY_COMMERCE_PROVIDERS_METADATA,
+          },
+          eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
+        },
         DEFAULT_PROVIDERS,
         ENVIRONMENT,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
 
       expect(response).toEqual({
         success: true,
-        result: [
-          {
-            entity: "product",
-            label: "Commerce Provider",
-          },
-        ],
       });
     });
   });
@@ -148,22 +160,20 @@ describe("Given on-boarding metadata file", () => {
       };
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
-      const clientRegistrations = require("../../data/onboarding/metadata/create_only_backoffice_providers_metadata.json");
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: {
+            registrations: fixtures.CREATE_ONLY_BACKOFFICE_PROVIDERS_METADATA,
+          },
+          eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
+        },
         DEFAULT_PROVIDERS,
         ENVIRONMENT,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
 
       expect(response).toEqual({
         success: true,
-        result: [
-          {
-            entity: "product",
-            label: "Backoffice Provider",
-          },
-        ],
       });
     });
   });
@@ -171,12 +181,18 @@ describe("Given on-boarding metadata file", () => {
     test("Then returns error response", async () => {
       const fakeError = new Error("fake");
       fetch.mockRejectedValue(fakeError);
-      const clientRegistrations = require("../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json");
+
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: {
+            registrations:
+              fixtures.CREATE_COMMERCE_AND_BACKOFFICE_PROVIDERS_METADATA,
+          },
+          eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
+        },
         DEFAULT_PROVIDERS,
         ENVIRONMENT,
-        ACCESS_TOKEN,
+        DEFAULT_AUTH_HEADERS,
       );
       expect(response).toEqual({
         success: false,
@@ -212,7 +228,6 @@ describe("Given on-boarding metadata file", () => {
       };
       fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
-      const clientRegistrations = require("../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json");
       const environment = {
         ...ENVIRONMENT,
         IO_MANAGEMENT_BASE_URL: "https://io-management.fake/",
@@ -222,10 +237,18 @@ describe("Given on-boarding metadata file", () => {
       };
 
       const response = await action.main(
-        clientRegistrations,
+        {
+          app: {
+            registrations:
+              fixtures.CREATE_COMMERCE_AND_BACKOFFICE_PROVIDERS_METADATA,
+          },
+          eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
+        },
         DEFAULT_PROVIDERS,
         environment,
+        DEFAULT_AUTH_HEADERS,
       );
+
       expect(response).toEqual({
         success: false,
         error: {

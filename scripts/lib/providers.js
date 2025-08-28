@@ -14,27 +14,16 @@ require("dotenv").config();
 
 const fetch = require("node-fetch");
 const uuid = require("uuid");
-const fs = require("node:fs");
-const path = require("node:path");
-const envPath = path.resolve(__dirname, "../../.env");
 
 const { makeError } = require("./helpers/errors");
-const { getMissingKeys } = require("../../actions/utils");
 const { getExistingProviders } = require("../../utils/adobe-events-api");
 const { addSuffix } = require("../../utils/naming");
-const { arrayItemsErrorFormat } = require("./helpers/errors");
-
-const providersEventsConfig = require("../onboarding/config/events.json");
-
-// Regex patterns defined at top level for performance
-const CRLF_PATTERN = /\r\n/g;
-const TRAILING_WHITESPACE_PATTERN = /\s+$/;
 
 /**
  * Creates an events provider via the I/O Management API
  * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID
  * @param {object} authHeaders - Authentication headers including access token
- * @param {{key?: string, label?: string, description?: string, docs_url?: string}} provider - Provider configuration object
+ * @param {object} provider - Provider configuration object
  * @returns Result object with created provider or error
  */
 async function createProvider(environment, authHeaders, provider) {
@@ -90,89 +79,22 @@ async function createProvider(environment, authHeaders, provider) {
 }
 
 /**
- * Checks if a provider was selected in client registrations
- * @param {string} selection - Provider key to check
- * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
- * @returns True if provider is selected in any registration
- */
-function hasSelection(selection, clientRegistrations) {
-  return Object.values(clientRegistrations).some((value) =>
-    value.includes(selection),
-  );
-}
-
-/**
- * Updates the .env file with provider id.
- *
- * @param {Array} providers - list of providers
- */
-function writeToEnvFile(providers) {
-  // Read the existing .env content
-  let envContent = fs.readFileSync(envPath, "utf8");
-  envContent = envContent
-    .replace(CRLF_PATTERN, "\n")
-    .replace(TRAILING_WHITESPACE_PATTERN, "");
-
-  for (const provider of providers) {
-    const providerType = provider.key.toUpperCase();
-    const providerIdEnv = `${providerType}_PROVIDER_ID=${provider.id}`;
-    const providerIdEnvRegex = new RegExp(
-      `^${providerType}_PROVIDER_ID=.*$`,
-      "m",
-    );
-
-    console.log(
-      `Defining the ${provider.key} provider id as : ${provider.id} having instance id : ${provider.instanceId}`,
-    );
-    if (providerIdEnvRegex.test(envContent)) {
-      envContent = envContent.replace(providerIdEnvRegex, providerIdEnv);
-    } else {
-      envContent += `\n${providerIdEnv}`;
-    }
-  }
-
-  // Write back to the .env file
-  fs.writeFileSync(envPath, `${envContent.trim()}\n`, "utf8");
-  console.log("Successfully updated .env file with provider id's");
-}
-
-/**
- * Main function to create events providers based on config/providers.json and client registrations
- * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
- * @param {object} environment - Environment configuration
+ * Main function to create events providers based on unified config.js
+ * @param {object} config - Unified configuration object containing registrations, providers and subscriptions
+ * @param {object} environment - Environment variables
  * @param {object} authHeaders - Authentication headers for API requests
  * @returns Result object with created providers or error
  */
-async function main(clientRegistrations, environment, authHeaders) {
-  // Load predefined provider, providerEvents and clientRegistrations
-  const providersList = require("../onboarding/config/providers.json");
+async function main(
+  { eventing: { providers, subscriptions } },
+  environment,
+  authHeaders,
+) {
   let currentProvider;
-
   try {
-    console.log("Start process of creating providers: ", providersEventsConfig);
+    console.log("Start process of creating providers: ", subscriptions);
 
     // Validate client registration selection
-    const requiredRegistrations = ["product", "customer", "order", "stock"];
-    const missingRegistrations = getMissingKeys(
-      clientRegistrations,
-      requiredRegistrations,
-    );
-
-    if (missingRegistrations.length > 0) {
-      const lines = [
-        arrayItemsErrorFormat(
-          missingRegistrations,
-          (item) => `Registration "${item}" is required`,
-        ),
-        '\nCheck that they are present in "/onboarding/config/starter-kit-registrations.json"',
-      ];
-
-      const reason = lines.join("\n");
-      return makeError("MISSING_REGISTRATIONS", reason, {
-        requiredRegistrations,
-        missingRegistrations,
-      });
-    }
 
     const existingProviders = await getExistingProviders(
       environment,
@@ -180,54 +102,58 @@ async function main(clientRegistrations, environment, authHeaders) {
     );
     const result = [];
 
-    for (const provider of providersList) {
+    const existingProvidersCollection = Object.values(existingProviders);
+
+    for (const provider of providers) {
       currentProvider = provider;
-      provider.label = addSuffix(provider.label, environment);
-      const isProviderSelectedByClient = hasSelection(
-        provider.key,
-        clientRegistrations,
+      const key = provider.key;
+      const label = addSuffix(provider.label, environment);
+
+      const persistedProvider = existingProvidersCollection.find(
+        (existingProvider) => {
+          return (
+            existingProvider.id === provider?.id ||
+            existingProvider?.label === label
+          );
+        },
       );
 
-      if (isProviderSelectedByClient) {
-        const persistedProvider = existingProviders[provider.label];
-
-        if (persistedProvider) {
-          console.log(
-            `Skipping creation of "${provider.label}" creation, provider already exists`,
-          );
-          result.push({
-            key: provider.key,
-            id: persistedProvider.id,
-            instanceId: persistedProvider.instance_id,
-            label: provider.label,
-          });
-
-          continue;
-        }
-
-        console.log("Creating provider with:", provider.label);
-        console.log("Provider information:", provider);
-
-        const createProviderResult = await createProvider(
-          environment,
-          authHeaders,
-          provider,
+      if (persistedProvider) {
+        console.log(
+          `Skipping creation of "${label}" creation, provider already exists`,
         );
-        if (!createProviderResult?.success) {
-          return createProviderResult;
-        }
-
         result.push({
-          key: provider.key,
-          id: createProviderResult.provider?.id,
-          instanceId: createProviderResult.provider?.instance_id,
-          label: provider.label,
+          key,
+          id: persistedProvider.id,
+          instanceId: persistedProvider.instance_id,
+          label,
+          providerMetadata: persistedProvider.provider_metadata,
         });
+
+        continue;
       }
+
+      const createProviderResult = await createProvider(
+        environment,
+        authHeaders,
+        {
+          ...provider,
+          label,
+        },
+      );
+      if (!createProviderResult?.success) {
+        return createProviderResult;
+      }
+
+      result.push({
+        key,
+        id: createProviderResult.provider?.id,
+        instanceId: createProviderResult.provider?.instance_id,
+        label,
+        providerMetadata: createProviderResult.provider?.provider_metadata,
+      });
     }
 
-    // update the env file with provider ID
-    writeToEnvFile(result);
     for (const provider of result) {
       console.log(
         `Defining the provider with key: ${provider.key} as: ${provider.id}`,

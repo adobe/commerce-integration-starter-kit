@@ -17,12 +17,14 @@ const { makeError } = require("./helpers/errors");
 
 /**
  * This method configures the commerce eventing module
- * @param {string} providerId - provider id
- * @param {string} instanceId - instance id
- * @param {object} workspaceConfiguration - workspace configuration
- * @param {object} environment - environment variables
+ * @param {Array} providersList - Array of provider configuration objects
+ * @param {string} providerId - Provider ID from Adobe I/O Events
+ * @param {string} instanceId - Instance ID for the commerce provider
+ * @param {object} workspaceConfiguration - Adobe I/O workspace configuration object
+ * @param {object} environment - Environment variables
  */
 async function main(
+  providersList,
   providerId,
   instanceId,
   workspaceConfiguration,
@@ -60,6 +62,7 @@ async function main(
 
     if (!isNonDefaultProviderAdded) {
       await addCommerceEventProvider(
+        providersList,
         providerId,
         instanceId,
         workspaceConfiguration,
@@ -101,18 +104,19 @@ async function main(
 /**
  * Adds the event provider to the commerce instance.
  *
+ * @param {Array} providersList - providers
  * @param {string} providerId - provider id
  * @param {string} instanceId - instance id
  * @param {object} workspaceConfiguration - workspace configuration
  * @param {object} environment - environment variables
  */
 async function addCommerceEventProvider(
+  providersList,
   providerId,
   instanceId,
   workspaceConfiguration,
   environment,
 ) {
-  const providersList = require("../onboarding/config/providers.json");
   const { label, description } =
     providersList.find((provider) => provider.key === "commerce") || {};
 
