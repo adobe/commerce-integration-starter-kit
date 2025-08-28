@@ -17,7 +17,7 @@ describe("getAuthProviderFromParams", () => {
       OAUTH_TECHNICAL_ACCOUNT_ID: "tech-account-id",
       OAUTH_ORG_ID: "org-id",
     };
-    const authProvider = await getAuthProviderFromParams(params);
+    const authProvider = await getAuthProviderFromParams(params, console);
 
     expect(authProvider).toBeDefined();
     expect(typeof authProvider).toBe("function");
@@ -32,7 +32,7 @@ describe("getAuthProviderFromParams", () => {
       COMMERCE_ACCESS_TOKEN_SECRET: "commerce-access-token-secret",
     };
 
-    const authProvider = await getAuthProviderFromParams(params);
+    const authProvider = await getAuthProviderFromParams(params, console);
 
     expect(authProvider).toBeDefined();
     expect(typeof authProvider).toBe("function");
@@ -40,7 +40,7 @@ describe("getAuthProviderFromParams", () => {
 
   it("throws if no valid params for either ImsAuth or Commerce OAuth1a", async () => {
     const { getAuthProviderFromParams } = require("../../actions/http-client");
-    await expect(getAuthProviderFromParams({})).rejects.toThrow(
+    await expect(getAuthProviderFromParams({}, console)).rejects.toThrow(
       "Unknown auth type, supported IMS OAuth or Commerce OAuth1. Please review documented auth types",
     );
   });
@@ -50,7 +50,7 @@ describe("getAuthProviderFromParams", () => {
     const params = {
       OAUTH_CLIENT_ID: "client-id",
     };
-    await expect(getAuthProviderFromParams(params)).rejects.toThrow();
+    await expect(getAuthProviderFromParams(params, console)).rejects.toThrow();
   });
 
   it("throws if no valid params for are supplied to Commerce OAuth1a", async () => {
@@ -58,7 +58,7 @@ describe("getAuthProviderFromParams", () => {
     const params = {
       COMMERCE_CONSUMER_KEY: "consumer-key",
     };
-    await expect(getAuthProviderFromParams(params)).rejects.toThrow();
+    await expect(getAuthProviderFromParams(params, console)).rejects.toThrow();
   });
 });
 
