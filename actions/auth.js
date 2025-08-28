@@ -23,7 +23,7 @@ const {
 } = require("@adobe/aio-commerce-lib-core/error");
 
 /**
- * This function returns the auth object based on the params
+ * This function returns the auth function from @adobe/aio-commerce-lib-auth based on the environment parameters.
  * @param {object} params - Environment params from the IO Runtime request
  * @returns the auth object for the request
  * @throws {Error} - throws error if the params are missing
@@ -89,6 +89,11 @@ const DEFAULT_IMS_SCOPES = [
   "commerce.accs",
 ];
 
+/**
+ * Resolve Commerce Integration configuration from environment parameters
+ * @param params
+ * @returns {{consumerKey: (string|*), consumerSecret: (string|*), accessToken: (string|*), accessTokenSecret: (string|*)}}
+ */
 function resolveIntegrationConfig(params) {
   return {
     consumerKey: params.COMMERCE_CONSUMER_KEY,
