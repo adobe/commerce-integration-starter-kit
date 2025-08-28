@@ -17,7 +17,7 @@ const { getAuthProviderFromParams } = require("./auth");
  * This function return the Adobe commerce OAuth client
  *
  * @param {object} options - include the information to configure oauth
- * @param {object} getAuthorizationHeaders - authProvider
+ * @param {function} getAuthorizationHeaders - authProvider
  * @param {object} logger - Logger
  */
 function createClient(options, getAuthorizationHeaders, logger) {
