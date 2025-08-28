@@ -24,7 +24,7 @@ const logger = Core.Logger("commerce-shipment-api-client", { level: "info" });
  * @param {object} data - Adobe commerce api payload
  */
 async function createShipment(baseUrl, params, orderId, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
@@ -45,7 +45,7 @@ async function createShipment(baseUrl, params, orderId, data) {
  * @param {object} data - Adobe commerce api payload
  */
 async function updateShipment(baseUrl, params, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,

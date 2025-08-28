@@ -25,7 +25,7 @@ const logger = Core.Logger("commerce-customer-group-api-client", {
  * @param {object} data - Adobe commerce api payload
  */
 async function createCustomerGroup(baseUrl, params, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
@@ -47,7 +47,7 @@ async function createCustomerGroup(baseUrl, params, data) {
  * @param {object} data - Adobe commerce api payload
  */
 async function updateCustomerGroup(baseUrl, params, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
@@ -71,7 +71,7 @@ async function updateCustomerGroup(baseUrl, params, data) {
  * @param {number} id - Id
  */
 async function deleteCustomerGroup(baseUrl, params, id) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,

@@ -24,7 +24,7 @@ const {
   PUBLISH_EVENT_SUCCESS,
 } = require("../../../actions/constants");
 
-const { getAdobeAccessToken } = require("../../../utils/adobe-auth");
+const { imsProviderWithEnvResolver } = require("../../../utils/adobe-auth");
 const { getProviderByKey } = require("../../../utils/adobe-events-api");
 const { validateData } = require("./validator");
 const { checkAuthentication } = require("./auth");
@@ -63,8 +63,8 @@ async function main(params) {
     }
 
     logger.debug("Generate Adobe access token");
-    const accessToken = await getAdobeAccessToken(params);
-
+    const imsProvider = await imsProviderWithEnvResolver(params);
+    const accessToken = await imsProvider.getAccessToken();
     const authHeaders = {
       Authorization: `Bearer ${accessToken}`,
       "x-api-key": params.OAUTH_CLIENT_ID,

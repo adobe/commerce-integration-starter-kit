@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const ansis = require("ansis");
-const { getAdobeAccessHeaders } = require("../../utils/adobe-auth");
+const { imsProviderWithEnvResolver } = require("../../utils/adobe-auth");
 const { makeError, formatError } = require("../lib/helpers/errors");
 const {
   CommerceSdkValidationError,
@@ -120,7 +120,8 @@ async function main() {
 
   try {
     // resolve params
-    authHeaders = await getAdobeAccessHeaders(process.env);
+    const provider = await imsProviderWithEnvResolver(process.env);
+    authHeaders = provider.getHeaders();
   } catch (error) {
     if (error instanceof CommerceSdkValidationError) {
       logOnboardingError(

@@ -17,15 +17,16 @@ const { getAuthProviderFromParams } = require("./auth");
  * This function return the Adobe commerce OAuth client
  *
  * @param {object} options - include the information to configure oauth
- * @param {function} getAuthorizationHeaders - authProvider
+ * @param {object} params - params from the IO Runtime request
  * @param {object} logger - Logger
  */
-function createClient(options, getAuthorizationHeaders, logger) {
+async function createClient(options, params, logger) {
   const instance = {};
 
   // Remove trailing slash if any
   const serverUrl = options.url;
   const apiVersion = options.version;
+  const authProvider = await getAuthProviderFromParams(params);
 
   /**
    * This function make the call to the api
@@ -43,7 +44,7 @@ function createClient(options, getAuthorizationHeaders, logger) {
           requestData.method,
       );
 
-      const authHeaders = await getAuthorizationHeaders(requestData);
+      const authHeaders = await authProvider(requestData);
 
       const headers = {
         ...customHeaders,
@@ -128,11 +129,11 @@ function createClient(options, getAuthorizationHeaders, logger) {
  * @param {object} clientOptions - define the options for the client
  * @param {object} logger - define the Logger
  */
-function getClient(clientOptions, logger) {
+async function getClient(clientOptions, logger) {
   const { params, ...options } = clientOptions;
   options.version = "V1";
 
-  return createClient(options, getAuthProviderFromParams(params), logger);
+  return await createClient(options, params, logger);
 }
 
 module.exports = {

@@ -7,42 +7,24 @@ afterEach(() => {
 });
 
 describe("getClient", () => {
-  it("should return a client", () => {
+  it("throw an error when authOptions are not declared", async () => {
     const { getClient } = require("../../actions/http-client");
-    const client = getClient(
-      {
-        url: "http://localhost:9000",
-        params: {
-          COMMERCE_CONSUMER_KEY: "key",
-          COMMERCE_CONSUMER_SECRET: "secret",
-          COMMERCE_ACCESS_TOKEN: "secret",
-          COMMERCE_ACCESS_TOKEN_SECRET: "secret",
-        },
-      },
-      console,
-    );
-
-    expect(client).toBeDefined();
-  });
-
-  it("throw an error when authOptions are not declared", () => {
-    const { getClient } = require("../../actions/http-client");
-    return expect(() => {
+    await expect(
       getClient(
         {
           url: "http://localhost:9000/",
           params: {},
         },
         console,
-      );
-    }).toThrow(
+      ),
+    ).rejects.toThrow(
       "Unknown auth type, supported IMS OAuth or Commerce OAuth1. Please review documented auth types",
     );
   });
 
   it("should add a OAuth header when using Commerce OAuth1a credentials", async () => {
     const { getClient } = require("../../actions/http-client");
-    const client = getClient(
+    const client = await getClient(
       {
         url: "http://commerce.adobe.io/",
         params: {
@@ -86,7 +68,7 @@ describe("getClient", () => {
 
     const { getClient } = require("../../actions/http-client");
 
-    const client = getClient(
+    const client = await getClient(
       {
         url: "http://commerce.adobe.io/",
         params: {

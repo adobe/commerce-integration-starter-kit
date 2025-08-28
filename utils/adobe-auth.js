@@ -13,6 +13,8 @@ governing permissions and limitations under the License.
 const {
   assertImsAuthParams,
   getImsAuthProvider,
+  assertIntegrationAuthParams,
+  getIntegrationAuthProvider,
 } = require("@adobe/aio-commerce-lib-auth");
 
 const {
@@ -93,34 +95,53 @@ function resolveImsConfig(params) {
 }
 
 /**
- * Generate access token to connect with Adobe tools (e.g. IO Events)
- * @param {object} params includes env parameters
- * @returns the access token
+ * Resolve Commerce Integration configuration from environment parameters
+ * @param params
+ * @returns Commerce OAuth1 config object
  */
-function getAdobeAccessToken(params) {
-  const config = resolveImsConfig(params);
-
-  assertImsAuthParams(config);
-  const imsAuthProvider = getImsAuthProvider(config);
-
-  return imsAuthProvider.getAccessToken();
+function resolveIntegrationConfig(params) {
+  return {
+    consumerKey: params.COMMERCE_CONSUMER_KEY,
+    consumerSecret: params.COMMERCE_CONSUMER_SECRET,
+    accessToken: params.COMMERCE_ACCESS_TOKEN,
+    accessTokenSecret: params.COMMERCE_ACCESS_TOKEN_SECRET,
+  };
 }
 
-/**
- * Get the access token headers for Adobe tools (e.g. IO Events)
- * @param {object} params - IMS authentication parameters
- * @returns the headers with access token
- */
-function getAdobeAccessHeaders(params) {
-  const config = resolveImsConfig(params);
-  assertImsAuthParams(config);
-  const imsAuthProvider = getImsAuthProvider(config);
+async function createIntegrationProvider(configOrResolver) {
+  const config = await Promise.resolve(
+    typeof configOrResolver === "function"
+      ? configOrResolver()
+      : configOrResolver,
+  );
 
-  return imsAuthProvider.getHeaders();
+  assertIntegrationAuthParams(config);
+  return getIntegrationAuthProvider(config);
+}
+
+async function createImsProvider(configOrResolver) {
+  const config = await Promise.resolve(
+    typeof configOrResolver === "function"
+      ? configOrResolver()
+      : configOrResolver,
+  );
+
+  assertImsAuthParams(config);
+  return getImsAuthProvider(config);
+}
+
+function integrationProviderWithEnvResolver(env) {
+  return createIntegrationProvider(resolveIntegrationConfig(env));
+}
+
+function imsProviderWithEnvResolver(env) {
+  return createImsProvider(resolveImsConfig(env));
 }
 
 module.exports = {
-  getAdobeAccessToken,
-  getAdobeAccessHeaders,
+  createImsProvider,
+  createIntegrationProvider,
+  imsProviderWithEnvResolver,
+  integrationProviderWithEnvResolver,
   resolveScopes,
 };

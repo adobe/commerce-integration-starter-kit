@@ -23,7 +23,7 @@ const logger = Core.Logger("commerce-consumer-api-client", { level: "info" });
  * @param {object} data - Adobe commerce api payload
  */
 async function createCustomer(baseUrl, params, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
@@ -45,7 +45,7 @@ async function createCustomer(baseUrl, params, data) {
  * @param {object} data - Adobe commerce api payload
  */
 async function updateCustomer(baseUrl, params, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
@@ -69,7 +69,7 @@ async function updateCustomer(baseUrl, params, data) {
  * @param {number} id - Id
  */
 async function deleteCustomer(baseUrl, params, id) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,

@@ -23,7 +23,7 @@ const logger = Core.Logger("commerce-stock-api-client", { level: "info" });
  * @param {object} data - Adobe commerce api payload
  */
 async function updateStock(baseUrl, params, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,

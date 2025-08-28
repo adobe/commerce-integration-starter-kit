@@ -23,7 +23,7 @@ const logger = Core.Logger("commerce-order-api-client", { level: "info" });
  * @param {object} data - Adobe commerce api payload
  */
 async function addComment(baseUrl, params, orderId, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,

@@ -13,11 +13,10 @@ governing permissions and limitations under the License.
 const { Core } = require("@adobe/aio-sdk");
 const logger = Core.Logger("auth", { level: "info" });
 const {
-  assertImsAuthParams,
-  assertIntegrationAuthParams,
-  getImsAuthProvider,
-  getIntegrationAuthProvider,
-} = require("@adobe/aio-commerce-lib-auth");
+  imsProviderWithEnvResolver,
+  integrationProviderWithEnvResolver,
+} = require("../utils/adobe-auth");
+
 const {
   CommerceSdkValidationError,
 } = require("@adobe/aio-commerce-lib-core/error");
@@ -28,20 +27,16 @@ const {
  * @returns the auth object for the request
  * @throws {Error} - throws error if the params are missing
  */
-function getAuthProviderFromParams(params) {
+async function getAuthProviderFromParams(params) {
   // `aio app dev` compatibility: inputs mapped to undefined env vars come as $<input_name> in dev mode, but as '' in prod mode
   try {
     if (
       params.COMMERCE_CONSUMER_KEY &&
       params.COMMERCE_CONSUMER_KEY !== "$COMMERCE_CONSUMER_KEY"
     ) {
-      logger.info(
-        "Commerce client attempting to parse CommerceIntegration params",
-      );
-      const commerceOAuth1 = resolveIntegrationConfig(params);
-      assertIntegrationAuthParams(commerceOAuth1);
       logger.info("Commerce client will use CommerceIntegration provider");
-      const integrationProvider = getIntegrationAuthProvider(commerceOAuth1);
+      const integrationProvider =
+        await integrationProviderWithEnvResolver(params);
       return ({ method, url }) => {
         return integrationProvider.getHeaders(method, url);
       };
@@ -52,11 +47,8 @@ function getAuthProviderFromParams(params) {
       params.OAUTH_CLIENT_ID &&
       params.OAUTH_CLIENT_ID !== "$OAUTH_CLIENT_ID"
     ) {
-      logger.info("Commerce client attempting to parse ImsAuth params");
-      const ims = resolveImsConfig(params);
-      assertImsAuthParams(ims);
       logger.info("Commerce client will use ImsAuth provider");
-      const imsProvider = getImsAuthProvider(ims);
+      const imsProvider = await imsProviderWithEnvResolver(params);
       return async () => {
         const token = await imsProvider.getAccessToken();
         return { Authorization: `Bearer ${token}` };
@@ -64,6 +56,10 @@ function getAuthProviderFromParams(params) {
     }
   } catch (error) {
     if (error instanceof CommerceSdkValidationError) {
+      logger.error(
+        `Unable to create authProvider params: ${error.display(false)}`,
+      );
+
       throw new Error(
         `Unable to create authProvider params: ${error.display(false)}`,
       );
@@ -75,51 +71,6 @@ function getAuthProviderFromParams(params) {
   throw new Error(
     "Unknown auth type, supported IMS OAuth or Commerce OAuth1. Please review documented auth types",
   );
-}
-
-const DEFAULT_IMS_SCOPES = [
-  "AdobeID",
-  "openid",
-  "read_organizations",
-  "additional_info.projectedProductContext",
-  "additional_info.roles",
-  "adobeio_api",
-  "read_client_secret",
-  "manage_client_secrets",
-  "commerce.accs",
-];
-
-/**
- * Resolve Commerce Integration configuration from environment parameters
- * @param params
- * @returns {{consumerKey: (string|*), consumerSecret: (string|*), accessToken: (string|*), accessTokenSecret: (string|*)}}
- */
-function resolveIntegrationConfig(params) {
-  return {
-    consumerKey: params.COMMERCE_CONSUMER_KEY,
-    consumerSecret: params.COMMERCE_CONSUMER_SECRET,
-    accessToken: params.COMMERCE_ACCESS_TOKEN,
-    accessTokenSecret: params.COMMERCE_ACCESS_TOKEN_SECRET,
-  };
-}
-
-/**
- * Resolve IMS configuration from environment parameters
- * @param {object} params - Environment parameters containing ImsAuth configuration
- * @returns IMS authentication configuration object
- */
-function resolveImsConfig(params) {
-  return {
-    clientId: params.OAUTH_CLIENT_ID,
-    clientSecrets: params.OAUTH_CLIENT_SECRET
-      ? [params.OAUTH_CLIENT_SECRET]
-      : [],
-    technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
-    technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
-    imsOrgId: params.OAUTH_ORG_ID,
-    scopes: params.OAUTH_SCOPES || DEFAULT_IMS_SCOPES,
-    environment: params.AIO_CLI_ENV || "prod",
-  };
 }
 
 module.exports = {
