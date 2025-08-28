@@ -59,7 +59,7 @@ application:
           $include: ./actions/stock/external/actions.config.yaml
   events:
     registrations:
-      3rd party product consumer:
+      Backoffice Product Sync:
         description: Consumes product events from 3rd party systems
         events_of_interest:
           - provider_metadata: 3rd_party_custom_events
@@ -68,7 +68,7 @@ application:
               - be-observer.catalog_product_update
               - be-observer.catalog_product_delete
         runtime_action: product-backoffice/consumer
-      3rd party customer consumer:
+      Backoffice Customer Sync:
         description: Consumes customer events from 3rd party systems
         events_of_interest:
           - provider_metadata: 3rd_party_custom_events
@@ -80,7 +80,7 @@ application:
               - be-observer.customer_group_update
               - be-observer.customer_group_delete
         runtime_action: customer-backoffice/consumer
-      3rd party order consumer:
+      Backoffice Order Sync:
         description: Consumes customer events from 3rd party systems
         events_of_interest:
           - provider_metadata: 3rd_party_custom_events
@@ -89,14 +89,14 @@ application:
               - be-observer.sales_order_shipment_create
               - be-observer.sales_order_shipment_update
         runtime_action: order-backoffice/consumer
-      3rd party stock consumer:
+      Backoffice Stock Sync:
         description: Consumes customer events from 3rd party systems
         events_of_interest:
           - provider_metadata: 3rd_party_custom_events
             event_codes:
               - be-observer.catalog_stock_update
         runtime_action: stock-backoffice/consumer
-      Commerce customer events consumer:
+      Commerce Customer Sync:
         description: Consumes customer events from Adobe Commerce
         events_of_interest:
           - provider_metadata: dx_commerce_events
@@ -106,7 +106,7 @@ application:
               - com.adobe.commerce.observer.customer_group_save_commit_after
               - com.adobe.commerce.observer.customer_group_delete_commit_after
         runtime_action: customer-commerce/consumer
-      Commerce product consumer:
+      Commerce Product Sync:
         description: Consumes product events from Adobe Commerce
         events_of_interest:
           - provider_metadata: dx_commerce_events
@@ -114,14 +114,14 @@ application:
               - com.adobe.commerce.observer.catalog_product_delete_commit_after
               - com.adobe.commerce.observer.catalog_product_save_commit_after
         runtime_action: product-commerce/consumer
-      Commerce order consumer:
+      Commerce Order Sync:
         description: Consumes order events from Adobe Commerce
         events_of_interest:
           - provider_metadata: dx_commerce_events
             event_codes:
               - com.adobe.commerce.observer.sales_order_save_commit_after
         runtime_action: order-commerce/consumer
-      Commerce stock consumer:
+      Commerce Stock Sync:
         description: Consumes stock events from Adobe Commerce
         events_of_interest:
           - provider_metadata: dx_commerce_events
