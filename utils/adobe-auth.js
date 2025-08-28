@@ -15,17 +15,57 @@ const {
   getImsAuthProvider,
 } = require("@adobe/aio-commerce-lib-auth");
 
-const DEFAULT_IMS_SCOPES = [
-  "AdobeID",
-  "openid",
-  "read_organizations",
-  "additional_info.projectedProductContext",
-  "additional_info.roles",
-  "adobeio_api",
-  "read_client_secret",
-  "manage_client_secrets",
-  "commerce.accs",
-];
+const {
+  CommerceSdkValidationError,
+} = require("@adobe/aio-commerce-lib-core/error");
+
+const v = require("valibot");
+
+const JsonArray = v.message(
+  v.pipe(
+    v.string("Expected a JSON string"),
+    v.nonEmpty(),
+    v.parseJson(),
+    v.array(v.string()),
+  ),
+  "Oopsie",
+);
+
+const SIMPLE_STRING_REGEX = /^[\w-]+(,\s*[\w-]+)*$/;
+const ValidSimpleString = v.regex(
+  SIMPLE_STRING_REGEX,
+  "Scopes must be comma-separated values containing only letters, numbers, underscores, and hyphens",
+);
+
+const SimpleStringArray = v.pipe(
+  v.string(),
+  ValidSimpleString,
+  v.transform((value) => {
+    if (value.includes(",")) {
+      return value.split(",").map((s) => s.trim());
+    }
+
+    return [value.trim()];
+  }),
+  v.array(v.string()),
+);
+
+const ScopesSchema = v.message(
+  v.union([JsonArray, SimpleStringArray, v.array(v.string())]),
+  "scopes only valid Array, Json or comma-separated string are supported",
+);
+
+function resolveScopes(scopes) {
+  const result = v.safeParse(ScopesSchema, scopes);
+
+  if (result.success) {
+    return result.output;
+  }
+
+  throw new CommerceSdkValidationError("Invalid scopes format", {
+    issues: result.issues,
+  });
+}
 
 /**
  * Resolve IMS configuration from environment parameters
@@ -41,7 +81,7 @@ function resolveImsConfig(params) {
     technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
     technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
     imsOrgId: params.OAUTH_ORG_ID,
-    scopes: DEFAULT_IMS_SCOPES,
+    scopes: resolveScopes(params.OAUTH_SCOPES),
     environment: params.AIO_CLI_ENV || "prod",
   };
 }
@@ -76,4 +116,5 @@ function getAdobeAccessHeaders(params) {
 module.exports = {
   getAdobeAccessToken,
   getAdobeAccessHeaders,
+  resolveScopes,
 };
