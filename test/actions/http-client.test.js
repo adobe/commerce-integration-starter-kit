@@ -1,9 +1,14 @@
 const { HTTP_OK } = require("../../actions/constants");
-const { getClient } = require("../../actions/http-client");
 const nock = require("nock");
+
+afterEach(() => {
+  jest.clearAllMocks();
+  jest.resetModules();
+});
 
 describe("getClient", () => {
   it("should return a client", () => {
+    const { getClient } = require("../../actions/http-client");
     const client = getClient(
       {
         url: "http://localhost:9000",
@@ -21,6 +26,7 @@ describe("getClient", () => {
   });
 
   it("throw an error when authOptions are not declared", () => {
+    const { getClient } = require("../../actions/http-client");
     return expect(() => {
       getClient(
         {
@@ -35,6 +41,7 @@ describe("getClient", () => {
   });
 
   it("should add a OAuth header when using Commerce OAuth1a credentials", async () => {
+    const { getClient } = require("../../actions/http-client");
     const client = getClient(
       {
         url: "http://commerce.adobe.io/",
@@ -65,6 +72,20 @@ describe("getClient", () => {
   });
 
   it("should add a Authorization with Bearer <TOKEN> when receiving a success response from IMS", async () => {
+    const { assertImsAuthParams } = jest.requireActual(
+      "@adobe/aio-commerce-lib-auth",
+    );
+
+    jest.doMock("@adobe/aio-commerce-lib-auth", () => ({
+      __esModule: true,
+      getImsAuthProvider: jest.fn().mockReturnValue({
+        getAccessToken: jest.fn().mockResolvedValue("test-token"),
+      }),
+      assertImsAuthParams,
+    }));
+
+    const { getClient } = require("../../actions/http-client");
+
     const client = getClient(
       {
         url: "http://commerce.adobe.io/",
@@ -72,24 +93,18 @@ describe("getClient", () => {
           OAUTH_CLIENT_ID: "client-id",
           OAUTH_CLIENT_SECRET: "client-secret",
           OAUTH_SCOPES: ["scope1", "scope2"],
+          OAUTH_TECHNICAL_ACCOUNT_ID: "test-technical-account-id",
+          OAUTH_TECHNICAL_ACCOUNT_EMAIL: "test-email@example.com",
+          OAUTH_ORG_ID: "test-org-id",
         },
       },
       console,
     );
 
-    const imsScope = nock("https://ims-na1.adobelogin.com", {})
-      .post("/ims/token/v3")
-      .reply(HTTP_OK, {
-        access_token: "TOKEN",
-        token_type: "Bearer",
-        expires_in: 86_000,
-        expires_at: 999_999_999,
-      });
-
     const scope = nock("http://commerce.adobe.io", {
       reqheaders: {
         Authorization: (value) => {
-          return value.includes("Bearer TOKEN");
+          return value.includes("Bearer test-token");
         },
       },
     })
@@ -102,7 +117,6 @@ describe("getClient", () => {
       success: true,
     });
 
-    imsScope.done();
     scope.done();
   });
 });

@@ -11,31 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const got = require("got");
-const { fromParams } = require("./auth");
-const {
-  getImsAuthProvider,
-  getIntegrationAuthProvider,
-} = require("@adobe/aio-commerce-lib-auth");
-
-function getAuthProvider(params) {
-  const authOptions = fromParams(params);
-
-  if (authOptions?.ims) {
-    const imsProvider = getImsAuthProvider(authOptions.ims);
-    return () => {
-      return imsProvider.getAccessToken();
-    };
-  }
-
-  if (authOptions?.commerceOAuth1) {
-    const integrationProvider = getIntegrationAuthProvider(
-      authOptions.commerceOAuth1,
-    );
-    return ({ method, url }) => {
-      return integrationProvider.getHeaders(method, url);
-    };
-  }
-}
+const { getAuthProviderFromParams } = require("./auth");
 
 /**
  * This function return the Adobe commerce OAuth client
@@ -156,7 +132,7 @@ function getClient(clientOptions, logger) {
   const { params, ...options } = clientOptions;
   options.version = "V1";
 
-  return createClient(options, getAuthProvider(fromParams(params)), logger);
+  return createClient(options, getAuthProviderFromParams(params), logger);
 }
 
 module.exports = {

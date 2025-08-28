@@ -15,6 +15,8 @@ const logger = Core.Logger("auth", { level: "info" });
 const {
   assertImsAuthParams,
   assertIntegrationAuthParams,
+  getImsAuthProvider,
+  getIntegrationAuthProvider,
 } = require("@adobe/aio-commerce-lib-auth");
 const {
   CommerceSdkValidationError,
@@ -26,7 +28,7 @@ const {
  * @returns the auth object for the request
  * @throws {Error} - throws error if the params are missing
  */
-function fromParams(params) {
+function getAuthProviderFromParams(params) {
   // `aio app dev` compatibility: inputs mapped to undefined env vars come as $<input_name> in dev mode, but as '' in prod mode
   try {
     if (
@@ -39,8 +41,9 @@ function fromParams(params) {
       const commerceOAuth1 = resolveIntegrationConfig(params);
       assertIntegrationAuthParams(commerceOAuth1);
       logger.info("Commerce client will use CommerceIntegration provider");
-      return {
-        commerceOAuth1,
+      const integrationProvider = getIntegrationAuthProvider(commerceOAuth1);
+      return ({ method, url }) => {
+        return integrationProvider.getHeaders(method, url);
       };
     }
 
@@ -53,8 +56,10 @@ function fromParams(params) {
       const ims = resolveImsConfig(params);
       assertImsAuthParams(ims);
       logger.info("Commerce client will use ImsAuth provider");
-      return {
-        ims,
+      const imsProvider = getImsAuthProvider(ims);
+      return async () => {
+        const token = await imsProvider.getAccessToken();
+        return { Authorization: `Bearer ${token}` };
       };
     }
   } catch (error) {
@@ -66,6 +71,10 @@ function fromParams(params) {
 
     throw new Error(`Unable to create authProvider params: ${error.message}`);
   }
+
+  throw new Error(
+    "Unknown auth type, supported IMS OAuth or Commerce OAuth1. Please review documented auth types",
+  );
 }
 
 const DEFAULT_IMS_SCOPES = [
@@ -109,5 +118,5 @@ function resolveImsConfig(params) {
 }
 
 module.exports = {
-  fromParams,
+  getAuthProviderFromParams,
 };

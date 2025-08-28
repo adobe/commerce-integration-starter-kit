@@ -1,7 +1,7 @@
-const { fromParams } = require("../..//actions/auth");
+const { getAuthProviderFromParams } = require("../..//actions/auth");
 
-describe("fromParams", () => {
-  it("can extract IMS params", () => {
+describe("getAuthProviderFromParams", () => {
+  it("with ImsAuth params it returns an anonymous function", () => {
     const params = {
       OAUTH_CLIENT_ID: "client-id",
       OAUTH_CLIENT_SECRET: "client-secret",
@@ -10,21 +10,13 @@ describe("fromParams", () => {
       OAUTH_TECHNICAL_ACCOUNT_ID: "tech-account-id",
       OAUTH_ORG_ID: "org-id",
     };
+    const authProvider = getAuthProviderFromParams(params);
 
-    expect(fromParams(params)).toEqual({
-      ims: {
-        clientId: "client-id",
-        clientSecrets: ["client-secret"],
-        imsOrgId: "org-id",
-        scopes: ["scope1", "scope2"],
-        environment: "prod",
-        technicalAccountEmail: "test@example.com",
-        technicalAccountId: "tech-account-id",
-      },
-    });
+    expect(authProvider).toBeDefined();
+    expect(typeof authProvider).toBe("function");
   });
 
-  it("can extract Commerce OAuth1a params", () => {
+  it("with Commerce OAuth1a params it returns an anonymous function", () => {
     const params = {
       COMMERCE_CONSUMER_KEY: "commerce-consumer-key",
       COMMERCE_CONSUMER_SECRET: "commerce-consumer-secret",
@@ -32,13 +24,30 @@ describe("fromParams", () => {
       COMMERCE_ACCESS_TOKEN_SECRET: "commerce-access-token-secret",
     };
 
-    expect(fromParams(params)).toEqual({
-      commerceOAuth1: {
-        consumerKey: "commerce-consumer-key",
-        consumerSecret: "commerce-consumer-secret",
-        accessToken: "commerce-access-token",
-        accessTokenSecret: "commerce-access-token-secret",
-      },
-    });
+    const authProvider = getAuthProviderFromParams(params);
+
+    expect(authProvider).toBeDefined();
+    expect(typeof authProvider).toBe("function");
+  });
+
+  it("throws if no valid params for either ImsAuth or Commerce OAuth1a", () => {
+    const params = {};
+    expect(() => getAuthProviderFromParams(params)).toThrow(
+      "Unknown auth type, supported IMS OAuth or Commerce OAuth1. Please review documented auth types",
+    );
+  });
+
+  it("throws if no valid params for are supplied to ImsAuth", () => {
+    const params = {
+      OAUTH_CLIENT_ID: "client-id",
+    };
+    expect(() => getAuthProviderFromParams(params)).toThrow();
+  });
+
+  it("throws if no valid params for are supplied to Commerce OAuth1a", () => {
+    const params = {
+      COMMERCE_CONSUMER_KEY: "consumer-key",
+    };
+    expect(() => getAuthProviderFromParams(params)).toThrow();
   });
 });
