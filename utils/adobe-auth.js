@@ -73,6 +73,12 @@ function resolveScopes(scopes) {
  * @returns IMS authentication configuration object
  */
 function resolveImsConfig(params) {
+  // scopes will be defaulted to empty array if not provided
+  // this will lead to the CommerceSdkValidationError error
+  const scopes = params.OAUTH_SCOPES
+    ? (resolveScopes(params.OAUTH_SCOPES) ?? [])
+    : [];
+
   return {
     clientId: params.OAUTH_CLIENT_ID,
     clientSecrets: params.OAUTH_CLIENT_SECRET
@@ -81,7 +87,7 @@ function resolveImsConfig(params) {
     technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
     technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
     imsOrgId: params.OAUTH_ORG_ID,
-    scopes: resolveScopes(params.OAUTH_SCOPES),
+    scopes,
     environment: params.AIO_CLI_ENV || "prod",
   };
 }
