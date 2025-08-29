@@ -31,7 +31,7 @@ async function createCustomer(baseUrl, params, data) {
     logger,
   );
 
-  return await client.post("customers", JSON.stringify(data), "", {
+  return await client.post("customers", JSON.stringify(data), {
     "Content-Type": "application/json",
   });
 }
@@ -55,7 +55,6 @@ async function updateCustomer(baseUrl, params, data) {
   return await client.put(
     `customers/${data.customer.id}`,
     JSON.stringify(data),
-    "",
     { "Content-Type": "application/json" },
   );
 }

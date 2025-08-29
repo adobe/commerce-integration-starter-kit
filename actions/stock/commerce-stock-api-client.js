@@ -30,7 +30,7 @@ async function updateStock(baseUrl, params, data) {
     },
     logger,
   );
-  return await client.post("inventory/source-items", JSON.stringify(data), "", {
+  return await client.post("inventory/source-items", JSON.stringify(data), {
     "Content-Type": "application/json",
   });
 }

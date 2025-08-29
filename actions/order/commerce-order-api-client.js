@@ -31,12 +31,9 @@ async function addComment(baseUrl, params, orderId, data) {
     logger,
   );
 
-  return await client.post(
-    `orders/${orderId}/comments`,
-    JSON.stringify(data),
-    "",
-    { "Content-Type": "application/json" },
-  );
+  return await client.post(`orders/${orderId}/comments`, JSON.stringify(data), {
+    "Content-Type": "application/json",
+  });
 }
 
 module.exports = {

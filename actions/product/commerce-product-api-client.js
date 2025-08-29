@@ -31,7 +31,7 @@ async function createProduct(baseUrl, params, data) {
     logger,
   );
 
-  return await client.post("products", JSON.stringify(data), "", {
+  return await client.post("products", JSON.stringify(data), {
     "Content-Type": "application/json",
   });
 }

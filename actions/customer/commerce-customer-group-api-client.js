@@ -33,7 +33,7 @@ async function createCustomerGroup(baseUrl, params, data) {
     logger,
   );
 
-  return await client.post("customerGroups", JSON.stringify(data), "", {
+  return await client.post("customerGroups", JSON.stringify(data), {
     "Content-Type": "application/json",
   });
 }
@@ -57,7 +57,6 @@ async function updateCustomerGroup(baseUrl, params, data) {
   return await client.put(
     `customerGroups/${data.group.id}`,
     JSON.stringify(data),
-    "",
     { "Content-Type": "application/json" },
   );
 }

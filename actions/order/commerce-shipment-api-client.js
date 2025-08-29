@@ -32,7 +32,7 @@ async function createShipment(baseUrl, params, orderId, data) {
     logger,
   );
 
-  return await client.post(`order/${orderId}/ship`, JSON.stringify(data), "", {
+  return await client.post(`order/${orderId}/ship`, JSON.stringify(data), {
     "Content-Type": "application/json",
   });
 }
@@ -52,7 +52,7 @@ async function updateShipment(baseUrl, params, data) {
     },
     logger,
   );
-  return await client.post("shipment", JSON.stringify(data), "", {
+  return await client.post("shipment", JSON.stringify(data), {
     "Content-Type": "application/json",
   });
 }
