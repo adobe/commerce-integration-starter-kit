@@ -45,11 +45,7 @@ const ValidSimpleString = v.pipe(
 const SimpleStringArray = v.pipe(
   ValidSimpleString,
   v.transform((value) => {
-    if (value.includes(",")) {
-      return value.split(",").map((s) => s.trim());
-    }
-
-    return [value.trim()];
+    return value.split(",").map((s) => s.trim());
   }),
   v.array(v.string()),
 );

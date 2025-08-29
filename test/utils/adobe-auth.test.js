@@ -33,12 +33,14 @@ describe("adobe-auth", () => {
       expect(() => resolveScopes(input)).toThrow("Invalid scopes format");
     });
 
-    it.each([["scope@"], ["scope1; scope2"], ["scope_1|scope-2"]])(
-      "should not parse invalid scope pattern %s",
-      (input) => {
-        expect(() => resolveScopes(input)).toThrow("Invalid scopes format");
-      },
-    );
+    it.each([
+      ["scope@"],
+      ["scope1; scope2"],
+      ["scope_1|scope-2"],
+      ["scope_1,,scope-2"],
+    ])("should not parse invalid scope pattern %s", (input) => {
+      expect(() => resolveScopes(input)).toThrow("Invalid scopes format");
+    });
 
     it("handles empty string", () => {
       const input = "";
