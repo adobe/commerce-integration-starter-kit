@@ -17,7 +17,6 @@
     "@adobe/aio-lib-state": "^5.1.0",
     "@adobe/aio-lib-telemetry": "^1.0.0",
     "@adobe/aio-sdk": "^6.0.0",
-    "@adobe/commerce-sdk-auth": "^0.1.0",
     "ajv": "^8.16.0",
     "ansis": "^4.1.0",
     "cloudevents": "^8.0.0",
@@ -40,7 +39,6 @@
   },
   "scripts": {
     "prepare": "husky",
-    "postinstall": "npm run build --if-present --workspaces",
     "test": "jest --passWithNoTests -c ./test/jest.config.js ./test",
     "onboard": "node --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
     "onboard:debug": "node --inspect-brk --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
@@ -52,11 +50,6 @@
   },
   "engines": {
     "node": ">=22.0.0"
-  },
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
