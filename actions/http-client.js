@@ -11,74 +11,88 @@ governing permissions and limitations under the License.
 */
 
 const got = require("got");
+
 const {
-  getImsAccessToken,
-  getOAuthHeader,
-} = require("@adobe/commerce-sdk-auth");
-const { fromParams } = require("./auth");
+  imsProviderWithEnvResolver,
+  integrationProviderWithEnvResolver,
+} = require("../utils/adobe-auth");
+const {
+  CommerceSdkValidationError,
+} = require("@adobe/aio-commerce-lib-core/error");
 
 /**
- * @returns the bearer token
- * @param {string} token - access token
+ * This function returns the auth function from @adobe/aio-commerce-lib-auth based on the environment parameters.
+ * @param {object} params - Environment params from the IO Runtime request
+ * @param {object} logger - Logger
+ * @returns the auth object for the request
+ * @throws {Error} - throws error if the params are missing
  */
-function withBearer(token) {
-  return `Bearer ${token}`;
+async function getAuthProviderFromParams(params, logger) {
+  // `aio app dev` compatibility: inputs mapped to undefined env vars come as $<input_name> in dev mode, but as '' in prod mode
+  try {
+    if (
+      params.COMMERCE_CONSUMER_KEY &&
+      params.COMMERCE_CONSUMER_KEY !== "$COMMERCE_CONSUMER_KEY"
+    ) {
+      logger.info("Commerce client will use CommerceIntegration provider");
+      const integrationProvider =
+        await integrationProviderWithEnvResolver(params);
+      return ({ method, url }) => {
+        return integrationProvider.getHeaders(method, url);
+      };
+    }
+
+    // `aio app dev` compatibility: inputs mapped to undefined env vars come as $<input_name> in dev mode, but as '' in prod mode
+    if (
+      params.OAUTH_CLIENT_ID &&
+      params.OAUTH_CLIENT_ID !== "$OAUTH_CLIENT_ID"
+    ) {
+      logger.info("Commerce client will use ImsAuth provider");
+      const imsProvider = await imsProviderWithEnvResolver(params);
+      return async () => {
+        const token = await imsProvider.getAccessToken();
+        return { Authorization: `Bearer ${token}` };
+      };
+    }
+  } catch (error) {
+    if (error instanceof CommerceSdkValidationError) {
+      logger.error(
+        `Unable to create authProvider params: ${error.display(false)}`,
+      );
+
+      throw new Error(
+        `Unable to create authProvider params: ${error.display(false)}`,
+      );
+    }
+  }
+
+  throw new Error(
+    "Unknown auth type, supported IMS OAuth or Commerce OAuth1. Please review documented auth types",
+  );
 }
 
 /**
  * This function return the Adobe commerce OAuth client
  *
  * @param {object} options - include the information to configure oauth
- * @param {object} authOptions - 'IMS' or 'COMMERCE'
+ * @param {object} params - params from the IO Runtime request
  * @param {object} logger - Logger
  */
-function createClient(options, authOptions, logger) {
+async function createClient(options, params, logger) {
   const instance = {};
 
   // Remove trailing slash if any
   const serverUrl = options.url;
   const apiVersion = options.version;
-
-  let getAuthorizationHeaders = (opts) => {
-    throw new Error("getAuthorizationHeaders not implemented");
-  };
-
-  if (authOptions?.ims) {
-    const { ims } = authOptions;
-    getAuthorizationHeaders = async (_opts) => {
-      const imsResponse = await getImsAccessToken(ims);
-      return {
-        Authorization: withBearer(imsResponse.access_token),
-      };
-    };
-  } else if (authOptions?.commerceOAuth1) {
-    const { commerceOAuth1 } = authOptions;
-    const oauthToken = {
-      key: commerceOAuth1.accessToken,
-      secret: commerceOAuth1.accessTokenSecret,
-    };
-    const oauth = getOAuthHeader(commerceOAuth1);
-    getAuthorizationHeaders = ({ url, method }) => {
-      return oauth.toHeader(
-        oauth.authorize(
-          {
-            url,
-            method,
-          },
-          oauthToken,
-        ),
-      );
-    };
-  }
+  const authProvider = await getAuthProviderFromParams(params, logger);
 
   /**
    * This function make the call to the api
    *
    * @param {object} requestData - include the request data
-   * @param {string} requestToken - access token
    * @param {object} customHeaders - include custom headers
    */
-  async function apiCall(requestData, requestToken = "", customHeaders = {}) {
+  async function apiCall(requestData, customHeaders = {}) {
     try {
       logger.debug(
         "Fetching URL: " +
@@ -87,18 +101,13 @@ function createClient(options, authOptions, logger) {
           requestData.method,
       );
 
-      let authHeaders = {};
-
-      if (requestToken.length > 0) {
-        authHeaders = { Authorization: withBearer(requestToken) };
-      } else {
-        authHeaders = await getAuthorizationHeaders(requestData);
-      }
+      const authHeaders = await authProvider(requestData);
 
       const headers = {
         ...customHeaders,
         ...authHeaders,
       };
+
       return await got(requestData.url, {
         http2: true,
         method: requestData.method,
@@ -119,12 +128,12 @@ function createClient(options, authOptions, logger) {
       body: loginData,
     });
 
-  instance.get = (resourceUrl, requestToken = "") => {
+  instance.get = (resourceUrl) => {
     const requestData = {
       url: createUrl(resourceUrl),
       method: "GET",
     };
-    return apiCall(requestData, requestToken);
+    return apiCall(requestData);
   };
 
   /**
@@ -137,35 +146,30 @@ function createClient(options, authOptions, logger) {
     return `${serverUrl}${apiVersion}/${resourceUrl}`;
   }
 
-  instance.post = (
-    resourceUrl,
-    data,
-    requestToken = "",
-    customHeaders = {},
-  ) => {
+  instance.post = (resourceUrl, data, customHeaders = {}) => {
     const requestData = {
       url: createUrl(resourceUrl),
       method: "POST",
       body: data,
     };
-    return apiCall(requestData, requestToken, customHeaders);
+    return apiCall(requestData, customHeaders);
   };
 
-  instance.put = (resourceUrl, data, requestToken = "", customHeaders = {}) => {
+  instance.put = (resourceUrl, data, customHeaders = {}) => {
     const requestData = {
       url: createUrl(resourceUrl),
       method: "PUT",
       body: data,
     };
-    return apiCall(requestData, requestToken, customHeaders);
+    return apiCall(requestData, customHeaders);
   };
 
-  instance.delete = (resourceUrl, requestToken = "") => {
+  instance.delete = (resourceUrl) => {
     const requestData = {
       url: createUrl(resourceUrl),
       method: "DELETE",
     };
-    return apiCall(requestData, requestToken);
+    return apiCall(requestData);
   };
 
   return instance;
@@ -177,13 +181,14 @@ function createClient(options, authOptions, logger) {
  * @param {object} clientOptions - define the options for the client
  * @param {object} logger - define the Logger
  */
-function getClient(clientOptions, logger) {
+async function getClient(clientOptions, logger) {
   const { params, ...options } = clientOptions;
   options.version = "V1";
 
-  return createClient(options, fromParams(params), logger);
+  return await createClient(options, params, logger);
 }
 
 module.exports = {
   getClient,
+  getAuthProviderFromParams,
 };

@@ -88,7 +88,7 @@ describe("onboarding index", () => {
     expect(fullErrorMessage).toContain("technicalAccountId");
     expect(fullErrorMessage).toContain("technicalAccountEmail");
     expect(fullErrorMessage).toContain("imsOrgId");
-    expect(fullErrorMessage).not.toContain("scopes");
+    expect(fullErrorMessage).toContain("scopes");
   });
 
   test("should print an error when IMS Auth clientSecrets is empty", async () => {
@@ -104,6 +104,7 @@ describe("onboarding index", () => {
       OAUTH_TECHNICAL_ACCOUNT_ID: "test-tech-account-id",
       OAUTH_TECHNICAL_ACCOUNT_EMAIL: "test@example.com",
       OAUTH_ORG_ID: "test-org-id",
+      OAUTH_SCOPES: "scope1, scope2",
     };
     jest.replaceProperty(process, "env", mockEnv);
     const result = await main();
@@ -146,6 +147,7 @@ describe("onboarding index", () => {
       OAUTH_TECHNICAL_ACCOUNT_EMAIL: "test@example.com",
       OAUTH_ORG_ID: "test-org-id",
       OAUTH_CLIENT_SECRET: "",
+      OAUTH_SCOPES: "scope1, scope2",
     };
     jest.replaceProperty(process, "env", mockEnv);
     const result = await main();
@@ -272,6 +274,7 @@ describe("onboarding index", () => {
       OAUTH_TECHNICAL_ACCOUNT_ID: "test-tech-account-id",
       OAUTH_TECHNICAL_ACCOUNT_EMAIL: "test@example.com",
       OAUTH_ORG_ID: "test-org-id",
+      OAUTH_SCOPES: "scope1, scope2",
     };
     jest.replaceProperty(process, "env", mockEnv);
     jest.resetModules();

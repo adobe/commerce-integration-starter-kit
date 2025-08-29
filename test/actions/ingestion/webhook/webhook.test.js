@@ -68,6 +68,7 @@ const validEnvParams = {
   OAUTH_TECHNICAL_ACCOUNT_ID: "example@adobe-ds.com",
   OAUTH_TECHNICAL_ACCOUNT_EMAIL: "example2@adobe-ds.com",
   OAUTH_ORG_ID: "OAUTH_ORG_ID",
+  OAUTH_SCOPES: "scope1,scope2",
 };
 
 /**

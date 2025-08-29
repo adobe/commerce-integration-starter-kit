@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { getClient } = require("../oauth1a");
+const { getClient } = require("../http-client");
 
 const { Core } = require("@adobe/aio-sdk");
 const logger = Core.Logger("commerce-shipment-api-client", { level: "info" });
@@ -24,7 +24,7 @@ const logger = Core.Logger("commerce-shipment-api-client", { level: "info" });
  * @param {object} data - Adobe commerce api payload
  */
 async function createShipment(baseUrl, params, orderId, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
@@ -32,7 +32,7 @@ async function createShipment(baseUrl, params, orderId, data) {
     logger,
   );
 
-  return await client.post(`order/${orderId}/ship`, JSON.stringify(data), "", {
+  return await client.post(`order/${orderId}/ship`, JSON.stringify(data), {
     "Content-Type": "application/json",
   });
 }
@@ -45,14 +45,14 @@ async function createShipment(baseUrl, params, orderId, data) {
  * @param {object} data - Adobe commerce api payload
  */
 async function updateShipment(baseUrl, params, data) {
-  const client = getClient(
+  const client = await getClient(
     {
       url: baseUrl,
       params,
     },
     logger,
   );
-  return await client.post("shipment", JSON.stringify(data), "", {
+  return await client.post("shipment", JSON.stringify(data), {
     "Content-Type": "application/json",
   });
 }
