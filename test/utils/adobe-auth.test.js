@@ -16,7 +16,7 @@ describe("adobe-auth", () => {
     it.each([
       ["scope", ["scope"]],
       ["scope1, scope2", ["scope1", "scope2"]],
-      ["scope_1, scope-2", ["scope_1", "scope-2"]],
+      ["scope_1, scope-2, scope.3", ["scope_1", "scope-2", "scope.3"]],
     ])("splits comma-separated string %s", (input, expected) => {
       const result = resolveScopes(input);
       expect(result).toEqual(expected);
@@ -34,7 +34,7 @@ describe("adobe-auth", () => {
     });
 
     it.each([["scope@"], ["scope1; scope2"], ["scope_1|scope-2"]])(
-      "splits comma-separated string %s",
+      "should not parse invalid scope pattern %s",
       (input) => {
         expect(() => resolveScopes(input)).toThrow("Invalid scopes format");
       },

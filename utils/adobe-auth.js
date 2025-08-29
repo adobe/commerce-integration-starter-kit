@@ -33,10 +33,10 @@ const JsonArray = v.message(
   "Oopsie",
 );
 
-const SIMPLE_STRING_REGEX = /^[\w-]+(,\s*[\w-]+)*$/;
+const SIMPLE_STRING_REGEX = /^[\w.-]+(,\s*[\w.-]+)*$/;
 const ValidSimpleString = v.regex(
   SIMPLE_STRING_REGEX,
-  "Scopes must be comma-separated values containing only letters, numbers, underscores, and hyphens",
+  "Scopes must be comma-separated values containing only letters, numbers, underscores, hyphens, and periods",
 );
 
 const SimpleStringArray = v.pipe(
