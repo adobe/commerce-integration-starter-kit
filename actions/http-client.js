@@ -90,10 +90,9 @@ async function createClient(options, params, logger) {
    * This function make the call to the api
    *
    * @param {object} requestData - include the request data
-   * @param {string} _requestToken - access token
    * @param {object} customHeaders - include custom headers
    */
-  async function apiCall(requestData, _requestToken = "", customHeaders = {}) {
+  async function apiCall(requestData, customHeaders = {}) {
     try {
       logger.debug(
         "Fetching URL: " +
@@ -129,12 +128,12 @@ async function createClient(options, params, logger) {
       body: loginData,
     });
 
-  instance.get = (resourceUrl, requestToken = "") => {
+  instance.get = (resourceUrl) => {
     const requestData = {
       url: createUrl(resourceUrl),
       method: "GET",
     };
-    return apiCall(requestData, requestToken);
+    return apiCall(requestData);
   };
 
   /**
@@ -147,35 +146,30 @@ async function createClient(options, params, logger) {
     return `${serverUrl}${apiVersion}/${resourceUrl}`;
   }
 
-  instance.post = (
-    resourceUrl,
-    data,
-    requestToken = "",
-    customHeaders = {},
-  ) => {
+  instance.post = (resourceUrl, data, customHeaders = {}) => {
     const requestData = {
       url: createUrl(resourceUrl),
       method: "POST",
       body: data,
     };
-    return apiCall(requestData, requestToken, customHeaders);
+    return apiCall(requestData, customHeaders);
   };
 
-  instance.put = (resourceUrl, data, requestToken = "", customHeaders = {}) => {
+  instance.put = (resourceUrl, data, customHeaders = {}) => {
     const requestData = {
       url: createUrl(resourceUrl),
       method: "PUT",
       body: data,
     };
-    return apiCall(requestData, requestToken, customHeaders);
+    return apiCall(requestData, customHeaders);
   };
 
-  instance.delete = (resourceUrl, requestToken = "") => {
+  instance.delete = (resourceUrl) => {
     const requestData = {
       url: createUrl(resourceUrl),
       method: "DELETE",
     };
-    return apiCall(requestData, requestToken);
+    return apiCall(requestData);
   };
 
   return instance;
