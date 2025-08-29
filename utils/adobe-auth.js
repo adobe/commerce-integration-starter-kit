@@ -30,7 +30,7 @@ const JsonArray = v.message(
     v.parseJson(),
     v.array(v.string()),
   ),
-  "Oopsie",
+  "Invalid JSON array format",
 );
 
 const SIMPLE_STRING_REGEX = /^[\w.-]+(,\s*[\w.-]+)*$/;
