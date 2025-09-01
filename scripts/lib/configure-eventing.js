@@ -20,18 +20,12 @@ const { makeError } = require("./helpers/errors");
  * @param {string} providerId - provider id
  * @param {string} instanceId - instance id
  * @param {object} workspaceConfiguration - workspace configuration
- * @param {object} environment - environment variables
  */
-async function main(
-  providerId,
-  instanceId,
-  workspaceConfiguration,
-  environment,
-) {
+async function main(providerId, instanceId, workspaceConfiguration) {
   const body = {
     config: {
       enabled: true,
-      merchant_id: environment.COMMERCE_ADOBE_IO_EVENTS_MERCHANT_ID,
+      merchant_id: process.env.COMMERCE_ADOBE_IO_EVENTS_MERCHANT_ID,
       environment_id: "Stage",
       provider_id: providerId,
       instance_id: instanceId,
@@ -41,8 +35,8 @@ async function main(
 
   try {
     const eventProviderResult = await getEventProviders(
-      environment.COMMERCE_BASE_URL,
-      environment,
+      process.env.COMMERCE_BASE_URL,
+      process.env,
     );
     const isNonDefaultProviderAdded = eventProviderResult.some(
       (provider) => provider.provider_id === providerId,
@@ -54,7 +48,7 @@ async function main(
     if (isDefaultWorkspaceEmpty) {
       await updateCommerceEventingConfiguration(
         workspaceConfiguration,
-        environment,
+        process.env,
       );
     }
 
@@ -63,7 +57,7 @@ async function main(
         providerId,
         instanceId,
         workspaceConfiguration,
-        environment,
+        process.env,
       );
     }
 

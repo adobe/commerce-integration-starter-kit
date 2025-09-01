@@ -121,7 +121,7 @@ async function main() {
   try {
     // resolve params
     const provider = await imsProviderWithEnvResolver(process.env);
-    authHeaders = provider.getHeaders();
+    authHeaders = await provider.getHeaders();
   } catch (error) {
     if (error instanceof CommerceSdkValidationError) {
       logOnboardingError(
@@ -197,7 +197,6 @@ async function main() {
         commerceProvider.id,
         commerceProvider.instanceId,
         workspaceConfiguration,
-        process.env,
       );
 
     if (!configureEventingResult.success) {
