@@ -23,19 +23,24 @@ const {
 
 const v = require("valibot");
 
+const MinArrayScope = v.pipe(
+  v.array(v.string(), "Expected an array of strings"),
+  v.minLength(1, "At least one scope must be provided"),
+);
+
 const JsonArray = v.message(
   v.pipe(
     v.string("Expected a JSON string"),
-    v.nonEmpty(),
+    v.nonEmpty("Empty string is not a valid JSON array"),
     v.parseJson(),
-    v.array(v.string()),
+    MinArrayScope,
   ),
   "Invalid JSON array format",
 );
 
 const SIMPLE_STRING_REGEX = /^[\w.-]+(,\s*[\w.-]+)*$/;
 const ValidSimpleString = v.pipe(
-  v.string(),
+  v.string("Expected a comma-separated string"),
   v.regex(
     SIMPLE_STRING_REGEX,
     "Scopes must be comma-separated values containing only letters, numbers, underscores, hyphens, and periods",
@@ -47,12 +52,12 @@ const SimpleStringArray = v.pipe(
   v.transform((value) => {
     return value.split(",").map((s) => s.trim());
   }),
-  v.array(v.string()),
+  MinArrayScope,
 );
 
 const ScopesSchema = v.message(
-  v.union([JsonArray, SimpleStringArray, v.array(v.string())]),
-  "scopes only valid Array, Json or comma-separated string are supported",
+  v.union([JsonArray, SimpleStringArray, MinArrayScope]),
+  "Scopes can only be either a valid Array, JSON Array or comma-separated string",
 );
 
 function resolveScopes(scopes) {

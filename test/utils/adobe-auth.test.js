@@ -28,6 +28,12 @@ describe("adobe-auth", () => {
       expect(result).toEqual(["scope1", "scope2"]);
     });
 
+    it("parses JSON array string with stringify", () => {
+      const input = JSON.stringify(["scope1", "scope2"]);
+      const result = resolveScopes(input);
+      expect(result).toEqual(["scope1", "scope2"]);
+    });
+
     it("handles invalid single comma strings gracefully", () => {
       const input = "['scope1, scope2]";
       expect(() => resolveScopes(input)).toThrow("Invalid scopes format");
@@ -38,6 +44,7 @@ describe("adobe-auth", () => {
       ["scope1; scope2"],
       ["scope_1|scope-2"],
       ["scope_1,,scope-2"],
+      [""],
     ])("should not parse invalid scope pattern %s", (input) => {
       expect(() => resolveScopes(input)).toThrow("Invalid scopes format");
     });
