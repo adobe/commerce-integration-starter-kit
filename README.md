@@ -311,7 +311,7 @@ To configure the provider in Commerce, do the following:
 
 > [!TIP]
 >
-> If your Commerce instance Adobe I/O Events for Adobe Commerce module version is 1.6.0 or greater, run the commerce-event-subscribe script to automatically subscribe to the Commerce events in `scripts/commerce-event-subscribe/config/commerce-event-subscribe.json`
+> If your Commerce instance Adobe I/O Events for Adobe Commerce module version is 1.6.0 or greater, run the commerce-event-subscribe script to automatically subscribe to the Commerce events in `extensibility.config.js` file at path `eventing.subscriptions`.
 >
 > ```bash
 > npm run commerce-event-subscribe

@@ -17,23 +17,13 @@ const {
   CommerceSdkValidationError,
 } = require("@adobe/aio-commerce-lib-core/error");
 const v = require("valibot");
-const config = require("../../extensibility.config.js");
 const { upsertEnvFile } = require("../../utils/upsert-env");
 
+const initialConfig = require("../../extensibility.config.js");
+const { defineConfig } = require("../../utils/config");
+const { requireEnvVars } = require("../../utils/env");
+
 require("dotenv").config();
-
-const StringSchema = v.pipe(
-  v.string(),
-  v.nonEmpty("The string should contain at least one character."),
-);
-
-const ProcessEnvSchema = v.object({
-  COMMERCE_BASE_URL: StringSchema,
-  IO_CONSUMER_ID: StringSchema,
-  IO_PROJECT_ID: StringSchema,
-  IO_WORKSPACE_ID: StringSchema,
-  EVENT_PREFIX: StringSchema,
-});
 
 /**
  * Logs an error occurred during the onboarding process
@@ -92,7 +82,14 @@ function logConfigureEventingError(errorInfo) {
  * @returns Object with providers and registrations on success, or void on error
  */
 async function main() {
-  const environmentResult = v.safeParse(ProcessEnvSchema, process.env);
+  const schema = requireEnvVars([
+    "COMMERCE_BASE_URL",
+    "IO_CONSUMER_ID",
+    "IO_PROJECT_ID",
+    "IO_WORKSPACE_ID",
+    "EVENT_PREFIX",
+  ]);
+  const environmentResult = v.safeParse(schema, process.env);
 
   if (!environmentResult.success) {
     const error = new CommerceSdkValidationError(
@@ -113,6 +110,8 @@ async function main() {
     return;
   }
 
+  const config = defineConfig(initialConfig, environmentResult.output);
+
   console.log(
     "Starting the process of on-boarding based on your registration choices",
   );
@@ -121,8 +120,8 @@ async function main() {
 
   try {
     // resolve params
-    const provider = await imsProviderWithEnvResolver(process.env);
-    authHeaders = await provider.getHeaders();
+    const imsAuthProvider = await imsProviderWithEnvResolver(process.env);
+    authHeaders = await imsAuthProvider.getHeaders();
   } catch (error) {
     if (error instanceof CommerceSdkValidationError) {
       logOnboardingError(
@@ -158,7 +157,16 @@ async function main() {
     return;
   }
 
-  const providers = createProvidersResult.result;
+  const providers = createProvidersResult.result.map((provider) => {
+    const configProvider = config.eventing.providers.find(
+      (p) => p.provider_metadata === provider.provider_metadata,
+    );
+    return {
+      ...configProvider,
+      ...provider,
+    };
+  });
+
   const createProvidersMetadataResult = await require("../lib/metadata").main(
     config,
     providers,
@@ -171,30 +179,34 @@ async function main() {
     return;
   }
 
-  console.log("Onboarding completed successfully:", providers);
+  console.log(
+    "Onboarding completed successfully:",
+    providers.map(({ events_metadata, ...provider }) => provider),
+  );
   console.log(
     "Starting the process of configuring Adobe I/O Events module in Commerce...",
   );
 
+  const commerceProvider = providers.find(
+    (p) => p.provider_metadata === "dx_commerce_events",
+  );
+
   upsertEnvFile(".env", {
-    COMMERCE_PROVIDER_ID: providers.find((p) => p.key === "commerce").id,
-    BACKOFFICE_PROVIDER_ID: providers.find((p) => p.key === "backoffice").id,
+    COMMERCE_PROVIDER_ID: commerceProvider.id,
+    BACKOFFICE_PROVIDER_ID: providers.find(
+      (p) => p.provider_metadata === "3rd_party_custom_events",
+    ).id,
     AIO_EVENTS_PROVIDERMETADATA_TO_PROVIDER_MAPPING: providers
-      .map((p) => `${p.providerMetadata}:${p.id}`)
+      .map((p) => `${p.provider_metadata}:${p.id}`)
       .join(","),
   });
 
   try {
     // eslint-disable-next-line node/no-missing-require,node/no-unpublished-require
     const workspaceConfiguration = require("./config/workspace.json");
-    const commerceProvider = providers.find(
-      (provider) => provider.key === "commerce",
-    );
     const configureEventingResult =
       await require("../lib/configure-eventing").main(
-        providers,
-        commerceProvider.id,
-        commerceProvider.instanceId,
+        commerceProvider,
         workspaceConfiguration,
       );
 
@@ -233,7 +245,7 @@ async function main() {
     "Process of configuring Adobe I/O Events module in Commerce completed successfully",
   );
   return {
-    providers,
+    providers: providers.map(({ events_metadata, ...provider }) => provider),
   };
 }
 

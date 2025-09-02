@@ -12,8 +12,15 @@ governing permissions and limitations under the License.
 
 const ansis = require("ansis");
 const { makeError, formatError } = require("../lib/helpers/errors");
-
 require("dotenv").config();
+
+const initConfig = require("../../extensibility.config.js");
+const { defineConfig } = require("../../utils/config");
+const { requireEnvVars } = require("../../utils/env");
+const v = require("valibot");
+const {
+  CommerceSdkValidationError,
+} = require("@adobe/aio-commerce-lib-core/error");
 
 /**
  * Logs an error ocurred during the commerce event subscribe process.
@@ -37,23 +44,76 @@ function logCommerceEventSubscribeError(errorInfo) {
 }
 
 /**
+ * Transform subscription event fields to API format
+ * @param {string|Array<string>} fields - Fields configuration
+ * @returns {Array<object>} API-compatible fields format
+ */
+const transformFields = (fields) => {
+  if (typeof fields === "string") {
+    return [{ name: fields }];
+  }
+  if (Array.isArray(fields)) {
+    return fields.map((field) => ({ name: field }));
+  }
+
+  throw new Error(
+    `Invalid fields type: expected string or array, got ${typeof fields}`,
+  );
+};
+
+/**
  * This method handles the commerce event subscribe script.
  * It configures the Adobe I/O Events Commerce module event subscriptions
  */
 async function main() {
   console.log("Starting the commerce event subscribe process");
 
+  const schema = requireEnvVars([
+    "COMMERCE_PROVIDER_ID",
+    "BACKOFFICE_PROVIDER_ID",
+    "EVENT_PREFIX",
+  ]);
+  const environmentResult = v.safeParse(schema, process.env);
+
+  if (!environmentResult.success) {
+    const error = new CommerceSdkValidationError(
+      "Invalid environment variables",
+      {
+        issues: environmentResult.issues,
+      },
+    );
+
+    console.error(error.display(true));
+
+    throw error;
+  }
+
+  const environment = environmentResult.output;
+
+  const {
+    eventing: { subscriptions },
+  } = defineConfig(initConfig, environment);
+
   const result = {
     successfulSubscriptions: [],
     failedSubscriptions: [],
   };
 
+  const commerceEventSubscriptions = subscriptions.map((subscription) => {
+    return {
+      ...subscription,
+      event: {
+        ...subscription.event,
+        provider_id: environment.COMMERCE_PROVIDER_ID,
+        fields: transformFields(subscription.event?.fields || []),
+      },
+    };
+  });
+
   try {
-    const commerceEventSubscriptions = require("./config/commerce-event-subscribe.json");
     for (const commerceEventSubscription of commerceEventSubscriptions) {
       const eventSubscribeResult = await require("../lib/event-subscribe").main(
         commerceEventSubscription,
-        process.env,
       );
       if (!eventSubscribeResult.success) {
         logCommerceEventSubscribeError(eventSubscribeResult.error);
@@ -68,30 +128,6 @@ async function main() {
       result.successfulSubscriptions.push(commerceEventSubscription.event.name);
     }
   } catch (error) {
-    if (error?.code === "MODULE_NOT_FOUND") {
-      logCommerceEventSubscribeError(
-        makeError(
-          "MISSING_EVENT_SPEC_FILE",
-          'The "commerce-event-subscribe.json" file was not found. Make sure the file exists in the "scripts/commerce-event-subscribe/config" directory',
-          { error },
-        ),
-      );
-
-      return;
-    }
-
-    if (error?.name === "SyntaxError") {
-      logCommerceEventSubscribeError(
-        makeError(
-          "INVALID_JSON_FILE",
-          'The "commerce-event-subscribe.json" file is not a valid JSON file. Make sure the file in the "scripts/commerce-event-subscribe/config" directory contains well-formed JSON',
-          { error },
-        ),
-      );
-
-      return;
-    }
-
     logCommerceEventSubscribeError(
       makeError("UNEXPECTED_ERROR", "An unexpected error occurred", { error }),
     );

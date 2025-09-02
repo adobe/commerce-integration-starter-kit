@@ -37,14 +37,13 @@ async function createProvider(environment, authHeaders, provider) {
       ...authHeaders,
     },
     body: JSON.stringify({
-      // read here about the use of the spread operator to merge objects: https://dev.to/sagar/three-dots---in-javascript-26ci
-      ...(provider?.key === "commerce" && {
-        provider_metadata: "dx_commerce_events",
+      description: provider?.description || "",
+      provider_metadata: provider?.provider_metadata,
+      label: provider?.label,
+      docs_url: provider?.docs_url || null,
+      ...(provider?.provider_metadata === "dx_commerce_events" && {
         instance_id: `${uuid.v4()}`,
       }),
-      ...(provider?.label && { label: `${provider?.label}` }),
-      ...(provider?.description && { description: `${provider?.description}` }),
-      ...(provider?.docs_url && { docs_url: `${provider?.docs_url}` }),
     }),
   });
 
@@ -80,21 +79,15 @@ async function createProvider(environment, authHeaders, provider) {
 
 /**
  * Main function to create events providers based on unified config.js
- * @param {object} config - Unified configuration object containing registrations, providers and subscriptions
+ * @param {object} config - Unified configuration object containing providers
  * @param {object} environment - Environment variables
  * @param {object} authHeaders - Authentication headers for API requests
  * @returns Result object with created providers or error
  */
-async function main(
-  { eventing: { providers, subscriptions } },
-  environment,
-  authHeaders,
-) {
+async function main({ eventing: { providers } }, environment, authHeaders) {
   let currentProvider;
   try {
-    console.log("Start process of creating providers: ", subscriptions);
-
-    // Validate client registration selection
+    console.log("Start process of creating providers: ", providers);
 
     const existingProviders = await getExistingProviders(
       environment,
@@ -106,16 +99,10 @@ async function main(
 
     for (const provider of providers) {
       currentProvider = provider;
-      const key = provider.key;
       const label = addSuffix(provider.label, environment);
 
       const persistedProvider = existingProvidersCollection.find(
-        (existingProvider) => {
-          return (
-            existingProvider.id === provider?.id ||
-            existingProvider?.label === label
-          );
-        },
+        (existingProvider) => existingProvider.id === provider?.id,
       );
 
       if (persistedProvider) {
@@ -123,11 +110,10 @@ async function main(
           `Skipping creation of "${label}" creation, provider already exists`,
         );
         result.push({
-          key,
           id: persistedProvider.id,
-          instanceId: persistedProvider.instance_id,
           label,
-          providerMetadata: persistedProvider.provider_metadata,
+          provider_metadata: persistedProvider.provider_metadata,
+          instance_id: persistedProvider.instance_id,
         });
 
         continue;
@@ -146,17 +132,16 @@ async function main(
       }
 
       result.push({
-        key,
         id: createProviderResult.provider?.id,
-        instanceId: createProviderResult.provider?.instance_id,
         label,
-        providerMetadata: createProviderResult.provider?.provider_metadata,
+        provider_metadata: createProviderResult.provider?.provider_metadata,
+        instance_id: createProviderResult.provider?.instance_id,
       });
     }
 
     for (const provider of result) {
       console.log(
-        `Defining the provider with key: ${provider.key} as: ${provider.id}`,
+        `Defining the provider with key: ${provider.provider_metadata} as: ${provider.id}`,
       );
     }
 

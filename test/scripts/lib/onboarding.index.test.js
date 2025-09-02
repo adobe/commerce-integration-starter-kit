@@ -14,6 +14,7 @@ governing permissions and limitations under the License.
 
 const { main } = require("../../../scripts/onboarding/index");
 const ansis = require("ansis");
+const { defineConfig } = require("../../../utils/config");
 
 const consoleLogSpy = jest.spyOn(console, "log").mockImplementation(() => {});
 const consoleErrorSpy = jest
@@ -192,25 +193,50 @@ describe("onboarding index", () => {
       assertImsAuthParams,
     }));
 
+    jest.doMock("../../../extensibility.config", () =>
+      defineConfig({
+        eventing: {
+          providers: [
+            {
+              id: "COMMERCE_PROVIDER_ID",
+              provider_metadata: "dx_commerce_events",
+              label: "Commerce Provider",
+            },
+            {
+              id: "BACKOFFICE_PROVIDER_ID",
+              provider_metadata: "3rd_party_custom_events",
+              label: "Backoffice Provider",
+            },
+          ],
+        },
+      }),
+    );
+
     jest.doMock("../../../scripts/lib/providers", () => ({
       main: jest.fn().mockResolvedValue({
         success: true,
         result: [
           {
-            key: "commerce",
             id: "COMMERCE_PROVIDER_ID",
-            instanceId: "AC_INSTANCE_ID",
+            instance_id: "AC_INSTANCE_ID",
+            provider_metadata: "dx_commerce_events",
             label: "Commerce Provider - test",
           },
           {
-            key: "backoffice",
             id: "BACKOFFICE_PROVIDER_ID",
-            instanceId: "BO_INSTANCE_ID",
+            instance_id: "BO_INSTANCE_ID",
+            provider_metadata: "3rd_party_custom_events",
             label: "Backoffice Provider - test",
           },
         ],
       }),
     }));
+
+    jest.doMock("../../../utils/upsert-env", () => {
+      return {
+        upsertEnvFile: jest.fn().mockReturnValue(true),
+      };
+    });
 
     jest.doMock("../../../scripts/lib/metadata", () => ({
       main: jest.fn().mockResolvedValue({
@@ -243,7 +269,6 @@ describe("onboarding index", () => {
       { virtual: true },
     );
 
-    // Set up required environment variables
     const mockEnv = {
       COMMERCE_BASE_URL: "https://commerce.test/",
       IO_CONSUMER_ID: "test-consumer-id",
@@ -259,8 +284,6 @@ describe("onboarding index", () => {
       OAUTH_SCOPES: "scope1, scope2",
     };
     jest.replaceProperty(process, "env", mockEnv);
-    jest.resetModules();
-
     const {
       main: onboardingMain,
     } = require("../../../scripts/onboarding/index");
@@ -271,15 +294,15 @@ describe("onboarding index", () => {
     expect(result).toBeDefined();
     expect(result.providers).toEqual([
       {
-        key: "commerce",
+        provider_metadata: "dx_commerce_events",
         id: "COMMERCE_PROVIDER_ID",
-        instanceId: "AC_INSTANCE_ID",
+        instance_id: "AC_INSTANCE_ID",
         label: "Commerce Provider - test",
       },
       {
-        key: "backoffice",
+        provider_metadata: "3rd_party_custom_events",
         id: "BACKOFFICE_PROVIDER_ID",
-        instanceId: "BO_INSTANCE_ID",
+        instance_id: "BO_INSTANCE_ID",
         label: "Backoffice Provider - test",
       },
     ]);

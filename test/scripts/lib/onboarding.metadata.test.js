@@ -21,8 +21,7 @@ const ENVIRONMENT = {
   EVENT_PREFIX: "test-project",
 };
 
-const fixtures = require("./fixtures/metadata.js");
-const { SampleEventTemplate } = require("../../../utils/sample-event-template");
+const eventTemplates = require("../../../scripts/onboarding/event-templates.js");
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -34,11 +33,54 @@ const DEFAULT_PROVIDERS = [
     key: "commerce",
     id: "COMMERCE_PROVIDER_ID",
     label: "Commerce Provider",
+    events_metadata: [
+      {
+        event_code:
+          "com.adobe.commerce.observer.catalog_product_delete_commit_after",
+        label:
+          "com.adobe.commerce.observer.catalog_product_delete_commit_after",
+        description:
+          "Event triggered after a product is deleted in Adobe Commerce",
+        sample_event_template:
+          eventTemplates[
+            "com.adobe.commerce.observer.catalog_product_delete_commit_after"
+          ].value,
+      },
+      {
+        event_code:
+          "com.adobe.commerce.observer.catalog_product_save_commit_after",
+        label: "com.adobe.commerce.observer.catalog_product_save_commit_after",
+        description:
+          "Event triggered after a product is saved in Adobe Commerce",
+        sample_event_template:
+          eventTemplates[
+            "com.adobe.commerce.observer.catalog_product_save_commit_after"
+          ].value,
+      },
+    ],
   },
   {
     key: "backoffice",
     id: "BACKOFFICE_PROVIDER_ID",
     label: "Backoffice Provider",
+    events_metadata: [
+      {
+        event_code: "be-observer.catalog_product_create",
+        label: "be-observer.catalog_product_create",
+        description:
+          "Event triggered when a product is created in the backoffice system",
+        sample_event_template:
+          eventTemplates["be-observer.catalog_product_create"],
+      },
+      {
+        event_code: "be-observer.catalog_product_update",
+        label: "be-observer.catalog_product_update",
+        description:
+          "Event triggered when a product is updated in the backoffice system",
+        sample_event_template:
+          eventTemplates["be-observer.catalog_product_update"],
+      },
+    ],
   },
 ];
 
@@ -47,10 +89,17 @@ const DEFAULT_SUBSCRIPTIONS = [
     providerKey: "commerce",
     events: {
       "com.adobe.commerce.observer.catalog_product_delete_commit_after": {
-        sampleEventTemplate: new SampleEventTemplate(
-          "com.adobe.commerce.observer.catalog_product_delete_commit_after",
-          {},
-        ),
+        event: {
+          name: "observer.catalog_product_delete_commit_after",
+          fields: [
+            { name: "id" },
+            { name: "sku" },
+            { name: "name" },
+            { name: "created_at" },
+            { name: "updated_at" },
+            { name: "description" },
+          ],
+        },
       },
     },
   },
@@ -85,10 +134,7 @@ describe("Given on-boarding metadata file", () => {
 
       const response = await action.main(
         {
-          app: {
-            registrations:
-              fixtures.CREATE_COMMERCE_AND_BACKOFFICE_PROVIDERS_METADATA,
-          },
+          app: {},
           eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
         },
         DEFAULT_PROVIDERS,
@@ -124,9 +170,7 @@ describe("Given on-boarding metadata file", () => {
 
       const response = await action.main(
         {
-          app: {
-            registrations: fixtures.CREATE_ONLY_COMMERCE_PROVIDERS_METADATA,
-          },
+          app: {},
           eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
         },
         DEFAULT_PROVIDERS,
@@ -162,9 +206,7 @@ describe("Given on-boarding metadata file", () => {
 
       const response = await action.main(
         {
-          app: {
-            registrations: fixtures.CREATE_ONLY_BACKOFFICE_PROVIDERS_METADATA,
-          },
+          app: {},
           eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
         },
         DEFAULT_PROVIDERS,
@@ -184,10 +226,7 @@ describe("Given on-boarding metadata file", () => {
 
       const response = await action.main(
         {
-          app: {
-            registrations:
-              fixtures.CREATE_COMMERCE_AND_BACKOFFICE_PROVIDERS_METADATA,
-          },
+          app: {},
           eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
         },
         DEFAULT_PROVIDERS,
@@ -238,10 +277,7 @@ describe("Given on-boarding metadata file", () => {
 
       const response = await action.main(
         {
-          app: {
-            registrations:
-              fixtures.CREATE_COMMERCE_AND_BACKOFFICE_PROVIDERS_METADATA,
-          },
+          app: {},
           eventing: { subscriptions: DEFAULT_SUBSCRIPTIONS },
         },
         DEFAULT_PROVIDERS,
