@@ -69,6 +69,7 @@ async function main() {
   console.log("Starting the commerce event subscribe process");
 
   const schema = requireEnvVars([
+    "COMMERCE_BASE_URL",
     "COMMERCE_PROVIDER_ID",
     "BACKOFFICE_PROVIDER_ID",
     "EVENT_PREFIX",
@@ -114,6 +115,7 @@ async function main() {
     for (const commerceEventSubscription of commerceEventSubscriptions) {
       const eventSubscribeResult = await require("../lib/event-subscribe").main(
         commerceEventSubscription,
+        environment,
       );
       if (!eventSubscribeResult.success) {
         logCommerceEventSubscribeError(eventSubscribeResult.error);
