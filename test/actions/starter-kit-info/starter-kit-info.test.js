@@ -11,6 +11,21 @@ governing permissions and limitations under the License.
 */
 
 const action = require("../../../actions/starter-kit-info/index.js");
+
+jest.mock("@adobe/aio-commerce-lib-auth", () => {
+  const originalModule = jest.requireActual("@adobe/aio-commerce-lib-auth");
+  return {
+    __esModule: true,
+    ...originalModule,
+    getImsAuthProvider: jest.fn(),
+  };
+});
+
+const { getImsAuthProvider } = require("@adobe/aio-commerce-lib-auth");
+
+jest.mock("node-fetch");
+const fetch = require("node-fetch");
+
 describe("Given the starter kit info action", () => {
   describe("When method main is defined", () => {
     test("Then is an instance of Function", () => {
@@ -19,13 +34,48 @@ describe("Given the starter kit info action", () => {
   });
   describe("When invoked", () => {
     test("The starter kit version is included in the response", async () => {
-      const params = {};
+      getImsAuthProvider.mockImplementation(() => {
+        return {
+          getAccessToken: () => {
+            return "test-token";
+          },
+        };
+      });
+
+      const params = {
+        OAUTH_CLIENT_ID: "OAUTH_CLIENT_ID",
+        OAUTH_CLIENT_SECRET: "OAUTH_CLIENT_SECRET",
+        OAUTH_TECHNICAL_ACCOUNT_ID: "example@adobe-ds.com",
+        OAUTH_TECHNICAL_ACCOUNT_EMAIL: "example2@adobe-ds.com",
+        OAUTH_ORG_ID: "OAUTH_ORG_ID",
+        OAUTH_SCOPES: "scope1,scope2",
+        IO_MANAGEMENT_BASE_URL: "https://example.com",
+        IO_CONSUMER_ID: "IO_CONSUMER_ID",
+        IO_PROJECT_ID: "IO_PROJECT_ID",
+        IO_WORKSPACE_ID: "IO_WORKSPACE_ID",
+      };
+
+      fetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({}),
+      });
       const response = await action.main(params);
 
       expect(response).toHaveProperty("body.message.starter_kit_version");
     });
     test("The registrations are included in the response", async () => {
-      const params = {};
+      const params = {
+        OAUTH_CLIENT_ID: "OAUTH_CLIENT_ID",
+        OAUTH_CLIENT_SECRET: "OAUTH_CLIENT_SECRET",
+        OAUTH_TECHNICAL_ACCOUNT_ID: "example@adobe-ds.com",
+        OAUTH_TECHNICAL_ACCOUNT_EMAIL: "example2@adobe-ds.com",
+        OAUTH_ORG_ID: "OAUTH_ORG_ID",
+        OAUTH_SCOPES: "scope1,scope2",
+        IO_MANAGEMENT_BASE_URL: "https://example.com",
+        IO_CONSUMER_ID: "IO_CONSUMER_ID",
+        IO_PROJECT_ID: "IO_PROJECT_ID",
+        IO_WORKSPACE_ID: "IO_WORKSPACE_ID",
+      };
       const response = await action.main(params);
 
       expect(response).toHaveProperty("body.message.registrations");

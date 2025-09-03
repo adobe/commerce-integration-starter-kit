@@ -13,6 +13,8 @@ governing permissions and limitations under the License.
 const { Core } = require("@adobe/aio-sdk");
 const { actionSuccessResponse, actionErrorResponse } = require("../responses");
 const { HTTP_OK, HTTP_INTERNAL_ERROR } = require("../constants");
+const { getExistingRegistrations } = require("../../utils/adobe-events-api");
+const { imsProviderWithEnvResolver } = require("../../utils/adobe-auth");
 
 /**
  * Please DO NOT DELETE this action; future functionalities planned for upcoming starter kit releases may stop working.
@@ -23,11 +25,8 @@ const { HTTP_OK, HTTP_INTERNAL_ERROR } = require("../constants");
  * @returns starter kit version and registration data
  * @param {object} params - includes the env params
  */
-function main(params) {
+async function main(params) {
   const version = require("../../package.json").version;
-  const {
-    app: { registrations },
-  } = require("../../extensibility.config.js");
 
   // create a Logger
   const logger = Core.Logger("starter-kit-info", {
@@ -37,6 +36,16 @@ function main(params) {
   try {
     // 'info' is the default level if not set
     logger.info("Calling the starter kit info action");
+
+    logger.debug("Generate Adobe access token");
+    const imsProvider = await imsProviderWithEnvResolver(params);
+    const accessToken = await imsProvider.getAccessToken();
+    const authHeaders = {
+      Authorization: `Bearer ${accessToken}`,
+      "x-api-key": params.OAUTH_CLIENT_ID,
+    };
+
+    const registrations = await getExistingRegistrations(params, authHeaders);
 
     // log the response status code
     logger.info(`Successful request: ${HTTP_OK}`);

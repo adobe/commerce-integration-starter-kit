@@ -14,6 +14,8 @@ webhook:
     IO_CONSUMER_ID: $IO_CONSUMER_ID
     IO_PROJECT_ID: $IO_PROJECT_ID
     IO_WORKSPACE_ID: $IO_WORKSPACE_ID
+    BACKOFFICE_PROVIDER_ID: $BACKOFFICE_PROVIDER_ID
+    AIO_CLI_ENV: $AIO_CLI_ENV
     AIO_runtime_namespace: $AIO_RUNTIME_NAMESPACE
   annotations:
     require-adobe-auth: false

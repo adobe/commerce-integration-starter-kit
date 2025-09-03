@@ -2,15 +2,7 @@ require("dotenv").config();
 const eventTemplates = require("./scripts/onboarding/event-templates.js");
 
 module.exports = {
-  app: {
-    meta: {
-      // Can be used by Admin UI SDK for `extension-manifest.json`.
-      slug: "my-oope-app",
-      version: "1.0.0",
-      displayName: "My OOPE App",
-      description: "My OOPE App Description",
-    },
-  },
+  app: {},
   adminUi: {},
   eventing: {
     providers: [

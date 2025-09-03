@@ -14,6 +14,12 @@ application:
             runtime: nodejs:22
             inputs:
               LOG_LEVEL: debug
+              OAUTH_CLIENT_ID: $OAUTH_CLIENT_ID
+              OAUTH_CLIENT_SECRET: $OAUTH_CLIENT_SECRET
+              OAUTH_TECHNICAL_ACCOUNT_ID: $OAUTH_TECHNICAL_ACCOUNT_ID
+              OAUTH_TECHNICAL_ACCOUNT_EMAIL: $OAUTH_TECHNICAL_ACCOUNT_EMAIL
+              OAUTH_SCOPES: $OAUTH_SCOPES
+              AIO_CLI_ENV: $AIO_CLI_ENV
             annotations:
               require-adobe-auth: true
               final: true

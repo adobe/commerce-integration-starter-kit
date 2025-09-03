@@ -20,12 +20,11 @@ const {
   HTTP_OK,
   HTTP_INTERNAL_ERROR,
   HTTP_UNAUTHORIZED,
-  BACKOFFICE_PROVIDER_KEY,
   PUBLISH_EVENT_SUCCESS,
 } = require("../../../actions/constants");
 
 const { imsProviderWithEnvResolver } = require("../../../utils/adobe-auth");
-const { getProviderByKey } = require("../../../utils/adobe-events-api");
+const { getExistingProviders } = require("../../../utils/adobe-events-api");
 const { validateData } = require("./validator");
 const { checkAuthentication } = require("./auth");
 const { errorResponse, successResponse } = require("../../responses");
@@ -33,8 +32,6 @@ const { errorResponse, successResponse } = require("../../responses");
 const {
   CommerceSdkValidationError,
 } = require("@adobe/aio-commerce-lib-core/error");
-const config = require("../../../extensibility.config.js");
-
 /**
  * This web action allow external back-office application publish event to IO event using custom authentication mechanism.
  *
@@ -72,11 +69,9 @@ async function main(params) {
     };
 
     logger.debug("Get existing registrations");
-    const provider = await getProviderByKey(
-      config.eventing.providers,
-      params,
-      authHeaders,
-      BACKOFFICE_PROVIDER_KEY,
+    const providers = await getExistingProviders(params, authHeaders);
+    const provider = providers.find(
+      (p) => p.id === params.BACKOFFICE_PROVIDER_ID,
     );
 
     if (!provider) {

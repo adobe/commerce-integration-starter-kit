@@ -95,13 +95,11 @@ async function main({ eventing: { providers } }, environment, authHeaders) {
     );
     const result = [];
 
-    const existingProvidersCollection = Object.values(existingProviders);
-
     for (const provider of providers) {
       currentProvider = provider;
       const label = addSuffix(provider.label, environment);
 
-      const persistedProvider = existingProvidersCollection.find(
+      const persistedProvider = existingProviders.find(
         (existingProvider) => existingProvider.id === provider?.id,
       );
 
