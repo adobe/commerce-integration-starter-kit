@@ -1,7 +1,7 @@
 application:
-#  hooks:
-#    pre-app-deploy: ./hooks/pre-app-deploy.js
-#    post-app-deploy: ./hooks/post-app-deploy.js
+  #  hooks:
+  #    pre-app-deploy: ./hooks/pre-app-deploy.js
+  #    post-app-deploy: ./hooks/post-app-deploy.js
   runtimeManifest:
     packages:
       starter-kit:
@@ -101,32 +101,32 @@ application:
         events_of_interest:
           - provider_metadata: dx_commerce_events
             event_codes:
-              - com.adobe.commerce.observer.customer_save_commit_after
-              - com.adobe.commerce.observer.customer_delete_commit_after
-              - com.adobe.commerce.observer.customer_group_save_commit_after
-              - com.adobe.commerce.observer.customer_group_delete_commit_after
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.customer_save_commit_after
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.customer_delete_commit_after
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.customer_group_save_commit_after
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.customer_group_delete_commit_after
         runtime_action: customer-commerce/consumer
       Commerce Product Sync:
         description: Consumes product events from Adobe Commerce
         events_of_interest:
           - provider_metadata: dx_commerce_events
             event_codes:
-              - com.adobe.commerce.observer.catalog_product_delete_commit_after
-              - com.adobe.commerce.observer.catalog_product_save_commit_after
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.catalog_product_delete_commit_after
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.catalog_product_save_commit_after
         runtime_action: product-commerce/consumer
       Commerce Order Sync:
         description: Consumes order events from Adobe Commerce
         events_of_interest:
           - provider_metadata: dx_commerce_events
             event_codes:
-              - com.adobe.commerce.observer.sales_order_save_commit_after
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.sales_order_save_commit_after
         runtime_action: order-commerce/consumer
       Commerce Stock Sync:
         description: Consumes stock events from Adobe Commerce
         events_of_interest:
           - provider_metadata: dx_commerce_events
             event_codes:
-              - com.adobe.commerce.observer.cataloginventory_stock_item_save_commit_after
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.cataloginventory_stock_item_save_commit_after
         runtime_action: stock-commerce/consumer
 productDependencies:
   - code: COMMC
