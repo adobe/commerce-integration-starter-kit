@@ -1,3 +1,3 @@
-module.exports = () => {
-  require("../scripts/commerce-event-subscribe/index.js").main();
+module.exports = async () => {
+  await require("../scripts/commerce-event-subscribe/index.js").main();
 };

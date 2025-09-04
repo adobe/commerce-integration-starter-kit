@@ -1,3 +1,3 @@
-module.exports = () => {
-  require("../scripts/onboarding/index.js").main();
+module.exports = async () => {
+  await require("../scripts/onboarding/index.js").main();
 };
