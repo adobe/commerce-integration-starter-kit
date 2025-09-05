@@ -20,6 +20,8 @@ const BACKOFFICE_PROVIDER_KEY = "backoffice";
 
 const PUBLISH_EVENT_SUCCESS = "OK";
 
+const INVALID_STATE_KEY_CHARS_REGEX = /[^a-zA-Z0-9-_.]/g;
+
 module.exports = {
   HTTP_OK,
   HTTP_BAD_REQUEST,
@@ -28,4 +30,5 @@ module.exports = {
   HTTP_INTERNAL_ERROR,
   BACKOFFICE_PROVIDER_KEY,
   PUBLISH_EVENT_SUCCESS,
+  INVALID_STATE_KEY_CHARS_REGEX,
 };
