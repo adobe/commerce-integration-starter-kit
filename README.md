@@ -188,7 +188,7 @@ application:
 
 #### Configure the event registrations
 
-In previous iterations event registrations was configured in the `onboarding/config/starter-kit-registrations.json` file. In the latest version these configurations have been moved to the `app.config.yaml` file under the path `.application.events.registrations` and are deployed with the `aio app deploy` command or can be force deployed with `aio app deploy --force-events`.
+Event registrations can be configured in your `app.config.yaml` file under the path `.application.events.registrations` and are registered within the `aio app deploy` command.
 
 ##### Configuring for Backoffice event registrations
 
@@ -220,13 +220,13 @@ For example, if you want to add a new event registration that consumed events fr
 application:
   # other configurations
   events:
-  registrations:
-    Commerce customer events consumer:
-    description: Consumes customer events from Adobe Commerce
-    events_of_interest:
-      - provider_metadata: dx_commerce_events
-        event_codes:
-          - com.adobe.commerce.<EVENT_PREFIX>.observer.customer_save_commit_after
+    registrations:
+      Commerce Stock Sync:
+        description: Consumes stock events from Adobe Commerce
+        events_of_interest:
+          - provider_metadata: dx_commerce_events
+            event_codes:
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.cataloginventory_stock_item_save_commit_after
 ```
 
 ### Deploy
@@ -249,7 +249,6 @@ To start the process run the command:
 
 ```bash
 aio app deploy
-aio app deploy --force-deploy --force-events # force redeploy and recreate event registrations if needed
 ```
 
 - pre-app-deploy - `onboarding/index.js` -
