@@ -19,7 +19,6 @@ const {
   HTTP_INTERNAL_ERROR,
   HTTP_BAD_REQUEST,
   HTTP_OK,
-  INVALID_STATE_KEY_CHARS_REGEX,
 } = require("../../../constants");
 const Openwhisk = require("../../../openwhisk");
 const { errorResponse, successResponse } = require("../../../responses");
@@ -50,11 +49,7 @@ function fnFingerprint(params) {
  */
 function fnInfiniteLoopKey(params) {
   return () => {
-    const sanitizedSku = params.data.value.sku.replace(
-      INVALID_STATE_KEY_CHARS_REGEX,
-      "_",
-    );
-    return `ilk_${sanitizedSku}`;
+    return `ilk_${params.data.value.sku}`;
   };
 }
 
