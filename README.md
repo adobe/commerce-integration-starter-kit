@@ -198,14 +198,15 @@ For example, if you want to add a new event registration to consume product even
 application:
   # other configurations
   events:
-  registrations:
-    3rd party product consumer:
-      description: Consumes product events from 3rd party systems
-      runtime_action: product-backoffice/consumer
-      events_of_interest:
-        - provider_metadata: 3rd_party_custom_events
-          event_codes:
-            - be-observer.catalog_product_create
+    registrations:
+      Backoffice Product Sync:
+        description: Consumes product events from 3rd party systems
+        events_of_interest:
+          - provider_metadata: 3rd_party_custom_events
+            event_codes:
+              - be-observer.catalog_product_create
+              - be-observer.catalog_product_update
+              - be-observer.catalog_product_delete
 ```
 
 ##### Configuring for Commerce event registrations
