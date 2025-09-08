@@ -17,18 +17,17 @@ const { makeError } = require("./helpers/errors");
 
 /**
  * This method configures the commerce eventing module
- * @param {string} providerId - provider id
- * @param {string} instanceId - instance id
- * @param {object} workspaceConfiguration - workspace configuration
+ * @param {object} commerceProvider - Commerce Provider
+ * @param {object} workspaceConfiguration - Adobe I/O workspace configuration object
  */
-async function main(providerId, instanceId, workspaceConfiguration) {
+async function main(commerceProvider, workspaceConfiguration) {
   const body = {
     config: {
       enabled: true,
       merchant_id: process.env.COMMERCE_ADOBE_IO_EVENTS_MERCHANT_ID,
       environment_id: "Stage",
-      provider_id: providerId,
-      instance_id: instanceId,
+      provider_id: commerceProvider.id,
+      instance_id: commerceProvider.instance_id,
       workspace_configuration: JSON.stringify(workspaceConfiguration),
     },
   };
@@ -39,7 +38,7 @@ async function main(providerId, instanceId, workspaceConfiguration) {
       process.env,
     );
     const isNonDefaultProviderAdded = eventProviderResult.some(
-      (provider) => provider.provider_id === providerId,
+      (provider) => provider.provider_id === commerceProvider.id,
     );
     const isDefaultWorkspaceEmpty = eventProviderResult.every(
       (item) => "id" in item || item.workspace_configuration === "",
@@ -54,8 +53,7 @@ async function main(providerId, instanceId, workspaceConfiguration) {
 
     if (!isNonDefaultProviderAdded) {
       await addCommerceEventProvider(
-        providerId,
-        instanceId,
+        commerceProvider,
         workspaceConfiguration,
         process.env,
       );
@@ -95,32 +93,26 @@ async function main(providerId, instanceId, workspaceConfiguration) {
 /**
  * Adds the event provider to the commerce instance.
  *
- * @param {string} providerId - provider id
- * @param {string} instanceId - instance id
+ * @param {object} commerceProvider - commerce provider
  * @param {object} workspaceConfiguration - workspace configuration
  * @param {object} environment - environment variables
  */
 async function addCommerceEventProvider(
-  providerId,
-  instanceId,
+  commerceProvider,
   workspaceConfiguration,
   environment,
 ) {
-  const providersList = require("../onboarding/config/providers.json");
-  const { label, description } =
-    providersList.find((provider) => provider.key === "commerce") || {};
-
   await addEventProvider(environment.COMMERCE_BASE_URL, environment, {
     eventProvider: {
-      provider_id: providerId,
-      instance_id: instanceId,
-      label,
-      description,
+      provider_id: commerceProvider.id,
+      instance_id: commerceProvider.instance_id,
+      label: commerceProvider.label,
+      description: commerceProvider.description,
       workspace_configuration: JSON.stringify(workspaceConfiguration),
     },
   });
   console.log(
-    `\nAdded non-default provider with id "${providerId}" and instance id "${instanceId}" to the commerce instance`,
+    `\nAdded non-default provider with id "${commerceProvider.id}" and instance id "${commerceProvider.instance_id}" to the commerce instance`,
   );
 }
 

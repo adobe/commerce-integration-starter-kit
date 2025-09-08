@@ -1,6 +1,7 @@
 application:
-#  hooks:
-#    post-app-deploy: ./hooks/post-app-deploy.js
+  hooks:
+    pre-app-deploy: ./hooks/pre-app-deploy.js
+    post-app-deploy: ./hooks/post-app-deploy.js
   runtimeManifest:
     packages:
       starter-kit:
@@ -13,6 +14,13 @@ application:
             runtime: nodejs:22
             inputs:
               LOG_LEVEL: debug
+              OAUTH_CLIENT_ID: $OAUTH_CLIENT_ID
+              OAUTH_CLIENT_SECRET: $OAUTH_CLIENT_SECRET
+              OAUTH_TECHNICAL_ACCOUNT_ID: $OAUTH_TECHNICAL_ACCOUNT_ID
+              OAUTH_TECHNICAL_ACCOUNT_EMAIL: $OAUTH_TECHNICAL_ACCOUNT_EMAIL
+              OAUTH_ORG_ID: $OAUTH_ORG_ID
+              OAUTH_SCOPES: $OAUTH_SCOPES
+              AIO_CLI_ENV: $AIO_CLI_ENV
             annotations:
               require-adobe-auth: true
               final: true
@@ -56,6 +64,77 @@ application:
         license: Apache-2.0
         actions:
           $include: ./actions/stock/external/actions.config.yaml
+  events:
+    registrations:
+      Backoffice Product Sync:
+        description: Consumes product events from 3rd party systems
+        events_of_interest:
+          - provider_metadata: 3rd_party_custom_events
+            event_codes:
+              - be-observer.catalog_product_create
+              - be-observer.catalog_product_update
+              - be-observer.catalog_product_delete
+        runtime_action: product-backoffice/consumer
+      Backoffice Customer Sync:
+        description: Consumes customer events from 3rd party systems
+        events_of_interest:
+          - provider_metadata: 3rd_party_custom_events
+            event_codes:
+              - be-observer.customer_create
+              - be-observer.customer_update
+              - be-observer.customer_delete
+              - be-observer.customer_group_create
+              - be-observer.customer_group_update
+              - be-observer.customer_group_delete
+        runtime_action: customer-backoffice/consumer
+      Backoffice Order Sync:
+        description: Consumes customer events from 3rd party systems
+        events_of_interest:
+          - provider_metadata: 3rd_party_custom_events
+            event_codes:
+              - be-observer.sales_order_status_update
+              - be-observer.sales_order_shipment_create
+              - be-observer.sales_order_shipment_update
+        runtime_action: order-backoffice/consumer
+      Backoffice Stock Sync:
+        description: Consumes customer events from 3rd party systems
+        events_of_interest:
+          - provider_metadata: 3rd_party_custom_events
+            event_codes:
+              - be-observer.catalog_stock_update
+        runtime_action: stock-backoffice/consumer
+      Commerce Customer Sync:
+        description: Consumes customer events from Adobe Commerce
+        events_of_interest:
+          - provider_metadata: dx_commerce_events
+            event_codes:
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.customer_save_commit_after
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.customer_delete_commit_after
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.customer_group_save_commit_after
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.customer_group_delete_commit_after
+        runtime_action: customer-commerce/consumer
+      Commerce Product Sync:
+        description: Consumes product events from Adobe Commerce
+        events_of_interest:
+          - provider_metadata: dx_commerce_events
+            event_codes:
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.catalog_product_delete_commit_after
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.catalog_product_save_commit_after
+        runtime_action: product-commerce/consumer
+      Commerce Order Sync:
+        description: Consumes order events from Adobe Commerce
+        events_of_interest:
+          - provider_metadata: dx_commerce_events
+            event_codes:
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.sales_order_save_commit_after
+        runtime_action: order-commerce/consumer
+      Commerce Stock Sync:
+        description: Consumes stock events from Adobe Commerce
+        events_of_interest:
+          - provider_metadata: dx_commerce_events
+            event_codes:
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.cataloginventory_stock_item_save_commit_after
+        runtime_action: stock-commerce/consumer
 productDependencies:
   - code: COMMC
     minVersion: 2.4.4

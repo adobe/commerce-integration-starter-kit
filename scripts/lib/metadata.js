@@ -13,46 +13,24 @@ governing permissions and limitations under the License.
 const fetch = require("node-fetch");
 
 const { makeError } = require("./helpers/errors");
-const providersEventsConfig = require("../onboarding/config/events.json");
-const { getEventName } = require("../../utils/naming");
+
+const toBase64 = (obj) => Buffer.from(JSON.stringify(obj)).toString("base64");
 
 /**
  * Builds an array of provider events with their metadata
- * @param {object} providerEvents - Provider events configuration object
+ * @param {Array} providerEvents - Provider events configuration object
  * @returns Array of formatted event metadata
  */
 function buildProviderData(providerEvents) {
-  const events = [];
-
-  for (const [event, { sampleEventTemplate }] of Object.entries(
-    providerEvents,
-  )) {
-    events.push({
-      eventCode: event,
-      label: event,
-      description: event,
-      sampleEventTemplate,
-    });
-  }
-
-  return events;
-}
-
-/**
- * Encodes a sample event template to base64 string
- * @param {object} sampleEventTemplate - Sample event template object
- * @returns Base64 encoded string of the template or null if invalid
- */
-function base64EncodedSampleEvent(sampleEventTemplate) {
-  if (!sampleEventTemplate || typeof sampleEventTemplate !== "object") {
-    return null;
-  }
-  return Buffer.from(JSON.stringify(sampleEventTemplate)).toString("base64");
+  return providerEvents.map(({ sample_event_template, ...event }) => ({
+    ...event,
+    sample_event_template: toBase64(sample_event_template),
+  }));
 }
 
 /**
  * Adds event metadata to a provider via the I/O Management API
- * @param {{eventCode: string, label: string, description: string, sampleEventTemplate: object}} metadata - Event metadata object
+ * @param {object} metadata - Event metadata object
  * @param {string} providerId - Provider ID
  * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID
  * @param {object} authHeaders - Authentication headers for API requests
@@ -65,18 +43,8 @@ async function addEventCodeToProvider(
   authHeaders,
 ) {
   console.log(
-    `Trying to create metadata for ${metadata?.eventCode} to provider ${providerId}`,
+    `Trying to create metadata for ${metadata?.event_code} to provider ${providerId}`,
   );
-
-  const { eventCode, label, description, sampleEventTemplate } = metadata;
-  const sampleEvent = base64EncodedSampleEvent(sampleEventTemplate);
-  const body = {
-    // eslint-disable-next-line camelcase
-    event_code: eventCode,
-    label,
-    description,
-    ...(sampleEvent ? { sample_event_template: sampleEvent } : {}),
-  };
 
   const url = `${environment.IO_MANAGEMENT_BASE_URL}${environment.IO_CONSUMER_ID}/${environment.IO_PROJECT_ID}/${environment.IO_WORKSPACE_ID}/providers/${providerId}/eventmetadata`;
   const addEventMetadataReq = await fetch(url, {
@@ -86,7 +54,7 @@ async function addEventCodeToProvider(
       Accept: "application/hal+json",
       ...authHeaders,
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(metadata),
   });
 
   const result = await addEventMetadataReq.json();
@@ -120,7 +88,7 @@ async function addEventCodeToProvider(
 
 /**
  * Adds multiple event metadata entries to a provider
- * @param {object} providerEvents - Provider events configuration object
+ * @param {Array} providerEvents - Provider events configuration object
  * @param {string} providerId - Provider ID
  * @param {object} environment - Environment configuration
  * @param {object} authHeaders - Authentication headers for API requests
@@ -215,21 +183,18 @@ async function getExistingMetadata(
 }
 
 /**
- * Main function to add metadata events codes from config/events.json to corresponding providers
- * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
- * @param {Array<{id: string, key: string, label: string}>} providers - List of provider objects
- * @param {object} environment - Environment configuration
+ * Main function to add metadata events codes from unified config.js to corresponding providers
+ * @param {object} _config - Unified configuration object containing registrations, providers and subscriptions
+ * @param {Array} providers - List of provider objects
+ * @param {object} environment - Environment variables
  * @param {object} authHeaders - Authentication headers for API requests
  * @returns Result object with operation outcome
  */
-async function main(clientRegistrations, providers, environment, authHeaders) {
+async function main(_config, providers, environment, authHeaders) {
   let currentProvider;
-  let eventName;
   try {
-    let providersEvents = {};
-
-    const result = [];
     for (const provider of providers) {
+      let providersEvents = {};
       currentProvider = provider;
       const existingMetadataResult = await getExistingMetadata(
         provider.id,
@@ -243,39 +208,29 @@ async function main(clientRegistrations, providers, environment, authHeaders) {
 
       const { existingMetadata } = existingMetadataResult;
 
-      for (const [entityName, options] of Object.entries(clientRegistrations)) {
-        if (options?.includes(provider.key)) {
-          if (providersEventsConfig[entityName]) {
-            for (const [event, eventProps] of Object.entries(
-              providersEventsConfig[entityName][provider.key],
-            )) {
-              eventName = getEventName(event, environment);
-              if (existingMetadata[eventName]) {
-                console.log(
-                  `Skipping, Metadata event code ${eventName} already exists!`,
-                );
-                continue;
-              }
-              providersEvents = {
-                ...providersEvents,
-                [eventName]: eventProps,
-              };
-            }
-          }
+      for (const event of provider.events_metadata) {
+        const { event_code } = event;
 
-          result.push({
-            entity: entityName,
-            label: provider.label,
-          });
+        if (existingMetadata[event_code]) {
+          console.log(
+            `Skipping, Metadata event code ${event_code} already exists!`,
+          );
+          continue;
         }
+
+        providersEvents = {
+          ...providersEvents,
+          [event_code]: event,
+        };
       }
 
       const addMetadataResult = await addMetadataToProvider(
-        providersEvents,
+        Object.values(providersEvents),
         provider.id,
         environment,
         authHeaders,
       );
+
       if (!addMetadataResult.success) {
         return addMetadataResult;
       }
@@ -283,7 +238,6 @@ async function main(clientRegistrations, providers, environment, authHeaders) {
 
     return {
       success: true,
-      result,
     };
   } catch (error) {
     const hints = [
@@ -291,12 +245,14 @@ async function main(clientRegistrations, providers, environment, authHeaders) {
       "Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?",
     ];
 
+    const { events_metadata: _events_metadata, ...rest } = currentProvider;
+
     return makeError(
       "UNEXPECTED_ERROR",
       "Unexpected error occurred while adding metadata to provider",
       {
         error,
-        provider: currentProvider,
+        provider: rest,
         hints: hints.length > 0 ? hints : undefined,
       },
     );

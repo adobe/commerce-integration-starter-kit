@@ -14,6 +14,7 @@ governing permissions and limitations under the License.
 
 const { main } = require("../../../scripts/onboarding/index");
 const ansis = require("ansis");
+const { defineConfig } = require("../../../utils/config");
 
 const consoleLogSpy = jest.spyOn(console, "log").mockImplementation(() => {});
 const consoleErrorSpy = jest
@@ -24,12 +25,12 @@ describe("onboarding index", () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
-    jest.clearAllMocks();
     jest.resetModules();
   });
 
   afterEach(() => {
     process.env = originalEnv;
+    jest.clearAllMocks();
   });
 
   test("should print an error when COMMERCE_BASE_URL, IO_PROJECT_ID, IO_CONSUMER_ID and IO_WORKSPACE_ID and EVENT_PREFIX are missing", async () => {
@@ -192,25 +193,50 @@ describe("onboarding index", () => {
       assertImsAuthParams,
     }));
 
+    jest.doMock("../../../extensibility.config", () =>
+      defineConfig({
+        eventing: {
+          providers: [
+            {
+              id: "COMMERCE_PROVIDER_ID",
+              provider_metadata: "dx_commerce_events",
+              label: "Commerce Provider",
+            },
+            {
+              id: "BACKOFFICE_PROVIDER_ID",
+              provider_metadata: "3rd_party_custom_events",
+              label: "Backoffice Provider",
+            },
+          ],
+        },
+      }),
+    );
+
     jest.doMock("../../../scripts/lib/providers", () => ({
       main: jest.fn().mockResolvedValue({
         success: true,
         result: [
           {
-            key: "commerce",
             id: "COMMERCE_PROVIDER_ID",
-            instanceId: "AC_INSTANCE_ID",
+            instance_id: "AC_INSTANCE_ID",
+            provider_metadata: "dx_commerce_events",
             label: "Commerce Provider - test",
           },
           {
-            key: "backoffice",
             id: "BACKOFFICE_PROVIDER_ID",
-            instanceId: "BO_INSTANCE_ID",
+            instance_id: "BO_INSTANCE_ID",
+            provider_metadata: "3rd_party_custom_events",
             label: "Backoffice Provider - test",
           },
         ],
       }),
     }));
+
+    jest.doMock("../../../utils/upsert-env", () => {
+      return {
+        upsertEnvFile: jest.fn().mockReturnValue(true),
+      };
+    });
 
     jest.doMock("../../../scripts/lib/metadata", () => ({
       main: jest.fn().mockResolvedValue({
@@ -225,13 +251,6 @@ describe("onboarding index", () => {
             label: "Backoffice Provider",
           },
         ],
-      }),
-    }));
-
-    jest.doMock("../../../scripts/lib/registrations", () => ({
-      main: jest.fn().mockResolvedValue({
-        success: true,
-        registrations: ["product", "customer", "order", "stock"],
       }),
     }));
 
@@ -250,18 +269,6 @@ describe("onboarding index", () => {
       { virtual: true },
     );
 
-    jest.doMock(
-      "../../../scripts/onboarding/config/starter-kit-registrations.json",
-      () => ({
-        product: ["commerce", "backoffice"],
-        customer: ["commerce"],
-        order: ["commerce"],
-        stock: ["commerce"],
-      }),
-      { virtual: true },
-    );
-
-    // Set up required environment variables
     const mockEnv = {
       COMMERCE_BASE_URL: "https://commerce.test/",
       IO_CONSUMER_ID: "test-consumer-id",
@@ -277,36 +284,28 @@ describe("onboarding index", () => {
       OAUTH_SCOPES: "scope1, scope2",
     };
     jest.replaceProperty(process, "env", mockEnv);
-    jest.resetModules();
-
     const {
       main: onboardingMain,
     } = require("../../../scripts/onboarding/index");
+
     const result = await onboardingMain();
 
     // Verify the success flow
     expect(result).toBeDefined();
     expect(result.providers).toEqual([
       {
-        key: "commerce",
+        provider_metadata: "dx_commerce_events",
         id: "COMMERCE_PROVIDER_ID",
-        instanceId: "AC_INSTANCE_ID",
+        instance_id: "AC_INSTANCE_ID",
         label: "Commerce Provider - test",
       },
       {
-        key: "backoffice",
+        provider_metadata: "3rd_party_custom_events",
         id: "BACKOFFICE_PROVIDER_ID",
-        instanceId: "BO_INSTANCE_ID",
+        instance_id: "BO_INSTANCE_ID",
         label: "Backoffice Provider - test",
       },
     ]);
-    expect(result.registrations).toEqual([
-      "product",
-      "customer",
-      "order",
-      "stock",
-    ]);
-
     // Verify console logs for success messages
     expect(consoleLogSpy).toHaveBeenCalledWith(
       "Starting the process of on-boarding based on your registration choices",
@@ -324,16 +323,5 @@ describe("onboarding index", () => {
 
     // Verify no errors were logged
     expect(consoleErrorSpy).not.toHaveBeenCalled();
-
-    // Clean up mocks
-    jest.dontMock("../../../utils/adobe-auth");
-    jest.dontMock("../../../scripts/lib/providers");
-    jest.dontMock("../../../scripts/lib/metadata");
-    jest.dontMock("../../../scripts/lib/registrations");
-    jest.dontMock("../../../scripts/lib/configure-eventing");
-    jest.dontMock("../../../scripts/onboarding/config/workspace.json");
-    jest.dontMock(
-      "../../../scripts/onboarding/config/starter-kit-registrations.json",
-    );
   });
 });

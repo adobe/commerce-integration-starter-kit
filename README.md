@@ -186,71 +186,83 @@ application:
     #  ...
 ```
 
+#### Configure the event registrations
+
+Event registrations can be configured in your `app.config.yaml` file under the path `.application.events.registrations` and are registered within the `aio app deploy` command.
+
+##### Configuring for Backoffice event registrations
+
+For example, if you want to add a new event registration to consume product events from a 3rd party system, you can add the following configuration:
+
+```yaml
+application:
+  # other configurations
+  events:
+    registrations:
+      Backoffice Product Sync:
+        description: Consumes product events from 3rd party systems
+        events_of_interest:
+          - provider_metadata: 3rd_party_custom_events
+            event_codes:
+              - be-observer.catalog_product_create
+              - be-observer.catalog_product_update
+              - be-observer.catalog_product_delete
+```
+
+##### Configuring for Commerce event registrations
+
+For example, if you want to add a new event registration that consumed events from commerce, you can add the following configuration:
+
+> [!NOTE]
+> `<EVENT_PREFIX>` should be replaced with the actual EVENT_PREFIX set in your `.env` file.
+
+```yaml
+application:
+  # other configurations
+  events:
+    registrations:
+      Commerce Stock Sync:
+        description: Consumes stock events from Adobe Commerce
+        events_of_interest:
+          - provider_metadata: dx_commerce_events
+            event_codes:
+              - com.adobe.commerce.<EVENT_PREFIX>.observer.cataloginventory_stock_item_save_commit_after
+```
+
 ### Deploy
 
-Run the following command to deploy the project; this will deploy the runtime actions needed for the onboarding step:
+#### Execute the deployment
+
+In Commerce Integration Starter Kit we have defined App builder lifecycle event hooks that make possible to automatically execute custom code when a particular application lifecycle event happens.
+To learn more these hooks navigate to [App Builder application tooling lifecycle event hooks](https://developer.adobe.com/app-builder/docs/guides/app-hooks/).
+
+The following code snapshot in the `app.config.yaml` file shows the lifecycle hooks that will execute the onboarding before the application is deployed and event subscription scripts after the application has been deployed:
+
+```yaml
+application:
+  hooks:
+    pre-app-deploy: ./hooks/pre-app-deploy.js
+    post-app-deploy: ./hooks/post-app-deploy.js
+```
+
+To start the process run the command:
 
 ```bash
 aio app deploy
 ```
 
-You can confirm the success of the deployment in the Adobe Developer Console by navigating to the `Runtime` section on your workspace:
-![Alt text](docs/console-user-defined-actions.png "Workspace runtimes packages")
-
-### Onboarding
-
-#### Configure the event registrations
-
-By default, the registrations' config file creates all the registrations for all entities. You can edit the `./scripts/onboarding/custom/starter-kit-registrations.json` file if you don't need a registration.
-If you don't want to receive events from commerce, remove `commerce` from the entity array; for backoffice updates, remove `backoffice`.
-e.g., In the previous onboarding step (`Configure the project`), we commented on the product-backoffice package. In this case, we have to remove `backoffice` from the `product` entity:
-
-```json
-{
-  "product": ["commerce"],
-  "customer": ["commerce", "backoffice"],
-  "order": ["commerce", "backoffice"],
-  "stock": ["commerce", "backoffice"]
-}
-```
-
-#### Execute the onboarding
-
-This step will generate the IO Events providers and the registrations for your starter kit project.
-If your Commerce instance Adobe I/O Events for Adobe Commerce module version 1.12.0 or greater, the module will also be automatically configured by the onboarding script and your commerce instance can connect to other event providers besides the default Commerce event provider registered in the system configuration.
-
-To start the process run the command:
-
-```bash
-npm run onboard
-```
-
-The console will return the provider's IDs and save this information:
-
-- You will need the commerce instance ID and provider ID to configure your commerce instance later.
-- You will need the backoffice provider id to send the events to the App builder project.
-  e.g., of output:
-
-```bash
-Process of On-Boarding done successfully: [
-  {
-    key: 'commerce',
-    id: 'THIS IS THE ID OF COMMERCE PROVIDER',
-    instanceId: 'THIS IS THE INSTANCE ID OF COMMERCE PROVIDER',
-    label: 'Commerce Provider'
-  },
-  {
-    key: 'backoffice',
-    id: 'THIS IS THE ID OF BACKOFFICE PROVIDER',
-    instanceId: 'THIS IS THE INSTANCE ID OF BACKOFFICE PROVIDER',
-    label: 'Backoffice Provider'
-  }
-]
-
-```
+- pre-app-deploy - `onboarding/index.js` -
+  - This step will generate the IO Events providers and the registrations for your starter kit project.
+    If your Commerce instance Adobe I/O Events for Adobe Commerce module version 1.12.0 or greater, the module will also be automatically configured by the onboarding script and your commerce instance can connect to other event providers besides the default Commerce event provider registered in the system configuration.
+  - This step will also update your .env with the `COMMERCE_PROVIDER_ID`, `BACKOFFICE_PROVIDER_ID` and `AIO_EVENTS_PROVIDERMETADATA_TO_PROVIDER_MAPPING` that were created in the process
+- deploy - main process of `aio app deploy` - This step will deploy the runtime actions in your AppBuilder project
+- post-app-deploy - `commerce-event-subscribe/index.js` - This step will subscribe to the events defined in the `extensibility.config.js` file in your Commerce instance.
 
 Check your App developer console to confirm the creation of the registrations:
 ![Alt text](docs/console-event-registrations.png "Workspace registrations")
+
+You can confirm the success of the deployment in the Adobe Developer Console by navigating to the `Runtime` section on your workspace:
+![Alt text](docs/console-user-defined-actions.png "Workspace runtimes packages")
 
 ### Complete the Adobe Commerce eventing configuration
 
@@ -283,7 +295,7 @@ To configure the provider in Commerce, do the following:
 
 > [!TIP]
 >
-> If your Commerce instance Adobe I/O Events for Adobe Commerce module version is 1.6.0 or greater, run the commerce-event-subscribe script to automatically subscribe to the Commerce events in `scripts/commerce-event-subscribe/config/commerce-event-subscribe.json`
+> If your Commerce instance Adobe I/O Events for Adobe Commerce module version is 1.6.0 or greater, run the commerce-event-subscribe script to automatically subscribe to the Commerce events in `extensibility.config.js` file at path `eventing.subscriptions`.
 >
 > ```bash
 > npm run commerce-event-subscribe
@@ -306,23 +318,6 @@ Here are the events with the minimal required fields you need to subscribe to, i
 | Customer group | observer.customer_group_delete_commit_after            | customer_group_code         | customer group [delete](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/customerGroupsid#operation/DeleteV1CustomerGroupsId)                                                                                                                                                                                                                                                                                                                |
 | Order          | observer.sales_order_save_commit_after                 | created_at, updated_at      | order update ([hold](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidhold#operation/PostV1OrdersIdHold), [unhold](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidunhold#operation/PostV1OrdersIdUnhold), [cancel](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidcancel#operation/PostV1OrdersIdCancel), [emails](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidemails#operation/PostV1OrdersIdEmails)) |
 | Stock          | observer.cataloginventory_stock_item_save_commit_after | product_id                  | product [stock update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/productsproductSkustockItemsitemId/#operation/PutV1ProductsProductSkuStockItemsItemId)                                                                                                                                                                                                                                                                               |
-
-### Automating the execution of onboarding and event subscription
-
-App builder defines lifecycle event hooks that make possible to automatically execute custom code when a particular application lifecycle event happens.
-To learn more these hooks navigate to [App Builder application tooling lifecycle event hooks](https://developer.adobe.com/app-builder/docs/guides/app-hooks/).
-
-The following code snapshot in the `app.config.yaml` file shows how to define a hook that will execute the onboarding and event subscription scripts after the application has been deployed:
-
-```yaml
-application:
-  hooks:
-    post-app-deploy: ./hooks/post-app-deploy.js
-```
-
-For convenience, the hook configuration is commented out in the `app.config.yaml` file. To enable the hook, uncomment the hook configuration.
-
-If you plan to add more hooks to the application, you can define them in the `hooks` folder and reference them in the `app.config.yaml` file.
 
 ## Development
 
@@ -733,19 +728,28 @@ You can find more details about unit testing and an example in [Lesson 3: Testin
 
 The starter kit comes with predefined events for each entity. Sometimes, you may need to add a new event to an entity, e.g., a customer. To do this, follow the next steps:
 
-- Add the event to the `./onboarding/config/events.json` file under the related entity flow; for example, if the event is related to a customer and is coming from commerce, you should add it under entity customer -> commerce. e.g.,
-  ```json
-      "customer": {
-        "commerce": [
-          "com.adobe.commerce.observer.customer_save_commit_after",
-          "com.adobe.commerce.observer.customer_delete_commit_after",
-          "com.adobe.commerce.observer.customer_group_save_commit_after",
-          "com.adobe.commerce.observer.customer_group_delete_commit_after",
-          "com.adobe.commerce.THE_NEW_CUSTOMER_EVENT"
+Add the event to the `extensibility.config.js` file at path `.eventing.subscriptions` under the related provider. See [Configure the event registrations](#configure-the-event-registrations) for more details about the configuration structure. For example, if the event is related to a product and is coming from commerce, you should add it under the commerce provider subscription. e.g.,
+
+```js
+{
+  subscriptions: [
+    {
+      event: {
+        name: "observer.catalog_product_delete_commit_after",
+        fields: [
+          "id",
+          "sku",
+          "name",
+          "created_at",
+          "updated_at",
+          "description",
         ],
-      ...
-      }
-  ```
+      },
+    },
+  ];
+}
+```
+
 - Run the onboarding script:
   ```bash
   npm run onboard
@@ -778,7 +782,7 @@ The starter kit comes with predefined events for each entity. Sometimes, you may
 With these steps, you can consume the new event you added to the project.
 If you want to change an existing event, make the changes in the same places:
 
-- Edit the event in the `./onboarding/config/events.json` file
+- Edit the event in the `./scripts/onboarding/extensibility.config.js`file at the path `.eventing.subscriptions`
 - Modify the event in the consumer of the flow where the event belongs
 - Make changes to the operation action invoked by the consumer switch case.
 - Deploy your changes

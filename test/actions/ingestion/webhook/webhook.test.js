@@ -107,6 +107,7 @@ describe("Given external backoffice events ingestion webhook", () => {
     test("Then returns success response", async () => {
       const params = {
         ...validEnvParams,
+        BACKOFFICE_PROVIDER_ID: "PROVIDER_ID",
         AIO_runtime_namespace: "eistarterkitv1",
         data: {
           uid: "product-123",
@@ -280,6 +281,7 @@ describe("Given external backoffice events ingestion webhook", () => {
     test("Then returns error response", async () => {
       const params = {
         ...validEnvParams,
+        BACKOFFICE_PROVIDER_ID: "PROVIDER_ID",
         AIO_runtime_namespace: "eistarterkitv1",
         data: {
           uid: "product-123",
@@ -294,10 +296,7 @@ describe("Given external backoffice events ingestion webhook", () => {
       };
 
       mockResolvedAccessToken();
-      fetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      });
+      fetch.mockResolvedValueOnce(createMockFetchProvidersResponse([]));
 
       const response = await action.main(params);
 
@@ -315,6 +314,7 @@ describe("Given external backoffice events ingestion webhook", () => {
     test("Then returns error response", async () => {
       const params = {
         ...validEnvParams,
+        BACKOFFICE_PROVIDER_ID: "PROVIDER_ID",
         AIO_runtime_namespace: "eistarterkitv1",
         data: {
           uid: "product-123",
@@ -360,6 +360,7 @@ describe("Given external backoffice events ingestion webhook", () => {
     test("Then returns error response", async () => {
       const params = {
         ...validEnvParams,
+        BACKOFFICE_PROVIDER_ID: "PROVIDER_ID",
         AIO_runtime_namespace: "eistarterkitv1",
         data: {
           uid: "product-123",
@@ -406,6 +407,7 @@ describe("Given external backoffice events ingestion webhook", () => {
     test("Then receives credentials params in the input", async () => {
       const params = {
         ...validEnvParams,
+        BACKOFFICE_PROVIDER_ID: "PROVIDER_ID",
         AIO_runtime_namespace: "eistarterkitv1",
         data: {
           uid: "product-123",

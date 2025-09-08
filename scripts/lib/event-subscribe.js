@@ -11,34 +11,16 @@ governing permissions and limitations under the License.
 */
 
 const { eventSubscribe } = require("./commerce-eventing-api-client");
-const { getEventName } = require("../../utils/naming");
 const { makeError } = require("./helpers/errors");
 
 /**
  * This method subscribes to an event in the commerce eventing module
  * @param {object} eventSpec - event specification as described in https://developer.adobe.com/commerce/extensibility/events/api/#subscribe-to-events
- * @param {object} environment - environment variables
+ * @param {object} environment - environment parameters
  */
 async function main(eventSpec, environment) {
-  if (!environment.EVENT_PREFIX) {
-    throw new Error(
-      "EVENT_PREFIX is required but is missing or empty from the .env file.",
-    );
-  }
-
-  if (!environment.COMMERCE_PROVIDER_ID) {
-    throw new Error(
-      'COMMERCE_PROVIDER_ID is required but is missing or empty from the .env file. Please run "npm run onboard".',
-    );
-  }
-
-  eventSpec.event.parent = eventSpec.event.name;
-  eventSpec.event.provider_id = environment.COMMERCE_PROVIDER_ID;
-  eventSpec.event.name = getEventName(eventSpec.event.name, environment);
-
   try {
-    await eventSubscribe(environment.COMMERCE_BASE_URL, environment, eventSpec);
-
+    await eventSubscribe(environment.COMMERCE_BASE_URL, process.env, eventSpec);
     return {
       success: true,
     };
