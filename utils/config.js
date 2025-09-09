@@ -22,27 +22,27 @@ function transformSubscriptions(
 function transformProviders({ eventing: { providers = [] } }, environment) {
   return providers.map((provider) => {
     let id = provider.id;
-    const { events_metadata = [], ...rest } = provider;
+    const { eventsMetadata = [], ...rest } = provider;
 
-    if (!id && rest.provider_metadata === "dx_commerce_events") {
+    if (!id && rest.providerMetadata === "dx_commerce_events") {
       id = environment.COMMERCE_PROVIDER_ID;
     }
 
-    if (!id && rest.provider_metadata === "3rd_party_custom_events") {
+    if (!id && rest.providerMetadata === "3rd_party_custom_events") {
       id = environment.BACKOFFICE_PROVIDER_ID;
     }
 
-    const mappedMetaData = events_metadata.map((event) => {
-      const { event_code, ...eventRest } = event;
+    const mappedMetaData = eventsMetadata.map((event) => {
+      const { eventCode, ...eventRest } = event;
       return {
-        event_code: getEventName(event_code, environment),
+        eventCode: getEventName(eventCode, environment),
         ...eventRest,
       };
     });
     return {
       ...rest,
       ...(id ? { id } : {}),
-      events_metadata: mappedMetaData,
+      eventsMetadata: mappedMetaData,
     };
   });
 }
