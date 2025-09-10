@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 const crypto = require("node:crypto");
 const { Core } = require("@adobe/aio-sdk");
+const { INVALID_STATE_KEY_CHARS_REGEX } = require("./constants");
 
 /** @constant {string} FINGERPRINT_ALGORITHM - The algorithm used to generate the fingerprint */
 const FINGERPRINT_ALGORITHM = "sha256";
@@ -51,16 +52,17 @@ async function isAPotentialInfiniteLoop(
   }
 
   const key = typeof keyFn === "function" ? keyFn() : keyFn;
+  const sanitizedKey = sanitizeKey(key);
   const data =
     typeof fingerprintFn === "function" ? fingerprintFn() : fingerprintFn;
 
-  const persistedFingerPrint = await state.get(key);
+  const persistedFingerPrint = await state.get(sanitizedKey);
   if (!persistedFingerPrint) {
-    logger.debug(`No persisted fingerprint found for key ${key}`);
+    logger.debug(`No persisted fingerprint found for key ${sanitizedKey}`);
     return false;
   }
   logger.debug(
-    `Persisted fingerprint found for key ${key}: ${persistedFingerPrint.value},` +
+    `Persisted fingerprint found for key ${sanitizedKey}: ${persistedFingerPrint.value},` +
       ` Generated fingerprint: ${fingerPrint(data)}`,
   );
 
@@ -82,9 +84,19 @@ async function storeFingerPrint(state, keyFn, fingerprintFn, ttl) {
   const data =
     typeof fingerprintFn === "function" ? fingerprintFn() : fingerprintFn;
 
-  await state.put(key, fingerPrint(data), {
+  await state.put(sanitizeKey(key), fingerPrint(data), {
     ttl: ttl || DEFAULT_INFINITE_LOOP_BREAKER_TTL,
   });
+}
+
+/**
+ * Replaces invalid characters in a state key with underscores
+ *
+ * @param {string} key - The key to sanitize
+ * @returns - The sanitized key
+ */
+function sanitizeKey(key) {
+  return key.replace(INVALID_STATE_KEY_CHARS_REGEX, "_");
 }
 
 /**
