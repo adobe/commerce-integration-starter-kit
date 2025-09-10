@@ -22,9 +22,10 @@ const toBase64 = (obj) => Buffer.from(JSON.stringify(obj)).toString("base64");
  * @returns Array of formatted event metadata
  */
 function buildProviderData(providerEvents) {
-  return providerEvents.map(({ sample_event_template, ...event }) => ({
+  return providerEvents.map(({ sampleEventTemplate, eventCode, ...event }) => ({
     ...event,
-    sample_event_template: toBase64(sample_event_template),
+    event_code: eventCode,
+    sample_event_template: toBase64(sampleEventTemplate),
   }));
 }
 
@@ -208,19 +209,19 @@ async function main(_config, providers, environment, authHeaders) {
 
       const { existingMetadata } = existingMetadataResult;
 
-      for (const event of provider.events_metadata) {
-        const { event_code } = event;
+      for (const event of provider.eventsMetadata) {
+        const { eventCode } = event;
 
-        if (existingMetadata[event_code]) {
+        if (existingMetadata[eventCode]) {
           console.log(
-            `Skipping, Metadata event code ${event_code} already exists!`,
+            `Skipping, Metadata event code ${eventCode} already exists!`,
           );
           continue;
         }
 
         providersEvents = {
           ...providersEvents,
-          [event_code]: event,
+          [eventCode]: event,
         };
       }
 
@@ -245,7 +246,7 @@ async function main(_config, providers, environment, authHeaders) {
       "Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?",
     ];
 
-    const { events_metadata: _events_metadata, ...rest } = currentProvider;
+    const { eventsMetadata: _eventsMetadata, ...rest } = currentProvider;
 
     return makeError(
       "UNEXPECTED_ERROR",

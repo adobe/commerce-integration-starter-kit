@@ -137,15 +137,15 @@ function createMockErrorResponse(status = 500, errorData = {}) {
 const DEFAULT_PROVIDERS = [
   {
     label: "Backoffice Provider",
-    provider_metadata: "3rd_party_custom_events",
+    providerMetadata: "3rd_party_custom_events",
     description: "Backoffice Provider that will receive events from commerce",
-    docs_url: null,
+    docsUrl: null,
   },
   {
     label: "Commerce Provider",
-    provider_metadata: "dx_commerce_events",
+    providerMetadata: "dx_commerce_events",
     description: "Event provider for Adobe Commerce",
-    docs_url: "https://developer.adobe.com/commerce/extensibility/events/",
+    docsUrl: "https://developer.adobe.com/commerce/extensibility/events/",
   },
 ];
 
@@ -212,17 +212,16 @@ describe("Given On-boarding providers file", () => {
       const providersToCreate = [
         {
           label: "Backoffice Provider",
-          provider_metadata: "3rd_party_custom_events",
+          providerMetadata: "3rd_party_custom_events",
           description:
             "Backoffice Provider that will receive events from commerce",
-          docs_url: null,
+          docsUrl: null,
         },
         {
           label: "Commerce Provider",
-          provider_metadata: "dx_commerce_events",
+          providerMetadata: "dx_commerce_events",
           description: "Event provider for Adobe Commerce",
-          docs_url:
-            "https://developer.adobe.com/commerce/extensibility/events/",
+          docsUrl: "https://developer.adobe.com/commerce/extensibility/events/",
         },
       ];
 
@@ -243,15 +242,15 @@ describe("Given On-boarding providers file", () => {
         result: [
           {
             id: backofficeProviderId,
-            instance_id: "BO_INSTANCE_ID",
+            instanceId: "BO_INSTANCE_ID",
             label: `Backoffice Provider - ${PROVIDER_SUFFIX}`,
-            provider_metadata: "3rd_party_custom_events",
+            providerMetadata: "3rd_party_custom_events",
           },
           {
             id: commerceProviderId,
-            instance_id: "AC_INSTANCE_ID",
+            instanceId: "AC_INSTANCE_ID",
             label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
-            provider_metadata: "dx_commerce_events",
+            providerMetadata: "dx_commerce_events",
           },
         ],
       });
@@ -299,18 +298,17 @@ describe("Given On-boarding providers file", () => {
       const providersWithCommerceExisting = [
         {
           label: "Backoffice Provider", // No id - will be created
-          provider_metadata: "3rd_party_custom_events",
+          providerMetadata: "3rd_party_custom_events",
           description:
             "Backoffice Provider that will receive events from commerce",
-          docs_url: null,
+          docsUrl: null,
         },
         {
           id: commerceProviderId, // Has id - already exists
           label: "Commerce Provider",
-          provider_metadata: "dx_commerce_events",
+          providerMetadata: "dx_commerce_events",
           description: "Event provider for Adobe Commerce",
-          docs_url:
-            "https://developer.adobe.com/commerce/extensibility/events/",
+          docsUrl: "https://developer.adobe.com/commerce/extensibility/events/",
         },
       ];
 
@@ -331,15 +329,15 @@ describe("Given On-boarding providers file", () => {
         result: [
           {
             id: backofficeProviderId,
-            instance_id: "BO_INSTANCE_ID",
+            instanceId: "BO_INSTANCE_ID",
             label: `Backoffice Provider - ${PROVIDER_SUFFIX}`,
-            provider_metadata: "3rd_party_custom_events",
+            providerMetadata: "3rd_party_custom_events",
           },
           {
             id: commerceProviderId,
-            instance_id: "AC_INSTANCE_ID",
+            instanceId: "AC_INSTANCE_ID",
             label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
-            provider_metadata: "dx_commerce_events",
+            providerMetadata: "dx_commerce_events",
           },
         ],
       });
@@ -388,17 +386,16 @@ describe("Given On-boarding providers file", () => {
         {
           id: backofficeProviderId, // Has id - already exists
           label: "Backoffice Provider",
-          provider_metadata: "3rd_party_custom_events",
+          providerMetadata: "3rd_party_custom_events",
           description:
             "Backoffice Provider that will receive events from commerce",
-          docs_url: null,
+          docsUrl: null,
         },
         {
           label: "Commerce Provider", // No id - will be created
-          provider_metadata: "dx_commerce_events",
+          providerMetadata: "dx_commerce_events",
           description: "Event provider for Adobe Commerce",
-          docs_url:
-            "https://developer.adobe.com/commerce/extensibility/events/",
+          docsUrl: "https://developer.adobe.com/commerce/extensibility/events/",
         },
       ];
 
@@ -419,15 +416,15 @@ describe("Given On-boarding providers file", () => {
         result: [
           {
             id: backofficeProviderId,
-            instance_id: "BO_INSTANCE_ID",
+            instanceId: "BO_INSTANCE_ID",
             label: `Backoffice Provider - ${PROVIDER_SUFFIX}`,
-            provider_metadata: "3rd_party_custom_events",
+            providerMetadata: "3rd_party_custom_events",
           },
           {
             id: commerceProviderId,
-            instance_id: "AC_INSTANCE_ID",
+            instanceId: "AC_INSTANCE_ID",
             label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
-            provider_metadata: "dx_commerce_events",
+            providerMetadata: "dx_commerce_events",
           },
         ],
       });
@@ -468,18 +465,17 @@ describe("Given On-boarding providers file", () => {
         {
           id: backofficeProviderId, // Has id - already exists
           label: "Backoffice Provider",
-          provider_metadata: "3rd_party_custom_events",
+          providerMetadata: "3rd_party_custom_events",
           description:
             "Backoffice Provider that will receive events from commerce",
-          docs_url: null,
+          docsUrl: null,
         },
         {
           id: commerceProviderId, // Has id - already exists
           label: "Commerce Provider",
-          provider_metadata: "dx_commerce_events",
+          providerMetadata: "dx_commerce_events",
           description: "Event provider for Adobe Commerce",
-          docs_url:
-            "https://developer.adobe.com/commerce/extensibility/events/",
+          docsUrl: "https://developer.adobe.com/commerce/extensibility/events/",
         },
       ];
 
@@ -500,15 +496,15 @@ describe("Given On-boarding providers file", () => {
         result: [
           {
             id: backofficeProviderId,
-            instance_id: "BO_INSTANCE_ID",
+            instanceId: "BO_INSTANCE_ID",
             label: `Backoffice Provider - ${PROVIDER_SUFFIX}`,
-            provider_metadata: "3rd_party_custom_events",
+            providerMetadata: "3rd_party_custom_events",
           },
           {
             id: commerceProviderId,
-            instance_id: "AC_INSTANCE_ID",
+            instanceId: "AC_INSTANCE_ID",
             label: `Commerce Provider - ${PROVIDER_SUFFIX}`,
-            provider_metadata: "dx_commerce_events",
+            providerMetadata: "dx_commerce_events",
           },
         ],
       });

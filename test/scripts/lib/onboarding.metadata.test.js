@@ -33,26 +33,26 @@ const DEFAULT_PROVIDERS = [
     key: "commerce",
     id: "COMMERCE_PROVIDER_ID",
     label: "Commerce Provider",
-    events_metadata: [
+    eventsMetadata: [
       {
-        event_code:
+        eventCode:
           "com.adobe.commerce.observer.catalog_product_delete_commit_after",
         label:
           "com.adobe.commerce.observer.catalog_product_delete_commit_after",
         description:
           "Event triggered after a product is deleted in Adobe Commerce",
-        sample_event_template:
+        sampleEventTemplate:
           eventTemplates[
             "com.adobe.commerce.observer.catalog_product_delete_commit_after"
           ].value,
       },
       {
-        event_code:
+        eventCode:
           "com.adobe.commerce.observer.catalog_product_save_commit_after",
         label: "com.adobe.commerce.observer.catalog_product_save_commit_after",
         description:
           "Event triggered after a product is saved in Adobe Commerce",
-        sample_event_template:
+        sampleEventTemplate:
           eventTemplates[
             "com.adobe.commerce.observer.catalog_product_save_commit_after"
           ].value,
@@ -63,21 +63,21 @@ const DEFAULT_PROVIDERS = [
     key: "backoffice",
     id: "BACKOFFICE_PROVIDER_ID",
     label: "Backoffice Provider",
-    events_metadata: [
+    eventsMetadata: [
       {
-        event_code: "be-observer.catalog_product_create",
+        eventCode: "be-observer.catalog_product_create",
         label: "be-observer.catalog_product_create",
         description:
           "Event triggered when a product is created in the backoffice system",
-        sample_event_template:
+        sampleEventTemplate:
           eventTemplates["be-observer.catalog_product_create"],
       },
       {
-        event_code: "be-observer.catalog_product_update",
+        eventCode: "be-observer.catalog_product_update",
         label: "be-observer.catalog_product_update",
         description:
           "Event triggered when a product is updated in the backoffice system",
-        sample_event_template:
+        sampleEventTemplate:
           eventTemplates["be-observer.catalog_product_update"],
       },
     ],

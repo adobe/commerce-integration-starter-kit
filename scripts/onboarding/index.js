@@ -159,7 +159,9 @@ async function main() {
 
   const providers = createProvidersResult.result.map((provider) => {
     const configProvider = config.eventing.providers.find(
-      (p) => p.provider_metadata === provider.provider_metadata,
+      (p) =>
+        p.id === provider.id ||
+        p.providerMetadata === provider.providerMetadata,
     );
     return {
       ...configProvider,
@@ -181,23 +183,23 @@ async function main() {
 
   console.log(
     "Onboarding completed successfully:",
-    providers.map(({ events_metadata, ...provider }) => provider),
+    providers.map(({ eventsMetadata, ...provider }) => provider),
   );
   console.log(
     "Starting the process of configuring Adobe I/O Events module in Commerce...",
   );
 
   const commerceProvider = providers.find(
-    (p) => p.provider_metadata === "dx_commerce_events",
+    (p) => p.providerMetadata === "dx_commerce_events",
   );
 
   upsertEnvFile(".env", {
     COMMERCE_PROVIDER_ID: commerceProvider.id,
     BACKOFFICE_PROVIDER_ID: providers.find(
-      (p) => p.provider_metadata === "3rd_party_custom_events",
+      (p) => p.providerMetadata === "3rd_party_custom_events",
     ).id,
     AIO_EVENTS_PROVIDERMETADATA_TO_PROVIDER_MAPPING: providers
-      .map((p) => `${p.provider_metadata}:${p.id}`)
+      .map((p) => `${p.providerMetadata}:${p.id}`)
       .join(","),
   });
 
@@ -245,7 +247,7 @@ async function main() {
     "Process of configuring Adobe I/O Events module in Commerce completed successfully",
   );
   return {
-    providers: providers.map(({ events_metadata, ...provider }) => provider),
+    providers: providers.map(({ eventsMetadata, ...provider }) => provider),
   };
 }
 

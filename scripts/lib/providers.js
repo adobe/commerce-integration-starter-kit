@@ -38,10 +38,10 @@ async function createProvider(environment, authHeaders, provider) {
     },
     body: JSON.stringify({
       description: provider?.description || "",
-      provider_metadata: provider?.provider_metadata,
+      provider_metadata: provider?.providerMetadata,
       label: provider?.label,
-      docs_url: provider?.docs_url || null,
-      ...(provider?.provider_metadata === "dx_commerce_events" && {
+      docs_url: provider?.docsUrl || null,
+      ...(provider?.providerMetadata === "dx_commerce_events" && {
         instance_id: `${uuid.v4()}`,
       }),
     }),
@@ -110,8 +110,8 @@ async function main({ eventing: { providers } }, environment, authHeaders) {
         result.push({
           id: persistedProvider.id,
           label,
-          provider_metadata: persistedProvider.provider_metadata,
-          instance_id: persistedProvider.instance_id,
+          providerMetadata: persistedProvider.provider_metadata,
+          instanceId: persistedProvider.instance_id,
         });
 
         continue;
@@ -132,14 +132,14 @@ async function main({ eventing: { providers } }, environment, authHeaders) {
       result.push({
         id: createProviderResult.provider?.id,
         label,
-        provider_metadata: createProviderResult.provider?.provider_metadata,
-        instance_id: createProviderResult.provider?.instance_id,
+        providerMetadata: createProviderResult.provider?.provider_metadata,
+        instanceId: createProviderResult.provider?.instance_id,
       });
     }
 
     for (const provider of result) {
       console.log(
-        `Defining the provider with key: ${provider.provider_metadata} as: ${provider.id}`,
+        `Defining the provider with key: ${provider.providerMetadata} as: ${provider.id}`,
       );
     }
 

@@ -27,7 +27,7 @@ async function main(commerceProvider, workspaceConfiguration) {
       merchant_id: process.env.COMMERCE_ADOBE_IO_EVENTS_MERCHANT_ID,
       environment_id: "Stage",
       provider_id: commerceProvider.id,
-      instance_id: commerceProvider.instance_id,
+      instance_id: commerceProvider.instanceId,
       workspace_configuration: JSON.stringify(workspaceConfiguration),
     },
   };
