@@ -112,7 +112,7 @@ async function addCommerceEventProvider(
     },
   });
   console.log(
-    `\nAdded non-default provider with id "${commerceProvider.id}" and instance id "${commerceProvider.instance_id}" to the commerce instance`,
+    `\nAdded non-default provider with id "${commerceProvider.id}" and instance id "${commerceProvider.instanceId}" to the commerce instance`,
   );
 }
 
