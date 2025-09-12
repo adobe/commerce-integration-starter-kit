@@ -105,7 +105,7 @@ async function addCommerceEventProvider(
   await addEventProvider(environment.COMMERCE_BASE_URL, environment, {
     eventProvider: {
       provider_id: commerceProvider.id,
-      instance_id: commerceProvider.instance_id,
+      instance_id: commerceProvider.instanceId,
       label: commerceProvider.label,
       description: commerceProvider.description,
       workspace_configuration: JSON.stringify(workspaceConfiguration),
