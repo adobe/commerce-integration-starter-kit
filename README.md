@@ -247,6 +247,10 @@ application:
 
 To start the process run the command:
 
+> [!NOTE]
+>
+> If you have a pre-existing Commerce and Backoffice Provider, you can assign them in the .env as COMMERCE_PROVIDER_ID and BACKOFFICE_PROVIDER_ID respectively to skip the provider creation step in the onboarding process.
+
 ```bash
 aio app deploy
 ```

@@ -105,14 +105,14 @@ async function addCommerceEventProvider(
   await addEventProvider(environment.COMMERCE_BASE_URL, environment, {
     eventProvider: {
       provider_id: commerceProvider.id,
-      instance_id: commerceProvider.instance_id,
+      instance_id: commerceProvider.instanceId,
       label: commerceProvider.label,
       description: commerceProvider.description,
       workspace_configuration: JSON.stringify(workspaceConfiguration),
     },
   });
   console.log(
-    `\nAdded non-default provider with id "${commerceProvider.id}" and instance id "${commerceProvider.instance_id}" to the commerce instance`,
+    `\nAdded non-default provider with id "${commerceProvider.id}" and instance id "${commerceProvider.instanceId}" to the commerce instance`,
   );
 }
 
