@@ -333,4 +333,168 @@ describe("onboarding index", () => {
       "../../../scripts/onboarding/config/starter-kit-registrations.json",
     );
   });
+
+  test("should print an error when workspace.json file is missing", async () => {
+    // Mock all required dependencies for this test
+    const { assertImsAuthParams } = jest.requireActual(
+      "@adobe/aio-commerce-lib-auth",
+    );
+    jest.doMock("@adobe/aio-commerce-lib-auth", () => ({
+      __esModule: true,
+      getImsAuthProvider: jest.fn().mockReturnValue({
+        getHeaders: jest.fn().mockResolvedValue({
+          Authorization: "Bearer test-token",
+          "x-api-key": "test-api-key",
+        }),
+      }),
+      assertImsAuthParams,
+    }));
+
+    jest.doMock("../../../scripts/lib/providers", () => ({
+      main: jest.fn().mockResolvedValue({
+        success: true,
+        result: [
+          {
+            key: "commerce",
+            id: "COMMERCE_PROVIDER_ID",
+            instanceId: "AC_INSTANCE_ID",
+            label: "Commerce Provider - test",
+          },
+          {
+            key: "backoffice",
+            id: "BACKOFFICE_PROVIDER_ID",
+            instanceId: "BO_INSTANCE_ID",
+            label: "Backoffice Provider - test",
+          },
+        ],
+      }),
+    }));
+
+    jest.doMock("../../../scripts/lib/metadata", () => ({
+      main: jest.fn().mockResolvedValue({
+        success: true,
+        result: [
+          {
+            entity: "product",
+            label: "Commerce Provider",
+          },
+          {
+            entity: "product",
+            label: "Backoffice Provider",
+          },
+        ],
+      }),
+    }));
+
+    jest.doMock("../../../scripts/lib/registrations", () => ({
+      main: jest.fn().mockResolvedValue({
+        success: true,
+        registrations: ["product", "customer", "order", "stock"],
+      }),
+    }));
+
+    jest.doMock("../../../scripts/lib/configure-eventing", () => ({
+      main: jest.fn().mockResolvedValue({
+        success: true,
+      }),
+    }));
+
+    jest.doMock(
+      "../../../scripts/onboarding/config/starter-kit-registrations.json",
+      () => ({
+        product: ["commerce", "backoffice"],
+        customer: ["commerce"],
+        order: ["commerce"],
+        stock: ["commerce"],
+      }),
+      { virtual: true },
+    );
+
+    // Mock workspace.json to throw MODULE_NOT_FOUND error
+    jest.doMock(
+      "../../../scripts/onboarding/config/workspace.json",
+      () => {
+        const error = new Error(
+          "Cannot find module '../../../scripts/onboarding/config/workspace.json'",
+        );
+        error.code = "MODULE_NOT_FOUND";
+        throw error;
+      },
+      { virtual: true },
+    );
+
+    // Set up required environment variables
+    const mockEnv = {
+      COMMERCE_BASE_URL: "https://commerce.test/",
+      IO_CONSUMER_ID: "test-consumer-id",
+      IO_WORKSPACE_ID: "test-workspace-id",
+      IO_PROJECT_ID: "test-project-id",
+      EVENT_PREFIX: "test-prefix",
+      IO_MANAGEMENT_BASE_URL: "https://io-management.test/",
+      OAUTH_CLIENT_ID: "test-client-id",
+      OAUTH_CLIENT_SECRET: "test-client-secret",
+      OAUTH_TECHNICAL_ACCOUNT_ID: "test-tech-account-id",
+      OAUTH_TECHNICAL_ACCOUNT_EMAIL: "test@example.com",
+      OAUTH_ORG_ID: "test-org-id",
+    };
+    jest.replaceProperty(process, "env", mockEnv);
+    jest.resetModules();
+
+    const {
+      main: onboardingMain,
+    } = require("../../../scripts/onboarding/index");
+    const result = await onboardingMain();
+
+    // Verify the error flow
+    expect(result).toBeUndefined();
+    expect(consoleErrorSpy).toHaveBeenCalled();
+
+    const errorCalls = consoleErrorSpy.mock.calls;
+    const errorMessages = errorCalls.map((call) => call.join(" "));
+    const fullErrorMessage = ansis.strip(errorMessages.join(" "));
+
+    // Verify error message contains expected content
+    expect(fullErrorMessage).toContain("CONFIGURE_EVENTING");
+    expect(fullErrorMessage).toContain("MISSING_WORKSPACE_FILE");
+    expect(fullErrorMessage).toContain(
+      'The "workspace.json" file was not found.',
+    );
+    expect(fullErrorMessage).toContain(
+      "scripts/onboarding/config/workspace.json",
+    );
+    expect(fullErrorMessage).toContain(
+      "https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file",
+    );
+    expect(fullErrorMessage).toContain(
+      'make sure the file is named "workspace.json"',
+    );
+
+    // Verify success messages up to the point of failure
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "Starting the process of on-boarding based on your registration choices",
+    );
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "Onboarding completed successfully:",
+      expect.any(Array),
+    );
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "Starting the process of configuring Adobe I/O Events module in Commerce...",
+    );
+
+    // Verify final success message was NOT logged (because workspace.json failed)
+    expect(consoleLogSpy).not.toHaveBeenCalledWith(
+      "Process of configuring Adobe I/O Events module in Commerce completed successfully",
+    );
+
+    // Clean up mocks
+    jest.dontMock("../../../utils/adobe-auth");
+    jest.dontMock("../../../scripts/lib/providers");
+    jest.dontMock("../../../scripts/lib/metadata");
+    jest.dontMock("../../../scripts/lib/registrations");
+    jest.dontMock("../../../scripts/lib/configure-eventing");
+    jest.dontMock("../../../scripts/onboarding/config/workspace.json");
+    jest.dontMock(
+      "../../../scripts/onboarding/config/starter-kit-registrations.json",
+    );
+  });
 });

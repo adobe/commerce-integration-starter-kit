@@ -217,14 +217,15 @@ async function main() {
               'Also, make sure the file is named "workspace.json".',
             ],
           },
-        ),
+        ).error,
       );
 
       return;
     }
 
     logConfigureEventingError(
-      makeError("UNEXPECTED_ERROR", "An unexpected error occurred", { error }),
+      makeError("UNEXPECTED_ERROR", "An unexpected error occurred", { error })
+        .error,
     );
 
     return;
