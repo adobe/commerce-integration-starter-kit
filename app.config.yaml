@@ -1,5 +1,67 @@
+application:
+#  hooks:
+#    post-app-deploy: ./hooks/post-app-deploy.js
+  runtimeManifest:
+    packages:
+      starter-kit:
+        license: Apache-2.0
+        actions:
+          # Please DO NOT DELETE this action; future functionalities planned for upcoming starter kit releases may stop working.
+          info:
+            function: actions/starter-kit-info/index.js
+            web: 'yes'
+            runtime: nodejs:22
+            inputs:
+              LOG_LEVEL: debug
+            annotations:
+              require-adobe-auth: true
+              final: true
+      #  ingestion:
+      #    license: Apache-2.0
+      #    actions:
+      #      $include: ./actions/ingestion/actions.config.yaml
+      webhook:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/webhook/actions.config.yaml
+      product-commerce:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/product/commerce/actions.config.yaml
+      product-backoffice:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/product/external/actions.config.yaml
+      customer-commerce:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/customer/commerce/actions.config.yaml
+      customer-backoffice:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/customer/external/actions.config.yaml
+      order-commerce:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/order/commerce/actions.config.yaml
+      order-backoffice:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/order/external/actions.config.yaml
+      stock-commerce:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/stock/commerce/actions.config.yaml
+      stock-backoffice:
+        license: Apache-2.0
+        actions:
+          $include: ./actions/stock/external/actions.config.yaml
+productDependencies:
+  - code: COMMC
+    minVersion: 2.4.4
+
 extensions:
   commerce/configuration/1:
-    $include: ext.config.yaml
+    $include: extensions/commerce-configuration-1/ext.config.yaml
     hooks:
       pre-app-build: node_modules/@adobe/aio-commerce-lib-config/dist/cjs/hooks/pre-app-build.cjs
