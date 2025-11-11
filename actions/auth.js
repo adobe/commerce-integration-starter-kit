@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const { Core } = require("@adobe/aio-sdk");
+const { parseArrayParam } = require("./utils");
 const logger = Core.Logger("auth", { level: "info" });
 /**
  *
@@ -96,9 +97,13 @@ function fromParams(params) {
     ]);
     const {
       AIO_COMMERCE_AUTH_IMS_CLIENT_ID: clientId,
-      AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: clientSecrets,
-      AIO_COMMERCE_AUTH_IMS_SCOPES: scopes,
+      AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: clientSecretsRaw,
+      AIO_COMMERCE_AUTH_IMS_SCOPES: scopesRaw,
     } = params;
+
+    // Parse JSON strings to arrays
+    const clientSecrets = parseArrayParam(clientSecretsRaw, []);
+    const scopes = parseArrayParam(scopesRaw, ["AdobeID", "openid"]);
 
     const imsProps = {
       clientId,

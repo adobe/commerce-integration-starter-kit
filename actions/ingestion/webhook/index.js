@@ -85,7 +85,7 @@ async function main(params) {
 
     logger.debug("Initiate events client");
     const eventsClient = await Events.init(
-      params.AIO_COMMERCE_AUTH_IMS_IMS_ORG_ID,
+      params.AIO_COMMERCE_AUTH_IMS_ORG_ID,
       params.AIO_COMMERCE_AUTH_IMS_CLIENT_ID,
       accessToken,
     );

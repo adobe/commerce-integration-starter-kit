@@ -69,7 +69,7 @@ const validEnvParams = {
   ],
   AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID: "example@adobe-ds.com",
   AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL: "example2@adobe-ds.com",
-  AIO_COMMERCE_AUTH_IMS_IMS_ORG_ID: "AIO_COMMERCE_AUTH_IMS_IMS_ORG_ID",
+  AIO_COMMERCE_AUTH_IMS_ORG_ID: "AIO_COMMERCE_AUTH_IMS_ORG_ID",
 };
 
 /**
@@ -154,7 +154,7 @@ describe("Given external backoffice events ingestion webhook", () => {
   describe("When received data information is invalid", () => {
     test("Then returns error response", async () => {
       const params = {
-        AIO_COMMERCE_AUTH_IMS_IMS_ORG_ID: "AIO_COMMERCE_AUTH_IMS_IMS_ORG_ID",
+        AIO_COMMERCE_AUTH_IMS_ORG_ID: "AIO_COMMERCE_AUTH_IMS_ORG_ID",
         AIO_COMMERCE_AUTH_IMS_CLIENT_ID: "AIO_COMMERCE_AUTH_IMS_CLIENT_ID",
         AIO_runtime_namespace: "eistarterkitv1",
       };
@@ -436,7 +436,7 @@ describe("Given external backoffice events ingestion webhook", () => {
 
       await action.main(params);
       expect(Events.init).toHaveBeenCalledWith(
-        "AIO_COMMERCE_AUTH_IMS_IMS_ORG_ID",
+        "AIO_COMMERCE_AUTH_IMS_ORG_ID",
         "AIO_COMMERCE_AUTH_IMS_CLIENT_ID",
         "access token",
       );

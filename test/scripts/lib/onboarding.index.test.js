@@ -103,7 +103,7 @@ describe("onboarding index", () => {
       AIO_COMMERCE_AUTH_IMS_CLIENT_ID: "test-client-id",
       AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID: "test-tech-account-id",
       AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL: "test@example.com",
-      AIO_COMMERCE_AUTH_IMS_IMS_ORG_ID: "test-org-id",
+      AIO_COMMERCE_AUTH_IMS_ORG_ID: "test-org-id",
     };
     jest.replaceProperty(process, "env", mockEnv);
     const result = await main();
@@ -144,7 +144,7 @@ describe("onboarding index", () => {
       AIO_COMMERCE_AUTH_IMS_CLIENT_ID: "test-client-id",
       AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID: "test-tech-account-id",
       AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL: "test@example.com",
-      AIO_COMMERCE_AUTH_IMS_IMS_ORG_ID: "test-org-id",
+      AIO_COMMERCE_AUTH_IMS_ORG_ID: "test-org-id",
       AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: [""],
     };
     jest.replaceProperty(process, "env", mockEnv);
