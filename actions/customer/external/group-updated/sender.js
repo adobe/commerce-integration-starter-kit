@@ -26,7 +26,7 @@ const {
 async function sendData(params, transformed, preProcessed) {
   try {
     const response = await updateCustomerGroup(
-      params.COMMERCE_BASE_URL,
+      params.AIO_COMMERCE_API_BASE_URL,
       params,
       transformed,
     );

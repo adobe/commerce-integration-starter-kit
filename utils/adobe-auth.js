@@ -34,14 +34,12 @@ const DEFAULT_IMS_SCOPES = [
  */
 function resolveImsConfig(params) {
   return {
-    clientId: params.OAUTH_CLIENT_ID,
-    clientSecrets: params.OAUTH_CLIENT_SECRET
-      ? [params.OAUTH_CLIENT_SECRET]
-      : [],
-    technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
-    technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
-    imsOrgId: params.OAUTH_ORG_ID,
-    scopes: DEFAULT_IMS_SCOPES,
+    clientId: params.AIO_COMMERCE_AUTH_IMS_CLIENT_ID,
+    clientSecrets: params.AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS || [],
+    technicalAccountId: params.AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID,
+    technicalAccountEmail: params.AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL,
+    imsOrgId: params.AIO_COMMERCE_AUTH_IMS_IMS_ORG_ID,
+    scopes: params.AIO_COMMERCE_AUTH_IMS_SCOPES || DEFAULT_IMS_SCOPES,
     environment: params.AIO_CLI_ENV || "prod",
   };
 }

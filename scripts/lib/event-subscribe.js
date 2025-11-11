@@ -37,7 +37,11 @@ async function main(eventSpec, environment) {
   eventSpec.event.name = getEventName(eventSpec.event.name, environment);
 
   try {
-    await eventSubscribe(environment.COMMERCE_BASE_URL, environment, eventSpec);
+    await eventSubscribe(
+      environment.AIO_COMMERCE_API_BASE_URL,
+      environment,
+      eventSpec,
+    );
 
     return {
       success: true,
@@ -47,7 +51,7 @@ async function main(eventSpec, environment) {
     let reason =
       "Unexpected error occurred while subscribing to an event in the Adobe I/O Events module in Commerce";
     const hints = [
-      "Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL",
+      "Make sure your authentication environment parameters are correct. Also check the AIO_COMMERCE_API_BASE_URL",
     ];
 
     if (error?.message?.includes("Response code 400 (Bad Request)")) {

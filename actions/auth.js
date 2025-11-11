@@ -55,21 +55,22 @@ function validateParams(params, expected) {
 function fromParams(params) {
   // `aio app dev` compatibility: inputs mapped to undefined env vars come as $<input_name> in dev mode, but as '' in prod mode
   if (
-    params.COMMERCE_CONSUMER_KEY &&
-    params.COMMERCE_CONSUMER_KEY !== "$COMMERCE_CONSUMER_KEY"
+    params.AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_KEY &&
+    params.AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_KEY !==
+      "$AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_KEY"
   ) {
     logger.info("Commerce client is using Commerce OAuth1 authentication");
     validateParams(params, [
-      "COMMERCE_CONSUMER_KEY",
-      "COMMERCE_CONSUMER_SECRET",
-      "COMMERCE_ACCESS_TOKEN",
-      "COMMERCE_ACCESS_TOKEN_SECRET",
+      "AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_KEY",
+      "AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_SECRET",
+      "AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN",
+      "AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN_SECRET",
     ]);
     const {
-      COMMERCE_CONSUMER_KEY: consumerKey,
-      COMMERCE_CONSUMER_SECRET: consumerSecret,
-      COMMERCE_ACCESS_TOKEN: accessToken,
-      COMMERCE_ACCESS_TOKEN_SECRET: accessTokenSecret,
+      AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_KEY: consumerKey,
+      AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_SECRET: consumerSecret,
+      AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN: accessToken,
+      AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN_SECRET: accessTokenSecret,
     } = params;
     return {
       commerceOAuth1: {
@@ -82,22 +83,28 @@ function fromParams(params) {
   }
 
   // `aio app dev` compatibility: inputs mapped to undefined env vars come as $<input_name> in dev mode, but as '' in prod mode
-  if (params.OAUTH_CLIENT_ID && params.OAUTH_CLIENT_ID !== "$OAUTH_CLIENT_ID") {
+  if (
+    params.AIO_COMMERCE_AUTH_IMS_CLIENT_ID &&
+    params.AIO_COMMERCE_AUTH_IMS_CLIENT_ID !==
+      "$AIO_COMMERCE_AUTH_IMS_CLIENT_ID"
+  ) {
     logger.info("Commerce client is using IMS OAuth authentication");
     validateParams(params, [
-      "OAUTH_CLIENT_ID",
-      "OAUTH_CLIENT_SECRET",
-      "OAUTH_SCOPES",
+      "AIO_COMMERCE_AUTH_IMS_CLIENT_ID",
+      "AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS",
+      "AIO_COMMERCE_AUTH_IMS_SCOPES",
     ]);
     const {
-      OAUTH_CLIENT_ID: clientId,
-      OAUTH_CLIENT_SECRET: clientSecret,
-      OAUTH_SCOPES: scopes,
+      AIO_COMMERCE_AUTH_IMS_CLIENT_ID: clientId,
+      AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: clientSecrets,
+      AIO_COMMERCE_AUTH_IMS_SCOPES: scopes,
     } = params;
 
     const imsProps = {
       clientId,
-      clientSecret,
+      clientSecret: Array.isArray(clientSecrets)
+        ? clientSecrets[0]
+        : clientSecrets,
       scopes,
     };
     if (params.OAUTH_HOST) {
