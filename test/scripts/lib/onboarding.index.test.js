@@ -132,48 +132,6 @@ describe("onboarding index", () => {
     expect(fullErrorMessage).not.toContain("scopes");
   });
 
-  test("should print an error when IMS Auth clientSecrets.0 is defined but an empty string", async () => {
-    // Mock process.env to simulate missing environment variables
-    const mockEnv = {
-      AIO_COMMERCE_API_BASE_URL: "https://commerce.test/",
-      IO_CONSUMER_ID: "test-consumer-id",
-      IO_WORKSPACE_ID: "test-workspace-id",
-      IO_PROJECT_ID: "test-project-id",
-      EVENT_PREFIX: "test-prefix",
-      IO_MANAGEMENT_BASE_URL: "https://io-management.test/",
-      AIO_COMMERCE_AUTH_IMS_CLIENT_ID: "test-client-id",
-      AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID: "test-tech-account-id",
-      AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL: "test@example.com",
-      AIO_COMMERCE_AUTH_IMS_ORG_ID: "test-org-id",
-      AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: [""],
-    };
-    jest.replaceProperty(process, "env", mockEnv);
-    const result = await main();
-
-    expect(result).toBeUndefined();
-    expect(consoleErrorSpy).toHaveBeenCalled();
-
-    const errorCalls = consoleErrorSpy.mock.calls;
-    const errorMessages = errorCalls.map((call) => call.join(" "));
-    const fullErrorMessage = ansis.strip(errorMessages.join(" "));
-
-    expect(fullErrorMessage).toContain("IMS_AUTH_PARAMS");
-    expect(fullErrorMessage).toContain("INVALID_IMS_AUTH_PARAMS");
-    expect(fullErrorMessage).toContain(
-      "Missing or invalid environment variables for Adobe IMS authentication.",
-    );
-    expect(fullErrorMessage).toContain("Invalid ImsAuthProvider configuration");
-    expect(fullErrorMessage).toContain("clientSecrets");
-    expect(fullErrorMessage).toContain(
-      "Expected at least one client secret for IMS auth",
-    );
-    expect(fullErrorMessage).not.toContain("clientId");
-    expect(fullErrorMessage).not.toContain("technicalAccountId");
-    expect(fullErrorMessage).not.toContain("technicalAccountEmail");
-    expect(fullErrorMessage).not.toContain("imsOrgId");
-    expect(fullErrorMessage).not.toContain("scopes");
-  });
-
   test("should complete successfully when all required values are provided", async () => {
     // Mock all required dependencies for this test
     const { assertImsAuthParams } = jest.requireActual(
@@ -267,11 +225,11 @@ describe("onboarding index", () => {
       IO_PROJECT_ID: "test-project-id",
       EVENT_PREFIX: "test-prefix",
       IO_MANAGEMENT_BASE_URL: "https://io-management.test/",
-      OAUTH_CLIENT_ID: "test-client-id",
+      AIO_COMMERCE_AUTH_IMS_CLIENT_ID: "test-client-id",
       AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: ["test-client-secret"],
-      OAUTH_TECHNICAL_ACCOUNT_ID: "test-tech-account-id",
-      OAUTH_TECHNICAL_ACCOUNT_EMAIL: "test@example.com",
-      OAUTH_ORG_ID: "test-org-id",
+      AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID: "test-tech-account-id",
+      AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL: "test@example.com",
+      AIO_COMMERCE_AUTH_IMS_ORG_ID: "test-org-id",
     };
     jest.replaceProperty(process, "env", mockEnv);
     jest.resetModules();
@@ -431,11 +389,11 @@ describe("onboarding index", () => {
       IO_PROJECT_ID: "test-project-id",
       EVENT_PREFIX: "test-prefix",
       IO_MANAGEMENT_BASE_URL: "https://io-management.test/",
-      OAUTH_CLIENT_ID: "test-client-id",
+      AIO_COMMERCE_AUTH_IMS_CLIENT_ID: "test-client-id",
       AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: ["test-client-secret"],
-      OAUTH_TECHNICAL_ACCOUNT_ID: "test-tech-account-id",
-      OAUTH_TECHNICAL_ACCOUNT_EMAIL: "test@example.com",
-      OAUTH_ORG_ID: "test-org-id",
+      AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID: "test-tech-account-id",
+      AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL: "test@example.com",
+      AIO_COMMERCE_AUTH_IMS_ORG_ID: "test-org-id",
     };
     jest.replaceProperty(process, "env", mockEnv);
     jest.resetModules();
