@@ -13,7 +13,7 @@
   "dependencies": {
     "@adobe/aio-commerce-lib-api": "^0.3.0",
     "@adobe/aio-commerce-lib-config": "^0.5.0",
-    "@adobe/aio-commerce-lib-auth": "^0.3.3",
+    "@adobe/aio-commerce-lib-auth": "^0.6.0",
     "@adobe/aio-commerce-lib-core": "^0.5.0",
     "@adobe/aio-lib-ims": "^8.0.0",
     "@adobe/aio-lib-state": "^5.1.0",
