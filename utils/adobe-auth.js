@@ -13,7 +13,8 @@ governing permissions and limitations under the License.
 const {
   assertImsAuthParams,
   getImsAuthProvider,
-} = require("@adobe/aio-commerce-lib-auth");
+} = require("@adobe/aio-commerce-sdk/auth");
+const { parseArrayParam } = require("../actions/utils");
 
 const DEFAULT_IMS_SCOPES = [
   "AdobeID",
@@ -33,15 +34,21 @@ const DEFAULT_IMS_SCOPES = [
  * @returns IMS authentication configuration object
  */
 function resolveImsConfig(params) {
+  const clientSecrets = parseArrayParam(
+    params.AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS,
+    [],
+  ).filter((secret) => secret.trim() !== "");
+
   return {
-    clientId: params.OAUTH_CLIENT_ID,
-    clientSecrets: params.OAUTH_CLIENT_SECRET
-      ? [params.OAUTH_CLIENT_SECRET]
-      : [],
-    technicalAccountId: params.OAUTH_TECHNICAL_ACCOUNT_ID,
-    technicalAccountEmail: params.OAUTH_TECHNICAL_ACCOUNT_EMAIL,
-    imsOrgId: params.OAUTH_ORG_ID,
-    scopes: DEFAULT_IMS_SCOPES,
+    clientId: params.AIO_COMMERCE_AUTH_IMS_CLIENT_ID,
+    clientSecrets,
+    technicalAccountId: params.AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID,
+    technicalAccountEmail: params.AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL,
+    imsOrgId: params.AIO_COMMERCE_AUTH_IMS_ORG_ID,
+    scopes: parseArrayParam(
+      params.AIO_COMMERCE_AUTH_IMS_SCOPES,
+      DEFAULT_IMS_SCOPES,
+    ),
     environment: params.AIO_CLI_ENV || "prod",
   };
 }

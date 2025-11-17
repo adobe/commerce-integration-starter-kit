@@ -8,10 +8,10 @@ describe("getClient", () => {
       {
         url: "http://localhost:9000",
         params: {
-          COMMERCE_CONSUMER_KEY: "key",
-          COMMERCE_CONSUMER_SECRET: "secret",
-          COMMERCE_ACCESS_TOKEN: "secret",
-          COMMERCE_ACCESS_TOKEN_SECRET: "secret",
+          AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_KEY: "key",
+          AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_SECRET: "secret",
+          AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN: "secret",
+          AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN_SECRET: "secret",
         },
       },
       console,
@@ -39,10 +39,10 @@ describe("getClient", () => {
       {
         url: "http://commerce.adobe.io/",
         params: {
-          COMMERCE_CONSUMER_KEY: "key",
-          COMMERCE_CONSUMER_SECRET: "secret",
-          COMMERCE_ACCESS_TOKEN: "secret",
-          COMMERCE_ACCESS_TOKEN_SECRET: "secret",
+          AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_KEY: "key",
+          AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_SECRET: "secret",
+          AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN: "secret",
+          AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN_SECRET: "secret",
         },
       },
       console,
@@ -69,9 +69,9 @@ describe("getClient", () => {
       {
         url: "http://commerce.adobe.io/",
         params: {
-          OAUTH_CLIENT_ID: "client-id",
-          OAUTH_CLIENT_SECRET: "client-secret",
-          OAUTH_SCOPES: ["scope1", "scope2"],
+          AIO_COMMERCE_AUTH_IMS_CLIENT_ID: "client-id",
+          AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: ["client-secret"],
+          AIO_COMMERCE_AUTH_IMS_SCOPES: ["scope1", "scope2"],
         },
       },
       console,

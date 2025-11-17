@@ -118,8 +118,31 @@ function checkMissingRequestInputs(
   return errorMessage;
 }
 
+/**
+ * Parse JSON string to array, fallback to default if invalid
+ * @param {string|Array} value - Value to parse (could be JSON string or already an array)
+ * @param {Array} defaultValue - Default value if parsing fails
+ * @returns {Array} Parsed array or default value
+ */
+function parseArrayParam(value, defaultValue = []) {
+  if (Array.isArray(value)) {
+    return value;
+  }
+  if (typeof value === "string" && value.trim()) {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : defaultValue;
+    } catch {
+      // If it's not JSON, treat as single value array
+      return [value];
+    }
+  }
+  return defaultValue;
+}
+
 module.exports = {
   stringParameters,
   getMissingKeys,
   checkMissingRequestInputs,
+  parseArrayParam,
 };

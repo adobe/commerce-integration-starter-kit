@@ -24,7 +24,7 @@ const { HTTP_INTERNAL_ERROR } = require("../../../constants");
 async function sendData(params, transformed, preProcessed) {
   try {
     const response = await deleteCustomer(
-      params.COMMERCE_BASE_URL,
+      params.AIO_COMMERCE_API_BASE_URL,
       params,
       transformed,
     );

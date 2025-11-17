@@ -67,7 +67,7 @@ async function main(params) {
 
     const authHeaders = {
       Authorization: `Bearer ${accessToken}`,
-      "x-api-key": params.OAUTH_CLIENT_ID,
+      "x-api-key": params.AIO_COMMERCE_AUTH_IMS_CLIENT_ID,
     };
 
     logger.debug("Get existing registrations");
@@ -85,8 +85,8 @@ async function main(params) {
 
     logger.debug("Initiate events client");
     const eventsClient = await Events.init(
-      params.OAUTH_ORG_ID,
-      params.OAUTH_CLIENT_ID,
+      params.AIO_COMMERCE_AUTH_IMS_ORG_ID,
+      params.AIO_COMMERCE_AUTH_IMS_CLIENT_ID,
       accessToken,
     );
 

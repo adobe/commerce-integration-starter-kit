@@ -3,26 +3,31 @@ const { validateParams, fromParams } = require("../..//actions/auth");
 describe("validateParams", () => {
   it("should throw error if missing params", () => {
     const params = {
-      OAUTH_CLIENT_ID: "client-id",
-    };
-
-    expect(() => {
-      validateParams(params, ["OAUTH_CLIENT_ID", "OAUTH_CLIENT_SECRET"]);
-    }).toThrow("Expected parameters are missing OAUTH_CLIENT_SECRET");
-  });
-
-  it("should not throw error if params are not missing", () => {
-    const params = {
-      OAUTH_CLIENT_ID: "client-id",
-      OAUTH_CLIENT_SECRET: "client-secret",
-      OAUTH_SCOPES: ["scope1", "scope2"],
+      AIO_COMMERCE_AUTH_IMS_CLIENT_ID: "client-id",
     };
 
     expect(() => {
       validateParams(params, [
-        "OAUTH_CLIENT_ID",
-        "OAUTH_CLIENT_SECRET",
-        "OAUTH_SCOPES",
+        "AIO_COMMERCE_AUTH_IMS_CLIENT_ID",
+        "AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS",
+      ]);
+    }).toThrow(
+      "Expected parameters are missing AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS",
+    );
+  });
+
+  it("should not throw error if params are not missing", () => {
+    const params = {
+      AIO_COMMERCE_AUTH_IMS_CLIENT_ID: "client-id",
+      AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: ["client-secret"],
+      AIO_COMMERCE_AUTH_IMS_SCOPES: ["scope1", "scope2"],
+    };
+
+    expect(() => {
+      validateParams(params, [
+        "AIO_COMMERCE_AUTH_IMS_CLIENT_ID",
+        "AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS",
+        "AIO_COMMERCE_AUTH_IMS_SCOPES",
       ]);
     }).not.toThrow();
   });
@@ -31,9 +36,9 @@ describe("validateParams", () => {
 describe("fromParams", () => {
   it("can extract IMS params", () => {
     const params = {
-      OAUTH_CLIENT_ID: "client-id",
-      OAUTH_CLIENT_SECRET: "client-secret",
-      OAUTH_SCOPES: ["scope1", "scope2"],
+      AIO_COMMERCE_AUTH_IMS_CLIENT_ID: "client-id",
+      AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: ["client-secret"],
+      AIO_COMMERCE_AUTH_IMS_SCOPES: ["scope1", "scope2"],
     };
 
     expect(fromParams(params)).toEqual({
@@ -47,10 +52,11 @@ describe("fromParams", () => {
 
   it("can extract Commerce OAuth1a params", () => {
     const params = {
-      COMMERCE_CONSUMER_KEY: "commerce-consumer-key",
-      COMMERCE_CONSUMER_SECRET: "commerce-consumer-secret",
-      COMMERCE_ACCESS_TOKEN: "commerce-access-token",
-      COMMERCE_ACCESS_TOKEN_SECRET: "commerce-access-token-secret",
+      AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_KEY: "commerce-consumer-key",
+      AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_SECRET: "commerce-consumer-secret",
+      AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN: "commerce-access-token",
+      AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN_SECRET:
+        "commerce-access-token-secret",
     };
 
     expect(fromParams(params)).toEqual({

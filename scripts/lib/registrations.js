@@ -21,7 +21,7 @@ const { makeError } = require("./helpers/errors");
  * Creates event registrations based on client selections from custom/starter-kit-registrations.json
  * @param {object} clientRegistrations - Client registrations mapping entity names to provider keys
  * @param {Array<{id: string, key: string, label: string}>} providers - List of provider objects
- * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID, OAUTH_CLIENT_ID
+ * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID, AIO_COMMERCE_AUTH_IMS_CLIENT_ID
  * @param {object} authHeaders - Authentication headers for API requests
  * @returns Result object with registrations or error
  */
@@ -95,7 +95,7 @@ async function main(clientRegistrations, providers, environment, authHeaders) {
     };
   } catch (error) {
     const hints = [
-      "Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL",
+      "Make sure your authentication environment parameters are correct. Also check the AIO_COMMERCE_API_BASE_URL",
       "Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?",
     ];
 
@@ -116,7 +116,7 @@ async function main(clientRegistrations, providers, environment, authHeaders) {
  * @param {string} entityName - Entity name for the registration
  * @param {string} providerKey - Provider key identifier
  * @param {Array<{provider_id: string, event_code: string}>} events - Array of events to register
- * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID, OAUTH_CLIENT_ID
+ * @param {object} environment - Environment configuration containing IO_MANAGEMENT_BASE_URL, IO_CONSUMER_ID, IO_PROJECT_ID, IO_WORKSPACE_ID, AIO_COMMERCE_AUTH_IMS_CLIENT_ID
  * @returns  Result object with registration details or error
  */
 async function createRequestRegistration(
@@ -127,7 +127,7 @@ async function createRequestRegistration(
   environment,
 ) {
   const body = JSON.stringify({
-    client_id: `${environment.OAUTH_CLIENT_ID}`,
+    client_id: `${environment.AIO_COMMERCE_AUTH_IMS_CLIENT_ID}`,
     runtime_action: `${entityName}-${providerKey}/consumer`,
     name: getRegistrationName(providerKey, entityName),
     description: getRegistrationName(providerKey, entityName),

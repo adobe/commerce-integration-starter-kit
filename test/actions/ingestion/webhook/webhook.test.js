@@ -39,8 +39,8 @@ jest.mock("@adobe/aio-lib-ims", () => ({
   },
 }));
 
-jest.mock("@adobe/aio-commerce-lib-auth", () => {
-  const originalModule = jest.requireActual("@adobe/aio-commerce-lib-auth");
+jest.mock("@adobe/aio-commerce-sdk/auth", () => {
+  const originalModule = jest.requireActual("@adobe/aio-commerce-sdk/auth");
   return {
     __esModule: true,
     ...originalModule,
@@ -48,7 +48,7 @@ jest.mock("@adobe/aio-commerce-lib-auth", () => {
   };
 });
 
-const { getImsAuthProvider } = require("@adobe/aio-commerce-lib-auth");
+const { getImsAuthProvider } = require("@adobe/aio-commerce-sdk/auth");
 
 jest.mock("node-fetch");
 const fetch = require("node-fetch");
@@ -63,11 +63,13 @@ afterEach(() => {
 });
 
 const validEnvParams = {
-  OAUTH_CLIENT_ID: "OAUTH_CLIENT_ID",
-  OAUTH_CLIENT_SECRET: "OAUTH_CLIENT_SECRET",
-  OAUTH_TECHNICAL_ACCOUNT_ID: "example@adobe-ds.com",
-  OAUTH_TECHNICAL_ACCOUNT_EMAIL: "example2@adobe-ds.com",
-  OAUTH_ORG_ID: "OAUTH_ORG_ID",
+  AIO_COMMERCE_AUTH_IMS_CLIENT_ID: "AIO_COMMERCE_AUTH_IMS_CLIENT_ID",
+  AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: [
+    "AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS",
+  ],
+  AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID: "example@adobe-ds.com",
+  AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL: "example2@adobe-ds.com",
+  AIO_COMMERCE_AUTH_IMS_ORG_ID: "AIO_COMMERCE_AUTH_IMS_ORG_ID",
 };
 
 /**
@@ -152,8 +154,8 @@ describe("Given external backoffice events ingestion webhook", () => {
   describe("When received data information is invalid", () => {
     test("Then returns error response", async () => {
       const params = {
-        OAUTH_ORG_ID: "OAUTH_ORG_ID",
-        OAUTH_CLIENT_ID: "OAUTH_CLIENT_ID",
+        AIO_COMMERCE_AUTH_IMS_ORG_ID: "AIO_COMMERCE_AUTH_IMS_ORG_ID",
+        AIO_COMMERCE_AUTH_IMS_CLIENT_ID: "AIO_COMMERCE_AUTH_IMS_CLIENT_ID",
         AIO_runtime_namespace: "eistarterkitv1",
       };
 
@@ -434,8 +436,8 @@ describe("Given external backoffice events ingestion webhook", () => {
 
       await action.main(params);
       expect(Events.init).toHaveBeenCalledWith(
-        "OAUTH_ORG_ID",
-        "OAUTH_CLIENT_ID",
+        "AIO_COMMERCE_AUTH_IMS_ORG_ID",
+        "AIO_COMMERCE_AUTH_IMS_CLIENT_ID",
         "access token",
       );
     });
