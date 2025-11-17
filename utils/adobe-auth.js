@@ -34,12 +34,14 @@ const DEFAULT_IMS_SCOPES = [
  * @returns IMS authentication configuration object
  */
 function resolveImsConfig(params) {
+  const clientSecrets = parseArrayParam(
+    params.AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS,
+    [],
+  ).filter((secret) => secret.trim() !== "");
+
   return {
     clientId: params.AIO_COMMERCE_AUTH_IMS_CLIENT_ID,
-    clientSecrets: parseArrayParam(
-      params.AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS,
-      [],
-    ),
+    clientSecrets,
     technicalAccountId: params.AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID,
     technicalAccountEmail: params.AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL,
     imsOrgId: params.AIO_COMMERCE_AUTH_IMS_ORG_ID,

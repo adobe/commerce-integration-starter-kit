@@ -102,8 +102,10 @@ function fromParams(params) {
     } = params;
 
     // Parse JSON strings to arrays
-    const clientSecrets = parseArrayParam(clientSecretsRaw, []);
     const scopes = parseArrayParam(scopesRaw, ["AdobeID", "openid"]);
+    const clientSecrets = parseArrayParam(clientSecretsRaw, []).filter(
+      (secret) => secret.trim() !== "",
+    );
 
     const imsProps = {
       clientId,
