@@ -39,8 +39,8 @@ jest.mock("@adobe/aio-lib-ims", () => ({
   },
 }));
 
-jest.mock("@adobe/aio-commerce-lib-auth", () => {
-  const originalModule = jest.requireActual("@adobe/aio-commerce-lib-auth");
+jest.mock("@adobe/aio-commerce-sdk/auth", () => {
+  const originalModule = jest.requireActual("@adobe/aio-commerce-sdk/auth");
   return {
     __esModule: true,
     ...originalModule,
@@ -48,7 +48,7 @@ jest.mock("@adobe/aio-commerce-lib-auth", () => {
   };
 });
 
-const { getImsAuthProvider } = require("@adobe/aio-commerce-lib-auth");
+const { getImsAuthProvider } = require("@adobe/aio-commerce-sdk/auth");
 
 jest.mock("node-fetch");
 const fetch = require("node-fetch");

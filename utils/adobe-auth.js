@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 const {
   assertImsAuthParams,
   getImsAuthProvider,
-} = require("@adobe/aio-commerce-lib-auth");
+} = require("@adobe/aio-commerce-sdk/auth");
 const { parseArrayParam } = require("../actions/utils");
 
 const DEFAULT_IMS_SCOPES = [

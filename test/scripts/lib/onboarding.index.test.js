@@ -177,9 +177,9 @@ describe("onboarding index", () => {
   test("should complete successfully when all required values are provided", async () => {
     // Mock all required dependencies for this test
     const { assertImsAuthParams } = jest.requireActual(
-      "@adobe/aio-commerce-lib-auth",
+      "@adobe/aio-commerce-sdk/auth",
     );
-    jest.doMock("@adobe/aio-commerce-lib-auth", () => ({
+    jest.doMock("@adobe/aio-commerce-sdk/auth", () => ({
       __esModule: true,
       getImsAuthProvider: jest.fn().mockReturnValue({
         getHeaders: jest.fn().mockResolvedValue({
@@ -337,9 +337,9 @@ describe("onboarding index", () => {
   test("should print an error when workspace.json file is missing", async () => {
     // Mock all required dependencies for this test
     const { assertImsAuthParams } = jest.requireActual(
-      "@adobe/aio-commerce-lib-auth",
+      "@adobe/aio-commerce-sdk/auth",
     );
-    jest.doMock("@adobe/aio-commerce-lib-auth", () => ({
+    jest.doMock("@adobe/aio-commerce-sdk/auth", () => ({
       __esModule: true,
       getImsAuthProvider: jest.fn().mockReturnValue({
         getHeaders: jest.fn().mockResolvedValue({
