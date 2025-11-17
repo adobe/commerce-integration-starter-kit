@@ -64,4 +64,4 @@ extensions:
   commerce/configuration/1:
     $include: commerce-configuration-1/ext.config.yaml
     hooks:
-      pre-app-build: node_modules/@adobe/aio-commerce-lib-config/dist/cjs/hooks/pre-app-build.cjs
+      pre-app-build: npx @adobe/aio-commerce-lib-config generate schema

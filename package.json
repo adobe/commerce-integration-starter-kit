@@ -40,7 +40,9 @@
   },
   "scripts": {
     "prepare": "husky",
-    "postinstall": "npm run build --if-present --workspaces",
+    "postinstall": "npm run build --if-present --workspaces && npm run business-config:generate",
+    "business-config:generate": "npx @adobe/aio-commerce-lib-config generate all",
+    "business-config:validate": "npx @adobe/aio-commerce-lib-config validate",
     "test": "jest --passWithNoTests -c ./test/jest.config.js ./test",
     "onboard": "node --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
     "onboard:debug": "node --inspect-brk --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",

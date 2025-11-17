@@ -1,1 +1,99 @@
-{}
+operations:
+  workerProcess:
+    - type: action
+      impl: app-management/get-scope-tree
+    - type: action
+      impl: app-management/get-config-schema
+    - type: action
+      impl: app-management/get-configuration
+    - type: action
+      impl: app-management/set-configuration
+    - type: action
+      impl: app-management/set-custom-scope-tree
+    - type: action
+      impl: app-management/sync-commerce-scopes
+runtimeManifest:
+  packages:
+    app-management:
+      license: Apache-2.0
+      actions:
+        get-scope-tree:
+          function: .generated/actions/app-management/get-scope-tree.js
+          web: yes
+          runtime: nodejs:22
+          inputs:
+            LOG_LEVEL: info
+            AIO_COMMERCE_API_BASE_URL: $AIO_COMMERCE_API_BASE_URL
+            AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_KEY: $AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_KEY
+            AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_SECRET: $AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_SECRET
+            AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN: $AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN
+            AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN_SECRET: $AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN_SECRET
+            AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
+            AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: $AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS
+            AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID: $AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID
+            AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL: $AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL
+            AIO_COMMERCE_AUTH_IMS_ORG_ID: $AIO_COMMERCE_AUTH_IMS_ORG_ID
+          annotations:
+            require-adobe-auth: true
+            final: true
+        get-config-schema:
+          function: .generated/actions/app-management/get-config-schema.js
+          web: yes
+          runtime: nodejs:22
+          inputs:
+            LOG_LEVEL: info
+          annotations:
+            require-adobe-auth: true
+            final: true
+          include:
+            - - .generated/configuration-schema.json
+              - app-management/
+        get-configuration:
+          function: .generated/actions/app-management/get-configuration.js
+          web: yes
+          runtime: nodejs:22
+          inputs:
+            LOG_LEVEL: info
+          annotations:
+            require-adobe-auth: true
+            final: true
+          include:
+            - - .generated/configuration-schema.json
+              - app-management/
+        set-configuration:
+          function: .generated/actions/app-management/set-configuration.js
+          web: yes
+          runtime: nodejs:22
+          inputs:
+            LOG_LEVEL: info
+          annotations:
+            require-adobe-auth: true
+            final: true
+        set-custom-scope-tree:
+          function: .generated/actions/app-management/set-custom-scope-tree.js
+          web: yes
+          runtime: nodejs:22
+          inputs:
+            LOG_LEVEL: info
+          annotations:
+            require-adobe-auth: true
+            final: true
+        sync-commerce-scopes:
+          function: .generated/actions/app-management/sync-commerce-scopes.js
+          web: yes
+          runtime: nodejs:22
+          inputs:
+            LOG_LEVEL: info
+            AIO_COMMERCE_API_BASE_URL: $AIO_COMMERCE_API_BASE_URL
+            AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_KEY: $AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_KEY
+            AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_SECRET: $AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_SECRET
+            AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN: $AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN
+            AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN_SECRET: $AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN_SECRET
+            AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
+            AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: $AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS
+            AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID: $AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID
+            AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL: $AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL
+            AIO_COMMERCE_AUTH_IMS_ORG_ID: $AIO_COMMERCE_AUTH_IMS_ORG_ID
+          annotations:
+            require-adobe-auth: true
+            final: true
