@@ -79,7 +79,7 @@
       }
     },
     {
-      "includes": ["commerce-configuration-1/.generated/**"],
+      "includes": ["src/commerce-configuration-1/.generated/**"],
       "linter": {
         "enabled": false
       },

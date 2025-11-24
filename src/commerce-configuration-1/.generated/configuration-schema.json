@@ -1,9 +1,8 @@
 [
   {
     "name": "exampleList",
-    "label": "Example List",
     "type": "list",
-    "selectionMode": "single",
+    "label": "Example List",
     "options": [
       {
         "label": "Option 1",
@@ -14,24 +13,13 @@
         "value": "option2"
       }
     ],
+    "selectionMode": "single",
     "default": "option1",
     "description": "This is a description for the example list"
   },
   {
     "name": "currency",
-    "label": "Currency",
-    "type": "text"
-  },
-  {
-    "name": "paymentMethod",
-    "label": "Payment Test Method",
-    "type": "text"
-  },
-  {
-    "name": "testField",
-    "label": "Test Field",
     "type": "text",
-    "default": "Test Default Value1",
-    "description": "This is a description for the test field"
+    "label": "Currency"
   }
 ]
