@@ -801,7 +801,7 @@ If you want to change an existing event, make the changes in the same places:
 
 The integration starter kit comes pre-integrated with the `@adobe/aio-commerce-lib-config` library. This library provides a way to set up a configuration for the business logic of your application. You can find more information about the package in the [library documentation](https://github.com/adobe/aio-commerce-sdk/blob/main/packages/aio-commerce-lib-config/docs/usage.md).
 
-You can configure the `schema` for your integration in the `businessConfig.schema` section of the `extensibility.config.js` file. See the different supported types in the [schema documentation](https://github.com/adobe/aio-commerce-sdk/blob/main/packages/aio-commerce-lib-config/docs/usage.md#schema-validation).
+You can configure the `schema` for your integration in the `businessConfig.schema` section of the [`extensibility.config.js`](./extensibility.config.js) file. See the different supported types in the [schema documentation](https://github.com/adobe/aio-commerce-sdk/blob/main/packages/aio-commerce-lib-config/docs/usage.md#schema-validation).
 
 ## Integrating OpenTelemetry
 
