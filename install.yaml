@@ -1,0 +1,9 @@
+$schema: http://json-schema.org/draft-07/schema
+$id: https://adobe.io/schemas/app-builder-templates/1
+
+categories:
+  - action
+
+extensions:
+  # `commerce/configuration/1` is required by `@adobe/aio-commerce-lib-config`.
+  - extensionPointId: commerce/configuration/1

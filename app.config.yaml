@@ -1,6 +1,6 @@
 application:
-#  hooks:
-#    post-app-deploy: ./hooks/post-app-deploy.js
+  #  hooks:
+  #    post-app-deploy: ./hooks/post-app-deploy.js
   runtimeManifest:
     packages:
       starter-kit:
@@ -56,6 +56,12 @@ application:
         license: Apache-2.0
         actions:
           $include: ./actions/stock/external/actions.config.yaml
+
+extensions:
+  # This extension is required by `@adobe/aio-commerce-lib-config`.
+  commerce/configuration/1:
+    $include: src/commerce-configuration-1/ext.config.yaml
+
 productDependencies:
   - code: COMMC
     minVersion: 2.4.4

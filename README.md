@@ -8,6 +8,7 @@ _Table of contents_:
   - [**Prerequisites**](#prerequisites)
   - [**Starter Kit first deploy \& onboarding**](#starter-kit-first-deploy--onboarding)
   - [**Development**](#development)
+  - [**Business Configuration**](#business-configuration)
   - [**Integrating OpenTelemetry**](#integrating-opentelemetry)
   - [**Included actions documentation**](#included-actions-documentation)
   - [**References**](#references)
@@ -36,7 +37,7 @@ Go to the [Adobe developer console](https://developer.adobe.com/console) portal
   - Adobe I/O Events for Adobe Commerce
   - Adobe Commerce as a Cloud Service.
     - If upgrading from previous versions without Adobe Commerce as a Cloud Service API:
-      - Check `.env` to ensure that `commerce.accs` scope has been added to `OAUTH_SCOPES`
+      - Check `.env` to ensure that `commerce.accs` scope has been added to `AIO_COMMERCE_AUTH_IMS_SCOPES`
       - Download again workspace configuration as explained below and execute `aio app use` again.
 - Download the [workspace configuration JSON](https://developer.adobe.com/commerce/extensibility/events/project-setup/#download-the-workspace-configuration-file) file and save it as `workspace.json` in the `./scripts/onboarding/config` starter kit folder because you will use it to configure Adobe IO Events in commerce afterward.
 
@@ -62,7 +63,7 @@ Following the next steps, you will deploy and onboard the starter kit for the fi
 - Fill in the values following the comments on the env file.
 
 > [!NOTE]
-> When configuring the `COMMERCE_BASE_URL` environment variable, the format differs between PaaS and SaaS:
+> When configuring the `AIO_COMMERCE_API_BASE_URL` environment variable, the format differs between PaaS and SaaS:
 >
 > For PaaS (On-Premise/Cloud):
 >
@@ -101,10 +102,10 @@ Configure a new Integration to secure the calls to Commerce from App Builder usi
 Store the credentials in the `.env` file, these are the minimum required values:
 
 ```dotenv
-COMMERCE_CONSUMER_KEY=
-COMMERCE_CONSUMER_SECRET=
-COMMERCE_ACCESS_TOKEN=
-COMMERCE_ACCESS_TOKEN_SECRET=
+AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_KEY=
+AIO_COMMERCE_AUTH_INTEGRATION_CONSUMER_SECRET=
+AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN=
+AIO_COMMERCE_AUTH_INTEGRATION_ACCESS_TOKEN_SECRET=
 ```
 
 #### \[SaaS\] IMS OAuth - Add the OAuth Server to Server credentials to the environment
@@ -114,9 +115,9 @@ Configure a new IMS OAuth Server to Server following this [documentation](https:
 Store the credentials in the `.env` file, these are the minimum required values:
 
 ```dotenv
-OAUTH_CLIENT_ID=<string> # Your client ID
-OAUTH_CLIENT_SECRET=<string> # Your client secret
-OAUTH_SCOPES=<array> # ['scope1', 'scope2']
+AIO_COMMERCE_AUTH_IMS_CLIENT_ID=<string> # Your client ID
+AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS=<array> # ['client-secret']
+AIO_COMMERCE_AUTH_IMS_SCOPES=<array> # ['scope1', 'scope2']
 ```
 
 These are optional values that can be provided:
@@ -795,6 +796,12 @@ If you want to change an existing event, make the changes in the same places:
 - Modify the event in the consumer of the flow where the event belongs
 - Make changes to the operation action invoked by the consumer switch case.
 - Deploy your changes
+
+## Business Configuration
+
+The integration starter kit comes pre-integrated with the `@adobe/aio-commerce-lib-config` library, which provides a way to set up configuration management and querying capabilities for your application. You can find more information about the package in the [library documentation](https://github.com/adobe/aio-commerce-sdk/blob/main/packages/aio-commerce-lib-config/docs/usage.md).
+
+You can configure the `schema` for your integration in the `businessConfig.schema` section of the [`extensibility.config.js`](./extensibility.config.js) file. See the different supported types in the [schema documentation](https://github.com/adobe/aio-commerce-sdk/blob/main/packages/aio-commerce-lib-config/docs/usage.md#schema-validation).
 
 ## Integrating OpenTelemetry
 

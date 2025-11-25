@@ -877,7 +877,7 @@ describe("Given on-boarding registrations file", () => {
           payload: {
             error: fakeError,
             hints: [
-              "Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL",
+              "Make sure your authentication environment parameters are correct. Also check the AIO_COMMERCE_API_BASE_URL",
               "Did you fill IO_CONSUMER_ID, IO_PROJECT_ID and IO_WORKSPACE_ID environment variables with the values in /onboarding/config/workspace.json?",
             ],
           },

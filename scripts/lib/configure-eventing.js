@@ -41,7 +41,7 @@ async function main(
 
   try {
     const eventProviderResult = await getEventProviders(
-      environment.COMMERCE_BASE_URL,
+      environment.AIO_COMMERCE_API_BASE_URL,
       environment,
     );
     const isNonDefaultProviderAdded = eventProviderResult.some(
@@ -74,7 +74,7 @@ async function main(
     const hints = [
       'Ensure your "onboarding/config/workspace.json" file is up to date',
       "Did you run `aio app deploy`? Your runtime actions should be deployed before running the onboarding script",
-      "Make sure your authentication environment parameters are correct. Also check the COMMERCE_BASE_URL",
+      "Make sure your authentication environment parameters are correct. Also check the AIO_COMMERCE_API_BASE_URL",
     ];
 
     if (error?.message?.includes("Response code 404 (Not Found)")) {
@@ -116,7 +116,7 @@ async function addCommerceEventProvider(
   const { label, description } =
     providersList.find((provider) => provider.key === "commerce") || {};
 
-  await addEventProvider(environment.COMMERCE_BASE_URL, environment, {
+  await addEventProvider(environment.AIO_COMMERCE_API_BASE_URL, environment, {
     eventProvider: {
       provider_id: providerId,
       instance_id: instanceId,
@@ -140,14 +140,18 @@ async function updateCommerceEventingConfiguration(
   workspaceConfiguration,
   environment,
 ) {
-  await updateConfiguration(environment.COMMERCE_BASE_URL, environment, {
-    config: {
-      enabled: true,
-      merchant_id: environment.COMMERCE_ADOBE_IO_EVENTS_MERCHANT_ID,
-      environment_id: "Stage",
-      workspace_configuration: JSON.stringify(workspaceConfiguration),
+  await updateConfiguration(
+    environment.AIO_COMMERCE_API_BASE_URL,
+    environment,
+    {
+      config: {
+        enabled: true,
+        merchant_id: environment.COMMERCE_ADOBE_IO_EVENTS_MERCHANT_ID,
+        environment_id: "Stage",
+        workspace_configuration: JSON.stringify(workspaceConfiguration),
+      },
     },
-  });
+  );
   console.log("\nUpdated the commerce instance with workspace configuration");
 }
 

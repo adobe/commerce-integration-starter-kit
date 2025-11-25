@@ -77,6 +77,18 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/commerce-configuration-1/.generated/**"],
+      "linter": {
+        "enabled": false
+      },
+      "formatter": {
+        "enabled": false
+      },
+      "assist": {
+        "enabled": false
+      }
     }
   ],
 

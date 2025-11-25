@@ -11,8 +11,8 @@
   "author": "Adobe Inc.",
   "private": true,
   "dependencies": {
-    "@adobe/aio-commerce-lib-auth": "^0.3.3",
-    "@adobe/aio-commerce-lib-core": "^0.4.1",
+    "@adobe/aio-commerce-lib-config": "^0.7.2",
+    "@adobe/aio-commerce-sdk": "^0.6.2",
     "@adobe/aio-lib-ims": "^8.0.0",
     "@adobe/aio-lib-state": "^5.1.0",
     "@adobe/aio-lib-telemetry": "^1.0.0",
@@ -40,7 +40,7 @@
   },
   "scripts": {
     "prepare": "husky",
-    "postinstall": "npm run build --if-present --workspaces",
+    "postinstall": "npm run build --if-present --workspaces && npx @adobe/aio-commerce-lib-config generate all",
     "test": "jest --passWithNoTests -c ./test/jest.config.js ./test",
     "onboard": "node --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
     "onboard:debug": "node --inspect-brk --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
