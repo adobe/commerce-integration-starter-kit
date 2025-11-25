@@ -8,6 +8,7 @@ _Table of contents_:
   - [**Prerequisites**](#prerequisites)
   - [**Starter Kit first deploy \& onboarding**](#starter-kit-first-deploy--onboarding)
   - [**Development**](#development)
+  - [**Business Configuration**](#business-configuration)
   - [**Integrating OpenTelemetry**](#integrating-opentelemetry)
   - [**Included actions documentation**](#included-actions-documentation)
   - [**References**](#references)
@@ -795,6 +796,10 @@ If you want to change an existing event, make the changes in the same places:
 - Modify the event in the consumer of the flow where the event belongs
 - Make changes to the operation action invoked by the consumer switch case.
 - Deploy your changes
+
+## Business Configuration
+
+The integration starter kit comes pre-integrated with the `@adobe/aio-commerce-lib-config` library. This library provides a way to set up a configuration for the business logic of your application. You can find more information about the package in the [library documentation](https://github.com/adobe/aio-commerce-sdk/blob/main/packages/aio-commerce-lib-config/docs/usage.md). You can configure the `schema` for your integration in the `businessConfig.schema` section of the `extensibility.config.js` file. See the different supported types in the [schema documentation](https://github.com/adobe/aio-commerce-sdk/blob/main/packages/aio-commerce-lib-config/docs/usage.md#schema-validation).
 
 ## Integrating OpenTelemetry
 
