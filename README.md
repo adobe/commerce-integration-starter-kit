@@ -320,6 +320,9 @@ Here are the events with the minimal required fields you need to subscribe to, i
 | Order          | observer.sales_order_save_commit_after                 | created_at, updated_at      | order update ([hold](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidhold#operation/PostV1OrdersIdHold), [unhold](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidunhold#operation/PostV1OrdersIdUnhold), [cancel](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidcancel#operation/PostV1OrdersIdCancel), [emails](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/ordersidemails#operation/PostV1OrdersIdEmails)) |
 | Stock          | observer.cataloginventory_stock_item_save_commit_after | product_id                  | product [stock update](https://adobe-commerce.redoc.ly/2.4.6-admin/tag/productsproductSkustockItemsitemId/#operation/PutV1ProductsProductSkuStockItemsItemId)                                                                                                                                                                                                                                                                               |
 
+> [!NOTE]
+> For the complete schema of each event, including all available fields and their types, refer to [`EVENTS_SCHEMA.json`](./EVENTS_SCHEMA.json) in the root of this repository.
+
 ### Automating the execution of onboarding and event subscription
 
 App builder defines lifecycle event hooks that make possible to automatically execute custom code when a particular application lifecycle event happens.
@@ -745,6 +748,9 @@ You can find more details about unit testing and an example in [Lesson 3: Testin
 ### How to subscribe to a new event
 
 The starter kit comes with predefined events for each entity. Sometimes, you may need to add a new event to an entity, e.g., a customer. To do this, follow the next steps:
+
+> [!TIP]
+> Before adding a new event, check [`EVENTS_SCHEMA.json`](./EVENTS_SCHEMA.json) to understand the schema structure and available fields for similar events. This will help you properly handle the event payload in your action handlers.
 
 - Add the event to the `./onboarding/config/events.json` file under the related entity flow; for example, if the event is related to a customer and is coming from commerce, you should add it under entity customer -> commerce. e.g.,
   ```json
