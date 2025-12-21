@@ -18,6 +18,8 @@ jobs:
         os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history for comparison
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -27,3 +29,92 @@ jobs:
       - run: npm ci
       - run: npm run code:report
       - run: npm test
+      - name: Check for new vulnerabilities and dependency issues
+        run: |
+          # Get the base branch for comparison
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          else
+            BASE_BRANCH="main"
+          fi
+          
+          echo "Comparing against base branch: $BASE_BRANCH"
+          
+          # Generate reports for current branch
+          echo "🔍 Checking current branch..."
+          npm audit --audit-level=moderate --json > current-audit.json || true
+          npx npm-check --no-emoji --no-color > current-npm-check.txt 2>&1 || true
+          
+          # Switch to base branch and generate reports
+          echo "🔍 Checking base branch..."
+          git checkout $BASE_BRANCH
+          npm ci
+          npm audit --audit-level=moderate --json > base-audit.json || true
+          npx npm-check --no-emoji --no-color > base-npm-check.txt 2>&1 || true
+          
+          # Switch back to current branch
+          git checkout -
+          npm ci
+          
+          # Compare vulnerabilities
+          CURRENT_VULNS=$(node -e "
+            try {
+              const report = JSON.parse(require('fs').readFileSync('current-audit.json', 'utf8'));
+              const vulnCount = Object.keys(report.vulnerabilities || {}).length;
+              console.log(vulnCount);
+            } catch (e) {
+              console.log('0');
+            }
+          ")
+          
+          BASE_VULNS=$(node -e "
+            try {
+              const report = JSON.parse(require('fs').readFileSync('base-audit.json', 'utf8'));
+              const vulnCount = Object.keys(report.vulnerabilities || {}).length;
+              console.log(vulnCount);
+            } catch (e) {
+              console.log('0');
+            }
+          ")
+          
+          echo "📊 Vulnerability Analysis:"
+          echo "  Base branch: $BASE_VULNS vulnerabilities"
+          echo "  Current branch: $CURRENT_VULNS vulnerabilities"
+          
+          # Compare dependency issues (using text patterns for CI environment)
+          CURRENT_ISSUES=$(grep -E "(MAJOR UP|UPDATE|NPM ERR|PKG ERR|Not in package.json)" current-npm-check.txt | wc -l || echo "0")
+          BASE_ISSUES=$(grep -E "(MAJOR UP|UPDATE|NPM ERR|PKG ERR|Not in package.json)" base-npm-check.txt | wc -l || echo "0")
+          
+          echo "📦 Dependency Analysis:"
+          echo "  Base branch: $BASE_ISSUES dependency issues"
+          echo "  Current branch: $CURRENT_ISSUES dependency issues"
+          
+          # Check for new vulnerabilities
+          if [ "$CURRENT_VULNS" -gt "$BASE_VULNS" ]; then
+            NEW_VULNS=$((CURRENT_VULNS - BASE_VULNS))
+            echo "❌ This PR introduces $NEW_VULNS new vulnerabilities"
+            echo "Please review and fix the new vulnerabilities before proceeding:"
+            npm audit --audit-level=moderate
+            exit 1
+          elif [ "$CURRENT_VULNS" -lt "$BASE_VULNS" ]; then
+            FIXED_VULNS=$((BASE_VULNS - CURRENT_VULNS))
+            echo "🎉 Fixed $FIXED_VULNS vulnerabilities!"
+          else
+            echo "✅ No new vulnerabilities introduced"
+          fi
+          
+          # Check for new dependency issues
+          if [ "$CURRENT_ISSUES" -gt "$BASE_ISSUES" ]; then
+            NEW_ISSUES=$((CURRENT_ISSUES - BASE_ISSUES))
+            echo "❌ This PR introduces $NEW_ISSUES new dependency issues"
+            echo "Please review and fix the new dependency issues before proceeding:"
+            npx npm-check --no-emoji --no-color
+            exit 1
+          elif [ "$CURRENT_ISSUES" -lt "$BASE_ISSUES" ]; then
+            FIXED_ISSUES=$((BASE_ISSUES - CURRENT_ISSUES))
+            echo "🎉 Fixed $FIXED_ISSUES dependency issues!"
+          else
+            echo "✅ No new dependency issues introduced"
+          fi
+          
+          echo "✅ All checks passed - no new issues introduced!"
