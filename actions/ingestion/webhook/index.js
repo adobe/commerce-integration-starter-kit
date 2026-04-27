@@ -13,7 +13,6 @@ governing permissions and limitations under the License.
 const { Core, Events } = require("@adobe/aio-sdk");
 const { stringParameters } = require("../../../actions/utils");
 const { CloudEvent } = require("cloudevents");
-const uuid = require("uuid");
 
 const {
   HTTP_BAD_REQUEST,
@@ -97,7 +96,7 @@ async function main(params) {
       type: eventType,
       datacontenttype: "application/json",
       data: params.data.value,
-      id: uuid.v4(),
+      id: crypto.randomUUID(),
     });
 
     logger.debug(`Publish event ${eventType} to provider ${provider.label}`);
