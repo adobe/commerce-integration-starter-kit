@@ -13,7 +13,6 @@ governing permissions and limitations under the License.
 require("dotenv").config();
 
 const fetch = require("node-fetch");
-const uuid = require("uuid");
 const fs = require("node:fs");
 const path = require("node:path");
 const envPath = path.resolve(__dirname, "../../.env");
@@ -51,7 +50,7 @@ async function createProvider(environment, authHeaders, provider) {
       // read here about the use of the spread operator to merge objects: https://dev.to/sagar/three-dots---in-javascript-26ci
       ...(provider?.key === "commerce" && {
         provider_metadata: "dx_commerce_events",
-        instance_id: `${uuid.v4()}`,
+        instance_id: crypto.randomUUID(),
       }),
       ...(provider?.label && { label: `${provider?.label}` }),
       ...(provider?.description && { description: `${provider?.description}` }),
