@@ -45,10 +45,6 @@
             "noExcessiveCognitiveComplexity": "off"
           },
 
-          "nursery": {
-            "useMaxParams": "off"
-          },
-
           "suspicious": {
             // We use console to log information during the onboarding process.
             "noConsole": "off"
@@ -60,10 +56,6 @@
       "includes": ["actions/**/*.js"],
       "linter": {
         "rules": {
-          "nursery": {
-            "useMaxParams": "off"
-          },
-
           "suspicious": {
             // Some placeholder functions most likely will be async (they invoke external systems), but they are unimplemented
             // so they don't use await. This is left to warn, because implementers should be aware of this.
