@@ -11,11 +11,8 @@ governing permissions and limitations under the License.
 */
 
 const got = require("got");
-const {
-  getImsAccessToken,
-  getOAuthHeader,
-} = require("@adobe/commerce-sdk-auth");
-const { fromParams } = require("./auth");
+const { getIntegrationAuthProvider } = require("@adobe/aio-commerce-lib-auth");
+const { getAdobeAccessToken } = require("../utils/adobe-auth");
 
 /**
  * @returns the bearer token
@@ -29,45 +26,45 @@ function withBearer(token) {
  * This function return the Adobe commerce OAuth client
  *
  * @param {object} options - include the information to configure oauth
- * @param {object} authOptions - 'IMS' or 'COMMERCE'
+ * @param {object} params - environment params from the IO Runtime request
  * @param {object} logger - Logger
  */
-function createClient(options, authOptions, logger) {
+function createClient(options, params, logger) {
   const instance = {};
 
   // Remove trailing slash if any
   const serverUrl = options.url;
   const apiVersion = options.version;
 
-  let getAuthorizationHeaders = (_opts) => {
-    throw new Error("getAuthorizationHeaders not implemented");
-  };
+  let getAuthorizationHeaders;
 
-  if (authOptions?.ims) {
-    const { ims } = authOptions;
-    getAuthorizationHeaders = async (_opts) => {
-      const imsResponse = await getImsAccessToken(ims);
-      return {
-        Authorization: withBearer(imsResponse.access_token),
-      };
-    };
-  } else if (authOptions?.commerceOAuth1) {
-    const { commerceOAuth1 } = authOptions;
-    const oauthToken = {
-      key: commerceOAuth1.accessToken,
-      secret: commerceOAuth1.accessTokenSecret,
-    };
-    const oauth = getOAuthHeader(commerceOAuth1);
+  // `aio app dev` compatibility: inputs mapped to undefined env vars come as $<input_name> in dev mode, but as '' in prod mode
+  if (
+    params.COMMERCE_CONSUMER_KEY &&
+    params.COMMERCE_CONSUMER_KEY !== "$COMMERCE_CONSUMER_KEY"
+  ) {
+    logger.info("Commerce client is using Commerce OAuth1 authentication");
+    const integrationsAuth = getIntegrationAuthProvider({
+      consumerKey: params.COMMERCE_CONSUMER_KEY,
+      consumerSecret: params.COMMERCE_CONSUMER_SECRET,
+      accessToken: params.COMMERCE_ACCESS_TOKEN,
+      accessTokenSecret: params.COMMERCE_ACCESS_TOKEN_SECRET,
+    });
     getAuthorizationHeaders = ({ url, method }) =>
-      oauth.toHeader(
-        oauth.authorize(
-          {
-            url,
-            method,
-          },
-          oauthToken,
-        ),
-      );
+      integrationsAuth.getHeaders(method, url);
+  } else if (
+    params.OAUTH_CLIENT_ID &&
+    params.OAUTH_CLIENT_ID !== "$OAUTH_CLIENT_ID"
+  ) {
+    logger.info("Commerce client is using IMS OAuth authentication");
+    getAuthorizationHeaders = async () => {
+      const token = await getAdobeAccessToken(params);
+      return { Authorization: withBearer(token) };
+    };
+  } else {
+    throw new Error(
+      "Unknown auth type, supported IMS OAuth or Commerce OAuth1. Please review documented auth types",
+    );
   }
 
   /**
@@ -180,7 +177,7 @@ function getClient(clientOptions, logger) {
   const { params, ...options } = clientOptions;
   options.version = "V1";
 
-  return createClient(options, fromParams(params), logger);
+  return createClient(options, params, logger);
 }
 
 module.exports = {

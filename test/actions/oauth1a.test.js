@@ -2,6 +2,10 @@ const { HTTP_OK } = require("../../actions/constants");
 const { getClient } = require("../../actions/oauth1a");
 const nock = require("nock");
 
+jest.mock("../../utils/adobe-auth", () => ({
+  getAdobeAccessToken: jest.fn().mockResolvedValue("TOKEN"),
+}));
+
 describe("getClient", () => {
   it("should return a client", () => {
     const client = getClient(
@@ -74,15 +78,6 @@ describe("getClient", () => {
       console,
     );
 
-    const imsScope = nock("https://ims-na1.adobelogin.com", {})
-      .post("/ims/token/v3")
-      .reply(HTTP_OK, {
-        access_token: "TOKEN",
-        token_type: "Bearer",
-        expires_in: 86_000,
-        expires_at: 999_999_999,
-      });
-
     const scope = nock("http://commerce.adobe.io", {
       reqheaders: {
         Authorization: (value) => value.includes("Bearer TOKEN"),
@@ -97,7 +92,6 @@ describe("getClient", () => {
       success: true,
     });
 
-    imsScope.done();
     scope.done();
   });
 });
