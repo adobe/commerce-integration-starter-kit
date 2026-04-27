@@ -10,7 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const fetch = require("node-fetch");
 const { getExistingRegistrations } = require("../../utils/adobe-events-api");
 const { getRegistrationName } = require("../../utils/naming");
 const { getEventName } = require("../../utils/naming");

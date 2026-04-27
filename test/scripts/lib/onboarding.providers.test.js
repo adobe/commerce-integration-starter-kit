@@ -10,7 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-jest.mock("node-fetch");
 jest.mock("node:path", () => {
   const originalPath = jest.requireActual("node:path");
   return {
@@ -27,7 +26,7 @@ jest.mock("node:path", () => {
   };
 });
 
-const fetch = require("node-fetch");
+let fetchSpy;
 const fs = require("node:fs");
 const path = require("node:path");
 const action = require("../../../scripts/lib/providers.js");
@@ -42,11 +41,12 @@ const TEST_ENV_PATH = path.resolve(
 
 beforeEach(() => {
   jest.resetModules();
-  // Reset path.resolve mock calls
   path.resolve.mockClear();
+  fetchSpy = jest.spyOn(global, "fetch");
 });
 
 afterEach(() => {
+  fetchSpy.mockRestore();
   jest.clearAllMocks();
 });
 
@@ -377,7 +377,7 @@ describe("Given On-boarding providers file", () => {
           }),
       };
 
-      fetch
+      fetchSpy
         .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse);
@@ -628,7 +628,7 @@ describe("Given On-boarding providers file", () => {
             },
           }),
       };
-      fetch
+      fetchSpy
         .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse);
 
@@ -872,7 +872,7 @@ describe("Given On-boarding providers file", () => {
             },
           }),
       };
-      fetch
+      fetchSpy
         .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse);
 
@@ -1118,7 +1118,7 @@ describe("Given On-boarding providers file", () => {
             },
           }),
       };
-      fetch
+      fetchSpy
         .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateBackofficeProviderResponse);
 
@@ -1151,7 +1151,7 @@ describe("Given On-boarding providers file", () => {
   describe("When create provider process call to API fails", () => {
     test("Then returns error response", async () => {
       const fakeError = new Error("fake");
-      fetch.mockRejectedValue(fakeError);
+      fetchSpy.mockRejectedValue(fakeError);
       const clientRegistrations = require("../../data/onboarding/providers/create_commerce_and_backoffice_providers.json");
       const response = await action.main(clientRegistrations, ACCESS_TOKEN);
       expect(response).toEqual({
@@ -1321,7 +1321,7 @@ describe("Given On-boarding providers file", () => {
             message: "Please provide valid data",
           }),
       };
-      fetch
+      fetchSpy
         .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse);
 
@@ -1378,7 +1378,7 @@ describe("Given On-boarding providers file", () => {
           }),
       };
 
-      fetch
+      fetchSpy
         .mockResolvedValueOnce(mockFetchGetExistingProvidersResponse)
         .mockResolvedValueOnce(mockFetchCreateCommerceProviderResponse);
 

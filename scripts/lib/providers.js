@@ -12,7 +12,6 @@ governing permissions and limitations under the License.
 
 require("dotenv").config();
 
-const fetch = require("node-fetch");
 const fs = require("node:fs");
 const path = require("node:path");
 const envPath = path.resolve(__dirname, "../../.env");
