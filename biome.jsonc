@@ -1,6 +1,6 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
-  "extends": ["ultracite"],
+  "$schema": "https://biomejs.dev/schemas/2.4.13/schema.json",
+  "extends": ["ultracite/biome/core"],
 
   "files": {
     "ignoreUnknown": true
@@ -32,6 +32,10 @@
       },
       "performance": {
         "noNamespaceImport": "off"
+      },
+      "correctness": {
+        // This is a CJS project; __dirname is valid and import.meta.dirname is not available.
+        "noGlobalDirnameFilename": "off"
       }
     }
   },
@@ -45,10 +49,6 @@
             "noExcessiveCognitiveComplexity": "off"
           },
 
-          "nursery": {
-            "useMaxParams": "off"
-          },
-
           "suspicious": {
             // We use console to log information during the onboarding process.
             "noConsole": "off"
@@ -60,10 +60,6 @@
       "includes": ["actions/**/*.js"],
       "linter": {
         "rules": {
-          "nursery": {
-            "useMaxParams": "off"
-          },
-
           "suspicious": {
             // Some placeholder functions most likely will be async (they invoke external systems), but they are unimplemented
             // so they don't use await. This is left to warn, because implementers should be aware of this.

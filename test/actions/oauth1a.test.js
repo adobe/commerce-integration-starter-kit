@@ -20,8 +20,8 @@ describe("getClient", () => {
     expect(client).toBeDefined();
   });
 
-  it("throw an error when authOptions are not declared", () => {
-    return expect(() => {
+  it("throw an error when authOptions are not declared", () =>
+    expect(() => {
       getClient(
         {
           url: "http://localhost:9000/",
@@ -31,8 +31,7 @@ describe("getClient", () => {
       );
     }).toThrow(
       "Unknown auth type, supported IMS OAuth or Commerce OAuth1. Please review documented auth types",
-    );
-  });
+    ));
 
   it("should add a OAuth header when using Commerce OAuth1a credentials", async () => {
     const client = getClient(
@@ -50,9 +49,7 @@ describe("getClient", () => {
 
     const scope = nock("http://commerce.adobe.io", {
       reqheaders: {
-        Authorization: (value) => {
-          return value.includes("OAuth");
-        },
+        Authorization: (value) => value.includes("OAuth"),
       },
     })
       .matchHeader("accept", "application/json")
@@ -88,9 +85,7 @@ describe("getClient", () => {
 
     const scope = nock("http://commerce.adobe.io", {
       reqheaders: {
-        Authorization: (value) => {
-          return value.includes("Bearer TOKEN");
-        },
+        Authorization: (value) => value.includes("Bearer TOKEN"),
       },
     })
       .matchHeader("accept", "application/json")

@@ -19,15 +19,12 @@ describe("Given customer external deleted validator", () => {
     });
   });
   describe("When data to validate is valid", () => {
-    it.each([[{ data: { id: 1234 } }]])(
-      "Then for %o,  returns successful response",
-      (params) => {
-        const SUCCESSFUL_RESPONSE = { success: true };
-        expect(validator.validateData(params)).toMatchObject(
-          SUCCESSFUL_RESPONSE,
-        );
-      },
-    );
+    it.each([
+      [{ data: { id: 1234 } }],
+    ])("Then for %o,  returns successful response", (params) => {
+      const SUCCESSFUL_RESPONSE = { success: true };
+      expect(validator.validateData(params)).toMatchObject(SUCCESSFUL_RESPONSE);
+    });
   });
   describe("When data to validate is not valid", () => {
     it.each([

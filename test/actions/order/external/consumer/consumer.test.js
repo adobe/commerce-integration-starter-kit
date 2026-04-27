@@ -71,16 +71,13 @@ describe("Given order external consumer", () => {
         "order-backoffice/updated",
         { one: "one", two: "two" },
       ],
-    ])(
-      "Then returns success response for %p action",
-      async (_, type, action, data) => {
-        const params = { type, data };
-        const invocation = jest.fn();
-        Openwhisk.prototype.invokeAction = invocation;
-        await consumer.main(params);
-        expect(invocation).toHaveBeenCalledWith(action, data);
-      },
-    );
+    ])("Then returns success response for %p action", async (_, type, action, data) => {
+      const params = { type, data };
+      const invocation = jest.fn();
+      Openwhisk.prototype.invokeAction = invocation;
+      await consumer.main(params);
+      expect(invocation).toHaveBeenCalledWith(action, data);
+    });
   });
   describe("When downstream throw an exception", () => {
     test("Then returns error response", async () => {
@@ -108,33 +105,30 @@ describe("Given order external consumer", () => {
       [HTTP_BAD_REQUEST, { success: false, error: "Invalid data" }],
       [HTTP_NOT_FOUND, { success: false, error: "Entity not found" }],
       [HTTP_INTERNAL_ERROR, { success: false, error: "Internal error" }],
-    ])(
-      "Then returns error response with the status code %p",
-      async (statusCode, response) => {
-        const type = "be-observer.sales_order_status_update";
-        const ACTION_RESPONSE = {
-          response: {
-            result: {
-              body: response,
-              statusCode,
-            },
-          },
-        };
-        const CONSUMER_RESPONSE = {
-          error: {
+    ])("Then returns error response with the status code %p", async (statusCode, response) => {
+      const type = "be-observer.sales_order_status_update";
+      const ACTION_RESPONSE = {
+        response: {
+          result: {
+            body: response,
             statusCode,
-            body: {
-              error: response.error,
-            },
           },
-        };
-        const params = { type, data: {} };
-        Openwhisk.prototype.invokeAction = jest
-          .fn()
-          .mockResolvedValue(ACTION_RESPONSE);
-        expect(await consumer.main(params)).toMatchObject(CONSUMER_RESPONSE);
-      },
-    );
+        },
+      };
+      const CONSUMER_RESPONSE = {
+        error: {
+          statusCode,
+          body: {
+            error: response.error,
+          },
+        },
+      };
+      const params = { type, data: {} };
+      Openwhisk.prototype.invokeAction = jest
+        .fn()
+        .mockResolvedValue(ACTION_RESPONSE);
+      expect(await consumer.main(params)).toMatchObject(CONSUMER_RESPONSE);
+    });
   });
   describe("When downstream returns a success response", () => {
     test("Then returns success response", async () => {

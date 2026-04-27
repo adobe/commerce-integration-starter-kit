@@ -5,19 +5,17 @@ const {
 } = require("@adobe/aio-lib-telemetry");
 
 /** The telemetry configuration to be used across all actions */
-const telemetryConfig = defineTelemetryConfig((params, isDev) => {
-  return {
-    sdkConfig: {
-      serviceName: "commerce-integration-starter-kit",
-      resource: getAioRuntimeResource(),
-      instrumentations: getPresetInstrumentations("simple"),
-    },
+const telemetryConfig = defineTelemetryConfig((_params, isDev) => ({
+  sdkConfig: {
+    serviceName: "commerce-integration-starter-kit",
+    resource: getAioRuntimeResource(),
+    instrumentations: getPresetInstrumentations("simple"),
+  },
 
-    diagnostics: {
-      logLevel: isDev ? "debug" : "info",
-    },
-  };
-});
+  diagnostics: {
+    logLevel: isDev ? "debug" : "info",
+  },
+}));
 
 /**
  * Helper function used within the Starter Kit to determine if an instrumented action is successful.

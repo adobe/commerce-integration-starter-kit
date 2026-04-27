@@ -37,12 +37,10 @@ const {
  * @returns the function that generates the fingerprint
  */
 function fnFingerprint(params) {
-  return () => {
-    return {
-      product: params.data.value.sku,
-      description: params.data.value.description,
-    };
-  };
+  return () => ({
+    product: params.data.value.sku,
+    description: params.data.value.description,
+  });
 }
 
 /**
@@ -51,9 +49,7 @@ function fnFingerprint(params) {
  * @returns the function that generates the keu
  */
 function fnInfiniteLoopKey(params) {
-  return () => {
-    return `ilk_${params.data.value.sku}`;
-  };
+  return () => `ilk_${params.data.value.sku}`;
 }
 
 /**

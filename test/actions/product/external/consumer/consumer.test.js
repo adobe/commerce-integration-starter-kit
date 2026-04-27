@@ -51,22 +51,23 @@ describe("Given product external consumer", () => {
 
   describe("When required params are missing", () => {
     logger.debug("When required params are missing");
-    it.each([{}, { data: {} }, { type: "be-observer.catalog_product_create" }])(
-      "Then for parameter %p returns error message",
-      async (params) => {
-        const INVALID_REQUEST_PARAMS_RESPONSE = {
-          error: {
-            body: {
-              error: expect.any(String),
-            },
-            statusCode: HTTP_BAD_REQUEST,
+    it.each([
+      {},
+      { data: {} },
+      { type: "be-observer.catalog_product_create" },
+    ])("Then for parameter %p returns error message", async (params) => {
+      const INVALID_REQUEST_PARAMS_RESPONSE = {
+        error: {
+          body: {
+            error: expect.any(String),
           },
-        };
-        expect(await consumer.main(params)).toMatchObject(
-          INVALID_REQUEST_PARAMS_RESPONSE,
-        );
-      },
-    );
+          statusCode: HTTP_BAD_REQUEST,
+        },
+      };
+      expect(await consumer.main(params)).toMatchObject(
+        INVALID_REQUEST_PARAMS_RESPONSE,
+      );
+    });
   });
 
   describe("When product event type received is not supported", () => {
@@ -108,17 +109,14 @@ describe("Given product external consumer", () => {
         "product-backoffice/deleted",
         { one: "one", two: "two" },
       ],
-    ])(
-      "Then returns success response for %p action",
-      async (_name, type, action, data) => {
-        logger.debug("When product event received is valid");
-        const params = { type, data };
-        const invocation = jest.fn();
-        Openwhisk.prototype.invokeAction = invocation;
-        await consumer.main(params);
-        expect(invocation).toHaveBeenCalledWith(action, data);
-      },
-    );
+    ])("Then returns success response for %p action", async (_name, type, action, data) => {
+      logger.debug("When product event received is valid");
+      const params = { type, data };
+      const invocation = jest.fn();
+      Openwhisk.prototype.invokeAction = invocation;
+      await consumer.main(params);
+      expect(invocation).toHaveBeenCalledWith(action, data);
+    });
   });
 
   describe("When downstream throw an exception", () => {
@@ -161,44 +159,41 @@ describe("Given product external consumer", () => {
       [HTTP_BAD_REQUEST, { success: false, error: "Invalid data" }],
       [HTTP_NOT_FOUND, { success: false, error: "Entity not found" }],
       [HTTP_INTERNAL_ERROR, { success: false, error: "Internal error" }],
-    ])(
-      "Then returns error response with the status code %p",
-      async (statusCode, response) => {
-        const type = "be-observer.catalog_product_create";
-        const ACTION_RESPONSE = {
-          response: {
-            result: {
-              body: response,
-              statusCode,
-            },
-          },
-        };
-        const CONSUMER_RESPONSE = {
-          error: {
+    ])("Then returns error response with the status code %p", async (statusCode, response) => {
+      const type = "be-observer.catalog_product_create";
+      const ACTION_RESPONSE = {
+        response: {
+          result: {
+            body: response,
             statusCode,
-            body: {
-              error: response.error,
-            },
           },
-        };
-        const params = {
-          type,
-          data: {
-            value: {
-              sku: "SKU",
-              name: "PRODUCT",
-              description: "Product description",
-              created_at: "2000-01-01",
-              updated_at: "2000-01-01",
-            },
+        },
+      };
+      const CONSUMER_RESPONSE = {
+        error: {
+          statusCode,
+          body: {
+            error: response.error,
           },
-        };
-        Openwhisk.prototype.invokeAction = jest
-          .fn()
-          .mockResolvedValue(ACTION_RESPONSE);
-        expect(await consumer.main(params)).toMatchObject(CONSUMER_RESPONSE);
-      },
-    );
+        },
+      };
+      const params = {
+        type,
+        data: {
+          value: {
+            sku: "SKU",
+            name: "PRODUCT",
+            description: "Product description",
+            created_at: "2000-01-01",
+            updated_at: "2000-01-01",
+          },
+        },
+      };
+      Openwhisk.prototype.invokeAction = jest
+        .fn()
+        .mockResolvedValue(ACTION_RESPONSE);
+      expect(await consumer.main(params)).toMatchObject(CONSUMER_RESPONSE);
+    });
   });
 
   describe("When downstream returns a success response", () => {

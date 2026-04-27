@@ -106,37 +106,34 @@ describe("Given stock commerce consumer", () => {
       [HTTP_BAD_REQUEST, { success: false, error: "Invalid data" }],
       [HTTP_NOT_FOUND, { success: false, error: "Entity not found" }],
       [HTTP_INTERNAL_ERROR, { success: false, error: "Internal error" }],
-    ])(
-      "Then returns the status code %p and response",
-      async (statusCode, response) => {
-        const type =
-          "com.adobe.commerce.test_app.observer.cataloginventory_stock_item_save_commit_after";
-        const ACTION_RESPONSE = {
-          response: {
-            result: {
-              body: response,
-              statusCode,
-            },
-          },
-        };
-        const CONSUMER_RESPONSE = {
-          error: {
+    ])("Then returns the status code %p and response", async (statusCode, response) => {
+      const type =
+        "com.adobe.commerce.test_app.observer.cataloginventory_stock_item_save_commit_after";
+      const ACTION_RESPONSE = {
+        response: {
+          result: {
+            body: response,
             statusCode,
-            body: {
-              error: response.error,
-            },
           },
-        };
-        const params = {
-          type,
-          EVENT_PREFIX: "test_app",
-          data: { value: { customer_group_code: "xxx" } },
-        };
-        Openwhisk.prototype.invokeAction = jest
-          .fn()
-          .mockResolvedValue(ACTION_RESPONSE);
-        expect(await action.main(params)).toMatchObject(CONSUMER_RESPONSE);
-      },
-    );
+        },
+      };
+      const CONSUMER_RESPONSE = {
+        error: {
+          statusCode,
+          body: {
+            error: response.error,
+          },
+        },
+      };
+      const params = {
+        type,
+        EVENT_PREFIX: "test_app",
+        data: { value: { customer_group_code: "xxx" } },
+      };
+      Openwhisk.prototype.invokeAction = jest
+        .fn()
+        .mockResolvedValue(ACTION_RESPONSE);
+      expect(await action.main(params)).toMatchObject(CONSUMER_RESPONSE);
+    });
   });
 });

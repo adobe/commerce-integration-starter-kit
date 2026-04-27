@@ -31,11 +31,7 @@ function stringParameters(params) {
   // hide parameters including terms in the 'hidden' array
   let sanitizedParams = { ...params };
   for (const key of Object.keys(sanitizedParams)) {
-    if (
-      !hidden.every((v) => {
-        return key.toLowerCase().indexOf(v) === -1;
-      })
-    ) {
+    if (!hidden.every((v) => key.toLowerCase().indexOf(v) === -1)) {
       sanitizedParams = { ...sanitizedParams, [key]: "<hidden>" };
     }
   }
@@ -105,7 +101,6 @@ function checkMissingRequestInputs(
   // check for missing parameters
   const missingParams = getMissingKeys(params, requiredParams);
   if (missingParams.length > 0) {
-    // biome-ignore lint/nursery/noUnnecessaryConditions: Seems to be a false positive.
     if (errorMessage) {
       errorMessage += " and ";
     } else {

@@ -13,19 +13,19 @@ governing permissions and limitations under the License.
 // @ts-expect-error - simple-oauth2 is not typed
 import { ClientCredentials } from "simple-oauth2";
 
-export type ImsAuthParams = {
-  host?: string;
+export interface ImsAuthParams {
   clientId: string;
   clientSecret: string;
+  host?: string;
   scopes: string[];
-};
+}
 
-type ImsTokenResponse = {
+interface ImsTokenResponse {
   access_token: string;
-  token_type: string;
-  expires_in: number;
   expires_at: string;
-};
+  expires_in: number;
+  token_type: string;
+}
 
 /**
  * Generate access token to connect with Adobe tools (e.g. IO Events)

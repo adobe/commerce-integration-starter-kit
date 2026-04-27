@@ -230,43 +230,40 @@ describe("Given product commerce consumer", () => {
       [HTTP_BAD_REQUEST, { success: false, error: "Invalid data" }],
       [HTTP_NOT_FOUND, { success: false, error: "Entity not found" }],
       [HTTP_INTERNAL_ERROR, { success: false, error: "Internal error" }],
-    ])(
-      "Then returns the status code %p and response",
-      async (statusCode, response) => {
-        const params = {
-          EVENT_PREFIX: "test_app",
-          type: "com.adobe.commerce.test_app.observer.catalog_product_save_commit_after",
-          data: {
-            value: {
-              sku: "SKU",
-              name: "PRODUCT",
-              description: "Product description",
-              created_at: "2000-01-01",
-              updated_at: "2000-01-02",
-            },
+    ])("Then returns the status code %p and response", async (statusCode, response) => {
+      const params = {
+        EVENT_PREFIX: "test_app",
+        type: "com.adobe.commerce.test_app.observer.catalog_product_save_commit_after",
+        data: {
+          value: {
+            sku: "SKU",
+            name: "PRODUCT",
+            description: "Product description",
+            created_at: "2000-01-01",
+            updated_at: "2000-01-02",
           },
-        };
-        const ACTION_RESPONSE = {
-          response: {
-            result: {
-              body: response,
-              statusCode,
-            },
-          },
-        };
-        const CONSUMER_RESPONSE = {
-          error: {
+        },
+      };
+      const ACTION_RESPONSE = {
+        response: {
+          result: {
+            body: response,
             statusCode,
-            body: {
-              error: response.error,
-            },
           },
-        };
-        Openwhisk.prototype.invokeAction = jest
-          .fn()
-          .mockResolvedValue(ACTION_RESPONSE);
-        expect(await action.main(params)).toMatchObject(CONSUMER_RESPONSE);
-      },
-    );
+        },
+      };
+      const CONSUMER_RESPONSE = {
+        error: {
+          statusCode,
+          body: {
+            error: response.error,
+          },
+        },
+      };
+      Openwhisk.prototype.invokeAction = jest
+        .fn()
+        .mockResolvedValue(ACTION_RESPONSE);
+      expect(await action.main(params)).toMatchObject(CONSUMER_RESPONSE);
+    });
   });
 });
