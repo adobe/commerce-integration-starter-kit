@@ -14,17 +14,17 @@ governing permissions and limitations under the License.
 import { ClientCredentials } from "simple-oauth2";
 
 export interface ImsAuthParams {
-  host?: string;
   clientId: string;
   clientSecret: string;
+  host?: string;
   scopes: string[];
 }
 
 interface ImsTokenResponse {
   access_token: string;
-  token_type: string;
-  expires_in: number;
   expires_at: string;
+  expires_in: number;
+  token_type: string;
 }
 
 /**

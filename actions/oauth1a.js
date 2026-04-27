@@ -39,7 +39,7 @@ function createClient(options, authOptions, logger) {
   const serverUrl = options.url;
   const apiVersion = options.version;
 
-  let getAuthorizationHeaders = (opts) => {
+  let getAuthorizationHeaders = (_opts) => {
     throw new Error("getAuthorizationHeaders not implemented");
   };
 
@@ -58,8 +58,8 @@ function createClient(options, authOptions, logger) {
       secret: commerceOAuth1.accessTokenSecret,
     };
     const oauth = getOAuthHeader(commerceOAuth1);
-    getAuthorizationHeaders = ({ url, method }) => {
-      return oauth.toHeader(
+    getAuthorizationHeaders = ({ url, method }) =>
+      oauth.toHeader(
         oauth.authorize(
           {
             url,
@@ -68,7 +68,6 @@ function createClient(options, authOptions, logger) {
           oauthToken,
         ),
       );
-    };
   }
 
   /**

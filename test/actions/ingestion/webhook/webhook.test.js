@@ -186,16 +186,12 @@ describe("Given external backoffice events ingestion webhook", () => {
         },
       };
 
-      getImsAuthProvider.mockImplementation(() => {
-        return {
-          getAccessToken: () => {
-            throw new Error("fake error");
-          },
-          getHeaders: () => {
-            return {};
-          },
-        };
-      });
+      getImsAuthProvider.mockImplementation(() => ({
+        getAccessToken: () => {
+          throw new Error("fake error");
+        },
+        getHeaders: () => ({}),
+      }));
 
       const response = await action.main(params);
 

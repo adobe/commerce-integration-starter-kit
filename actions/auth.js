@@ -21,13 +21,11 @@ const logger = Core.Logger("auth", { level: "info" });
 function checkIfMissing(params, expected) {
   return expected
     .filter((value) => !params[value])
-    .map((key) => {
-      return {
-        error: true,
-        message: `Missing ${key} in params`,
-        key,
-      };
-    });
+    .map((key) => ({
+      error: true,
+      message: `Missing ${key} in params`,
+      key,
+    }));
 }
 
 /**

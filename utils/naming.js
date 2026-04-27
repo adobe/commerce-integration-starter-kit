@@ -19,7 +19,7 @@ const SEPARATOR = "-";
  * @returns the suffix
  */
 function labelSuffix(runtimeNamespace) {
-  return runtimeNamespace.substring(runtimeNamespace.indexOf(SEPARATOR) + 1);
+  return runtimeNamespace.slice(runtimeNamespace.indexOf(SEPARATOR) + 1);
 }
 
 /**

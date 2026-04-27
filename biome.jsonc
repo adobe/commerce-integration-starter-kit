@@ -1,6 +1,6 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.15/schema.json",
-  "extends": ["ultracite/core"],
+  "$schema": "https://biomejs.dev/schemas/2.4.13/schema.json",
+  "extends": ["ultracite/biome/core"],
 
   "files": {
     "ignoreUnknown": true

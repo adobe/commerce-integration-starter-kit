@@ -74,7 +74,6 @@ async function main(params) {
     }
 
     const message = [
-      // biome-ignore lint/nursery/noUnnecessaryConditions: seems to be a false positive
       `Sync process ${hasErrors ? "completed with some errors" : "completed successfully"}.`,
       `Processed ${results.length} pages:`,
       `\t${results.filter((item) => item.success).length} succeeded.`,
