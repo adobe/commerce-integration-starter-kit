@@ -21,7 +21,7 @@
     "ajv": "^8.16.0",
     "ansis": "^4.1.0",
     "cloudevents": "^10.0.0",
-    "dotenv": "^16.4.5",
+    "dotenv": "^17.0.0",
     "got": "^11.8.5",
     "graphql-request": "^7.1.2",
     "node-fetch": "^2.7.0",
