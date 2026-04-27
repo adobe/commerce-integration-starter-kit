@@ -1,0 +1,40 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    ":automergeDisabled",
+    ":ignoreUnstable",
+    ":prConcurrentLimitNone",
+    ":preserveSemverRanges",
+    ":rebaseStalePrs",
+    ":renovatePrefix",
+    ":separateMultipleMajorReleases",
+    ":updateNotScheduled",
+    "config:best-practices",
+    "config:recommended",
+    "customManagers:biomeVersions",
+    "group:definitelyTyped",
+    "group:monorepos",
+    "group:recommended",
+    "helpers:disableTypesNodeMajor",
+    "helpers:pinGitHubActionDigestsToSemver",
+    "security:minimumReleaseAgeNpm"
+  ],
+  "automerge": false,
+  "branchPrefix": "renovate/",
+  "commitMessagePrefix": "RENOVATE: ",
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-non-major",
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "schedule": ["on Monday"]
+    },
+    {
+      "matchUpdateTypes": ["lockFileMaintenance"],
+      "automerge": true,
+      "schedule": ["on Monday"]
+    }
+  ]
+}
