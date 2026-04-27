@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@tsconfig/node22": "22.0.5",
+    "@tsconfig/node24": "24.0.0",
     "@types/node": "^22.1.0",
     "concurrently": "9.2.1",
     "rimraf": "6.1.3",
