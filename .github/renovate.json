@@ -36,6 +36,15 @@
       "matchUpdateTypes": ["lockFileMaintenance"],
       "automerge": true,
       "schedule": ["on Monday"]
+    },
+    {
+      "groupName": "aio-commerce-sdk",
+      "matchPackageNames": [
+        "@adobe/aio-commerce-lib-*",
+        "@adobe/aio-commerce-sdk*"
+      ],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
     }
   ]
 }
