@@ -1,10 +1,17 @@
 const { HTTP_OK } = require("../../actions/constants");
 const { getClient } = require("../../actions/oauth1a");
-const nock = require("nock");
 
 jest.mock("../../utils/adobe-auth", () => ({
   getAdobeAccessToken: jest.fn().mockResolvedValue("TOKEN"),
 }));
+
+const mockJsonResponse = (body, ok = true) =>
+  Promise.resolve({
+    ok,
+    status: ok ? HTTP_OK : 500,
+    statusText: ok ? "OK" : "Internal Server Error",
+    json: () => Promise.resolve(body),
+  });
 
 describe("getClient", () => {
   it("should return a client", () => {
@@ -38,6 +45,10 @@ describe("getClient", () => {
     ));
 
   it("should add a OAuth header when using Commerce OAuth1a credentials", async () => {
+    const fetchSpy = jest
+      .spyOn(global, "fetch")
+      .mockImplementation(() => mockJsonResponse({ success: true }));
+
     const client = getClient(
       {
         url: "http://commerce.adobe.io/",
@@ -51,21 +62,26 @@ describe("getClient", () => {
       console,
     );
 
-    const scope = nock("http://commerce.adobe.io", {
-      reqheaders: {
-        Authorization: (value) => value.includes("OAuth"),
-      },
-    })
-      .matchHeader("accept", "application/json")
-      .get("/V1/foo")
-      .reply(HTTP_OK, { success: true });
-    expect(await client.get("foo", "")).toStrictEqual({
-      success: true,
-    });
-    scope.done();
+    expect(await client.get("foo", "")).toStrictEqual({ success: true });
+
+    expect(fetchSpy).toHaveBeenCalledWith(
+      "http://commerce.adobe.io/V1/foo",
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Accept: "application/json",
+          Authorization: expect.stringContaining("OAuth"),
+        }),
+      }),
+    );
+
+    fetchSpy.mockRestore();
   });
 
   it("should add a Authorization with Bearer <TOKEN> when receiving a success response from IMS", async () => {
+    const fetchSpy = jest
+      .spyOn(global, "fetch")
+      .mockImplementation(() => mockJsonResponse({ success: true }));
+
     const client = getClient(
       {
         url: "http://commerce.adobe.io/",
@@ -78,20 +94,18 @@ describe("getClient", () => {
       console,
     );
 
-    const scope = nock("http://commerce.adobe.io", {
-      reqheaders: {
-        Authorization: (value) => value.includes("Bearer TOKEN"),
-      },
-    })
-      .matchHeader("accept", "application/json")
-      .get("/V1/foo")
-      .reply(HTTP_OK, { success: true });
+    expect(await client.get("foo", "")).toStrictEqual({ success: true });
 
-    const result = await client.get("foo", "");
-    expect(result).toStrictEqual({
-      success: true,
-    });
+    expect(fetchSpy).toHaveBeenCalledWith(
+      "http://commerce.adobe.io/V1/foo",
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Accept: "application/json",
+          Authorization: "Bearer TOKEN",
+        }),
+      }),
+    );
 
-    scope.done();
+    fetchSpy.mockRestore();
   });
 });

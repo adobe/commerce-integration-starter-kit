@@ -50,14 +50,15 @@ jest.mock("@adobe/aio-commerce-lib-auth", () => {
 
 const { getImsAuthProvider } = require("@adobe/aio-commerce-lib-auth");
 
-jest.mock("node-fetch");
-const fetch = require("node-fetch");
+let fetchSpy;
 
 beforeEach(() => {
-  Events.init.mockClear(); // only clears calls stats
+  Events.init.mockClear();
+  fetchSpy = jest.spyOn(global, "fetch");
 });
 
 afterEach(() => {
+  fetchSpy.mockRestore();
   jest.clearAllMocks();
   jest.resetModules();
 });
@@ -120,7 +121,7 @@ describe("Given external backoffice events ingestion webhook", () => {
       };
 
       mockResolvedAccessToken();
-      fetch.mockResolvedValueOnce(
+      fetchSpy.mockResolvedValueOnce(
         createMockFetchProvidersResponse([
           {
             id: "PROVIDER_ID",
@@ -257,7 +258,7 @@ describe("Given external backoffice events ingestion webhook", () => {
       };
 
       mockResolvedAccessToken();
-      fetch.mockRejectedValue(new Error("fake error"));
+      fetchSpy.mockRejectedValue(new Error("fake error"));
 
       const response = await action.main(params);
 
@@ -289,7 +290,7 @@ describe("Given external backoffice events ingestion webhook", () => {
       };
 
       mockResolvedAccessToken();
-      fetch.mockResolvedValueOnce({
+      fetchSpy.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({}),
       });
@@ -324,7 +325,7 @@ describe("Given external backoffice events ingestion webhook", () => {
       };
 
       mockResolvedAccessToken();
-      fetch.mockResolvedValueOnce(
+      fetchSpy.mockResolvedValueOnce(
         createMockFetchProvidersResponse([
           {
             id: "PROVIDER_ID",
@@ -369,7 +370,7 @@ describe("Given external backoffice events ingestion webhook", () => {
       };
 
       mockResolvedAccessToken();
-      fetch.mockResolvedValueOnce(
+      fetchSpy.mockResolvedValueOnce(
         createMockFetchProvidersResponse([
           {
             id: "PROVIDER_ID",
@@ -415,7 +416,7 @@ describe("Given external backoffice events ingestion webhook", () => {
       };
 
       mockResolvedAccessToken();
-      fetch.mockResolvedValueOnce(
+      fetchSpy.mockResolvedValueOnce(
         createMockFetchProvidersResponse([
           {
             id: "PROVIDER_ID",

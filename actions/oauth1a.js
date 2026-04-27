@@ -10,7 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const got = require("got");
 const { getIntegrationAuthProvider } = require("@adobe/aio-commerce-lib-auth");
 const { getAdobeAccessToken } = require("../utils/adobe-auth");
 
@@ -92,16 +91,19 @@ function createClient(options, params, logger) {
       }
 
       const headers = {
+        Accept: "application/json",
         ...customHeaders,
         ...authHeaders,
       };
-      return await got(requestData.url, {
-        http2: true,
+      const response = await fetch(requestData.url, {
         method: requestData.method,
         headers,
         body: requestData.body,
-        responseType: "json",
-      }).json();
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      return response.json();
     } catch (error) {
       logger.error(`Error fetching URL ${requestData.url}: ${error}`);
       throw error;

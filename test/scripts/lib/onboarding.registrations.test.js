@@ -10,11 +10,15 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-jest.mock("node-fetch");
-const fetch = require("node-fetch");
+let fetchSpy;
 const action = require("../../../scripts/lib/registrations.js");
 
+beforeEach(() => {
+  fetchSpy = jest.spyOn(global, "fetch");
+});
+
 afterEach(() => {
+  fetchSpy.mockRestore();
   jest.clearAllMocks();
   jest.resetModules();
 });
@@ -241,7 +245,7 @@ describe("Given on-boarding registrations file", () => {
             enabled: true,
           }),
       };
-      fetch
+      fetchSpy
         .mockResolvedValueOnce(mockFetchExistingRegistrationResponse)
         .mockResolvedValueOnce(
           mockFetchCreateProductCommerceRegistrationResponse,
@@ -441,7 +445,7 @@ describe("Given on-boarding registrations file", () => {
             enabled: true,
           }),
       };
-      fetch
+      fetchSpy
         .mockResolvedValueOnce(mockFetchExistingRegistrationResponse)
         .mockResolvedValueOnce(
           mockFetchCreateProductCommerceRegistrationResponse,
@@ -632,7 +636,7 @@ describe("Given on-boarding registrations file", () => {
             enabled: true,
           }),
       };
-      fetch
+      fetchSpy
         .mockResolvedValueOnce(mockFetchExistingRegistrationResponse)
         .mockResolvedValueOnce(
           mockFetchCreateProductBackofficeRegistrationResponse,
@@ -823,7 +827,7 @@ describe("Given on-boarding registrations file", () => {
             enabled: true,
           }),
       };
-      fetch
+      fetchSpy
         .mockResolvedValueOnce(mockFetchExistingRegistrationResponse)
         .mockResolvedValueOnce(
           mockFetchCreateProductBackofficeRegistrationResponse,
@@ -859,7 +863,7 @@ describe("Given on-boarding registrations file", () => {
   describe("When create registration process call to API fails", () => {
     test("Then returns error response", async () => {
       const fakeError = new Error("fake");
-      fetch.mockRejectedValue(fakeError);
+      fetchSpy.mockRejectedValue(fakeError);
 
       const clientRegistrations = require("../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json");
       const response = await action.main(
@@ -897,7 +901,7 @@ describe("Given on-boarding registrations file", () => {
           }),
       };
 
-      fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
+      fetchSpy.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
       const clientRegistrations = require("../../data/onboarding/registrations/create_commerce_and_backoffice_registrations.json");
       const environment = {

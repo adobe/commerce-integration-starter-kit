@@ -10,15 +10,19 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-jest.mock("node-fetch");
-const fetch = require("node-fetch");
+let fetchSpy;
 const action = require("../../../scripts/lib/metadata.js");
 const ACCESS_TOKEN = "token";
 const ENVIRONMENT = {
   EVENT_PREFIX: "test-project",
 };
 
+beforeEach(() => {
+  fetchSpy = jest.spyOn(global, "fetch");
+});
+
 afterEach(() => {
+  fetchSpy.mockRestore();
   jest.clearAllMocks();
   jest.resetModules();
 });
@@ -61,7 +65,7 @@ describe("Given on-boarding metadata file", () => {
             },
           }),
       };
-      fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
+      fetchSpy.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
       const clientRegistrations = require("../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json");
       const response = await action.main(
@@ -106,7 +110,7 @@ describe("Given on-boarding metadata file", () => {
           }),
       };
 
-      fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
+      fetchSpy.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
       const clientRegistrations = require("../../data/onboarding/metadata/create_only_commerce_providers_metadata.json");
       const response = await action.main(
@@ -146,7 +150,7 @@ describe("Given on-boarding metadata file", () => {
             },
           }),
       };
-      fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
+      fetchSpy.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
       const clientRegistrations = require("../../data/onboarding/metadata/create_only_backoffice_providers_metadata.json");
       const response = await action.main(
@@ -170,7 +174,7 @@ describe("Given on-boarding metadata file", () => {
   describe("When metadata process API call fails", () => {
     test("Then returns error response", async () => {
       const fakeError = new Error("fake");
-      fetch.mockRejectedValue(fakeError);
+      fetchSpy.mockRejectedValue(fakeError);
       const clientRegistrations = require("../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json");
       const response = await action.main(
         clientRegistrations,
@@ -210,7 +214,7 @@ describe("Given on-boarding metadata file", () => {
             message: "Please provide valid data",
           }),
       };
-      fetch.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
+      fetchSpy.mockResolvedValue(mockFetchCreateProviderMetadataResponse);
 
       const clientRegistrations = require("../../data/onboarding/metadata/create_commerce_and_backoffice_providers_metadata.json");
       const environment = {

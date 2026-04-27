@@ -21,9 +21,7 @@
     "ansis": "^4.1.0",
     "cloudevents": "^10.0.0",
     "dotenv": "^17.0.0",
-    "got": "^11.8.5",
     "graphql-request": "^7.1.2",
-    "node-fetch": "^2.7.0",
     "openwhisk": "^3.21.8",
     "valibot": "^1.1.0"
   },
@@ -32,7 +30,6 @@
     "husky": "9.1.7",
     "jest": "29.7.0",
     "lint-staged": "16.4.0",
-    "nock": "13.5.6",
     "prettier": "3.8.3",
     "ultracite": "7.6.2"
   },
