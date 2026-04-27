@@ -123,7 +123,7 @@ describe("onboarding index", () => {
     expect(fullErrorMessage).toContain("Invalid ImsAuthProvider configuration");
     expect(fullErrorMessage).toContain("clientSecrets");
     expect(fullErrorMessage).toContain(
-      "Expected at least one client secret for IMS auth",
+      "Expected at least 1 items for the IMS auth parameter clientSecrets",
     );
     expect(fullErrorMessage).not.toContain("clientId");
     expect(fullErrorMessage).not.toContain("technicalAccountId");
@@ -165,7 +165,7 @@ describe("onboarding index", () => {
     expect(fullErrorMessage).toContain("Invalid ImsAuthProvider configuration");
     expect(fullErrorMessage).toContain("clientSecrets");
     expect(fullErrorMessage).toContain(
-      "Expected at least one client secret for IMS auth",
+      "Expected at least 1 items for the IMS auth parameter clientSecrets",
     );
     expect(fullErrorMessage).not.toContain("clientId");
     expect(fullErrorMessage).not.toContain("technicalAccountId");

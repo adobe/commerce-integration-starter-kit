@@ -32,4 +32,9 @@ module.exports = {
   reporters: ["default"],
   testEnvironment: "node",
   setupFilesAfterEnv: ["./jest.setup.js"],
+  // camelcase v8+ is ESM-only and breaks Jest (CJS). Map it to a CJS shim backed
+  // by camelcase@5 (already installed as a transitive dep) which exposes the same API.
+  moduleNameMapper: {
+    "^camelcase$": "<rootDir>/helpers/camelcase-cjs.js",
+  },
 };
