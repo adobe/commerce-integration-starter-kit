@@ -32,7 +32,7 @@
     {
       "customType": "regex",
       "managerFilePatterns": ["/\\.config\\.yaml$/"],
-      "matchStrings": ["runtime: nodejs:(?<currentValue>\\d+)"],
+      "matchStrings": ["runtime: ['\"]?nodejs:(?<currentValue>\\d+)['\"]?"],
       "depNameTemplate": "node",
       "datasourceTemplate": "node-version",
       "versioningTemplate": "node"
