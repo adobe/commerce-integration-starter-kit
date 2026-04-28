@@ -24,7 +24,6 @@
     "automerge": true
   },
   "osvVulnerabilityAlerts": true,
-  "transitiveRemediation": true,
   "branchPrefix": "renovate/",
   "commitMessagePrefix": "RENOVATE: ",
   "labels": ["dependencies"],
