@@ -31,7 +31,9 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["\\.config\\.yaml$"],
+      "managerFilePatterns": [
+        "/\\.config\\.yaml$/"
+      ],
       "matchStrings": ["runtime: nodejs:(?<currentValue>\\d+)"],
       "depNameTemplate": "node",
       "datasourceTemplate": "node-version",
