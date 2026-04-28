@@ -11,15 +11,14 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        node-version: ['16']
         os: [ubuntu-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: '.nvmrc'
       - name: npm install
         run: npm i
       - name: Setup CLI
