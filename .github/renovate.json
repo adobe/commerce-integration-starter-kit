@@ -28,6 +28,16 @@
   "commitMessagePrefix": "RENOVATE: ",
   "labels": ["dependencies"],
   "postUpdateOptions": ["npmDedupe"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["\\.config\\.yaml$"],
+      "matchStrings": ["runtime: nodejs:(?<currentValue>\\d+)"],
+      "depNameTemplate": "node",
+      "datasourceTemplate": "node-version",
+      "versioningTemplate": "node"
+    }
+  ],
   "packageRules": [
     {
       "groupName": "all non-major dependencies",
@@ -47,6 +57,12 @@
         "@adobe/aio-commerce-lib-*",
         "@adobe/aio-commerce-sdk*"
       ],
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "groupName": "node version",
+      "matchPackageNames": ["node"],
       "matchUpdateTypes": ["major"],
       "automerge": false
     }
