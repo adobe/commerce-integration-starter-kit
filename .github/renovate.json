@@ -20,6 +20,10 @@
     ":separateMultipleMajorReleases"
   ],
   "automerge": false,
+  "vulnerabilityAlerts": {
+    "automerge": true
+  },
+  "osvVulnerabilityAlerts": true,
   "branchPrefix": "renovate/",
   "commitMessagePrefix": "RENOVATE: ",
   "labels": ["dependencies"],
