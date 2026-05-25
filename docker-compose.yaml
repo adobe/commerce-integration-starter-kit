@@ -1,6 +1,6 @@
 services:
   otel-lgtm:
-    image: grafana/otel-lgtm:latest@sha256:764b657d5c750a151fbe2f9acd8cd8edeec873b8f5e3179380d7d08b69797c2e
+    image: grafana/otel-lgtm:latest@sha256:10f48eb2f8670134df542177bb19536c55421b089e43f9dfc2a27d4c078204d8
     container_name: otel-lgtm
     restart: unless-stopped
     ports:
