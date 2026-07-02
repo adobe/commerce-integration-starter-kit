@@ -25,6 +25,9 @@
   },
 
   "linter": {
+    "domains": {
+      "test": "all"
+    },
     "rules": {
       "style": {
         // This only applies to TypeScript, which we don't use yet.
