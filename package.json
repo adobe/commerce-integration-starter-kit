@@ -46,7 +46,7 @@
     "docs:format:fix": "prettier --write --no-error-on-unmatched-pattern '**/*.md' \"!**/{CODE_OF_CONDUCT.md,COPYRIGHT,LICENSE,SECURITY.md,CONTRIBUTING.md,COPILOT-INSTRUCTIONS.md}\""
   },
   "engines": {
-    "node": "^22.0.0"
+    "node": "^24.0.0"
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
