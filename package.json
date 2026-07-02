@@ -26,11 +26,11 @@
     "valibot": "^1.1.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.16",
+    "@biomejs/biome": "2.5.1",
     "husky": "9.1.7",
     "jest": "30.4.2",
     "lint-staged": "17.0.8",
-    "prettier": "3.8.4",
+    "prettier": "3.9.1",
     "ultracite": "7.8.3"
   },
   "scripts": {
