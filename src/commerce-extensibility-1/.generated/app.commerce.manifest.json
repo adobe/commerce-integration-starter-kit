@@ -1,0 +1,404 @@
+{
+  "eventing": {
+    "commerce": [
+      {
+        "events": [
+          {
+            "description": "Observer catalog product delete commit after",
+            "fields": [
+              {
+                "name": "id"
+              },
+              {
+                "name": "sku"
+              },
+              {
+                "name": "name"
+              },
+              {
+                "name": "created_at"
+              },
+              {
+                "name": "updated_at"
+              },
+              {
+                "name": "description"
+              }
+            ],
+            "label": "Observer catalog product delete commit after",
+            "name": "observer.catalog_product_delete_commit_after",
+            "runtimeActions": [
+              "product-commerce/consumer"
+            ]
+          },
+          {
+            "description": "Observer catalog product save commit after",
+            "fields": [
+              {
+                "name": "id"
+              },
+              {
+                "name": "sku"
+              },
+              {
+                "name": "name"
+              },
+              {
+                "name": "created_at"
+              },
+              {
+                "name": "updated_at"
+              },
+              {
+                "name": "description"
+              }
+            ],
+            "label": "Observer catalog product save commit after",
+            "name": "observer.catalog_product_save_commit_after",
+            "runtimeActions": [
+              "product-commerce/consumer"
+            ]
+          },
+          {
+            "description": "Observer customer save commit after",
+            "fields": [
+              {
+                "name": "id"
+              },
+              {
+                "name": "firstname"
+              },
+              {
+                "name": "lastname"
+              },
+              {
+                "name": "email"
+              },
+              {
+                "name": "created_at"
+              },
+              {
+                "name": "updated_at"
+              }
+            ],
+            "label": "Observer customer save commit after",
+            "name": "observer.customer_save_commit_after",
+            "runtimeActions": [
+              "customer-commerce/consumer"
+            ]
+          },
+          {
+            "description": "Observer customer delete commit after",
+            "fields": [
+              {
+                "name": "id"
+              },
+              {
+                "name": "firstname"
+              },
+              {
+                "name": "lastname"
+              },
+              {
+                "name": "email"
+              }
+            ],
+            "label": "Observer customer delete commit after",
+            "name": "observer.customer_delete_commit_after",
+            "runtimeActions": [
+              "customer-commerce/consumer"
+            ]
+          },
+          {
+            "description": "Observer customer group save commit after",
+            "fields": [
+              {
+                "name": "customer_group_code"
+              },
+              {
+                "name": "tax_class_id"
+              },
+              {
+                "name": "extension_attributes"
+              },
+              {
+                "name": "customer_group_id"
+              }
+            ],
+            "label": "Observer customer group save commit after",
+            "name": "observer.customer_group_save_commit_after",
+            "runtimeActions": [
+              "customer-commerce/consumer"
+            ]
+          },
+          {
+            "description": "Observer customer group delete commit after",
+            "fields": [
+              {
+                "name": "customer_group_code"
+              },
+              {
+                "name": "customer_group_id"
+              },
+              {
+                "name": "tax_class_id"
+              }
+            ],
+            "label": "Observer customer group delete commit after",
+            "name": "observer.customer_group_delete_commit_after",
+            "runtimeActions": [
+              "customer-commerce/consumer"
+            ]
+          },
+          {
+            "description": "Observer sales order save commit after",
+            "fields": [
+              {
+                "name": "id"
+              },
+              {
+                "name": "increment_id"
+              },
+              {
+                "name": "created_at"
+              },
+              {
+                "name": "updated_at"
+              }
+            ],
+            "label": "Observer sales order save commit after",
+            "name": "observer.sales_order_save_commit_after",
+            "runtimeActions": [
+              "order-commerce/consumer"
+            ]
+          },
+          {
+            "description": "Observer cataloginventory stock item save commit after",
+            "fields": [
+              {
+                "name": "item_id"
+              },
+              {
+                "name": "product_id"
+              },
+              {
+                "name": "stock_id"
+              },
+              {
+                "name": "qty"
+              },
+              {
+                "name": "min_qty"
+              },
+              {
+                "name": "use_config_min_qty"
+              },
+              {
+                "name": "is_qty_decimal"
+              },
+              {
+                "name": "backorders"
+              },
+              {
+                "name": "use_config_backorders"
+              },
+              {
+                "name": "min_sale_qty"
+              },
+              {
+                "name": "use_config_min_sale_qty"
+              },
+              {
+                "name": "max_sale_qty"
+              },
+              {
+                "name": "use_config_max_sale_qty"
+              },
+              {
+                "name": "is_in_stock"
+              },
+              {
+                "name": "low_stock_date"
+              },
+              {
+                "name": "notify_stock_qty"
+              },
+              {
+                "name": "use_config_notify_stock_qty"
+              },
+              {
+                "name": "manage_stock"
+              },
+              {
+                "name": "use_config_manage_stock"
+              },
+              {
+                "name": "stock_status_changed_auto"
+              },
+              {
+                "name": "use_config_qty_increments"
+              },
+              {
+                "name": "qty_increments"
+              },
+              {
+                "name": "use_config_enable_qty_inc"
+              },
+              {
+                "name": "enable_qty_increments"
+              },
+              {
+                "name": "is_decimal_divided"
+              },
+              {
+                "name": "website_id"
+              },
+              {
+                "name": "deferred_stock_update"
+              },
+              {
+                "name": "use_config_deferred_stock_update"
+              },
+              {
+                "name": "type_id"
+              },
+              {
+                "name": "min_qty_allowed_in_shopping_cart"
+              }
+            ],
+            "label": "Observer cataloginventory stock item save commit after",
+            "name": "observer.cataloginventory_stock_item_save_commit_after",
+            "runtimeActions": [
+              "stock-commerce/consumer"
+            ]
+          }
+        ],
+        "provider": {
+          "description": "Commerce Provider that will receive events from commerce",
+          "key": "commerce",
+          "label": "Commerce Provider"
+        }
+      }
+    ],
+    "external": [
+      {
+        "events": [
+          {
+            "description": "Be observer catalog product create",
+            "label": "Be observer catalog product create",
+            "name": "be-observer.catalog_product_create",
+            "runtimeActions": [
+              "product-backoffice/consumer"
+            ]
+          },
+          {
+            "description": "Be observer catalog product update",
+            "label": "Be observer catalog product update",
+            "name": "be-observer.catalog_product_update",
+            "runtimeActions": [
+              "product-backoffice/consumer"
+            ]
+          },
+          {
+            "description": "Be observer catalog product delete",
+            "label": "Be observer catalog product delete",
+            "name": "be-observer.catalog_product_delete",
+            "runtimeActions": [
+              "product-backoffice/consumer"
+            ]
+          },
+          {
+            "description": "Be observer customer create",
+            "label": "Be observer customer create",
+            "name": "be-observer.customer_create",
+            "runtimeActions": [
+              "customer-backoffice/consumer"
+            ]
+          },
+          {
+            "description": "Be observer customer update",
+            "label": "Be observer customer update",
+            "name": "be-observer.customer_update",
+            "runtimeActions": [
+              "customer-backoffice/consumer"
+            ]
+          },
+          {
+            "description": "Be observer customer delete",
+            "label": "Be observer customer delete",
+            "name": "be-observer.customer_delete",
+            "runtimeActions": [
+              "customer-backoffice/consumer"
+            ]
+          },
+          {
+            "description": "Be observer customer group create",
+            "label": "Be observer customer group create",
+            "name": "be-observer.customer_group_create",
+            "runtimeActions": [
+              "customer-backoffice/consumer"
+            ]
+          },
+          {
+            "description": "Be observer customer group update",
+            "label": "Be observer customer group update",
+            "name": "be-observer.customer_group_update",
+            "runtimeActions": [
+              "customer-backoffice/consumer"
+            ]
+          },
+          {
+            "description": "Be observer customer group delete",
+            "label": "Be observer customer group delete",
+            "name": "be-observer.customer_group_delete",
+            "runtimeActions": [
+              "customer-backoffice/consumer"
+            ]
+          },
+          {
+            "description": "Be observer sales order status update",
+            "label": "Be observer sales order status update",
+            "name": "be-observer.sales_order_status_update",
+            "runtimeActions": [
+              "order-backoffice/consumer"
+            ]
+          },
+          {
+            "description": "Be observer sales order shipment create",
+            "label": "Be observer sales order shipment create",
+            "name": "be-observer.sales_order_shipment_create",
+            "runtimeActions": [
+              "order-backoffice/consumer"
+            ]
+          },
+          {
+            "description": "Be observer sales order shipment update",
+            "label": "Be observer sales order shipment update",
+            "name": "be-observer.sales_order_shipment_update",
+            "runtimeActions": [
+              "order-backoffice/consumer"
+            ]
+          },
+          {
+            "description": "Be observer catalog stock update",
+            "label": "Be observer catalog stock update",
+            "name": "be-observer.catalog_stock_update",
+            "runtimeActions": [
+              "stock-backoffice/consumer"
+            ]
+          }
+        ],
+        "provider": {
+          "description": "Backoffice Provider that will receive events from commerce",
+          "label": "Backoffice Provider"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "description": "To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder....",
+    "displayName": "Commerce Integration Starter Kit",
+    "id": "commerce-integration-starter-kit",
+    "version": "1.0.2"
+  }
+}

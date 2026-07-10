@@ -1,6 +1,4 @@
 application:
-#  hooks:
-#    post-app-deploy: ./hooks/post-app-deploy.js
   runtimeManifest:
     packages:
       starter-kit:
@@ -60,3 +58,8 @@ productDependencies:
   - code: COMMC
     minVersion: 2.4.4
     maxVersion: 2.4.9
+
+extensions:
+  # This extension is required for app management. Do not remove.
+  commerce/extensibility/1:
+    $include: src/commerce-extensibility-1/ext.config.yaml
