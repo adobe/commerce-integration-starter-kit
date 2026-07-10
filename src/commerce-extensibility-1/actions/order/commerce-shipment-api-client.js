@@ -10,51 +10,36 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { getClient } = require("../oauth1a");
-
-const { Core } = require("@adobe/aio-sdk");
-const logger = Core.Logger("commerce-shipment-api-client", { level: "info" });
+const { getCommerceClient } = require("@adobe/aio-commerce-lib-app");
+const { resolveImsAuthParams } = require("@adobe/aio-commerce-sdk/auth");
 
 /**
  * This function call Adobe commerce rest API to create a shipment
  *
- * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {string} orderId - Adobe commerce order id
  * @param {object} data - Adobe commerce api payload
  */
-async function createShipment(baseUrl, params, orderId, data) {
-  const client = getClient(
-    {
-      url: baseUrl,
-      params,
-    },
-    logger,
-  );
+async function createShipment(params, orderId, data) {
+  // App Management requires IMS. It's fine to only resolve IMS authentication.
+  const imsAuthParams = resolveImsAuthParams(params);
+  const client = await getCommerceClient(imsAuthParams);
 
-  return await client.post(`order/${orderId}/ship`, JSON.stringify(data), "", {
-    "Content-Type": "application/json",
-  });
+  return await client.post(`order/${orderId}/ship`, { json: data });
 }
 
 /**
  * This function call Adobe commerce rest API to update a shipment
  *
- * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {object} data - Adobe commerce api payload
  */
-async function updateShipment(baseUrl, params, data) {
-  const client = getClient(
-    {
-      url: baseUrl,
-      params,
-    },
-    logger,
-  );
-  return await client.post("shipment", JSON.stringify(data), "", {
-    "Content-Type": "application/json",
-  });
+async function updateShipment(params, data) {
+  // App Management requires IMS. It's fine to only resolve IMS authentication.
+  const imsAuthParams = resolveImsAuthParams(params);
+  const client = await getCommerceClient(imsAuthParams);
+
+  return await client.post("shipment", { json: data });
 }
 
 module.exports = {

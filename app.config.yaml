@@ -1,19 +1,6 @@
 application:
   runtimeManifest:
     packages:
-      starter-kit:
-        license: Apache-2.0
-        actions:
-          # Please DO NOT DELETE this action; future functionalities planned for upcoming starter kit releases may stop working.
-          info:
-            function: actions/starter-kit-info/index.js
-            web: 'yes'
-            runtime: nodejs:24
-            inputs:
-              LOG_LEVEL: debug
-            annotations:
-              require-adobe-auth: true
-              final: true
       #  ingestion:
       #    license: Apache-2.0
       #    actions:
@@ -54,6 +41,7 @@ application:
         license: Apache-2.0
         actions:
           $include: ./actions/stock/external/actions.config.yaml
+          
 productDependencies:
   - code: COMMC
     minVersion: 2.4.4

@@ -23,11 +23,7 @@ const { HTTP_INTERNAL_ERROR } = require("../../../constants");
  */
 async function sendData(params, transformed, preProcessed) {
   try {
-    const response = await deleteProduct(
-      params.COMMERCE_BASE_URL,
-      params,
-      transformed,
-    );
+    const response = await deleteProduct(params, transformed);
 
     return {
       success: true,

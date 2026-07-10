@@ -52,7 +52,7 @@
       "assist": { "enabled": false }
     },
     {
-      "includes": ["actions/**/*.js"],
+      "includes": ["src/commerce-extensibility-1/actions/**/*.js"],
       "linter": {
         "rules": {
           "suspicious": {

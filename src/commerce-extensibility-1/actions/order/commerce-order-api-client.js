@@ -10,33 +10,22 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { getClient } = require("../oauth1a");
-const { Core } = require("@adobe/aio-sdk");
-const logger = Core.Logger("commerce-order-api-client", { level: "info" });
+const { getCommerceClient } = require("@adobe/aio-commerce-lib-app");
+const { resolveImsAuthParams } = require("@adobe/aio-commerce-sdk/auth");
 
 /**
- * This function call Adobe commerce rest API to create a product
+ * This function call Adobe commerce rest API to add a comment to an order
  *
- * @param {string} baseUrl - Adobe commerce rest api base url
  * @param {object} params - Environment params from the IO Runtime request
  * @param {number} orderId - order id
  * @param {object} data - Adobe commerce api payload
  */
-async function addComment(baseUrl, params, orderId, data) {
-  const client = getClient(
-    {
-      url: baseUrl,
-      params,
-    },
-    logger,
-  );
+async function addComment(params, orderId, data) {
+  // App Management requires IMS. It's fine to only resolve IMS authentication.
+  const imsAuthParams = resolveImsAuthParams(params);
+  const client = await getCommerceClient(imsAuthParams);
 
-  return await client.post(
-    `orders/${orderId}/comments`,
-    JSON.stringify(data),
-    "",
-    { "Content-Type": "application/json" },
-  );
+  return await client.post(`orders/${orderId}/comments`, { json: data });
 }
 
 module.exports = {

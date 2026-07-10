@@ -23,12 +23,7 @@ const { HTTP_INTERNAL_ERROR } = require("../../../constants");
  */
 async function sendData(params, transformed, preProcessed) {
   try {
-    const response = await addComment(
-      params.COMMERCE_BASE_URL,
-      params,
-      params.data.id,
-      transformed,
-    );
+    const response = await addComment(params, params.data.id, transformed);
 
     return {
       success: true,

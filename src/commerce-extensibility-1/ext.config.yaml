@@ -1,4 +1,3 @@
-
 # The [pre-app-build] hooks are auto-generated. Do not remove or manually edit.
 hooks:
   pre-app-build: EXTENSION=extensibility/1 npx aio-commerce-lib-app hooks pre-app-build
@@ -8,6 +7,8 @@ operations:
   workerProcess:
     - type: action
       impl: app-management/app-config
+    - type: action
+      impl: app-management/association
     - type: action
       impl: app-management/installation
 
@@ -24,8 +25,17 @@ runtimeManifest:
           inputs:
             LOG_LEVEL: $LOG_LEVEL
           annotations:
-            require-adobe-auth: true
             final: true
+            require-adobe-auth: true
+        association:
+          function: .generated/actions/app-management/association.js
+          web: yes
+          runtime: nodejs:24
+          inputs:
+            LOG_LEVEL: $LOG_LEVEL
+          annotations:
+            final: true
+            require-adobe-auth: true
         installation:
           function: .generated/actions/app-management/installation.js
           web: yes
@@ -39,7 +49,7 @@ runtimeManifest:
             AIO_COMMERCE_AUTH_IMS_ORG_ID: $AIO_COMMERCE_AUTH_IMS_ORG_ID
             AIO_COMMERCE_AUTH_IMS_SCOPES: $AIO_COMMERCE_AUTH_IMS_SCOPES
           annotations:
-            require-adobe-auth: true
             final: true
+            require-adobe-auth: true
           limits:
             timeout: 600000
