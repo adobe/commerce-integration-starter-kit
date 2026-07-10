@@ -45,19 +45,11 @@
 
   "overrides": [
     {
-      "includes": ["scripts/**/*.js"],
-      "linter": {
-        "rules": {
-          "complexity": {
-            "noExcessiveCognitiveComplexity": "off"
-          },
-
-          "suspicious": {
-            // We use console to log information during the onboarding process.
-            "noConsole": "off"
-          }
-        }
-      }
+      // Generated code is regenerated on every build; don't lint, format, or assist it.
+      "includes": ["**/.generated/**"],
+      "linter": { "enabled": false },
+      "formatter": { "enabled": false },
+      "assist": { "enabled": false }
     },
     {
       "includes": ["actions/**/*.js"],
