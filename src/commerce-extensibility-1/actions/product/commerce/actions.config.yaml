@@ -1,10 +1,9 @@
-consumer:
-  function: consumer/index.js
+upsert:
+  function: upsert/index.js
   web: 'no'
   runtime: nodejs:24
   inputs:
     LOG_LEVEL: debug
-    EVENT_PREFIX: $EVENT_PREFIX
   annotations:
     require-adobe-auth: true
     final: true

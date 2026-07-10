@@ -28,7 +28,7 @@
             "label": "Observer catalog product delete commit after",
             "name": "observer.catalog_product_delete_commit_after",
             "runtimeActions": [
-              "product-commerce/consumer"
+              "product-commerce/deleted"
             ]
           },
           {
@@ -56,7 +56,7 @@
             "label": "Observer catalog product save commit after",
             "name": "observer.catalog_product_save_commit_after",
             "runtimeActions": [
-              "product-commerce/consumer"
+              "product-commerce/upsert"
             ]
           },
           {
@@ -84,7 +84,7 @@
             "label": "Observer customer save commit after",
             "name": "observer.customer_save_commit_after",
             "runtimeActions": [
-              "customer-commerce/consumer"
+              "customer-commerce/upsert"
             ]
           },
           {
@@ -106,7 +106,7 @@
             "label": "Observer customer delete commit after",
             "name": "observer.customer_delete_commit_after",
             "runtimeActions": [
-              "customer-commerce/consumer"
+              "customer-commerce/deleted"
             ]
           },
           {
@@ -128,7 +128,7 @@
             "label": "Observer customer group save commit after",
             "name": "observer.customer_group_save_commit_after",
             "runtimeActions": [
-              "customer-commerce/consumer"
+              "customer-commerce/group-updated"
             ]
           },
           {
@@ -147,7 +147,7 @@
             "label": "Observer customer group delete commit after",
             "name": "observer.customer_group_delete_commit_after",
             "runtimeActions": [
-              "customer-commerce/consumer"
+              "customer-commerce/group-deleted"
             ]
           },
           {
@@ -169,7 +169,7 @@
             "label": "Observer sales order save commit after",
             "name": "observer.sales_order_save_commit_after",
             "runtimeActions": [
-              "order-commerce/consumer"
+              "order-commerce/upsert"
             ]
           },
           {
@@ -269,7 +269,7 @@
             "label": "Observer cataloginventory stock item save commit after",
             "name": "observer.cataloginventory_stock_item_save_commit_after",
             "runtimeActions": [
-              "stock-commerce/consumer"
+              "stock-commerce/updated"
             ]
           }
         ],
@@ -288,7 +288,7 @@
             "label": "Be observer catalog product create",
             "name": "be-observer.catalog_product_create",
             "runtimeActions": [
-              "product-backoffice/consumer"
+              "product-backoffice/created"
             ]
           },
           {
@@ -296,7 +296,7 @@
             "label": "Be observer catalog product update",
             "name": "be-observer.catalog_product_update",
             "runtimeActions": [
-              "product-backoffice/consumer"
+              "product-backoffice/updated"
             ]
           },
           {
@@ -304,7 +304,7 @@
             "label": "Be observer catalog product delete",
             "name": "be-observer.catalog_product_delete",
             "runtimeActions": [
-              "product-backoffice/consumer"
+              "product-backoffice/deleted"
             ]
           },
           {
@@ -312,7 +312,7 @@
             "label": "Be observer customer create",
             "name": "be-observer.customer_create",
             "runtimeActions": [
-              "customer-backoffice/consumer"
+              "customer-backoffice/created"
             ]
           },
           {
@@ -320,7 +320,7 @@
             "label": "Be observer customer update",
             "name": "be-observer.customer_update",
             "runtimeActions": [
-              "customer-backoffice/consumer"
+              "customer-backoffice/updated"
             ]
           },
           {
@@ -328,7 +328,7 @@
             "label": "Be observer customer delete",
             "name": "be-observer.customer_delete",
             "runtimeActions": [
-              "customer-backoffice/consumer"
+              "customer-backoffice/deleted"
             ]
           },
           {
@@ -336,7 +336,7 @@
             "label": "Be observer customer group create",
             "name": "be-observer.customer_group_create",
             "runtimeActions": [
-              "customer-backoffice/consumer"
+              "customer-backoffice/group-created"
             ]
           },
           {
@@ -344,7 +344,7 @@
             "label": "Be observer customer group update",
             "name": "be-observer.customer_group_update",
             "runtimeActions": [
-              "customer-backoffice/consumer"
+              "customer-backoffice/group-updated"
             ]
           },
           {
@@ -352,7 +352,7 @@
             "label": "Be observer customer group delete",
             "name": "be-observer.customer_group_delete",
             "runtimeActions": [
-              "customer-backoffice/consumer"
+              "customer-backoffice/group-deleted"
             ]
           },
           {
@@ -360,7 +360,7 @@
             "label": "Be observer sales order status update",
             "name": "be-observer.sales_order_status_update",
             "runtimeActions": [
-              "order-backoffice/consumer"
+              "order-backoffice/updated"
             ]
           },
           {
@@ -368,7 +368,7 @@
             "label": "Be observer sales order shipment create",
             "name": "be-observer.sales_order_shipment_create",
             "runtimeActions": [
-              "order-backoffice/consumer"
+              "order-backoffice/shipment-created"
             ]
           },
           {
@@ -376,7 +376,7 @@
             "label": "Be observer sales order shipment update",
             "name": "be-observer.sales_order_shipment_update",
             "runtimeActions": [
-              "order-backoffice/consumer"
+              "order-backoffice/shipment-updated"
             ]
           },
           {
@@ -384,7 +384,7 @@
             "label": "Be observer catalog stock update",
             "name": "be-observer.catalog_stock_update",
             "runtimeActions": [
-              "stock-backoffice/consumer"
+              "stock-backoffice/updated"
             ]
           }
         ],
