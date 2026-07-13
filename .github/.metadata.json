@@ -7,13 +7,13 @@
     "team": {
       "name": "Decepticons",
       "DL": "Grp-Decepticons",
-      "slackChannel": "#commerce-enterprise-integrations"
+      "slackChannel": "#commerce-team-decepticons"
     }
   },
   "ticketTracker": {
     "functionalJiraQueue": {
-      "projectKey": "ACSP",
-      "component": ""
+      "projectKey": "CEXT",
+      "component": "Commerce Extensibility"
     },
     "securityJiraQueue": {
       "projectKey": "MAGREQ",

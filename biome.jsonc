@@ -13,7 +13,7 @@
   },
 
   "javascript": {
-    "globals": ["jest"],
+    "globals": ["vi"],
     "formatter": {
       "arrowParentheses": "always",
       "bracketSameLine": true,
