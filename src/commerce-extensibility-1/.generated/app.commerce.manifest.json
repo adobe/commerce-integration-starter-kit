@@ -413,19 +413,10 @@
         "fallback_error_message": "The product stock validation failed",
         "fields": [
           {
-            "name": "data.product.id"
+            "name": "data.cart_id"
           },
           {
-            "name": "data.product.name"
-          },
-          {
-            "name": "data.product.qty"
-          },
-          {
-            "name": "data.product.stock_data"
-          },
-          {
-            "name": "data.product.quantity_and_stock_status"
+            "name": "data.items"
           }
         ],
         "hook_name": "check_stock",
