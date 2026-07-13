@@ -79,11 +79,7 @@ async function main(params) {
  */
 async function processPage(params, pageSize, currentPage, logger) {
   try {
-    const response = await queryProducts(
-      params.COMMERCE_GRAPHQL_ENDPOINT,
-      pageSize,
-      currentPage,
-    );
+    const response = await queryProducts(pageSize, currentPage);
     logger.debug(`Raw GraphQL response: ${JSON.stringify(response)}`);
     if (response.errors) {
       throw new Error(

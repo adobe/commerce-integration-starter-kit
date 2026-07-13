@@ -6,7 +6,7 @@ _Table of contents_:
 
 - [**Commerce Integration Starter Kit**](#commerce--integration-starter-kit)
   - [**Prerequisites**](#prerequisites)
-  - [**Deploy and onboarding**](#deploy-and-onboarding)
+  - [**App Management Setup**](#app-management-setup)
   - [**Development**](#development)
   - [**Log management and forwarding**](#log-management-and-forwarding)
   - [**Integrating OpenTelemetry**](#integrating-opentelemetry)
@@ -48,7 +48,7 @@ Install Adobe I/O Events for Adobe Commerce module in your commerce instance fol
 >
 > By upgrading the Adobe I/O Events for Adobe Commerce module to version 1.6.0 or greater, you will benefit from some additional automated steps during onboarding.
 
-## Deploy and onboarding
+## App Management Setup
 
 This starter kit uses [App Management](https://developer.adobe.com/commerce/extensibility/app-management/) to install, configure, and deploy the application. Event subscriptions, installation, and authentication are declared in `app.commerce.config.ts` and managed by App Management, so the manual onboarding scripts are no longer needed.
 
@@ -159,7 +159,6 @@ Pass the required parameters to the action by configuring them in the `src/comme
   web: "no"
   runtime: nodejs:22
   inputs:
-    LOG_LEVEL: debug
     HERE_YOUR_PARAM: $HERE_YOUR_PARAM_ENV
   annotations:
     require-adobe-auth: true
@@ -342,10 +341,7 @@ The starter kit comes with predefined events for each entity. Sometimes, you may
     function: new-operation/index.js
     web: "no"
     runtime: nodejs:22
-    inputs:
-      LOG_LEVEL: debug
     annotations:
-      require-adobe-auth: true
       final: true
   ```
 - Deploy the changes: `aio app deploy`
@@ -358,6 +354,9 @@ If you want to change an existing event, make the changes in the same places:
 - Deploy your changes
 
 ## Log management and forwarding
+
+> [!WARNING]
+> Log forwarding and OpenTelemetry logs (described one section below) are two separate ways to ship logs off Adobe I/O Runtime. If you enable both and point them at the same observability platform, your log data will be duplicated. Stick with one method for logs.
 
 Application logs allow developers to debug an application in development as well as monitor it in production.
 
@@ -389,9 +388,6 @@ const hidden = ["secret", "token"];
 Adjust these values to hide secrets passed as params to your runtime actions if needed.
 
 ## Integrating OpenTelemetry
-
-> [!WARNING]
-> Log forwarding and OpenTelemetry logs are two separate ways to ship logs off Adobe I/O Runtime. If you enable both and point them at the same observability platform, your log data will be duplicated. Stick with one method for logs.
 
 > [!NOTE]
 > The starter kit includes the `@adobe/aio-lib-telemetry` package by default. Find it on NPM [here](https://www.npmjs.com/package/@adobe/aio-lib-telemetry).

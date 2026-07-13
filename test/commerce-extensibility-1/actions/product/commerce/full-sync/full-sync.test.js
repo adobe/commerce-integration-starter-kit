@@ -54,9 +54,7 @@ describe("Given product commerce full sync action", () => {
 
   describe("When invalid product data is received", () => {
     test("Then returns action error response", async () => {
-      const params = {
-        COMMERCE_GRAPHQL_ENDPOINT: "https://commerce.example.com/graphql",
-      };
+      const params = {};
 
       const ERROR_MESSAGE = "Invalid data";
       validateData.mockReturnValue({
@@ -78,9 +76,7 @@ describe("Given product commerce full sync action", () => {
 
   describe("When GraphQL query fails", () => {
     test("Then returns action error response", async () => {
-      const params = {
-        COMMERCE_GRAPHQL_ENDPOINT: "https://commerce.example.com/graphql",
-      };
+      const params = {};
 
       queryProducts.mockResolvedValue({
         errors: [{ message: "GraphQL error" }],
@@ -100,9 +96,7 @@ describe("Given product commerce full sync action", () => {
 
   describe("When sending data fails", () => {
     test("Then returns action error response", async () => {
-      const params = {
-        COMMERCE_GRAPHQL_ENDPOINT: "https://commerce.example.com/graphql",
-      };
+      const params = {};
 
       validateData.mockReturnValue({ success: true });
       queryProducts.mockResolvedValue({

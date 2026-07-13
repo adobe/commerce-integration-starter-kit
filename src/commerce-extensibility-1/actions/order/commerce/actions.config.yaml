@@ -3,25 +3,22 @@ upsert:
   web: 'no'
   runtime: nodejs:24
   inputs:
-    LOG_LEVEL: debug
+    LOG_LEVEL: $LOG_LEVEL
   annotations:
-    require-adobe-auth: true
     final: true
 created:
   function: created/index.js
   web: 'no'
   runtime: nodejs:24
   inputs:
-    LOG_LEVEL: debug
+    LOG_LEVEL: $LOG_LEVEL
   annotations:
-    require-adobe-auth: true
     final: true
 updated:
   function: updated/index.js
   web: 'no'
   runtime: nodejs:24
   inputs:
-    LOG_LEVEL: debug
+    LOG_LEVEL: $LOG_LEVEL
   annotations:
-    require-adobe-auth: true
     final: true

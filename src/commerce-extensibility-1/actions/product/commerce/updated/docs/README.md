@@ -32,9 +32,8 @@ updated:
   web: "no"
   runtime: nodejs:24
   inputs:
-    LOG_LEVEL: debug
+    LOG_LEVEL: $LOG_LEVEL
     HERE_YOUR_PARAM: $HERE_YOUR_PARAM_ENV
   annotations:
-    require-adobe-auth: true
     final: true
 ```
