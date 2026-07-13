@@ -12,11 +12,11 @@ import {
 import { telemetryConfig } from "#src/telemetry";
 import { stringParameters } from "#src/utils";
 
-import { postProcess } from "./post";
-import { preProcess } from "./pre";
-import { sendData } from "./sender";
-import { transformData } from "./transformer";
-import { validateData } from "./validator";
+import { postProcess } from "./post.js";
+import { preProcess } from "./pre.js";
+import { sendData } from "./sender.js";
+import { transformData } from "./transformer.js";
+import { validateData } from "./validator.js";
 
 /**
  * This action is on charge of sending created customer information in Adobe commerce to external back-office application

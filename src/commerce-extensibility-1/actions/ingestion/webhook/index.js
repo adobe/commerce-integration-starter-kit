@@ -14,8 +14,8 @@ import {
 import { errorResponse, successResponse } from "#src/responses";
 import { stringParameters } from "#src/utils";
 
-import { checkAuthentication } from "./auth";
-import { validateData } from "./validator";
+import { checkAuthentication } from "./auth.js";
+import { validateData } from "./validator.js";
 
 /**
  * This web action allow external back-office application publish event to IO event using custom authentication mechanism.

@@ -4,8 +4,8 @@ import { HTTP_OK } from "#src/constants";
 import { webhookErrorResponse, webhookSuccessResponse } from "#src/responses";
 import { stringParameters } from "#src/utils";
 
-import { checkAvailableStock } from "./stock";
-import { validateData } from "./validator";
+import { checkAvailableStock } from "./stock.js";
+import { validateData } from "./validator.js";
 
 /**
  * This web action is used to check stock of cart items on real time.

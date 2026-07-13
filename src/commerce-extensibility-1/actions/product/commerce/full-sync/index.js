@@ -5,11 +5,11 @@ import { queryProducts } from "#src/product/commerce-product-graphql-client";
 import { actionErrorResponse, actionSuccessResponse } from "#src/responses";
 import { stringParameters } from "#src/utils";
 
-import { postProcess } from "./post";
-import { preProcess } from "./pre";
-import { sendData } from "./sender";
-import { transformData } from "./transformer";
-import { validateData } from "./validator";
+import { postProcess } from "./post.js";
+import { preProcess } from "./pre.js";
+import { sendData } from "./sender.js";
+import { transformData } from "./transformer.js";
+import { validateData } from "./validator.js";
 
 const DEFAULT_PAGE_SIZE = 20;
 
