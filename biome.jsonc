@@ -35,10 +35,6 @@
       },
       "performance": {
         "noNamespaceImport": "off"
-      },
-      "correctness": {
-        // This is a CJS project; __dirname is valid and import.meta.dirname is not available.
-        "noGlobalDirnameFilename": "off"
       }
     }
   },
@@ -103,5 +99,12 @@
         }
       }
     }
+  },
+
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "defaultBranch": "main",
+    "useIgnoreFile": true
   }
 }
