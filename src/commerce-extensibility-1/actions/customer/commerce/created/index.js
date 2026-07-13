@@ -18,17 +18,13 @@ import { sendData } from "./sender";
 import { transformData } from "./transformer";
 import { validateData } from "./validator";
 
-const __esm_main = instrumentEntrypoint(main, {
-  ...telemetryConfig,
-  isSuccessful: isActionSuccessful,
-});
 /**
  * This action is on charge of sending created customer information in Adobe commerce to external back-office application
  *
  * @returns response object with status code, request data received and response of the invoked action
  * @param {object} params - includes the env params, type and the data of the event
  */
-async function main(params) {
+async function __main(params) {
   const { logger } = getInstrumentationHelpers();
   logger.info("Start processing request");
   logger.debug(`Received params: ${stringParameters(params)}`);
@@ -59,4 +55,7 @@ async function main(params) {
   }
 }
 
-export { __esm_main as main };
+export const main = instrumentEntrypoint(__main, {
+  ...telemetryConfig,
+  isSuccessful: isActionSuccessful,
+});

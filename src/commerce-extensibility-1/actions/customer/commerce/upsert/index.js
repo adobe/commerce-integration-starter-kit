@@ -10,10 +10,6 @@ import { actionErrorResponse, isActionSuccessful } from "#src/responses";
 import { telemetryConfig } from "#src/telemetry";
 import { checkMissingRequestInputs, stringParameters } from "#src/utils";
 
-const __esm_main = instrumentEntrypoint(main, {
-  ...telemetryConfig,
-  isSuccessful: isActionSuccessful,
-});
 /**
  * Handles the customer save event by dispatching to the created or updated
  * handler. A record is treated as new when its created_at and updated_at
@@ -22,7 +18,7 @@ const __esm_main = instrumentEntrypoint(main, {
  * @returns response object from the created or updated handler
  * @param {object} params - includes the env params, type and the data of the event
  */
-async function main(params) {
+async function __main(params) {
   const { logger } = getInstrumentationHelpers();
   logger.info("Start processing request");
   logger.debug(`Upsert main params: ${stringParameters(params)}`);
@@ -48,4 +44,7 @@ async function main(params) {
   return await updated.main(params);
 }
 
-export { __esm_main as main };
+export const main = instrumentEntrypoint(__main, {
+  ...telemetryConfig,
+  isSuccessful: isActionSuccessful,
+});
