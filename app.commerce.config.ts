@@ -1,6 +1,7 @@
 import { defineConfig } from "@adobe/aio-commerce-lib-app/config";
 
-const field = (name: string) => ({ name });
+const field = (name: string, source?: string) =>
+  source ? { name, source } : { name };
 
 export default defineConfig({
   metadata: {
@@ -259,6 +260,13 @@ export default defineConfig({
         soft_timeout: 1000,
         timeout: 5000,
         fallback_error_message: "The product stock validation failed",
+        fields: [
+          field("data.product.id"),
+          field("data.product.name"),
+          field("data.product.qty"),
+          field("data.product.stock_data"),
+          field("data.product.quantity_and_stock_status"),
+        ],
       },
     },
   ],

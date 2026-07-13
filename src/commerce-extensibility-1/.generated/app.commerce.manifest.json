@@ -405,12 +405,29 @@
     {
       "category": "validation",
       "description": "Validates stock availability for cart items in real time before a product is added to the cart",
-      "label": "Cart stock validation",
+      "label": "Cart Stock Validation",
       "requireAdobeAuth": true,
       "runtimeAction": "webhook/check-stock",
       "webhook": {
         "batch_name": "validate_stock",
         "fallback_error_message": "The product stock validation failed",
+        "fields": [
+          {
+            "name": "data.product.id"
+          },
+          {
+            "name": "data.product.name"
+          },
+          {
+            "name": "data.product.qty"
+          },
+          {
+            "name": "data.product.stock_data"
+          },
+          {
+            "name": "data.product.quantity_and_stock_status"
+          }
+        ],
         "hook_name": "check_stock",
         "method": "POST",
         "required": true,
