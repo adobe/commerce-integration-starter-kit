@@ -25,19 +25,30 @@ function stringParameters(params) {
   // hide authorization token without overriding params
   let headers = params.__ow_headers || {};
   if (headers.authorization) {
-    headers = { ...headers, authorization: "<hidden>" };
+    headers = {
+      ...headers,
+      authorization: "<hidden>",
+    };
   }
 
   // hide parameters including terms in the 'hidden' array
-  let sanitizedParams = { ...params };
+  let sanitizedParams = {
+    ...params,
+  };
   for (const key of Object.keys(sanitizedParams)) {
     if (!hidden.every((v) => key.toLowerCase().indexOf(v) === -1)) {
-      sanitizedParams = { ...sanitizedParams, [key]: "<hidden>" };
+      sanitizedParams = {
+        ...sanitizedParams,
+        [key]: "<hidden>",
+      };
     }
   }
 
   // loop over params keys and replace if needed
-  return JSON.stringify({ ...sanitizedParams, __ow_headers: headers });
+  return JSON.stringify({
+    ...sanitizedParams,
+    __ow_headers: headers,
+  });
 }
 
 /**
@@ -55,11 +66,9 @@ function getMissingKeys(obj, required) {
   return required.filter((r) => {
     const splits = r.split(".");
     const last = splits.at(-1);
-
     const traverse = splits
       .slice(0, -1)
       .reduce((tObj, split) => tObj[split] || {}, obj);
-
     return traverse[last] === undefined || traverse[last] === ""; // missing default params are empty string
   });
 }
@@ -93,7 +102,6 @@ function checkMissingRequestInputs(
     params.__ow_headers || {},
     normalizedRequiredHeaders,
   );
-
   if (missingHeaders.length > 0) {
     errorMessage = `missing header(s) '${missingHeaders}'`;
   }
@@ -106,15 +114,9 @@ function checkMissingRequestInputs(
     } else {
       errorMessage = "";
     }
-
     errorMessage += `missing parameter(s) '${missingParams}'`;
   }
-
   return errorMessage;
 }
 
-module.exports = {
-  stringParameters,
-  getMissingKeys,
-  checkMissingRequestInputs,
-};
+export { checkMissingRequestInputs, getMissingKeys, stringParameters };

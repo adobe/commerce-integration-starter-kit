@@ -41,6 +41,4 @@ function transform(stockUpdate) {
   };
 }
 
-module.exports = {
-  transformData,
-};
+export { transformData };

@@ -21,6 +21,4 @@ function transformData(params) {
   return params.data.id;
 }
 
-module.exports = {
-  transformData,
-};
+export { transformData };

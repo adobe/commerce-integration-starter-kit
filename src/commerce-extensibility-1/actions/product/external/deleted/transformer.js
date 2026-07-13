@@ -21,6 +21,4 @@ function transformData(params) {
   return params.data.sku;
 }
 
-module.exports = {
-  transformData,
-};
+export { transformData };

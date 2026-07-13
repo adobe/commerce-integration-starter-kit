@@ -27,6 +27,4 @@ function transformData(params) {
   };
 }
 
-module.exports = {
-  transformData,
-};
+export { transformData };

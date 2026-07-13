@@ -22,6 +22,4 @@ function transformData(data) {
   return transformedData;
 }
 
-module.exports = {
-  transformData,
-};
+export { transformData };

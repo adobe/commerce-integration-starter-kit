@@ -22,6 +22,4 @@ function postProcess(data, transformed, preProcessed, result) {
   // @TODO Here implement any postprocessing needed
 }
 
-module.exports = {
-  postProcess,
-};
+export { postProcess };

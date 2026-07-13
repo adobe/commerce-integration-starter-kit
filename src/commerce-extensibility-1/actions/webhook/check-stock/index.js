@@ -1,24 +1,11 @@
-/*
-Copyright 2022 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+import { Core } from "@adobe/aio-sdk";
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+import { HTTP_OK } from "#src/constants";
+import { webhookErrorResponse, webhookSuccessResponse } from "#src/responses";
+import { stringParameters } from "#src/utils";
 
-const { Core } = require("@adobe/aio-sdk");
-const { HTTP_OK } = require("../../../actions/constants");
-const { validateData } = require("./validator");
-const { checkAvailableStock } = require("./stock");
-const { stringParameters } = require("../../utils");
-const {
-  webhookErrorResponse,
-  webhookSuccessResponse,
-} = require("../../responses");
+import { checkAvailableStock } from "./stock";
+import { validateData } from "./validator";
 
 /**
  * This web action is used to check stock of cart items on real time.
@@ -33,19 +20,16 @@ async function main(params) {
   try {
     logger.info("Start processing request");
     logger.debug(`Webhook main params: ${stringParameters(params)}`);
-
     const validationResult = validateData(params);
     if (!validationResult.success) {
       logger.error(`Validation failed with error: ${validationResult.message}`);
       return webhookErrorResponse(validationResult.message);
     }
-
     const checkAvailableStockResult = await checkAvailableStock(params.data);
     if (!checkAvailableStockResult.success) {
       logger.error(`Stock check failed: ${checkAvailableStockResult.message}`);
       return webhookErrorResponse(checkAvailableStockResult.message);
     }
-
     logger.info(`Successful request: ${HTTP_OK}`);
     return webhookSuccessResponse();
   } catch (error) {
@@ -54,4 +38,4 @@ async function main(params) {
   }
 }
 
-exports.main = main;
+export { main };

@@ -24,6 +24,4 @@ async function checkAvailableStock(params) {
   };
 }
 
-module.exports = {
-  checkAvailableStock,
-};
+export { checkAvailableStock };

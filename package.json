@@ -1,18 +1,20 @@
 {
   "name": "@adobe/commerce-integration-starter-kit",
   "version": "1.0.2",
+  "author": "Adobe Inc.",
   "license": "Apache-2.0",
   "description": "To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder....",
-  "keywords": [
-    "testing",
-    "aio",
-    "adobe-io"
-  ],
-  "author": "Adobe Inc.",
   "private": true,
+  "engines": {
+    "node": "^24.0.0"
+  },
+  "imports": {
+    "#app.commerce.config": "./src/commerce-extensibility-1/.generated/app.commerce.config.js",
+    "#src/*": "./src/commerce-extensibility-1/actions/*.js"
+  },
   "dependencies": {
-    "@adobe/aio-commerce-lib-app": "^1.8.0-beta-20260709150737",
-    "@adobe/aio-commerce-sdk": "^1.4.0-beta-20260709150737",
+    "@adobe/aio-commerce-lib-app": "^1.8.0-beta-20260710135109",
+    "@adobe/aio-commerce-sdk": "^1.4.0-beta-20260710135109",
     "@adobe/aio-lib-telemetry": "^1.0.0",
     "@adobe/aio-sdk": "^6.0.0",
     "ajv": "^8.16.0",
@@ -20,26 +22,23 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.2",
+    "@vitest/coverage-istanbul": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.10",
     "husky": "9.1.7",
-    "jest": "30.4.2",
     "lint-staged": "17.0.8",
     "prettier": "3.9.4",
-    "ultracite": "7.8.4"
+    "ultracite": "7.8.4",
+    "vitest": "^4.1.10"
   },
   "scripts": {
     "prepare": "husky",
-    "postinstall": "npm run build --if-present && npx aio-commerce-lib-app hooks postinstall",
-    "test": "jest --passWithNoTests -c ./test/jest.config.js ./test",
-    "onboard": "node --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
-    "onboard:debug": "node --inspect-brk --no-warnings -e 'require(\"./scripts/onboarding/index.js\").main()'",
-    "commerce-event-subscribe": "node --no-warnings -e 'require(\"./scripts/commerce-event-subscribe/index.js\").main()'",
+    "postinstall": "npx aio-commerce-lib-app hooks postinstall",
+    "test": "vitest run",
     "code:report": "biome ci --formatter-enabled=true --linter-enabled=true --assist-enabled=true --no-errors-on-unmatched",
     "code:format:fix": "biome format --write --no-errors-on-unmatched",
     "code:lint:fix": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
-    "docs:format:fix": "prettier --write --no-error-on-unmatched-pattern '**/*.md' \"!**/{CODE_OF_CONDUCT.md,COPYRIGHT,LICENSE,SECURITY.md,CONTRIBUTING.md,COPILOT-INSTRUCTIONS.md}\""
-  },
-  "engines": {
-    "node": "^24.0.0"
+    "docs:format:fix": "prettier --write --no-error-on-unmatched-pattern '**/*.md' \"!**/{CODE_OF_CONDUCT.md,COPYRIGHT,LICENSE,SECURITY.md,CONTRIBUTING.md,COPILOT-INSTRUCTIONS.md}\"",
+    "test:coverage": "vitest run --coverage"
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
@@ -52,8 +51,5 @@
     "*": [
       "biome check --no-errors-on-unmatched --files-ignore-unknown=true"
     ]
-  },
-  "imports": {
-    "#app.commerce.config": "./src/commerce-extensibility-1/.generated/app.commerce.config.js"
   }
 }

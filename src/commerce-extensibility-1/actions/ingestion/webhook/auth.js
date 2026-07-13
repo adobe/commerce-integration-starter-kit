@@ -24,6 +24,4 @@ function checkAuthentication(params) {
   };
 }
 
-module.exports = {
-  checkAuthentication,
-};
+export { checkAuthentication };

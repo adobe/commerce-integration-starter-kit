@@ -20,6 +20,4 @@ function preProcess(data, transformed) {
   // @TODO Here implement any preprocessing needed
 }
 
-module.exports = {
-  preProcess,
-};
+export { preProcess };

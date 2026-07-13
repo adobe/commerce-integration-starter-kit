@@ -1,21 +1,13 @@
-/*
-Copyright 2022 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
-
-const {
-  instrument,
+import {
   getInstrumentationHelpers,
-} = require("@adobe/aio-lib-telemetry");
-const { isOperationSuccessful } = require("../../../telemetry");
+  instrument,
+} from "@adobe/aio-lib-telemetry";
 
+import { isOperationSuccessful } from "#src/telemetry";
+
+const __esm_validateData = instrument(validateData, {
+  isSuccessful: isOperationSuccessful,
+});
 /**
  * This function validate the customer data received
  *
@@ -26,15 +18,12 @@ function validateData(data) {
   // @TODO Here add the logic to validate the received data
   // @TODO in case of error return { success: false, message: '<error message>' }
   const { currentSpan } = getInstrumentationHelpers();
-  currentSpan.addEvent("created.phase", { value: "validateData" });
-
+  currentSpan.addEvent("created.phase", {
+    value: "validateData",
+  });
   return {
     success: true,
   };
 }
 
-module.exports = {
-  validateData: instrument(validateData, {
-    isSuccessful: isOperationSuccessful,
-  }),
-};
+export { __esm_validateData as validateData };

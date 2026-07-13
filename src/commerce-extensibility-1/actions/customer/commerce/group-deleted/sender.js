@@ -28,6 +28,4 @@ async function sendData(params, data, preProcessed) {
   };
 }
 
-module.exports = {
-  sendData,
-};
+export { sendData };

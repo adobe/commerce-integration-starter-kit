@@ -1,8 +1,8 @@
-const {
+import {
   defineTelemetryConfig,
   getAioRuntimeResource,
   getPresetInstrumentations,
-} = require("@adobe/aio-lib-telemetry");
+} from "@adobe/aio-lib-telemetry";
 
 /** The telemetry configuration to be used across all actions */
 const telemetryConfig = defineTelemetryConfig((_params, isDev) => ({
@@ -11,7 +11,6 @@ const telemetryConfig = defineTelemetryConfig((_params, isDev) => ({
     resource: getAioRuntimeResource(),
     instrumentations: getPresetInstrumentations("simple"),
   },
-
   diagnostics: {
     logLevel: isDev ? "debug" : "info",
   },
@@ -32,11 +31,7 @@ function isOperationSuccessful(result) {
   ) {
     return true;
   }
-
   return false;
 }
 
-module.exports = {
-  telemetryConfig,
-  isOperationSuccessful,
-};
+export { isOperationSuccessful, telemetryConfig };

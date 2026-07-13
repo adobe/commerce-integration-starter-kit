@@ -25,6 +25,4 @@ function validateData(data) {
   };
 }
 
-module.exports = {
-  validateData,
-};
+export { validateData };
