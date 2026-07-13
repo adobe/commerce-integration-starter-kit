@@ -6,7 +6,7 @@ It is an alternative method to deliver events for scenarios where the calling sy
 
 This runtime action exposes a web entry point to an external back office application for publishing information to IO events.
 
-**This feature is turned off by default. To activate it**, remove the comment '#' from the line `#$include ./ingestion/actions.config.yaml` in the file `app.config.yaml`.
+**This feature is turned off by default. To activate it**, uncomment the `ingestion` package block in `src/commerce-extensibility-1/ext.config.yaml`.
 
 ![Alt text](BackofficeEventsIngestionWebhook.png "Title")
 
@@ -15,7 +15,7 @@ This runtime action exposes a web entry point to an external back office applica
 Data parameters hold the event information to publish; each event must include entity, event, and value. The value parameter contains the data to send through the event.
 
 - The entities available are [product, customer, customer-group, order, shipment, stock]
-- The list of events available by an entity can be found in the file `onboarding/config/events.json` under the `backoffice` sections.
+- The list of events available by an entity can be found in the `eventing` section of `app.commerce.config.ts`, under the `external` provider.
 
 Here is the payload JSON sample:
 
@@ -36,29 +36,25 @@ Here is the payload JSON sample:
 
 ## Authentication
 
-The webhook is not authenticated by default; you must implement your authentication check on the file `ingestion/auth.js` method checkAuthentication(params).
+The webhook is not authenticated by default; you must implement your authentication check in the `checkAuthentication(params)` method in `src/commerce-extensibility-1/actions/ingestion/webhook/auth.js`.
 
 ## Use extra env parameters
 
-You can access any needed environment parameter from `params`. Add the required parameter in the `actions/ingestion/webhook/actions.config.yaml` under `webhook -> inputs` as follows:
+You can access any needed environment parameter from `params`. Add the required parameter in the `src/commerce-extensibility-1/actions/ingestion/actions.config.yaml` under `webhook -> inputs` as follows:
 
 ```yaml
 webhook:
-  function: ./consumer/index.js
-  web: "no"
-  runtime: nodejs:22
+  function: ./webhook/index.js
+  web: "yes"
+  runtime: nodejs:24
   inputs:
     LOG_LEVEL: debug
-    OAUTH_ORG_ID: $OAUTH_ORG_ID
-    OAUTH_CLIENT_ID: $OAUTH_CLIENT_ID
-    OAUTH_CLIENT_SECRET: $OAUTH_CLIENT_SECRET
-    OAUTH_TECHNICAL_ACCOUNT_ID: $OAUTH_TECHNICAL_ACCOUNT_ID
-    OAUTH_TECHNICAL_ACCOUNT_EMAIL: $OAUTH_TECHNICAL_ACCOUNT_EMAIL
-    IO_MANAGEMENT_BASE_URL: $IO_MANAGEMENT_BASE_URL
-    IO_CONSUMER_ID: $IO_CONSUMER_ID
-    IO_PROJECT_ID: $IO_PROJECT_ID
-    IO_WORKSPACE_ID: $IO_WORKSPACE_ID
-    AIO_runtime_namespace: $AIO_runtime_namespace
+    AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
+    AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: $AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS
+    AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID: $AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID
+    AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL: $AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL
+    AIO_COMMERCE_AUTH_IMS_ORG_ID: $AIO_COMMERCE_AUTH_IMS_ORG_ID
+    AIO_COMMERCE_AUTH_IMS_SCOPES: $AIO_COMMERCE_AUTH_IMS_SCOPES
 
     HERE_YOUR_PARAM: $HERE_YOUR_PARAM_ENV
 

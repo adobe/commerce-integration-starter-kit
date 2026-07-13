@@ -52,13 +52,13 @@ return {
 
 ## Use extra env parameters
 
-You can access any needed environment parameter from `params`. Add the required parameter in the `actions/webhook/check-stock/actions.config.yaml` under `check-stock -> inputs` as follows:
+You can access any needed environment parameter from `params`. Add the required parameter in the `src/commerce-extensibility-1/actions/webhook/check-stock/actions.config.yaml` under `check-stock -> inputs` as follows:
 
 ```yaml
 check-stock:
   function: check-stock/index.js
   web: "yes"
-  runtime: nodejs:22
+  runtime: nodejs:24
   inputs:
     LOG_LEVEL: debug
 

@@ -36,22 +36,23 @@ Here's an example:
 ## Interact with the Adobe Commerce API
 
 The `sendData` function in the `sender.js` file defines the interaction with the Adobe Commerce API.
-This function delegates to the `createCustomerGroup` method in the `actions/customer/commerce-customer-group-api-client.js` interaction with the Commerce API.
+This function delegates to the `createCustomerGroup` method in the `src/commerce-extensibility-1/actions/customer/commerce-customer-group-api-client.js` interaction with the Commerce API.
 Any parameters needed from the execution environment could be accessed from `params`.
-These parameters can be passed on the action by configuring them in the `actions/customer/external/actions.config.yaml` under `group-created -> inputs` as follows:
+These parameters can be passed on the action by configuring them in the `src/commerce-extensibility-1/actions/customer/external/actions.config.yaml` under `group-created -> inputs` as follows:
 
 ```yaml
 group-created:
   function: group/created/index.js
   web: "no"
-  runtime: nodejs:22
+  runtime: nodejs:24
   inputs:
     LOG_LEVEL: debug
-    COMMERCE_BASE_URL: $COMMERCE_BASE_URL
-    COMMERCE_CONSUMER_KEY: $COMMERCE_CONSUMER_KEY
-    COMMERCE_CONSUMER_SECRET: $COMMERCE_CONSUMER_SECRET
-    COMMERCE_ACCESS_TOKEN: $COMMERCE_ACCESS_TOKEN
-    COMMERCE_ACCESS_TOKEN_SECRET: $COMMERCE_ACCESS_TOKEN_SECRET
+    AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
+    AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS: $AIO_COMMERCE_AUTH_IMS_CLIENT_SECRETS
+    AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID: $AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_ID
+    AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL: $AIO_COMMERCE_AUTH_IMS_TECHNICAL_ACCOUNT_EMAIL
+    AIO_COMMERCE_AUTH_IMS_ORG_ID: $AIO_COMMERCE_AUTH_IMS_ORG_ID
+    AIO_COMMERCE_AUTH_IMS_SCOPES: $AIO_COMMERCE_AUTH_IMS_SCOPES
   annotations:
     require-adobe-auth: true
     final: true
