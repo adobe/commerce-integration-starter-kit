@@ -5,6 +5,7 @@
   "license": "Apache-2.0",
   "description": "To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder....",
   "private": true,
+  "type": "module",
   "engines": {
     "node": "^24.0.0"
   },

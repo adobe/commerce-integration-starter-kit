@@ -388,9 +388,12 @@ See the [package usage guide](https://github.com/adobe/aio-lib-telemetry/blob/ma
 > [!TIP]
 > Check the [How To Use](https://github.com/adobe/aio-lib-telemetry/blob/main/docs/usage.md#how-to-use) section in the `@adobe/aio-lib-telemetry` usage guide for comprehensive integration instructions.
 
-The starter kit includes a sample implementation in the `customer/commerce` workflow, specifically within the `created` action. This example uses the telemetry configuration in `src/commerce-extensibility-1/actions/telemetry.js`.
+The starter kit ships with a sample implementation: the `customer/commerce` `created` action and the three commerce `upsert` actions (`customer/commerce`, `order/commerce`, and `product/commerce`) are instrumented out of the box. This example uses the telemetry configuration in `src/commerce-extensibility-1/actions/telemetry.js`.
 
 The instrumentation is designed to be minimally invasive and won't disrupt existing functionality. However, telemetry requires explicit opt-in configuration: you must instrument each runtime action individually, configure exporters in the `telemetry.js` file, and set the `ENABLE_TELEMETRY` environment variable to `true` in each action's `inputs` section. While we've implemented this setup for the aforementioned actions, to fully enable telemetry, you need to complete your configuration in the `telemetry.js` file.
+
+> [!IMPORTANT]
+> `ENABLE_TELEMETRY` must be set to `true` in the `inputs` of **every** instrumented action (any action that uses `@adobe/aio-lib-telemetry` through `instrumentEntrypoint` or `instrument`). An instrumented action that is missing this input can behave inconsistently, so keep the flag in sync with your instrumentation.
 
 The integration within the `customer/commerce` workflow facilitates three key signals: **traces**, **metrics**, and **logs**, while also adding automatic context propagation. This means that when a matching event triggers the instrumented `created` handler, it generates a unified trace that spans the entire execution flow.
 
