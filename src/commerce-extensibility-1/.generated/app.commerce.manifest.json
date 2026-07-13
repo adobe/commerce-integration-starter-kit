@@ -400,5 +400,25 @@
     "displayName": "Commerce Integration Starter Kit",
     "id": "commerce-integration-starter-kit",
     "version": "1.0.2"
-  }
+  },
+  "webhooks": [
+    {
+      "category": "validation",
+      "description": "Validates stock availability for cart items in real time before a product is added to the cart",
+      "label": "Cart stock validation",
+      "requireAdobeAuth": true,
+      "runtimeAction": "webhook/check-stock",
+      "webhook": {
+        "batch_name": "validate_stock",
+        "fallback_error_message": "The product stock validation failed",
+        "hook_name": "check_stock",
+        "method": "POST",
+        "required": true,
+        "soft_timeout": 1000,
+        "timeout": 5000,
+        "webhook_method": "observer.checkout_cart_product_add_before",
+        "webhook_type": "before"
+      }
+    }
+  ]
 }

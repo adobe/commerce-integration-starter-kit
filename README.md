@@ -23,23 +23,6 @@ The public documentation can be found at [Adobe Developer Starter Kit docs](http
 
 ## Prerequisites
 
-### Create App Builder project
-
-Go to the [Adobe developer console](https://developer.adobe.com/console) portal
-
-- Click on `Create project from template`
-- Select `App Builder`
-- Chose a name and title
-- Select stage workspace or create a new one
-- Add the following API services (select default Oauth server to server)
-  - I/0 events
-  - I/O management
-  - Adobe I/O Events for Adobe Commerce
-  - Adobe Commerce as a Cloud Service.
-
-> [!TIP]
-> Adobe Commerce as a Cloud Service API is only required when accessing to Adobe Commerce as a Cloud Service.
-
 ### Install Commerce Eventing module (only required when running Adobe Commerce versions 2.4.4 or 2.4.5)
 
 Install Adobe I/O Events for Adobe Commerce module in your commerce instance following this [documentation](https://developer.adobe.com/commerce/extensibility/events/installation/)

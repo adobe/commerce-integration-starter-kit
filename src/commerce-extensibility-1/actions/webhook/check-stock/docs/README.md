@@ -65,6 +65,6 @@ check-stock:
     HERE_YOUR_PARAM: $HERE_YOUR_PARAM_ENV
 
   annotations:
-    require-adobe-auth: false
+    require-adobe-auth: true
     final: true
 ```
