@@ -4,8 +4,8 @@ import {
 } from "@adobe/aio-lib-telemetry";
 
 import { HTTP_BAD_REQUEST } from "#src/constants";
-import created from "#src/order/commerce/created/index";
-import updated from "#src/order/commerce/updated/index";
+import * as created from "#src/order/commerce/created/index";
+import * as updated from "#src/order/commerce/updated/index";
 import { actionErrorResponse, isActionSuccessful } from "#src/responses";
 import { telemetryConfig } from "#src/telemetry";
 import { checkMissingRequestInputs, stringParameters } from "#src/utils";
