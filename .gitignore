@@ -1,4 +1,3 @@
-
 # package directories
 node_modules
 jspm_packages
@@ -12,9 +11,6 @@ dist
 config.json
 .env*
 .aio
-
-# Adobe I/O console config
-console.json
 
 # Test output
 junit.xml
@@ -47,6 +43,3 @@ coverage
 logs
 
 test/test-coverage
-
-# Onboarding workspace config - may contain secrets
-scripts/onboarding/config/workspace.json
