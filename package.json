@@ -14,8 +14,8 @@
     "#src/*": "./src/commerce-extensibility-1/actions/*.js"
   },
   "dependencies": {
-    "@adobe/aio-commerce-lib-app": "^1.8.0-beta-20260710135109",
-    "@adobe/aio-commerce-sdk": "^1.4.0-beta-20260710135109",
+    "@adobe/aio-commerce-lib-app": "^1.8.0-beta-20260714082406",
+    "@adobe/aio-commerce-sdk": "^1.4.0-beta-20260714082406",
     "@adobe/aio-lib-telemetry": "^1.0.0",
     "@adobe/aio-sdk": "^6.0.0",
     "ajv": "^8.16.0",
