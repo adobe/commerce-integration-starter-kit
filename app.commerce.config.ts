@@ -158,6 +158,7 @@ export default defineConfig({
           label: "Backoffice Provider",
           description:
             "Backoffice Provider that will receive events from commerce",
+          key: "backoffice",
         },
         events: [
           {

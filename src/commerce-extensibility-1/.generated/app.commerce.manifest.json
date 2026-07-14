@@ -390,6 +390,7 @@
         ],
         "provider": {
           "description": "Backoffice Provider that will receive events from commerce",
+          "key": "backoffice",
           "label": "Backoffice Provider"
         }
       }

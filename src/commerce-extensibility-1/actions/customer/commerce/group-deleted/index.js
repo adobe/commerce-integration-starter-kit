@@ -23,14 +23,14 @@ async function main(params) {
   logger.info("Start processing request");
   logger.debug(`Received params: ${stringParameters(params)}`);
   try {
-    logger.debug(`Validate data: ${JSON.stringify(params.data)}`);
-    const validation = validateData(params.data);
+    logger.debug(`Validate data: ${JSON.stringify(params.data.value)}`);
+    const validation = validateData(params.data.value);
     if (!validation.success) {
       logger.error(`Validation failed with error: ${validation.message}`);
       return actionErrorResponse(HTTP_BAD_REQUEST, validation.message);
     }
-    logger.debug(`Transform data: ${JSON.stringify(params.data)}`);
-    const transformedData = transformData(params.data);
+    logger.debug(`Transform data: ${JSON.stringify(params.data.value)}`);
+    const transformedData = transformData(params.data.value);
     logger.debug(`Preprocess data: ${stringParameters(params)}`);
     const preProcessed = preProcess(params, transformedData);
     logger.debug(`Start sending data: ${JSON.stringify(params)}`);
