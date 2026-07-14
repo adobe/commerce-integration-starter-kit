@@ -9,7 +9,7 @@ export default defineConfig({
     displayName: "Commerce Integration Starter Kit",
     version: "1.0.2",
     description:
-      "To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder....",
+      "To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder.",
   },
   eventing: {
     commerce: [
