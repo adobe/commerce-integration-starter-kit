@@ -8,7 +8,7 @@ This runtime action exposes a web entry point to an external back office applica
 
 **This feature is turned off by default. To activate it**, uncomment the `ingestion` package block in `src/commerce-extensibility-1/ext.config.yaml`.
 
-![Alt text](BackofficeEventsIngestionWebhook.png "Title")
+![Bidirectional event ingestion and product synchronization architecture](BackofficeEventsIngestionWebhook.png "Backoffice event ingestion architecture")
 
 # Input information
 

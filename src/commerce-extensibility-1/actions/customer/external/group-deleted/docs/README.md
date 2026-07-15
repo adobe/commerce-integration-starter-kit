@@ -2,7 +2,7 @@
 
 This runtime action is responsible for notifying the integration with Adobe Commerce after a customer is deleted by the 3rd party.
 
-![Alt text](ExternalCustomerGroupDeleteSync.png "Title")
+![Bidirectional customer group synchronization highlighting deletion from the backoffice](ExternalCustomerGroupDeleteSync.png "Backoffice customer group deletion synchronization")
 
 # Incoming event payload
 

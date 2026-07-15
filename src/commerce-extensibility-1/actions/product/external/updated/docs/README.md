@@ -2,7 +2,7 @@
 
 This runtime action is responsible for notifying the integration with Adobe Commerce after a product is updated in the 3rd party.
 
-![Alt text](ExternalProductUpdateSync.png "Title")
+![Bidirectional product synchronization highlighting product updates from the backoffice](ExternalProductUpdateSync.png "Backoffice product update synchronization")
 
 # Incoming event payload
 

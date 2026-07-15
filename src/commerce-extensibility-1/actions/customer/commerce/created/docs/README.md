@@ -2,7 +2,7 @@
 
 This runtime action is responsible for notifying the integration with the 3rd party after a customer is created in Adobe Commerce.
 
-![Alt text](CommerceCustomerCreateSync.png "Title")
+![Bidirectional customer synchronization highlighting customer creation from Adobe Commerce](CommerceCustomerCreateSync.png "Commerce customer creation synchronization")
 
 # Incoming event payload
 

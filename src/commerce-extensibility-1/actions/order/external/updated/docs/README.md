@@ -3,7 +3,7 @@
 This runtime action is responsible for notifying the integration with Adobe Commerce after an order status is updated in the 3rd party.
 As a result of processing this event a comment will be added to the related order.
 
-![Alt text](ExternalOrderUpdateSync.png "Title")
+![Bidirectional order synchronization highlighting order updates from the backoffice](ExternalOrderUpdateSync.png "Backoffice order update synchronization")
 
 # Incoming event payload
 

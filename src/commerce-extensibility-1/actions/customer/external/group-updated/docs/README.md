@@ -2,7 +2,7 @@
 
 This runtime action is responsible for notifying the integration with Adobe Commerce after a customer is updated in the 3rd party.
 
-![Alt text](ExternalCustomerGroupUpdateSync.png "Title")
+![Bidirectional customer group synchronization highlighting updates from the backoffice](ExternalCustomerGroupUpdateSync.png "Backoffice customer group update synchronization")
 
 # Incoming event payload
 

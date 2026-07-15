@@ -2,7 +2,7 @@
 
 This runtime action is responsible for notifying the integration with the 3rd party after a stock item is updated in Adobe Commerce.
 
-![Alt text](CommerceStockUpdateSync.png "Title")
+![Bidirectional stock synchronization highlighting updates from Adobe Commerce](CommerceStockUpdateSync.png "Commerce stock update synchronization")
 
 # Incoming event payload
 

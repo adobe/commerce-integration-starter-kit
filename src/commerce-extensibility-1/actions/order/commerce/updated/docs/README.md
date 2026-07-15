@@ -2,7 +2,7 @@
 
 This runtime action is responsible for notifying the integration with the external back-office application after an order is updated in Adobe Commerce.
 
-![Alt text](CommerceOrderUpdateSync.png "Title")
+![Bidirectional order synchronization highlighting order updates from Adobe Commerce](CommerceOrderUpdateSync.png "Commerce order update synchronization")
 
 # Incoming event payload
 

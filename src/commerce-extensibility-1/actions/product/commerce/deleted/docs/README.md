@@ -2,7 +2,7 @@
 
 This runtime action is responsible for notifying the integration with the 3rd party after a product is deleted in Adobe Commerce.
 
-![Alt text](CommmerceProductDeleteSync.png "Title")
+![Bidirectional product synchronization highlighting product deletion from Adobe Commerce](CommmerceProductDeleteSync.png "Commerce product deletion synchronization")
 
 # Incoming event payload
 

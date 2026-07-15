@@ -3,7 +3,7 @@
 This runtime action exposes a web entry point to check the available stock for commerce cart items in real time. You must implement the logic to check the stock on the external service.
 The response of this runtime is adapted for [Commerce webhook module](https://developer.adobe.com/commerce/extensibility/webhooks/) to allow intercepting flows in Adobe commerce.
 
-![Alt text](SyncWebhookStockCheck.png "Title")
+![Stock synchronization and real-time stock check architecture](SyncWebhookStockCheck.png "Synchronous stock check architecture")
 
 # Input information
 

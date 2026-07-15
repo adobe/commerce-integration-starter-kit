@@ -2,7 +2,7 @@
 
 This runtime action is responsible for notifying the integration with Adobe Commerce after a product is created in the 3rd party.
 
-![Alt text](ExternalProductCreateSync.png "Title")
+![Bidirectional product synchronization highlighting product creation from the backoffice](ExternalProductCreateSync.png "Backoffice product creation synchronization")
 
 # Incoming event payload
 

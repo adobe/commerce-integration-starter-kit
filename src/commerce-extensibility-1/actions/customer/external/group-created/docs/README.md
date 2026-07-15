@@ -2,7 +2,7 @@
 
 This runtime action is responsible for notifying the integration with Adobe Commerce after a customer is created in the 3rd party.
 
-![Alt text](ExternalCustomerGroupCreateSync.png "Title")
+![Bidirectional customer group synchronization highlighting creation from the backoffice](ExternalCustomerGroupCreateSync.png "Backoffice customer group creation synchronization")
 
 # Incoming event payload
 

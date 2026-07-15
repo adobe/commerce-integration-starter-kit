@@ -2,7 +2,7 @@
 
 This runtime action is responsible for notifying the integration with Adobe Commerce after a shipment is updated in the 3rd party.
 
-![Alt text](ExternalShipmentUpdateSync.png "Title")
+![Shipment synchronization highlighting shipment updates from the backoffice](ExternalShipmentUpdateSync.png "Backoffice shipment update synchronization")
 
 # Incoming event payload
 
