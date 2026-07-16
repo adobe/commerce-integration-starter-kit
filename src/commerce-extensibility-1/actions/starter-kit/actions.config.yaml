@@ -1,0 +1,10 @@
+# Please DO NOT DELETE this action; future functionalities planned for upcoming starter kit releases may stop working.
+info:
+  function: ./info/index.js
+  web: 'yes'
+  runtime: nodejs:24
+  inputs:
+    LOG_LEVEL: $LOG_LEVEL
+  annotations:
+    require-adobe-auth: true
+    final: true

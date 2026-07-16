@@ -13,7 +13,7 @@
   },
 
   "javascript": {
-    "globals": ["jest"],
+    "globals": ["vi"],
     "formatter": {
       "arrowParentheses": "always",
       "bracketSameLine": true,
@@ -35,32 +35,20 @@
       },
       "performance": {
         "noNamespaceImport": "off"
-      },
-      "correctness": {
-        // This is a CJS project; __dirname is valid and import.meta.dirname is not available.
-        "noGlobalDirnameFilename": "off"
       }
     }
   },
 
   "overrides": [
     {
-      "includes": ["scripts/**/*.js"],
-      "linter": {
-        "rules": {
-          "complexity": {
-            "noExcessiveCognitiveComplexity": "off"
-          },
-
-          "suspicious": {
-            // We use console to log information during the onboarding process.
-            "noConsole": "off"
-          }
-        }
-      }
+      // Generated code is regenerated on every build; don't lint, format, or assist it.
+      "includes": ["**/.generated/**"],
+      "linter": { "enabled": false },
+      "formatter": { "enabled": false },
+      "assist": { "enabled": false }
     },
     {
-      "includes": ["actions/**/*.js"],
+      "includes": ["src/commerce-extensibility-1/actions/**/*.js"],
       "linter": {
         "rules": {
           "suspicious": {
@@ -111,5 +99,12 @@
         }
       }
     }
+  },
+
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "defaultBranch": "main",
+    "useIgnoreFile": true
   }
 }

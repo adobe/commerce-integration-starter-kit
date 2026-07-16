@@ -21,7 +21,7 @@ jobs:
         uses: adobe/aio-cli-setup-action@1.1.0
         with:
           os: ${{ matrix.os }}
-          version: 9.x.x
+          version: 11.x.x
       - name: Auth
         uses: adobe/aio-apps-action@2.0.2
         with:

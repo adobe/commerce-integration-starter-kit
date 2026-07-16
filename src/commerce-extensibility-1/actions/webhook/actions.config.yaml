@@ -1,0 +1,9 @@
+check-stock:
+  function: ./check-stock/index.js
+  web: 'yes'
+  runtime: nodejs:24
+  inputs:
+    LOG_LEVEL: $LOG_LEVEL
+  annotations:
+    require-adobe-auth: true
+    final: true
