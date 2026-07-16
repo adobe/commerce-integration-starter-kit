@@ -3,14 +3,14 @@ import {
   instrumentEntrypoint,
 } from "@adobe/aio-lib-telemetry";
 
-import { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR } from "#src/constants";
+import { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR } from "#lib/constants";
 import {
   actionErrorResponse,
   actionSuccessResponse,
   isActionSuccessful,
-} from "#src/responses";
-import { telemetryConfig } from "#src/telemetry";
-import { stringParameters } from "#src/utils";
+} from "#lib/responses";
+import { checkMissingRequestInputs, stringParameters } from "#lib/utils";
+import { telemetryConfig } from "#telemetry";
 
 import { postProcess } from "./post.js";
 import { preProcess } from "./pre.js";
@@ -28,6 +28,28 @@ async function __main(params) {
   const { logger } = getInstrumentationHelpers();
   logger.info("Start processing request");
   logger.debug(`Received params: ${stringParameters(params)}`);
+
+  const errorMessage = checkMissingRequestInputs(
+    params,
+    ["data.value.created_at", "data.value.updated_at"],
+    [],
+  );
+  if (errorMessage) {
+    logger.error(`Invalid request parameters: ${errorMessage}`);
+    return actionErrorResponse(
+      HTTP_BAD_REQUEST,
+      `Invalid request parameters: ${errorMessage}`,
+    );
+  }
+
+  // Only handle newly created records; updates are handled by the updated action.
+  const createdAt = Date.parse(params.data.value.created_at);
+  const updatedAt = Date.parse(params.data.value.updated_at);
+  if (createdAt !== updatedAt) {
+    logger.info("Customer is not newly created; skipping");
+    return actionSuccessResponse("Skipped: customer is not newly created");
+  }
+
   try {
     logger.debug(`Validate data: ${JSON.stringify(params.data)}`);
     const validation = validateData(params.data);

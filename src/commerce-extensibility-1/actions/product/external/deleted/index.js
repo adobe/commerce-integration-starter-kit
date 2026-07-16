@@ -1,8 +1,8 @@
 import { Core } from "@adobe/aio-sdk";
 
-import { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR } from "#src/constants";
-import { actionErrorResponse, actionSuccessResponse } from "#src/responses";
-import { stringParameters } from "#src/utils";
+import { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR } from "#lib/constants";
+import { actionErrorResponse, actionSuccessResponse } from "#lib/responses";
+import { stringParameters } from "#lib/utils";
 
 import { postProcess } from "./post.js";
 import { preProcess } from "./pre.js";

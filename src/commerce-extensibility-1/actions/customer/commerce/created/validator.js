@@ -3,7 +3,7 @@ import {
   instrument,
 } from "@adobe/aio-lib-telemetry";
 
-import { isOperationSuccessful } from "#src/telemetry";
+import { isOperationSuccessful } from "#telemetry";
 
 /**
  * This function validate the customer data received

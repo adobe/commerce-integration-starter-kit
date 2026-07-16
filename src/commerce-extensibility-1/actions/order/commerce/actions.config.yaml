@@ -1,12 +1,3 @@
-upsert:
-  function: upsert/index.js
-  web: 'no'
-  runtime: nodejs:24
-  inputs:
-    LOG_LEVEL: $LOG_LEVEL
-    ENABLE_TELEMETRY: true
-  annotations:
-    final: true
 created:
   function: created/index.js
   web: 'no'

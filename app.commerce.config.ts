@@ -47,7 +47,10 @@ export default defineConfig({
               field("updated_at"),
               field("description"),
             ],
-            runtimeActions: ["product-commerce/upsert"],
+            runtimeActions: [
+              "product-commerce/created",
+              "product-commerce/updated",
+            ],
           },
           {
             name: "observer.customer_save_commit_after",
@@ -61,7 +64,10 @@ export default defineConfig({
               field("created_at"),
               field("updated_at"),
             ],
-            runtimeActions: ["customer-commerce/upsert"],
+            runtimeActions: [
+              "customer-commerce/created",
+              "customer-commerce/updated",
+            ],
           },
           {
             name: "observer.customer_delete_commit_after",
@@ -108,7 +114,10 @@ export default defineConfig({
               field("created_at"),
               field("updated_at"),
             ],
-            runtimeActions: ["order-commerce/upsert"],
+            runtimeActions: [
+              "order-commerce/created",
+              "order-commerce/updated",
+            ],
           },
           {
             name: "observer.cataloginventory_stock_item_save_commit_after",

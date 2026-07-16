@@ -1,4 +1,4 @@
-import { HTTP_INTERNAL_ERROR } from "#src/constants";
+import { HTTP_INTERNAL_ERROR } from "#lib/constants";
 import { updateCustomer } from "#src/customer/commerce-customer-api-client";
 
 /**

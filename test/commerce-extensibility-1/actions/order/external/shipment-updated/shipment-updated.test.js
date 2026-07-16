@@ -1,15 +1,3 @@
-/*
-Copyright 2022 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
-
 vi.mock("#src/order/external/shipment-updated/validator");
 
 import { validateData } from "#src/order/external/shipment-updated/validator";
@@ -18,7 +6,7 @@ vi.mock("#src/order/external/shipment-updated/transformer");
 
 vi.mock("#src/order/external/shipment-updated/sender");
 
-import { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR, HTTP_OK } from "#src/constants";
+import { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR, HTTP_OK } from "#lib/constants";
 import * as action from "#src/order/external/shipment-updated/index";
 import { sendData } from "#src/order/external/shipment-updated/sender";
 

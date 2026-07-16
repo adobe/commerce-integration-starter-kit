@@ -10,9 +10,9 @@ import {
   HTTP_INTERNAL_ERROR,
   HTTP_OK,
   HTTP_UNAUTHORIZED,
-} from "#src/constants";
-import { errorResponse, successResponse } from "#src/responses";
-import { stringParameters } from "#src/utils";
+} from "#lib/constants";
+import { errorResponse, successResponse } from "#lib/responses";
+import { stringParameters } from "#lib/utils";
 
 import { checkAuthentication } from "./auth.js";
 import { validateData } from "./validator.js";

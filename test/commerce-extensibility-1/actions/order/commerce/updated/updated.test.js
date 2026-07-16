@@ -1,20 +1,17 @@
-/*
-Copyright 2022 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
-
 import * as action from "#src/order/commerce/updated/index";
 
 vi.mock("#src/order/commerce/updated/validator");
 
 import { validateData } from "#src/order/commerce/updated/validator";
+
+const NEW_RECORD = {
+  created_at: "2024-01-01T00:00:00.000Z",
+  updated_at: "2024-01-01T00:00:00.000Z",
+};
+const EXISTING_RECORD = {
+  created_at: "2024-01-01T00:00:00.000Z",
+  updated_at: "2024-06-01T00:00:00.000Z",
+};
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -27,10 +24,24 @@ describe("Given order commerce updated action", () => {
       expect(action.main).toBeInstanceOf(Function);
     });
   });
+  describe("When the record was not updated", () => {
+    test("Then skips execution and returns success", async () => {
+      const response = await action.main({ data: { value: NEW_RECORD } });
+
+      expect(response).toEqual({
+        statusCode: 200,
+        body: {
+          success: true,
+          message: "Skipped: order was not updated",
+        },
+      });
+      expect(validateData).not.toHaveBeenCalled();
+    });
+  });
   describe("When order event data is invalid", () => {
     test("Then returns action error response", async () => {
       const params = {
-        data: {},
+        data: { value: EXISTING_RECORD },
       };
 
       const ERROR_MESSAGE = "Invalid data";

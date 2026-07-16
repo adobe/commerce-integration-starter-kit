@@ -1,8 +1,8 @@
 import { Core } from "@adobe/aio-sdk";
 
-import { HTTP_OK } from "#src/constants";
-import { webhookErrorResponse, webhookSuccessResponse } from "#src/responses";
-import { stringParameters } from "#src/utils";
+import { HTTP_OK } from "#lib/constants";
+import { webhookErrorResponse, webhookSuccessResponse } from "#lib/responses";
+import { stringParameters } from "#lib/utils";
 
 import { checkAvailableStock } from "./stock.js";
 import { validateData } from "./validator.js";

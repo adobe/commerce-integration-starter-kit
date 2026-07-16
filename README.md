@@ -181,7 +181,7 @@ By default, the response of the `event handler` actions is the following:
 - success
 
   ```javascript
-  // ./src/commerce-extensibility-1/actions/responses.js#actionSuccessResponse
+  // ./src/commerce-extensibility-1/lib/responses.js#actionSuccessResponse
   return {
     statusCode: 200,
     body: {
@@ -193,7 +193,7 @@ By default, the response of the `event handler` actions is the following:
 
 - failure
   ```javascript
-  // ./src/commerce-extensibility-1/actions/responses.js#actionErrorResponse
+  // ./src/commerce-extensibility-1/lib/responses.js#actionErrorResponse
   return {
     statusCode: 400, // 404, 500, etc
     body: {
@@ -223,7 +223,7 @@ By default, the response of the `event ingestion` actions is the following:
 - success
 
   ```javascript
-  // ./src/commerce-extensibility-1/actions/responses.js#successResponse
+  // ./src/commerce-extensibility-1/lib/responses.js#successResponse
   return {
     statusCode: 200,
     body: {
@@ -238,7 +238,7 @@ By default, the response of the `event ingestion` actions is the following:
 
 - failure
   ```javascript
-  // ./src/commerce-extensibility-1/actions/responses.js#errorResponse
+  // ./src/commerce-extensibility-1/lib/responses.js#errorResponse
   return {
     error: {
       statusCode: 400, // 404, 500, etc,
@@ -270,7 +270,7 @@ By default, the response of the `synchronous webhook` actions is the following:
 - success
 
   ```javascript
-  // ./src/commerce-extensibility-1/actions/responses.js#webhookSuccessResponse
+  // ./src/commerce-extensibility-1/lib/responses.js#webhookSuccessResponse
   return {
     statusCode: 200,
     body: {
@@ -281,7 +281,7 @@ By default, the response of the `synchronous webhook` actions is the following:
 
 - failure
   ```javascript
-  // ./src/commerce-extensibility-1/actions/responses.js#webhookSuccessResponse
+  // ./src/commerce-extensibility-1/lib/responses.js#webhookSuccessResponse
   return {
     error: {
       statusCode: 200,
@@ -356,7 +356,7 @@ page describes the steps to set up the starter kit to forward logs to New Relic.
 
 ### Prevent secrets from leaking in logs.
 
-The `stringParameters` in the `./src/commerce-extensibility-1/actions/utils.js` file can be used to avoid secrets leaking when logging the parameters received by a runtime action.
+The `stringParameters` in the `./src/commerce-extensibility-1/lib/utils.js` file can be used to avoid secrets leaking when logging the parameters received by a runtime action.
 It will replace
 
 - the `authorization` header value with `<hidden>`, and
@@ -388,7 +388,7 @@ See the [package usage guide](https://github.com/adobe/aio-lib-telemetry/blob/ma
 > [!TIP]
 > Check the [How To Use](https://github.com/adobe/aio-lib-telemetry/blob/main/docs/usage.md#how-to-use) section in the `@adobe/aio-lib-telemetry` usage guide for comprehensive integration instructions.
 
-The starter kit ships with a sample implementation: the `customer/commerce` `created` action and the three commerce `upsert` actions (`customer/commerce`, `order/commerce`, and `product/commerce`) are instrumented out of the box. This example uses the telemetry configuration in `src/commerce-extensibility-1/actions/telemetry.js`.
+The starter kit ships with a sample implementation: the `customer/commerce` `created` action is instrumented out of the box. This example uses the telemetry configuration in `src/commerce-extensibility-1/telemetry.js`.
 
 The instrumentation is designed to be minimally invasive and won't disrupt existing functionality. However, telemetry requires explicit opt-in configuration: you must instrument each runtime action individually, configure exporters in the `telemetry.js` file, and set the `ENABLE_TELEMETRY` environment variable to `true` in each action's `inputs` section. While we've implemented this setup for the aforementioned actions, to fully enable telemetry, you need to complete your configuration in the `telemetry.js` file.
 

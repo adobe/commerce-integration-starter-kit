@@ -1,8 +1,8 @@
 import { Core } from "@adobe/aio-sdk";
 
-import { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR } from "#src/constants";
-import { actionErrorResponse, actionSuccessResponse } from "#src/responses";
-import { stringParameters } from "#src/utils";
+import { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR } from "#lib/constants";
+import { actionErrorResponse, actionSuccessResponse } from "#lib/responses";
+import { checkMissingRequestInputs, stringParameters } from "#lib/utils";
 
 import { postProcess } from "./post.js";
 import { preProcess } from "./pre.js";
@@ -22,6 +22,28 @@ async function main(params) {
   });
   logger.info("Start processing request");
   logger.debug(`Received params: ${stringParameters(params)}`);
+
+  const errorMessage = checkMissingRequestInputs(
+    params,
+    ["data.value.created_at", "data.value.updated_at"],
+    [],
+  );
+  if (errorMessage) {
+    logger.error(`Invalid request parameters: ${errorMessage}`);
+    return actionErrorResponse(
+      HTTP_BAD_REQUEST,
+      `Invalid request parameters: ${errorMessage}`,
+    );
+  }
+
+  // Only handle updates; newly created records are handled by the created action.
+  const createdAt = Date.parse(params.data.value.created_at);
+  const updatedAt = Date.parse(params.data.value.updated_at);
+  if (createdAt === updatedAt) {
+    logger.info("Order was not updated; skipping");
+    return actionSuccessResponse("Skipped: order was not updated");
+  }
+
   try {
     logger.debug(`Validate data: ${JSON.stringify(params.data)}`);
     const validation = validateData(params.data);

@@ -1,4 +1,4 @@
-import { checkMissingRequestInputs } from "#src/utils";
+import { checkMissingRequestInputs } from "#lib/utils";
 
 /**
  * Validate the event information
