@@ -1,4 +1,4 @@
-import { Core } from "@adobe/aio-sdk";
+import AioLogger from "@adobe/aio-lib-core-logging";
 
 import { HTTP_OK } from "#lib/constants";
 import { webhookErrorResponse, webhookSuccessResponse } from "#lib/responses";
@@ -14,7 +14,7 @@ import { validateData } from "./validator.js";
  * @returns - response with success status and result
  */
 async function main(params) {
-  const logger = Core.Logger("webhook-check-stock", {
+  const logger = AioLogger("webhook-check-stock", {
     level: params.LOG_LEVEL || "info",
   });
   try {

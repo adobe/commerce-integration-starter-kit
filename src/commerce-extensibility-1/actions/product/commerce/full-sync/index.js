@@ -1,4 +1,4 @@
-import { Core } from "@adobe/aio-sdk";
+import AioLogger from "@adobe/aio-lib-core-logging";
 
 import { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR } from "#lib/constants";
 import { actionErrorResponse, actionSuccessResponse } from "#lib/responses";
@@ -20,7 +20,7 @@ const DEFAULT_PAGE_SIZE = 20;
  * @returns response object with status code and result
  */
 async function main(params) {
-  const logger = Core.Logger("product-commerce-full-sync", {
+  const logger = AioLogger("product-commerce-full-sync", {
     level: params.LOG_LEVEL || "info",
   });
   logger.info("Start processing product full sync");

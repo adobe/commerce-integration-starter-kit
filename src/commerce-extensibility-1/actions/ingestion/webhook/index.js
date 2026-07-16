@@ -2,7 +2,7 @@ import { publishEvent } from "@adobe/aio-commerce-lib-app";
 import { CommerceSdkValidationError } from "@adobe/aio-commerce-lib-core/error";
 import { createAdobeIoEventsApiClient } from "@adobe/aio-commerce-lib-events/io-events";
 import { resolveImsAuthParams } from "@adobe/aio-commerce-sdk/auth";
-import { Core } from "@adobe/aio-sdk";
+import AioLogger from "@adobe/aio-lib-core-logging";
 
 import {
   BACKOFFICE_PROVIDER_KEY,
@@ -24,7 +24,7 @@ import { validateData } from "./validator.js";
  * @returns response with success status and result
  */
 async function main(params) {
-  const logger = Core.Logger("ingestion-webhook", {
+  const logger = AioLogger("ingestion-webhook", {
     level: params.LOG_LEVEL || "info",
   });
   try {

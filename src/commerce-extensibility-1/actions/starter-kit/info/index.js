@@ -1,4 +1,4 @@
-import { Core } from "@adobe/aio-sdk";
+import AioLogger from "@adobe/aio-lib-core-logging";
 
 import appConfig from "#app.commerce.config";
 import { HTTP_INTERNAL_ERROR, HTTP_OK } from "#lib/constants";
@@ -14,7 +14,7 @@ import { actionErrorResponse, actionSuccessResponse } from "#lib/responses";
  * @param {object} params - includes the env params
  */
 function main(params) {
-  const logger = Core.Logger("starter-kit-info", {
+  const logger = AioLogger("starter-kit-info", {
     level: params.LOG_LEVEL || "info",
   });
 

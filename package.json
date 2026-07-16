@@ -11,15 +11,15 @@
   },
   "imports": {
     "#app.commerce.config": "./src/commerce-extensibility-1/.generated/app.commerce.config.js",
-    "#telemetry": "./src/commerce-extensibility-1/telemetry.js",
-    "#lib/*": "./src/commerce-extensibility-1/lib/*.js",
+    "#telemetry": "./src/telemetry.js",
+    "#lib/*": "./src/lib/*.js",
     "#src/*": "./src/commerce-extensibility-1/actions/*.js"
   },
   "dependencies": {
     "@adobe/aio-commerce-lib-app": "^1.8.0-beta-20260714082406",
     "@adobe/aio-commerce-sdk": "^1.4.0-beta-20260714082406",
+    "@adobe/aio-lib-core-logging": "^3.0.2",
     "@adobe/aio-lib-telemetry": "^1.0.0",
-    "@adobe/aio-sdk": "^6.0.0",
     "ajv": "^8.16.0",
     "graphql-request": "^7.1.2"
   },

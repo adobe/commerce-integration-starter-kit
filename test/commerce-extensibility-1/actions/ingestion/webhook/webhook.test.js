@@ -1,10 +1,10 @@
 import { CommerceSdkValidationError } from "@adobe/aio-commerce-lib-core/error";
 
-vi.mock("@adobe/aio-sdk", () => ({
-  Core: { Logger: vi.fn() },
+vi.mock("@adobe/aio-lib-core-logging", () => ({
+  default: vi.fn(),
 }));
 
-import { Core } from "@adobe/aio-sdk";
+import AioLogger from "@adobe/aio-lib-core-logging";
 
 vi.mock("@adobe/aio-commerce-lib-app", () => ({ publishEvent: vi.fn() }));
 
@@ -29,7 +29,7 @@ const mockLoggerInstance = {
   debug: vi.fn(),
   error: vi.fn(),
 };
-Core.Logger.mockReturnValue(mockLoggerInstance);
+AioLogger.mockReturnValue(mockLoggerInstance);
 
 afterEach(() => {
   vi.clearAllMocks();
