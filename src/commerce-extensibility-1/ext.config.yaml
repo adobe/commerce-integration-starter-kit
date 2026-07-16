@@ -14,6 +14,10 @@ operations:
 
 runtimeManifest:
   packages:
+    starter-kit:
+      license: Apache-2.0
+      actions:
+        $include: ./actions/starter-kit/actions.config.yaml
     #  ingestion:
     #    license: Apache-2.0
     #    actions:
