@@ -1,0 +1,8 @@
+{
+  "type": "object",
+  "properties": {
+    "sku": { "type": "string" }
+  },
+  "required": ["sku"],
+  "additionalProperties": false
+}
