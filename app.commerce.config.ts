@@ -130,7 +130,7 @@ export default defineConfig({
             name: "observer.cataloginventory_stock_item_save_commit_after",
             label: "Stock Item Updated",
             description:
-              "Fires after a stock item's inventory data is created or updated in Commerce, used to sync stock levels to external systems",
+              "Fires after inventory data for a stock item is created or updated in Commerce, used to sync stock levels to external systems",
             fields: [
               field("item_id"),
               field("product_id"),
@@ -244,7 +244,7 @@ export default defineConfig({
             name: "be-observer.sales_order_status_update",
             label: "Backoffice Order Status Updated",
             description:
-              "Notifies Commerce that a sales order's status was updated in the backoffice system",
+              "Notifies Commerce that a sales order status was updated in the backoffice system",
             runtimeActions: ["order-backoffice/updated"],
           },
           {
