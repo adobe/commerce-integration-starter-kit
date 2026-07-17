@@ -4,7 +4,13 @@
  * @param {object} params - include the env params
  * @param {object} data - Customer data
  * @param {object} preProcessed - result of the pre-process logic if any
- * @returns the sending result if needed for post process
+ * @returns {Promise<
+ *   | { success: true }
+ *   | { success: false, statusCode: number, message: string }
+ * >} Result consumed by the action's `main`: `success` gates the flow, and on
+ *   failure `statusCode`/`message` are forwarded to the error response. This stub
+ *   only returns the success variant; return the failure variant (see the @TODO
+ *   below) once real send logic is added.
  */
 function sendData(params, data, preProcessed) {
   // @TODO Here add the logic to send the information to 3rd party

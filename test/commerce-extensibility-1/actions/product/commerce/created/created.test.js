@@ -30,10 +30,8 @@ describe("Given product commerce created action", () => {
 
       expect(response).toEqual({
         statusCode: 200,
-        body: {
-          success: true,
-          message: "Skipped: product is not newly created",
-        },
+        type: "success",
+        body: { message: "Skipped: product is not newly created" },
       });
       expect(validateData).not.toHaveBeenCalled();
     });
@@ -53,11 +51,8 @@ describe("Given product commerce created action", () => {
       const response = await action.main(params);
 
       expect(response).toEqual({
-        statusCode: 400,
-        body: {
-          success: false,
-          error: ERROR_MESSAGE,
-        },
+        type: "error",
+        error: { statusCode: 400, body: { message: ERROR_MESSAGE } },
       });
     });
   });

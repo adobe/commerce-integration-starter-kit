@@ -1,14 +1,15 @@
 import {
+  badRequest,
+  buildErrorResponse,
+  internalServerError,
+  isSuccessResponse,
+  ok,
+} from "@adobe/aio-commerce-sdk/core/responses";
+import {
   getInstrumentationHelpers,
   instrumentEntrypoint,
 } from "@adobe/aio-lib-telemetry";
 
-import { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR } from "#lib/constants";
-import {
-  actionErrorResponse,
-  actionSuccessResponse,
-  isActionSuccessful,
-} from "#lib/responses";
 import { checkMissingRequestInputs, stringParameters } from "#lib/utils";
 import { telemetryConfig } from "#telemetry";
 
@@ -36,10 +37,7 @@ async function __main(params) {
   );
   if (errorMessage) {
     logger.error(`Invalid request parameters: ${errorMessage}`);
-    return actionErrorResponse(
-      HTTP_BAD_REQUEST,
-      `Invalid request parameters: ${errorMessage}`,
-    );
+    return badRequest(`Invalid request parameters: ${errorMessage}`);
   }
 
   // Only handle newly created records; updates are handled by the updated action.
@@ -47,7 +45,7 @@ async function __main(params) {
   const updatedAt = Date.parse(params.data.value.updated_at);
   if (createdAt !== updatedAt) {
     logger.info("Customer is not newly created; skipping");
-    return actionSuccessResponse("Skipped: customer is not newly created");
+    return ok("Skipped: customer is not newly created");
   }
 
   try {
@@ -55,7 +53,7 @@ async function __main(params) {
     const validation = validateData(params.data);
     if (!validation.success) {
       logger.error(`Validation failed with error: ${validation.message}`);
-      return actionErrorResponse(HTTP_BAD_REQUEST, validation.message);
+      return badRequest(validation.message);
     }
     logger.debug(`Transform data: ${JSON.stringify(params.data)}`);
     const transformedData = transformData(params.data);
@@ -65,19 +63,21 @@ async function __main(params) {
     const result = await sendData(params, transformedData, preProcessed);
     if (!result.success) {
       logger.error(`Send data failed: ${result.message}`);
-      return actionErrorResponse(result.statusCode, result.message);
+      return buildErrorResponse(result.statusCode, {
+        body: { message: result.message },
+      });
     }
     logger.debug(`Postprocess data: ${stringParameters(params)}`);
     postProcess(params, transformedData, preProcessed, result);
     logger.debug("Process finished successfully");
-    return actionSuccessResponse("Customer created successfully");
+    return ok("Customer created successfully");
   } catch (error) {
     logger.error(`Error processing the request: ${error.message}`);
-    return actionErrorResponse(HTTP_INTERNAL_ERROR, error.message);
+    return internalServerError(error.message);
   }
 }
 
 export const main = instrumentEntrypoint(__main, {
   ...telemetryConfig,
-  isSuccessful: isActionSuccessful,
+  isSuccessful: isSuccessResponse,
 });
