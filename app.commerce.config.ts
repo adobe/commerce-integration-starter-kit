@@ -24,7 +24,8 @@ export default defineConfig({
           {
             name: "observer.catalog_product_delete_commit_after",
             label: "Observer catalog product delete commit after",
-            description: "Observer catalog product delete commit after",
+            description:
+              "Fires after a product is deleted in Commerce, used to sync the deletion to external systems",
             fields: [
               field("id"),
               field("sku"),
@@ -38,7 +39,8 @@ export default defineConfig({
           {
             name: "observer.catalog_product_save_commit_after",
             label: "Observer catalog product save commit after",
-            description: "Observer catalog product save commit after",
+            description:
+              "Fires after a product is created or updated in Commerce, used to sync product changes to external systems",
             fields: [
               field("id"),
               field("sku"),
@@ -55,7 +57,8 @@ export default defineConfig({
           {
             name: "observer.customer_save_commit_after",
             label: "Observer customer save commit after",
-            description: "Observer customer save commit after",
+            description:
+              "Fires after a customer is created or updated in Commerce, used to sync customer changes to external systems",
             fields: [
               field("id"),
               field("firstname"),
@@ -72,7 +75,8 @@ export default defineConfig({
           {
             name: "observer.customer_delete_commit_after",
             label: "Observer customer delete commit after",
-            description: "Observer customer delete commit after",
+            description:
+              "Fires after a customer is deleted in Commerce, used to sync the deletion to external systems",
             fields: [
               field("id"),
               field("firstname"),
@@ -84,7 +88,8 @@ export default defineConfig({
           {
             name: "observer.customer_group_save_commit_after",
             label: "Observer customer group save commit after",
-            description: "Observer customer group save commit after",
+            description:
+              "Fires after a customer group is created or updated in Commerce, used to sync group changes to external systems",
             fields: [
               field("customer_group_code"),
               field("tax_class_id"),
@@ -96,7 +101,8 @@ export default defineConfig({
           {
             name: "observer.customer_group_delete_commit_after",
             label: "Observer customer group delete commit after",
-            description: "Observer customer group delete commit after",
+            description:
+              "Fires after a customer group is deleted in Commerce, used to sync the deletion to external systems",
             fields: [
               field("customer_group_code"),
               field("customer_group_id"),
@@ -107,7 +113,8 @@ export default defineConfig({
           {
             name: "observer.sales_order_save_commit_after",
             label: "Observer sales order save commit after",
-            description: "Observer sales order save commit after",
+            description:
+              "Fires after a sales order is created or updated in Commerce, used to sync order changes to external systems",
             fields: [
               field("id"),
               field("increment_id"),
@@ -123,7 +130,7 @@ export default defineConfig({
             name: "observer.cataloginventory_stock_item_save_commit_after",
             label: "Observer cataloginventory stock item save commit after",
             description:
-              "Observer cataloginventory stock item save commit after",
+              "Fires after a stock item's inventory data is created or updated in Commerce, used to sync stock levels to external systems",
             fields: [
               field("item_id"),
               field("product_id"),
@@ -173,79 +180,92 @@ export default defineConfig({
           {
             name: "be-observer.catalog_product_create",
             label: "Be observer catalog product create",
-            description: "Be observer catalog product create",
+            description:
+              "Notifies Commerce that a product was created in the backoffice system",
             runtimeActions: ["product-backoffice/created"],
           },
           {
             name: "be-observer.catalog_product_update",
             label: "Be observer catalog product update",
-            description: "Be observer catalog product update",
+            description:
+              "Notifies Commerce that a product was updated in the backoffice system",
             runtimeActions: ["product-backoffice/updated"],
           },
           {
             name: "be-observer.catalog_product_delete",
             label: "Be observer catalog product delete",
-            description: "Be observer catalog product delete",
+            description:
+              "Notifies Commerce that a product was deleted in the backoffice system",
             runtimeActions: ["product-backoffice/deleted"],
           },
           {
             name: "be-observer.customer_create",
             label: "Be observer customer create",
-            description: "Be observer customer create",
+            description:
+              "Notifies Commerce that a customer was created in the backoffice system",
             runtimeActions: ["customer-backoffice/created"],
           },
           {
             name: "be-observer.customer_update",
             label: "Be observer customer update",
-            description: "Be observer customer update",
+            description:
+              "Notifies Commerce that a customer was updated in the backoffice system",
             runtimeActions: ["customer-backoffice/updated"],
           },
           {
             name: "be-observer.customer_delete",
             label: "Be observer customer delete",
-            description: "Be observer customer delete",
+            description:
+              "Notifies Commerce that a customer was deleted in the backoffice system",
             runtimeActions: ["customer-backoffice/deleted"],
           },
           {
             name: "be-observer.customer_group_create",
             label: "Be observer customer group create",
-            description: "Be observer customer group create",
+            description:
+              "Notifies Commerce that a customer group was created in the backoffice system",
             runtimeActions: ["customer-backoffice/group-created"],
           },
           {
             name: "be-observer.customer_group_update",
             label: "Be observer customer group update",
-            description: "Be observer customer group update",
+            description:
+              "Notifies Commerce that a customer group was updated in the backoffice system",
             runtimeActions: ["customer-backoffice/group-updated"],
           },
           {
             name: "be-observer.customer_group_delete",
             label: "Be observer customer group delete",
-            description: "Be observer customer group delete",
+            description:
+              "Notifies Commerce that a customer group was deleted in the backoffice system",
             runtimeActions: ["customer-backoffice/group-deleted"],
           },
           {
             name: "be-observer.sales_order_status_update",
             label: "Be observer sales order status update",
-            description: "Be observer sales order status update",
+            description:
+              "Notifies Commerce that a sales order's status was updated in the backoffice system",
             runtimeActions: ["order-backoffice/updated"],
           },
           {
             name: "be-observer.sales_order_shipment_create",
             label: "Be observer sales order shipment create",
-            description: "Be observer sales order shipment create",
+            description:
+              "Notifies Commerce that a shipment was created for a sales order in the backoffice system",
             runtimeActions: ["order-backoffice/shipment-created"],
           },
           {
             name: "be-observer.sales_order_shipment_update",
             label: "Be observer sales order shipment update",
-            description: "Be observer sales order shipment update",
+            description:
+              "Notifies Commerce that a shipment was updated for a sales order in the backoffice system",
             runtimeActions: ["order-backoffice/shipment-updated"],
           },
           {
             name: "be-observer.catalog_stock_update",
             label: "Be observer catalog stock update",
-            description: "Be observer catalog stock update",
+            description:
+              "Notifies Commerce that stock levels were updated in the backoffice system",
             runtimeActions: ["stock-backoffice/updated"],
           },
         ],
