@@ -37,10 +37,8 @@ describe("Given customer commerce created action", () => {
 
       expect(response).toEqual({
         statusCode: 200,
-        body: {
-          success: true,
-          message: "Skipped: customer is not newly created",
-        },
+        type: "success",
+        body: { message: "Skipped: customer is not newly created" },
       });
       expect(validateData).not.toHaveBeenCalled();
     });
@@ -61,11 +59,8 @@ describe("Given customer commerce created action", () => {
       const response = await action.main(params);
 
       expect(response).toEqual({
-        statusCode: 400,
-        body: {
-          success: false,
-          error: ERROR_MESSAGE,
-        },
+        type: "error",
+        error: { statusCode: 400, body: { message: ERROR_MESSAGE } },
       });
     });
   });

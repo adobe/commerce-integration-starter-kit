@@ -6,7 +6,12 @@ vi.mock("#src/order/external/shipment-created/transformer");
 
 vi.mock("#src/order/external/shipment-created/sender");
 
-import { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR, HTTP_OK } from "#lib/constants";
+import {
+  HTTP_BAD_REQUEST,
+  HTTP_INTERNAL_SERVER_ERROR,
+  HTTP_OK,
+} from "@adobe/aio-commerce-sdk/core/responses";
+
 import * as action from "#src/order/external/shipment-created/index";
 import { sendData } from "#src/order/external/shipment-created/sender";
 
@@ -24,10 +29,10 @@ describe("Given order external shipment created action", () => {
         message: "Data provided does not validate with the schema",
       };
       const ERROR_RESPONSE = {
-        statusCode: HTTP_BAD_REQUEST,
-        body: {
-          success: false,
-          error: "Data provided does not validate with the schema",
+        type: "error",
+        error: {
+          statusCode: HTTP_BAD_REQUEST,
+          body: { message: "Data provided does not validate with the schema" },
         },
       };
       validateData.mockReturnValue(FAILED_VALIDATION_RESPONSE);
@@ -42,10 +47,10 @@ describe("Given order external shipment created action", () => {
       };
       const ERROR = new Error("generic error");
       const ERROR_RESPONSE = {
-        statusCode: HTTP_INTERNAL_ERROR,
-        body: {
-          success: false,
-          error: ERROR.message,
+        type: "error",
+        error: {
+          statusCode: HTTP_INTERNAL_SERVER_ERROR,
+          body: { message: ERROR.message },
         },
       };
       validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE);
@@ -64,12 +69,7 @@ describe("Given order external shipment created action", () => {
         success: true,
         response: "anything",
       };
-      const SUCCESS_RESPONSE = {
-        statusCode: HTTP_OK,
-        body: {
-          success: true,
-        },
-      };
+      const SUCCESS_RESPONSE = { statusCode: HTTP_OK, type: "success" };
       validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE);
       sendData.mockReturnValue(SUCCESSFUL_SEND_DATA_RESPONSE);
       expect(await action.main(IGNORED_PARAMS)).toMatchObject(SUCCESS_RESPONSE);

@@ -1,20 +1,20 @@
-import { CommerceSdkValidationError } from "@adobe/aio-commerce-lib-core/error";
+import { CommerceSdkValidationError } from "@adobe/aio-commerce-sdk/core/error";
 
-vi.mock("@adobe/aio-sdk", () => ({
-  Core: { Logger: vi.fn() },
+vi.mock("@adobe/aio-lib-core-logging", () => ({
+  default: vi.fn(),
 }));
 
-import { Core } from "@adobe/aio-sdk";
+import AioLogger from "@adobe/aio-lib-core-logging";
 
 vi.mock("@adobe/aio-commerce-lib-app", () => ({ publishEvent: vi.fn() }));
 
 import { publishEvent } from "@adobe/aio-commerce-lib-app";
 
-vi.mock("@adobe/aio-commerce-lib-events/io-events", () => ({
+vi.mock("@adobe/aio-commerce-sdk/events/io-events", () => ({
   createAdobeIoEventsApiClient: vi.fn(() => ({ id: "events-client" })),
 }));
 
-import { createAdobeIoEventsApiClient } from "@adobe/aio-commerce-lib-events/io-events";
+import { createAdobeIoEventsApiClient } from "@adobe/aio-commerce-sdk/events/io-events";
 
 vi.mock("@adobe/aio-commerce-sdk/auth", () => ({
   resolveImsAuthParams: vi.fn(() => ({ ims: "auth" })),
@@ -29,7 +29,7 @@ const mockLoggerInstance = {
   debug: vi.fn(),
   error: vi.fn(),
 };
-Core.Logger.mockReturnValue(mockLoggerInstance);
+AioLogger.mockReturnValue(mockLoggerInstance);
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -71,12 +71,13 @@ describe("Given external backoffice events ingestion webhook", () => {
       });
       expect(response).toEqual({
         statusCode: 200,
+        type: "success",
         body: {
+          type: validData.event,
           response: {
             success: true,
             message: "Event published successfully",
           },
-          type: validData.event,
         },
       });
     });
@@ -88,10 +89,11 @@ describe("Given external backoffice events ingestion webhook", () => {
 
       expect(publishEvent).not.toHaveBeenCalled();
       expect(response).toEqual({
+        type: "error",
         error: {
           statusCode: 400,
           body: {
-            error: "missing parameter(s) 'data.uid,data.event,data.value'",
+            message: "missing parameter(s) 'data.uid,data.event,data.value'",
           },
         },
       });
@@ -105,9 +107,10 @@ describe("Given external backoffice events ingestion webhook", () => {
       const response = await action.main({ data: validData });
 
       expect(response).toEqual({
+        type: "error",
         error: {
           statusCode: 500,
-          body: { error: "fake error" },
+          body: { message: "fake error" },
         },
       });
     });
@@ -120,9 +123,10 @@ describe("Given external backoffice events ingestion webhook", () => {
       const response = await action.main({ data: validData });
 
       expect(response).toEqual({
+        type: "error",
         error: {
           statusCode: 500,
-          body: { error: "Invalid event data" },
+          body: { message: "Invalid event data" },
         },
       });
       expect(mockLoggerInstance.error).toHaveBeenCalledWith(

@@ -17,8 +17,6 @@ Welcome to Adobe Commerce Integration Starter Kit.
 
 Integrating an e-commerce platform with your ERP, OMS, or CRM is a mission-critical requirement. Companies can spend tens of thousands of dollars building these integrations. To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder. The kit includes reference integrations for commonly used commerce data like orders, products, and customers. It also includes a standardized architecture for developers to build on following best practices.
 
-The public documentation can be found at [Adobe Developer Starter Kit docs](https://developer.adobe.com/commerce/extensibility/starter-kit/integration/).
-
 ![Architecture Diagram](architecture.png "Architecture Diagram")
 
 ## Prerequisites
@@ -328,6 +326,7 @@ The starter kit comes with predefined events for each entity. Sometimes, you may
       final: true
   ```
 - Deploy the changes: `aio app deploy`
+- Reinstall the application in App Management so the new event is wired up.
 
 With these steps, you can consume the new event you added to the project.
 If you want to change an existing event, make the changes in the same places:

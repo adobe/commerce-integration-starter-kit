@@ -54,8 +54,8 @@ describe("Given product commerce full sync action", () => {
 
       expect(response).toEqual({
         statusCode: 200,
+        type: "success",
         body: {
-          success: true,
           message: expect.stringContaining("completed with some errors"),
         },
       });
@@ -74,8 +74,8 @@ describe("Given product commerce full sync action", () => {
 
       expect(response).toEqual({
         statusCode: 200,
+        type: "success",
         body: {
-          success: true,
           message: expect.stringContaining("completed with some errors"),
         },
       });
@@ -103,8 +103,8 @@ describe("Given product commerce full sync action", () => {
 
       expect(response).toEqual({
         statusCode: 200,
+        type: "success",
         body: {
-          success: true,
           message: expect.stringContaining("completed with some errors"),
         },
       });

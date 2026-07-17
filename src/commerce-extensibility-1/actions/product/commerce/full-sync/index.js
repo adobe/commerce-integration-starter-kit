@@ -1,7 +1,11 @@
-import { Core } from "@adobe/aio-sdk";
+import {
+  HTTP_BAD_REQUEST,
+  HTTP_INTERNAL_SERVER_ERROR,
+  internalServerError,
+  ok,
+} from "@adobe/aio-commerce-sdk/core/responses";
+import AioLogger from "@adobe/aio-lib-core-logging";
 
-import { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR } from "#lib/constants";
-import { actionErrorResponse, actionSuccessResponse } from "#lib/responses";
 import { stringParameters } from "#lib/utils";
 import { queryProducts } from "#src/product/commerce-product-graphql-client";
 
@@ -20,7 +24,7 @@ const DEFAULT_PAGE_SIZE = 20;
  * @returns response object with status code and result
  */
 async function main(params) {
-  const logger = Core.Logger("product-commerce-full-sync", {
+  const logger = AioLogger("product-commerce-full-sync", {
     level: params.LOG_LEVEL || "info",
   });
   logger.info("Start processing product full sync");
@@ -61,10 +65,10 @@ async function main(params) {
       )}`,
     ].join("\n");
     logger.info("Product sync completed successfully");
-    return actionSuccessResponse(message);
+    return ok(message);
   } catch (error) {
     logger.error(`Error processing the request: ${error.message}`);
-    return actionErrorResponse(HTTP_INTERNAL_ERROR, error.message);
+    return internalServerError(error.message);
   }
 }
 
@@ -119,7 +123,12 @@ async function processPage(params, pageSize, currentPage, logger) {
     return createResult(currentPage, true, null, null, totalCount);
   } catch (error) {
     logger.error(`Error processing page ${currentPage}: ${error.message}`);
-    return createResult(currentPage, false, error.message, HTTP_INTERNAL_ERROR);
+    return createResult(
+      currentPage,
+      false,
+      error.message,
+      HTTP_INTERNAL_SERVER_ERROR,
+    );
   }
 }
 

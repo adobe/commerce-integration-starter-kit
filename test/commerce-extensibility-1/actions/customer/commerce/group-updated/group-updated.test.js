@@ -30,11 +30,8 @@ describe("Given customer group commerce updated action", () => {
       const response = await action.main(params);
 
       expect(response).toEqual({
-        statusCode: 400,
-        body: {
-          success: false,
-          error: ERROR_MESSAGE,
-        },
+        type: "error",
+        error: { statusCode: 400, body: { message: ERROR_MESSAGE } },
       });
     });
   });

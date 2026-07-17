@@ -1,21 +1,23 @@
 import { publishEvent } from "@adobe/aio-commerce-lib-app";
-import { CommerceSdkValidationError } from "@adobe/aio-commerce-lib-core/error";
-import { createAdobeIoEventsApiClient } from "@adobe/aio-commerce-lib-events/io-events";
 import { resolveImsAuthParams } from "@adobe/aio-commerce-sdk/auth";
-import { Core } from "@adobe/aio-sdk";
-
+import { CommerceSdkValidationError } from "@adobe/aio-commerce-sdk/core/error";
 import {
-  BACKOFFICE_PROVIDER_KEY,
-  HTTP_BAD_REQUEST,
-  HTTP_INTERNAL_ERROR,
+  badRequest,
   HTTP_OK,
-  HTTP_UNAUTHORIZED,
-} from "#lib/constants";
-import { errorResponse, successResponse } from "#lib/responses";
+  internalServerError,
+  ok,
+  unauthorized,
+} from "@adobe/aio-commerce-sdk/core/responses";
+import { createAdobeIoEventsApiClient } from "@adobe/aio-commerce-sdk/events/io-events";
+import AioLogger from "@adobe/aio-lib-core-logging";
+
+import appConfig from "#app.commerce.config";
 import { stringParameters } from "#lib/utils";
 
 import { checkAuthentication } from "./auth.js";
 import { validateData } from "./validator.js";
+
+const BACKOFFICE_PROVIDER_KEY = appConfig.eventing.external[0].provider.key;
 
 /**
  * This web action allow external back-office application publish event to IO event using custom authentication mechanism.
@@ -24,7 +26,7 @@ import { validateData } from "./validator.js";
  * @returns response with success status and result
  */
 async function main(params) {
-  const logger = Core.Logger("ingestion-webhook", {
+  const logger = AioLogger("ingestion-webhook", {
     level: params.LOG_LEVEL || "info",
   });
   try {
@@ -35,12 +37,12 @@ async function main(params) {
       logger.error(
         `Authentication failed with error: ${authentication.message}`,
       );
-      return errorResponse(HTTP_UNAUTHORIZED, authentication.message);
+      return unauthorized(authentication.message);
     }
     const validationResult = validateData(params);
     if (!validationResult.success) {
       logger.error(`Validation failed with error: ${validationResult.message}`);
-      return errorResponse(HTTP_BAD_REQUEST, validationResult.message);
+      return badRequest(validationResult.message);
     }
     const client = createAdobeIoEventsApiClient({
       auth: resolveImsAuthParams(params),
@@ -57,16 +59,21 @@ async function main(params) {
       payload: params.data.value,
     });
     logger.info(`Successful request: ${HTTP_OK}`);
-    return successResponse(eventType, {
-      success: true,
-      message: "Event published successfully",
+    return ok({
+      body: {
+        type: eventType,
+        response: {
+          success: true,
+          message: "Event published successfully",
+        },
+      },
     });
   } catch (error) {
     logger.error(`Server error: ${error.message}`);
     if (error instanceof CommerceSdkValidationError) {
       logger.error(error.display());
     }
-    return errorResponse(HTTP_INTERNAL_ERROR, error.message);
+    return internalServerError(error.message);
   }
 }
 

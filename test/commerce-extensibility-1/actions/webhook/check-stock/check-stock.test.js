@@ -42,6 +42,7 @@ describe("Given synchronous webhook action to check stock availability", () => {
 
       expect(response).toEqual({
         statusCode: 200,
+        type: "success",
         body: {
           op: "success",
         },
@@ -56,6 +57,7 @@ describe("Given synchronous webhook action to check stock availability", () => {
 
       expect(response).toEqual({
         statusCode: 200,
+        type: "success",
         body: {
           op: "exception",
           message: "missing parameter(s) 'data.cart_id,data.items'",
@@ -89,6 +91,7 @@ describe("Given synchronous webhook action to check stock availability", () => {
 
       expect(response).toEqual({
         statusCode: 200,
+        type: "success",
         body: {
           op: "exception",
           message: "no stock found",

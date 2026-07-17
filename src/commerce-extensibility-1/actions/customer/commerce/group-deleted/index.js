@@ -1,7 +1,11 @@
-import { Core } from "@adobe/aio-sdk";
+import {
+  badRequest,
+  buildErrorResponse,
+  internalServerError,
+  ok,
+} from "@adobe/aio-commerce-sdk/core/responses";
+import AioLogger from "@adobe/aio-lib-core-logging";
 
-import { HTTP_BAD_REQUEST, HTTP_INTERNAL_ERROR } from "#lib/constants";
-import { actionErrorResponse, actionSuccessResponse } from "#lib/responses";
 import { stringParameters } from "#lib/utils";
 
 import { postProcess } from "./post.js";
@@ -17,7 +21,7 @@ import { validateData } from "./validator.js";
  * @param {object} params - includes the env params, type and the data of the event
  */
 async function main(params) {
-  const logger = Core.Logger("customer-commerce-group-deleted", {
+  const logger = AioLogger("customer-commerce-group-deleted", {
     level: params.LOG_LEVEL || "info",
   });
   logger.info("Start processing request");
@@ -27,7 +31,7 @@ async function main(params) {
     const validation = validateData(params.data.value);
     if (!validation.success) {
       logger.error(`Validation failed with error: ${validation.message}`);
-      return actionErrorResponse(HTTP_BAD_REQUEST, validation.message);
+      return badRequest(validation.message);
     }
     logger.debug(`Transform data: ${JSON.stringify(params.data.value)}`);
     const transformedData = transformData(params.data.value);
@@ -37,15 +41,17 @@ async function main(params) {
     const result = await sendData(params, transformedData, preProcessed);
     if (!result.success) {
       logger.error(`Send data failed: ${result.message}`);
-      return actionErrorResponse(result.statusCode, result.message);
+      return buildErrorResponse(result.statusCode, {
+        body: { message: result.message },
+      });
     }
     logger.debug(`Postprocess data: ${stringParameters(params)}`);
     postProcess(params, transformedData, preProcessed, result);
     logger.debug("Process finished successfully");
-    return actionSuccessResponse("Customer group deleted successfully");
+    return ok("Customer group deleted successfully");
   } catch (error) {
     logger.error(`Error processing the request: ${error.message}`);
-    return actionErrorResponse(HTTP_INTERNAL_ERROR, error.message);
+    return internalServerError(error.message);
   }
 }
 
