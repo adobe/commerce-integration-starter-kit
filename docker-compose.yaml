@@ -1,6 +1,6 @@
 services:
   otel-lgtm:
-    image: grafana/otel-lgtm:0.28.0@sha256:10f48eb2f8670134df542177bb19536c55421b089e43f9dfc2a27d4c078204d8
+    image: grafana/otel-lgtm:0.29.1@sha256:b4da8bf6b1b44f6f683883869619eb9781465c642ce5f2d70591fb27094ddb1c
     container_name: otel-lgtm
     restart: unless-stopped
     ports:
@@ -13,7 +13,7 @@ services:
 
   # Cloudflare Tunnel - Exposes collector for deployed actions
   cloudflared:
-    image: cloudflare/cloudflared:2026.6.1@sha256:6d91c121b803126f7a5344005d17a9324788fc09d305b6e2560ec6040a7ae283
+    image: cloudflare/cloudflared:2026.7.3@sha256:e39ee8da81ad5e05d77f38d2f51c60ca51bf2a8450ac3abab50c17fdb91d91bf
     container_name: cloudflared
     restart: unless-stopped
     networks: [telemetry]
