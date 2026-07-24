@@ -3,7 +3,8 @@
   "extends": ["ultracite/biome/core"],
 
   "files": {
-    "ignoreUnknown": true
+    "ignoreUnknown": true,
+    "includes": ["!**/.generated"]
   },
 
   "json": {
@@ -40,13 +41,6 @@
   },
 
   "overrides": [
-    {
-      // Generated code is regenerated on every build; don't lint, format, or assist it.
-      "includes": ["**/.generated/**"],
-      "linter": { "enabled": false },
-      "formatter": { "enabled": false },
-      "assist": { "enabled": false }
-    },
     {
       "includes": ["src/commerce-extensibility-1/actions/**/*.js"],
       "linter": {
