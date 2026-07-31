@@ -29,7 +29,7 @@ async function main(params) {
   try {
     logger.debug(`Validate data: ${JSON.stringify(params.data)}`);
     const validation = validateData(params.data);
-    // biome-ignore lint/suspicious/noUnnecessaryConditions: validateData's placeholder scaffold currently always returns { success: true }; this check becomes meaningful once the real logic is implemented.
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: validateData's scaffold always returns { success: true } until implemented.
     if (!validation.success) {
       logger.error(`Validation failed with error: ${validation.message}`);
       return badRequest(validation.message);
@@ -40,7 +40,7 @@ async function main(params) {
     const preProcessed = preProcess(params, transformedData);
     logger.debug(`Start sending data: ${JSON.stringify(params)}`);
     const result = await sendData(params, transformedData, preProcessed);
-    // biome-ignore lint/suspicious/noUnnecessaryConditions: sendData's placeholder scaffold currently always returns { success: true }; this check becomes meaningful once the real logic is implemented.
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: sendData's scaffold always returns { success: true } until implemented.
     if (!result.success) {
       logger.error(`Send data failed: ${result.message}`);
       return buildErrorResponse(result.statusCode, {

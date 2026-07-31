@@ -33,7 +33,7 @@ async function main(params) {
     logger.info("Start processing request");
     logger.debug(`Webhook main params: ${stringParameters(params)}`);
     const authentication = checkAuthentication(params);
-    // biome-ignore lint/suspicious/noUnnecessaryConditions: checkAuthentication's placeholder scaffold currently always returns { success: true }; this check becomes meaningful once the real logic is implemented.
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: checkAuthentication's scaffold always returns { success: true } until implemented.
     if (!authentication.success) {
       logger.error(
         `Authentication failed with error: ${authentication.message}`,
