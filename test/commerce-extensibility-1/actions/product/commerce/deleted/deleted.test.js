@@ -23,15 +23,15 @@ describe("Given product commerce deleted action", () => {
 
       const ERROR_MESSAGE = "Invalid data";
       validateData.mockReturnValue({
-        success: false,
         message: ERROR_MESSAGE,
+        success: false,
       });
 
       const response = await action.main(params);
 
       expect(response).toEqual({
+        error: { body: { message: ERROR_MESSAGE }, statusCode: 400 },
         type: "error",
-        error: { statusCode: 400, body: { message: ERROR_MESSAGE } },
       });
     });
   });

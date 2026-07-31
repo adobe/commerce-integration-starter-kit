@@ -17,8 +17,8 @@ describe("Given the Validator of customer group commerce deleted action", () => 
       const response = await validateData({});
 
       expect(response).toEqual({
-        success: false,
         message: "missing parameter(s) 'customer_group_code'",
+        success: false,
       });
     });
   });

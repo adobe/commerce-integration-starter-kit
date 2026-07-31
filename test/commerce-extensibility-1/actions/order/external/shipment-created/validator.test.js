@@ -11,20 +11,20 @@ describe("Given order external shipment created validator", () => {
       [
         {
           data: {
-            orderId: 6,
-            items: [{ orderItemId: 7, qty: 1 }],
-            tracks: [
-              {
-                trackNumber: "Custom Value",
-                title: "Custom Title",
-                carrierCode: "custom",
-              },
-            ],
             comment: {
               comment: "Order Shipped from API",
               visibleOnFront: true,
             },
+            items: [{ orderItemId: 7, qty: 1 }],
+            orderId: 6,
             stockSourceCode: "default",
+            tracks: [
+              {
+                carrierCode: "custom",
+                title: "Custom Title",
+                trackNumber: "Custom Value",
+              },
+            ],
           },
         },
       ],
@@ -39,23 +39,23 @@ describe("Given order external shipment created validator", () => {
       [
         {
           data: {
-            orderId: "6",
-            items: [{ orderItemId: "7", qty: "1" }],
-            tracks: [
-              {
-                trackNumber: "Custom Value",
-                title: "Custom Title",
-                carrierCode: "custom",
-              },
-            ],
             comments: [
               {
-                notifyCustomer: 0,
                 comment: "Order Shipped from API",
+                notifyCustomer: 0,
                 visibleOnFront: 1,
               },
             ],
+            items: [{ orderItemId: "7", qty: "1" }],
+            orderId: "6",
             stockSourceCode: "default",
+            tracks: [
+              {
+                carrierCode: "custom",
+                title: "Custom Title",
+                trackNumber: "Custom Value",
+              },
+            ],
           },
         },
       ], // wrong type property

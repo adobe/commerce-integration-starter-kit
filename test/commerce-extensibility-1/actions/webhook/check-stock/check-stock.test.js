@@ -25,8 +25,8 @@ describe("Given synchronous webhook action to check stock availability", () => {
           items: [
             {
               item_id: "ITEM_ID",
-              sku: "SKU",
               qty: 1,
+              sku: "SKU",
             },
           ],
         },
@@ -41,11 +41,11 @@ describe("Given synchronous webhook action to check stock availability", () => {
       const response = await action.main(params);
 
       expect(response).toEqual({
-        statusCode: 200,
-        type: "success",
         body: {
           op: "success",
         },
+        statusCode: 200,
+        type: "success",
       });
     });
   });
@@ -56,12 +56,12 @@ describe("Given synchronous webhook action to check stock availability", () => {
       const response = await action.main(params);
 
       expect(response).toEqual({
+        body: {
+          message: "missing parameter(s) 'data.cart_id,data.items'",
+          op: "exception",
+        },
         statusCode: 200,
         type: "success",
-        body: {
-          op: "exception",
-          message: "missing parameter(s) 'data.cart_id,data.items'",
-        },
       });
     });
   });
@@ -73,8 +73,8 @@ describe("Given synchronous webhook action to check stock availability", () => {
           items: [
             {
               item_id: "ITEM_ID",
-              sku: "SKU",
               qty: 1,
+              sku: "SKU",
             },
           ],
         },
@@ -82,20 +82,20 @@ describe("Given synchronous webhook action to check stock availability", () => {
 
       checkAvailableStock.mockResolvedValueOnce(
         Promise.resolve({
-          success: false,
           message: "no stock found",
+          success: false,
         }),
       );
 
       const response = await action.main(params);
 
       expect(response).toEqual({
+        body: {
+          message: "no stock found",
+          op: "exception",
+        },
         statusCode: 200,
         type: "success",
-        body: {
-          op: "exception",
-          message: "no stock found",
-        },
       });
     });
   });

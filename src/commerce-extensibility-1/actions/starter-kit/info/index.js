@@ -27,11 +27,11 @@ function main(params) {
     return ok({
       body: {
         message: {
-          starter_kit_version: appConfig.metadata.version,
+          eventing: appConfig.eventing,
           // Kept for backwards compatibility; the data now lives in `eventing`.
           registrations:
             'This information now lives in the "eventing" property.',
-          eventing: appConfig.eventing,
+          starter_kit_version: appConfig.metadata.version,
         },
       },
     });

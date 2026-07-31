@@ -46,18 +46,18 @@ describe("Given product commerce full sync action", () => {
 
       const ERROR_MESSAGE = "Invalid data";
       validateData.mockReturnValue({
-        success: false,
         message: ERROR_MESSAGE,
+        success: false,
       });
 
       const response = await action.main(params);
 
       expect(response).toEqual({
-        statusCode: 200,
-        type: "success",
         body: {
           message: expect.stringContaining("completed with some errors"),
         },
+        statusCode: 200,
+        type: "success",
       });
     });
   });
@@ -73,11 +73,11 @@ describe("Given product commerce full sync action", () => {
       const response = await action.main(params);
 
       expect(response).toEqual({
-        statusCode: 200,
-        type: "success",
         body: {
           message: expect.stringContaining("completed with some errors"),
         },
+        statusCode: 200,
+        type: "success",
       });
     });
   });
@@ -94,19 +94,19 @@ describe("Given product commerce full sync action", () => {
         },
       });
       sendData.mockResolvedValue({
-        success: false,
         message: "Failed to send data",
         statusCode: 400,
+        success: false,
       });
 
       const response = await action.main(params);
 
       expect(response).toEqual({
-        statusCode: 200,
-        type: "success",
         body: {
           message: expect.stringContaining("completed with some errors"),
         },
+        statusCode: 200,
+        type: "success",
       });
     });
   });

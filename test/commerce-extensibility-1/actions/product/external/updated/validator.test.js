@@ -10,17 +10,17 @@ describe("Given product external updated validator", () => {
     it.each([
       [
         {
-          data: { sku: "SKU", name: "NAME", price: 99.99, description: "DESC" },
+          data: { description: "DESC", name: "NAME", price: 99.99, sku: "SKU" },
         },
       ], // required properties
       [
         {
           data: {
-            sku: "SKU",
-            name: "NAME",
-            price: 99.99,
             description: "DESC",
             extra: "EXTRA",
+            name: "NAME",
+            price: 99.99,
+            sku: "SKU",
           },
         },
       ], // additional properties
@@ -31,14 +31,14 @@ describe("Given product external updated validator", () => {
   });
   describe("When data to validate is not valid", () => {
     it.each([
-      [{ data: { sku: "SKU", name: "NAME", description: "DESC" } }], // missing required properties
+      [{ data: { description: "DESC", name: "NAME", sku: "SKU" } }], // missing required properties
       [
         {
           data: {
-            sku: "SKU",
+            description: "DESC",
             name: "NAME",
             price: "99.99",
-            description: "DESC",
+            sku: "SKU",
           },
         },
       ], // wrong type property

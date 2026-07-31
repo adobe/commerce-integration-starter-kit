@@ -37,6 +37,7 @@ async function main(params) {
     let hasErrors = false;
     while (currentPage <= totalPages) {
       logger.info(`Fetching products page ${currentPage}`);
+      // biome-ignore lint/performance/noAwaitInLoops: totalPages is only known after fetching the first page, so pages must be requested sequentially.
       const pageResult = await processPage(
         params,
         pageSize,
@@ -53,7 +54,7 @@ async function main(params) {
           `Total products: ${pageResult.totalCount}, Total pages: ${totalPages}`,
         );
       }
-      currentPage++;
+      currentPage += 1;
     }
     const message = [
       `Sync process ${hasErrors ? "completed with some errors" : "completed successfully"}.`,
@@ -92,6 +93,7 @@ async function processPage(params, pageSize, currentPage, logger) {
     }
     logger.debug(`Validate data: ${JSON.stringify(response)}`);
     const validation = validateData(response);
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: validateData's placeholder scaffold currently always returns { success: true }; this check becomes meaningful once the real logic is implemented.
     if (!validation.success) {
       return createResult(
         currentPage,
@@ -110,6 +112,7 @@ async function processPage(params, pageSize, currentPage, logger) {
     const preProcessed = preProcess(items, transformedData);
     logger.debug(`Start sending data: ${JSON.stringify(items)}`);
     const result = await sendData(params, transformedData, preProcessed);
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: sendData's placeholder scaffold currently always returns { success: true }; this check becomes meaningful once the real logic is implemented.
     if (!result.success) {
       return createResult(
         currentPage,

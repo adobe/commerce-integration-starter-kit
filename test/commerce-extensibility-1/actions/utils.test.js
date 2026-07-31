@@ -8,17 +8,17 @@ test("interface", () => {
 describe("stringParameters", () => {
   test("no auth header", () => {
     const params = {
+      __ow_headers: { "x-api-key": "fake-api-key" },
       a: 1,
       b: 2,
-      __ow_headers: { "x-api-key": "fake-api-key" },
     };
     expect(utils.stringParameters(params)).toEqual(JSON.stringify(params));
   });
   test("with auth header", () => {
     const params = {
+      __ow_headers: { authorization: "secret", "x-api-key": "fake-api-key" },
       a: 1,
       b: 2,
-      __ow_headers: { "x-api-key": "fake-api-key", authorization: "secret" },
     };
     expect(utils.stringParameters(params)).toEqual(
       expect.stringContaining('"authorization":"<hidden>"'),
@@ -29,11 +29,11 @@ describe("stringParameters", () => {
   });
   test("with fields to be hidden", () => {
     const params = {
-      x_secret: "secret",
       secret_x: "secret",
+      TOKEN_x: "secret",
+      x_secret: "secret",
       x_secret_x: "secret",
       x_TOKEN: "secret",
-      TOKEN_x: "secret",
       x_TOKEN_x: "secret",
     };
     expect(utils.stringParameters(params)).toEqual(
@@ -87,7 +87,7 @@ describe("checkMissingRequestInputs", () => {
   test("({ a: 1, __ow_headers: { h: 1, i: 2 } }, undefined, [h])", () => {
     expect(
       utils.checkMissingRequestInputs(
-        { a: 1, __ow_headers: { h: 1, i: 2 } },
+        { __ow_headers: { h: 1, i: 2 }, a: 1 },
         undefined,
         ["h"],
       ),
@@ -96,7 +96,7 @@ describe("checkMissingRequestInputs", () => {
   test("({ a: 1, __ow_headers: { f: 2 } }, [a], [h, i])", () => {
     expect(
       utils.checkMissingRequestInputs(
-        { a: 1, __ow_headers: { f: 2 } },
+        { __ow_headers: { f: 2 }, a: 1 },
         ["a"],
         ["h", "i"],
       ),

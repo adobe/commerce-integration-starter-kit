@@ -33,6 +33,7 @@ async function main(params) {
     logger.info("Start processing request");
     logger.debug(`Webhook main params: ${stringParameters(params)}`);
     const authentication = checkAuthentication(params);
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: checkAuthentication's placeholder scaffold currently always returns { success: true }; this check becomes meaningful once the real logic is implemented.
     if (!authentication.success) {
       logger.error(
         `Authentication failed with error: ${authentication.message}`,
@@ -54,18 +55,18 @@ async function main(params) {
     );
     await publishEvent({
       client,
-      provider: BACKOFFICE_PROVIDER_KEY,
       event: eventType,
       payload: params.data.value,
+      provider: BACKOFFICE_PROVIDER_KEY,
     });
     logger.info(`Successful request: ${HTTP_OK}`);
     return ok({
       body: {
-        type: eventType,
         response: {
-          success: true,
           message: "Event published successfully",
+          success: true,
         },
+        type: eventType,
       },
     });
   } catch (error) {

@@ -6,13 +6,13 @@ import {
 
 /** The telemetry configuration to be used across all actions */
 const telemetryConfig = defineTelemetryConfig((_params, isDev) => ({
-  sdkConfig: {
-    serviceName: "commerce-integration-starter-kit",
-    resource: getAioRuntimeResource(),
-    instrumentations: getPresetInstrumentations("simple"),
-  },
   diagnostics: {
     logLevel: isDev ? "debug" : "info",
+  },
+  sdkConfig: {
+    instrumentations: getPresetInstrumentations("simple"),
+    resource: getAioRuntimeResource(),
+    serviceName: "commerce-integration-starter-kit",
   },
 }));
 

@@ -39,6 +39,7 @@ async function main(params) {
     const preProcessed = preProcess(params, transformedData);
     logger.debug(`Start sending data: ${JSON.stringify(params)}`);
     const result = await sendData(params, transformedData, preProcessed);
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: sendData's placeholder scaffold currently always returns { success: true }; this check becomes meaningful once the real logic is implemented.
     if (!result.success) {
       logger.error(`Send data failed: ${result.message}`);
       return buildErrorResponse(result.statusCode, {

@@ -11,21 +11,21 @@ describe("Given customer external updated validator", () => {
       [
         {
           data: {
-            id: 1234,
-            name: "John",
-            lastname: "Doe",
             email: "john@doe.com",
+            id: 1234,
+            lastname: "Doe",
+            name: "John",
           },
         },
       ],
       [
         {
           data: {
-            id: 1234,
-            name: "John",
-            lastname: "Doe",
             email: "john@doe.com",
             extra: "EXTRA",
+            id: 1234,
+            lastname: "Doe",
+            name: "John",
           },
         },
       ],
@@ -36,15 +36,15 @@ describe("Given customer external updated validator", () => {
   });
   describe("When data to validate is not valid", () => {
     it.each([
-      [{ data: { id: 1234, name: "John", lastname: "Doe" } }],
+      [{ data: { id: 1234, lastname: "Doe", name: "John" } }],
       [
         {
           data: {
-            id: "1234",
-            name: "John",
-            lastname: "Doe",
             email: "john@doe.com",
             extra: "EXTRA",
+            id: "1234",
+            lastname: "Doe",
+            name: "John",
           },
         },
       ],

@@ -29,9 +29,9 @@ describe("Given customer commerce updated action", () => {
       const response = await action.main({ data: { value: NEW_RECORD } });
 
       expect(response).toEqual({
+        body: { message: "Skipped: customer was not updated" },
         statusCode: 200,
         type: "success",
-        body: { message: "Skipped: customer was not updated" },
       });
       expect(validateData).not.toHaveBeenCalled();
     });
@@ -44,15 +44,15 @@ describe("Given customer commerce updated action", () => {
 
       const ERROR_MESSAGE = "Invalid data";
       validateData.mockReturnValue({
-        success: false,
         message: ERROR_MESSAGE,
+        success: false,
       });
 
       const response = await action.main(params);
 
       expect(response).toEqual({
+        error: { body: { message: ERROR_MESSAGE }, statusCode: 400 },
         type: "error",
-        error: { statusCode: 400, body: { message: ERROR_MESSAGE } },
       });
     });
   });

@@ -9,10 +9,10 @@ function transformData(params) {
   // Notice that the attribute_set_id may need to be changed
   return {
     customer: {
-      id: params.data.id,
-      firstname: params.data.name,
-      lastname: params.data.lastname,
       email: params.data.email,
+      firstname: params.data.name,
+      id: params.data.id,
+      lastname: params.data.lastname,
     },
   };
 }

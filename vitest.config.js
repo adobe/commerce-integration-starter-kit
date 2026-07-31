@@ -2,17 +2,12 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    globals: true,
-    environment: "node",
-    include: ["test/**/*.test.js"],
-    testTimeout: 30_000,
-    silent: true,
     coverage: {
+      exclude: ["src/**/.generated/**"],
+      include: ["src/**/*.js"],
       provider: "istanbul",
       reporter: ["text-summary", "html"],
       reportsDirectory: "test/test-coverage",
-      include: ["src/**/*.js"],
-      exclude: ["src/**/.generated/**"],
       thresholds: {
         branches: 65,
         functions: 50,
@@ -20,5 +15,10 @@ export default defineConfig({
         statements: 80,
       },
     },
+    environment: "node",
+    globals: true,
+    include: ["test/**/*.test.js"],
+    silent: true,
+    testTimeout: 30_000,
   },
 });

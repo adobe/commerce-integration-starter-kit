@@ -4,26 +4,11 @@ const field = (name: string, source?: string) =>
   source ? { name, source } : { name };
 
 export default defineConfig({
-  metadata: {
-    id: "commerce-integration-starter-kit",
-    displayName: "Commerce Integration Starter Kit",
-    version: "1.0.2",
-    description:
-      "To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder.",
-  },
   eventing: {
     commerce: [
       {
-        provider: {
-          label: "Commerce Provider",
-          description:
-            "Commerce Provider that will receive events from commerce",
-          key: "commerce",
-        },
         events: [
           {
-            name: "observer.catalog_product_delete_commit_after",
-            label: "Product Deleted",
             description:
               "Fires after a product is deleted in Commerce, used to sync the deletion to external systems",
             fields: [
@@ -34,11 +19,11 @@ export default defineConfig({
               field("updated_at"),
               field("description"),
             ],
+            label: "Product Deleted",
+            name: "observer.catalog_product_delete_commit_after",
             runtimeActions: ["product-commerce/deleted"],
           },
           {
-            name: "observer.catalog_product_save_commit_after",
-            label: "Product Created or Updated",
             description:
               "Fires after a product is created or updated in Commerce, used to sync product changes to external systems",
             fields: [
@@ -49,14 +34,14 @@ export default defineConfig({
               field("updated_at"),
               field("description"),
             ],
+            label: "Product Created or Updated",
+            name: "observer.catalog_product_save_commit_after",
             runtimeActions: [
               "product-commerce/created",
               "product-commerce/updated",
             ],
           },
           {
-            name: "observer.customer_save_commit_after",
-            label: "Customer Created or Updated",
             description:
               "Fires after a customer is created or updated in Commerce, used to sync customer changes to external systems",
             fields: [
@@ -67,14 +52,14 @@ export default defineConfig({
               field("created_at"),
               field("updated_at"),
             ],
+            label: "Customer Created or Updated",
+            name: "observer.customer_save_commit_after",
             runtimeActions: [
               "customer-commerce/created",
               "customer-commerce/updated",
             ],
           },
           {
-            name: "observer.customer_delete_commit_after",
-            label: "Customer Deleted",
             description:
               "Fires after a customer is deleted in Commerce, used to sync the deletion to external systems",
             fields: [
@@ -83,11 +68,11 @@ export default defineConfig({
               field("lastname"),
               field("email"),
             ],
+            label: "Customer Deleted",
+            name: "observer.customer_delete_commit_after",
             runtimeActions: ["customer-commerce/deleted"],
           },
           {
-            name: "observer.customer_group_save_commit_after",
-            label: "Customer Group Created or Updated",
             description:
               "Fires after a customer group is created or updated in Commerce, used to sync group changes to external systems",
             fields: [
@@ -96,11 +81,11 @@ export default defineConfig({
               field("extension_attributes"),
               field("customer_group_id"),
             ],
+            label: "Customer Group Created or Updated",
+            name: "observer.customer_group_save_commit_after",
             runtimeActions: ["customer-commerce/group-updated"],
           },
           {
-            name: "observer.customer_group_delete_commit_after",
-            label: "Customer Group Deleted",
             description:
               "Fires after a customer group is deleted in Commerce, used to sync the deletion to external systems",
             fields: [
@@ -108,11 +93,11 @@ export default defineConfig({
               field("customer_group_id"),
               field("tax_class_id"),
             ],
+            label: "Customer Group Deleted",
+            name: "observer.customer_group_delete_commit_after",
             runtimeActions: ["customer-commerce/group-deleted"],
           },
           {
-            name: "observer.sales_order_save_commit_after",
-            label: "Sales Order Created or Updated",
             description:
               "Fires after a sales order is created or updated in Commerce, used to sync order changes to external systems",
             fields: [
@@ -121,14 +106,14 @@ export default defineConfig({
               field("created_at"),
               field("updated_at"),
             ],
+            label: "Sales Order Created or Updated",
+            name: "observer.sales_order_save_commit_after",
             runtimeActions: [
               "order-commerce/created",
               "order-commerce/updated",
             ],
           },
           {
-            name: "observer.cataloginventory_stock_item_save_commit_after",
-            label: "Stock Item Updated",
             description:
               "Fires after inventory data for a stock item is created or updated in Commerce, used to sync stock levels to external systems",
             fields: [
@@ -163,134 +148,149 @@ export default defineConfig({
               field("type_id"),
               field("min_qty_allowed_in_shopping_cart"),
             ],
+            label: "Stock Item Updated",
+            name: "observer.cataloginventory_stock_item_save_commit_after",
             runtimeActions: ["stock-commerce/updated"],
           },
         ],
+        provider: {
+          description:
+            "Commerce Provider that will receive events from commerce",
+          key: "commerce",
+          label: "Commerce Provider",
+        },
       },
     ],
     external: [
       {
-        provider: {
-          label: "Backoffice Provider",
-          description:
-            "Backoffice Provider that will receive events from commerce",
-          key: "backoffice",
-        },
         events: [
           {
-            name: "be-observer.catalog_product_create",
-            label: "Backoffice Product Created",
             description:
               "Notifies Commerce that a product was created in the backoffice system",
+            label: "Backoffice Product Created",
+            name: "be-observer.catalog_product_create",
             runtimeActions: ["product-backoffice/created"],
           },
           {
-            name: "be-observer.catalog_product_update",
-            label: "Backoffice Product Updated",
             description:
               "Notifies Commerce that a product was updated in the backoffice system",
+            label: "Backoffice Product Updated",
+            name: "be-observer.catalog_product_update",
             runtimeActions: ["product-backoffice/updated"],
           },
           {
-            name: "be-observer.catalog_product_delete",
-            label: "Backoffice Product Deleted",
             description:
               "Notifies Commerce that a product was deleted in the backoffice system",
+            label: "Backoffice Product Deleted",
+            name: "be-observer.catalog_product_delete",
             runtimeActions: ["product-backoffice/deleted"],
           },
           {
-            name: "be-observer.customer_create",
-            label: "Backoffice Customer Created",
             description:
               "Notifies Commerce that a customer was created in the backoffice system",
+            label: "Backoffice Customer Created",
+            name: "be-observer.customer_create",
             runtimeActions: ["customer-backoffice/created"],
           },
           {
-            name: "be-observer.customer_update",
-            label: "Backoffice Customer Updated",
             description:
               "Notifies Commerce that a customer was updated in the backoffice system",
+            label: "Backoffice Customer Updated",
+            name: "be-observer.customer_update",
             runtimeActions: ["customer-backoffice/updated"],
           },
           {
-            name: "be-observer.customer_delete",
-            label: "Backoffice Customer Deleted",
             description:
               "Notifies Commerce that a customer was deleted in the backoffice system",
+            label: "Backoffice Customer Deleted",
+            name: "be-observer.customer_delete",
             runtimeActions: ["customer-backoffice/deleted"],
           },
           {
-            name: "be-observer.customer_group_create",
-            label: "Backoffice Customer Group Created",
             description:
               "Notifies Commerce that a customer group was created in the backoffice system",
+            label: "Backoffice Customer Group Created",
+            name: "be-observer.customer_group_create",
             runtimeActions: ["customer-backoffice/group-created"],
           },
           {
-            name: "be-observer.customer_group_update",
-            label: "Backoffice Customer Group Updated",
             description:
               "Notifies Commerce that a customer group was updated in the backoffice system",
+            label: "Backoffice Customer Group Updated",
+            name: "be-observer.customer_group_update",
             runtimeActions: ["customer-backoffice/group-updated"],
           },
           {
-            name: "be-observer.customer_group_delete",
-            label: "Backoffice Customer Group Deleted",
             description:
               "Notifies Commerce that a customer group was deleted in the backoffice system",
+            label: "Backoffice Customer Group Deleted",
+            name: "be-observer.customer_group_delete",
             runtimeActions: ["customer-backoffice/group-deleted"],
           },
           {
-            name: "be-observer.sales_order_status_update",
-            label: "Backoffice Order Status Updated",
             description:
               "Notifies Commerce that a sales order status was updated in the backoffice system",
+            label: "Backoffice Order Status Updated",
+            name: "be-observer.sales_order_status_update",
             runtimeActions: ["order-backoffice/updated"],
           },
           {
-            name: "be-observer.sales_order_shipment_create",
-            label: "Backoffice Order Shipment Created",
             description:
               "Notifies Commerce that a shipment was created for a sales order in the backoffice system",
+            label: "Backoffice Order Shipment Created",
+            name: "be-observer.sales_order_shipment_create",
             runtimeActions: ["order-backoffice/shipment-created"],
           },
           {
-            name: "be-observer.sales_order_shipment_update",
-            label: "Backoffice Order Shipment Updated",
             description:
               "Notifies Commerce that a shipment was updated for a sales order in the backoffice system",
+            label: "Backoffice Order Shipment Updated",
+            name: "be-observer.sales_order_shipment_update",
             runtimeActions: ["order-backoffice/shipment-updated"],
           },
           {
-            name: "be-observer.catalog_stock_update",
-            label: "Backoffice Stock Updated",
             description:
               "Notifies Commerce that stock levels were updated in the backoffice system",
+            label: "Backoffice Stock Updated",
+            name: "be-observer.catalog_stock_update",
             runtimeActions: ["stock-backoffice/updated"],
           },
         ],
+        provider: {
+          description:
+            "Backoffice Provider that will receive events from commerce",
+          key: "backoffice",
+          label: "Backoffice Provider",
+        },
       },
     ],
   },
+  metadata: {
+    description:
+      "To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder.",
+    displayName: "Commerce Integration Starter Kit",
+    id: "commerce-integration-starter-kit",
+    version: "1.0.2",
+  },
   webhooks: [
     {
-      label: "Cart Stock Validation",
+      category: "validation",
       description:
         "Validates stock availability for cart items in real time before a product is added to the cart",
-      category: "validation",
-      runtimeAction: "webhook/check-stock",
+      label: "Cart Stock Validation",
       requireAdobeAuth: true,
+      runtimeAction: "webhook/check-stock",
       webhook: {
-        webhook_method: "observer.checkout_cart_product_add_before",
-        webhook_type: "before",
         batch_name: "validate_stock",
+        fallback_error_message: "The product stock validation failed",
+        fields: [field("data.cart_id"), field("data.items")],
         hook_name: "check_stock",
         method: "POST",
         required: true,
         soft_timeout: 1000,
         timeout: 5000,
-        fallback_error_message: "The product stock validation failed",
-        fields: [field("data.cart_id"), field("data.items")],
+        webhook_method: "observer.checkout_cart_product_add_before",
+        webhook_type: "before",
       },
     },
   ],

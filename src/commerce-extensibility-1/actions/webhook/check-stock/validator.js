@@ -11,8 +11,8 @@ function validateData(params) {
   const errorMessage = checkMissingRequestInputs(params, requiredParams, []);
   if (errorMessage) {
     return {
-      success: false,
       message: errorMessage,
+      success: false,
     };
   }
 

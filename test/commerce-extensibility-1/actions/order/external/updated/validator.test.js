@@ -9,14 +9,14 @@ describe("Given order external updated validator", () => {
   describe("When data to validate is valid", () => {
     it.each([
       [{ data: { id: 99, status: "completed" } }],
-      [{ data: { id: 99, status: "completed", notifyCustomer: true } }],
+      [{ data: { id: 99, notifyCustomer: true, status: "completed" } }],
       [
         {
           data: {
-            id: 99,
-            status: "completed",
-            notifyCustomer: true,
             extra: "EXTRA",
+            id: 99,
+            notifyCustomer: true,
+            status: "completed",
           },
         },
       ],
@@ -28,7 +28,7 @@ describe("Given order external updated validator", () => {
   describe("When data to validate is not valid", () => {
     it.each([
       [{ data: { id: 99 } }],
-      [{ data: { id: 99, status: "completed", notifyCustomer: 1 } }],
+      [{ data: { id: 99, notifyCustomer: 1, status: "completed" } }],
     ])("Then for %o,  returns error response", (params) => {
       const UNSUCCESSFUL_RESPONSE = { success: false };
       expect(validator.validateData(params)).toMatchObject(

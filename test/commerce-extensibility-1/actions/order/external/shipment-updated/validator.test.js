@@ -11,26 +11,26 @@ describe("Given order external shipment updated validator", () => {
       [
         {
           data: {
-            id: 9,
-            orderId: 6,
-            items: [{ entityId: 12, orderItemId: 7, qty: 1 }],
-            tracks: [
-              {
-                entityId: 13,
-                trackNumber: "Custom Value",
-                title: "Custom Title",
-                carrierCode: "custom",
-              },
-            ],
             comments: [
               {
+                comment: "Order Shipped from API",
                 entityId: 14,
                 notifyCustomer: false,
-                comment: "Order Shipped from API",
                 visibleOnFront: true,
               },
             ],
+            id: 9,
+            items: [{ entityId: 12, orderItemId: 7, qty: 1 }],
+            orderId: 6,
             stockSourceCode: "default",
+            tracks: [
+              {
+                carrierCode: "custom",
+                entityId: 13,
+                title: "Custom Title",
+                trackNumber: "Custom Value",
+              },
+            ],
           },
         },
       ],
@@ -45,26 +45,26 @@ describe("Given order external shipment updated validator", () => {
       [
         {
           data: {
-            id: "9",
-            orderId: "6",
-            items: [{ entityId: "12", orderItemId: "7", qty: "1" }],
-            tracks: [
-              {
-                entityId: "13",
-                trackNumber: "Custom Value",
-                title: "Custom Title",
-                carrierCode: "custom",
-              },
-            ],
             comments: [
               {
+                comment: "Order Shipped from API",
                 entityId: "14",
                 notifyCustomer: 0,
-                comment: "Order Shipped from API",
                 visibleOnFront: 1,
               },
             ],
+            id: "9",
+            items: [{ entityId: "12", orderItemId: "7", qty: "1" }],
+            orderId: "6",
             stockSourceCode: "default",
+            tracks: [
+              {
+                carrierCode: "custom",
+                entityId: "13",
+                title: "Custom Title",
+                trackNumber: "Custom Value",
+              },
+            ],
           },
         },
       ], // wrong type property

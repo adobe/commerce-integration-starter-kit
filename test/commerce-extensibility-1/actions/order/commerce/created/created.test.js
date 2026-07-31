@@ -29,9 +29,9 @@ describe("Given order commerce created action", () => {
       const response = await action.main({ data: { value: EXISTING_RECORD } });
 
       expect(response).toEqual({
+        body: { message: "Skipped: order is not newly created" },
         statusCode: 200,
         type: "success",
-        body: { message: "Skipped: order is not newly created" },
       });
       expect(validateData).not.toHaveBeenCalled();
     });
@@ -44,15 +44,15 @@ describe("Given order commerce created action", () => {
 
       const ERROR_MESSAGE = "Invalid data";
       validateData.mockReturnValue({
-        success: false,
         message: ERROR_MESSAGE,
+        success: false,
       });
 
       const response = await action.main(params);
 
       expect(response).toEqual({
+        error: { body: { message: ERROR_MESSAGE }, statusCode: 400 },
         type: "error",
-        error: { statusCode: 400, body: { message: ERROR_MESSAGE } },
       });
     });
   });

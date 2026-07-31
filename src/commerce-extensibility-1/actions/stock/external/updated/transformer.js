@@ -22,9 +22,9 @@ function transformData(params) {
  */
 function transform(stockUpdate) {
   return {
+    quantity: stockUpdate.quantity,
     sku: stockUpdate.sku,
     source_code: stockUpdate.source,
-    quantity: stockUpdate.quantity,
     status: stockUpdate.outOfStock ? 0 : 1,
   };
 }
