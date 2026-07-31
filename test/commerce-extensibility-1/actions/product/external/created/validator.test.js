@@ -8,19 +8,19 @@ describe("Given product external created validator", () => {
   });
   describe("When data to validate is valid", () => {
     it.each([
-      [{ data: { sku: "SKU", name: "NAME", description: "DESC" } }], // required properties
+      [{ data: { description: "DESC", name: "NAME", sku: "SKU" } }], // required properties
       [
         {
-          data: { sku: "SKU", name: "NAME", price: 99.99, description: "DESC" },
+          data: { description: "DESC", name: "NAME", price: 99.99, sku: "SKU" },
         },
       ], // all properties
       [
         {
           data: {
-            sku: "SKU",
-            name: "NAME",
             description: "DESC",
             extra: "EXTRA",
+            name: "NAME",
+            sku: "SKU",
           },
         },
       ], // additional properties
@@ -31,8 +31,8 @@ describe("Given product external created validator", () => {
   });
   describe("When data to validate is not valid", () => {
     it.each([
-      [{ data: { sku: "SKU", name: "NAME" } }], // missing required properties
-      [{ data: { sku: "SKU", name: "NAME", price: "99.99" } }], // wrong type property
+      [{ data: { name: "NAME", sku: "SKU" } }], // missing required properties
+      [{ data: { name: "NAME", price: "99.99", sku: "SKU" } }], // wrong type property
     ])("Then for %o,  returns error response", (params) => {
       const UNSUCCESSFUL_RESPONSE = { success: false };
       expect(validator.validateData(params)).toMatchObject(

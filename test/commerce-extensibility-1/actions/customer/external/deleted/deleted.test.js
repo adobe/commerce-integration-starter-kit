@@ -23,15 +23,15 @@ describe("Given customer external deleted action", () => {
     test("Then returns action error response", async () => {
       const IGNORED_PARAMS = { data: {} };
       const FAILED_VALIDATION_RESPONSE = {
-        success: false,
         message: "Data provided does not validate with the schema",
+        success: false,
       };
       const ERROR_RESPONSE = {
-        type: "error",
         error: {
-          statusCode: HTTP_BAD_REQUEST,
           body: { message: "Data provided does not validate with the schema" },
+          statusCode: HTTP_BAD_REQUEST,
         },
+        type: "error",
       };
       validateData.mockReturnValue(FAILED_VALIDATION_RESPONSE);
       expect(await action.main(IGNORED_PARAMS)).toMatchObject(ERROR_RESPONSE);
@@ -45,11 +45,11 @@ describe("Given customer external deleted action", () => {
       };
       const ERROR = new Error("generic error");
       const ERROR_RESPONSE = {
-        type: "error",
         error: {
-          statusCode: HTTP_INTERNAL_SERVER_ERROR,
           body: { message: ERROR.message },
+          statusCode: HTTP_INTERNAL_SERVER_ERROR,
         },
+        type: "error",
       };
       validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE);
       sendData.mockRejectedValue(ERROR);
@@ -63,8 +63,8 @@ describe("Given customer external deleted action", () => {
         success: true,
       };
       const SUCCESSFUL_SEND_DATA_RESPONSE = {
-        success: true,
         response: "anything",
+        success: true,
       };
       const SUCCESS_RESPONSE = { statusCode: HTTP_OK, type: "success" };
       validateData.mockReturnValue(SUCCESSFUL_VALIDATION_RESPONSE);

@@ -9,7 +9,7 @@ describe("Given customer group external created validator", () => {
   describe("When data to validate is valid", () => {
     it.each([
       [{ data: { name: "NAME", taxClassId: 99 } }],
-      [{ data: { name: "NAME", taxClassId: 99, extra: "EXTRA" } }],
+      [{ data: { extra: "EXTRA", name: "NAME", taxClassId: 99 } }],
     ])("Then for %o,  returns successful response", (params) => {
       const SUCCESSFUL_RESPONSE = { success: true };
       expect(validator.validateData(params)).toMatchObject(SUCCESSFUL_RESPONSE);

@@ -17,8 +17,8 @@ describe("Validator of Customer group commerce updated action", () => {
       const response = await validateData({});
 
       expect(response).toEqual({
-        success: false,
         message: "missing parameter(s) 'customer_group_code'",
+        success: false,
       });
     });
   });

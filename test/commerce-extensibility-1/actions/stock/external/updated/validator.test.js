@@ -11,8 +11,8 @@ describe("Given stock external updated validator", () => {
       [
         {
           data: [
-            { sku: "SKU1", source: "SOURCE1", quantity: 99, outOfStock: false },
-            { sku: "SKU2", source: "SOURCE2", quantity: 66, outOfStock: true },
+            { outOfStock: false, quantity: 99, sku: "SKU1", source: "SOURCE1" },
+            { outOfStock: true, quantity: 66, sku: "SKU2", source: "SOURCE2" },
           ],
         },
       ],
@@ -20,11 +20,11 @@ describe("Given stock external updated validator", () => {
         {
           data: [
             {
+              extra: "EXTRA",
+              outOfStock: false,
+              quantity: 99,
               sku: "SKU1",
               source: "SOURCE1",
-              quantity: 99,
-              outOfStock: false,
-              extra: "EXTRA",
             },
           ],
         },
@@ -36,14 +36,14 @@ describe("Given stock external updated validator", () => {
   });
   describe("When data to validate is not valid", () => {
     it.each([
-      [{ data: { sku: "SKU", name: "NAME", description: "DESC" } }],
+      [{ data: { description: "DESC", name: "NAME", sku: "SKU" } }],
       [
         {
           data: {
-            sku: "SKU",
+            description: "DESC",
             name: "NAME",
             price: "99.99",
-            description: "DESC",
+            sku: "SKU",
           },
         },
       ],

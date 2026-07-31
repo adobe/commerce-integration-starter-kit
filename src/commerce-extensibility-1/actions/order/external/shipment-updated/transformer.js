@@ -19,11 +19,11 @@ function transformItems(items) {
  */
 function transformTracks(orderId, tracks) {
   return tracks.map((track) => ({
+    carrier_code: track.carrierCode,
     entity_id: track.entityId,
     order_id: orderId,
-    track_number: track.trackNumber,
     title: track.title,
-    carrier_code: track.carrierCode,
+    track_number: track.trackNumber,
   }));
 }
 
@@ -34,9 +34,9 @@ function transformTracks(orderId, tracks) {
  */
 function transformComments(comments) {
   return comments.map((comment) => ({
+    comment: comment.comment,
     entity_id: comment.entityId,
     is_customer_notified: comment.notifyCustomer ? 1 : 0,
-    comment: comment.comment,
     is_visible_on_front: comment.visibleOnFront ? 1 : 0,
   }));
 }
@@ -53,14 +53,14 @@ function transformData(params) {
 
   return {
     entity: {
-      entity_id: params.data.id,
-      order_id: params.data.orderId,
-      items: transformItems(params.data.items),
-      tracks: transformTracks(params.data.orderId, params.data.tracks),
       comments: transformComments(params.data.comments),
+      entity_id: params.data.id,
       extension_attributes: {
         source_code: params.data.stockSourceCode,
       },
+      items: transformItems(params.data.items),
+      order_id: params.data.orderId,
+      tracks: transformTracks(params.data.orderId, params.data.tracks),
     },
   };
 }

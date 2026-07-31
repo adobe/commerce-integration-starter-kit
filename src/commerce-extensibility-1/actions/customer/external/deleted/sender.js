@@ -19,14 +19,14 @@ async function sendData(params, transformed, preProcessed) {
   try {
     const response = await deleteCustomer(params, transformed);
     return {
-      success: true,
       message: response,
+      success: true,
     };
   } catch (error) {
     return {
-      success: false,
-      statusCode: error.response?.statusCode || HTTP_INTERNAL_SERVER_ERROR,
       message: error.message,
+      statusCode: error.response?.statusCode || HTTP_INTERNAL_SERVER_ERROR,
+      success: false,
     };
   }
 }

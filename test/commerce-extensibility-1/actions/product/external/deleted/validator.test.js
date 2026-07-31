@@ -16,7 +16,7 @@ describe("Given product external deleted validator", () => {
   });
   describe("When data to validate is not valid", () => {
     it.each([
-      [{ data: { sku: "SKU", name: "NAME" } }], // additional properties
+      [{ data: { name: "NAME", sku: "SKU" } }], // additional properties
       [{ data: { sku: 99 } }], // wrong type property
     ])("Then for %o,  returns error response", (params) => {
       const UNSUCCESSFUL_RESPONSE = { success: false };

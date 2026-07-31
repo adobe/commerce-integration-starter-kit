@@ -9,8 +9,8 @@ function transformData(params) {
   // Notice that the attribute_set_id may need to be changed
   return {
     group: {
-      id: params.data.id,
       code: params.data.name,
+      id: params.data.id,
       tax_class_id: params.data.taxClassId,
     },
   };

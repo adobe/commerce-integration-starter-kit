@@ -30,6 +30,7 @@ async function main(params) {
       return ok(exceptionOperation(validationResult.message));
     }
     const checkAvailableStockResult = await checkAvailableStock(params.data);
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: checkAvailableStock's scaffold returns success until implemented.
     if (!checkAvailableStockResult.success) {
       logger.error(`Stock check failed: ${checkAvailableStockResult.message}`);
       return ok(exceptionOperation(checkAvailableStockResult.message));

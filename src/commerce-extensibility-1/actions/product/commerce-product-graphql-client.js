@@ -55,8 +55,8 @@ async function queryProducts(pageSize, currentPage) {
 
   const client = createGraphqlClient(baseUrl);
   return await client.request(PRODUCTS_QUERY, {
-    pageSize,
     currentPage,
+    pageSize,
   });
 }
 

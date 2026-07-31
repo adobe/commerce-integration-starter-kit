@@ -9,14 +9,14 @@ import schema from "./schema.json";
  * @param {object} params - Received data from adobe commerce
  */
 function validateData(params) {
-  const data = params.data;
+  const { data } = params;
   const ajv = new Ajv();
   const validate = ajv.compile(schema);
   const isValid = validate(data);
   if (!isValid) {
     return {
-      success: false,
       message: `Data provided ${JSON.stringify(data)} does not validate with the schema`,
+      success: false,
     };
   }
   return {

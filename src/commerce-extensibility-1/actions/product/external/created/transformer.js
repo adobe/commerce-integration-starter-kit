@@ -9,9 +9,6 @@ function transformData(params) {
   // @TODO Notice that the attribute_set_id may need to be changed
   return {
     product: {
-      sku: params.data.sku,
-      name: params.data.name,
-      price: params.data.price,
       attribute_set_id: 4,
       custom_attributes: [
         {
@@ -19,6 +16,9 @@ function transformData(params) {
           value: params.data.description,
         },
       ],
+      name: params.data.name,
+      price: params.data.price,
+      sku: params.data.sku,
     },
   };
 }

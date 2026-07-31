@@ -18,9 +18,9 @@ function transformItems(items) {
  */
 function transformTracks(orderId, tracks) {
   return tracks.map((track) => ({
-    track_number: track.trackNumber,
-    title: track.title,
     carrier_code: track.carrierCode,
+    title: track.title,
+    track_number: track.trackNumber,
   }));
 }
 
@@ -47,12 +47,12 @@ function transformData(params) {
   // @TODO Notice that the attribute_set_id may need to be changed
 
   return {
-    items: transformItems(params.data.items),
-    tracks: transformTracks(params.data.orderId, params.data.tracks),
     comment: transformComment(params.data.comment),
     extension_attributes: {
       source_code: params.data.stockSourceCode,
     },
+    items: transformItems(params.data.items),
+    tracks: transformTracks(params.data.orderId, params.data.tracks),
   };
 }
 
