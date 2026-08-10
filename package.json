@@ -1,46 +1,25 @@
 {
   "name": "@adobe/commerce-integration-starter-kit",
   "version": "4.0.0",
-  "author": "Adobe Inc.",
-  "license": "Apache-2.0",
-  "description": "To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder.",
   "private": true,
+  "description": "To reduce the cost of integrating with Enterprise Resource Planning (ERP) solutions and to improve the reliability of real-time connections, Adobe is introducing an integration starter kit for back-office integrations using Adobe Developer App Builder.",
+  "license": "Apache-2.0",
+  "author": "Adobe Inc.",
   "type": "module",
-  "engines": {
-    "node": "^24.0.0"
-  },
   "imports": {
     "#app.commerce.config": "./src/commerce-extensibility-1/.generated/app.commerce.config.js",
     "#telemetry": "./src/telemetry.js",
     "#lib/*": "./src/lib/*.js",
     "#src/*": "./src/commerce-extensibility-1/actions/*.js"
   },
-  "dependencies": {
-    "@adobe/aio-commerce-lib-app": "^1.8.0",
-    "@adobe/aio-commerce-sdk": "^1.4.0",
-    "@adobe/aio-lib-core-logging": "^3.0.2",
-    "@adobe/aio-lib-telemetry": "^1.0.0",
-    "ajv": "^8.16.0",
-    "graphql-request": "^7.1.2"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "2.5.6",
-    "@vitest/coverage-istanbul": "^4.1.10",
-    "@vitest/coverage-v8": "^4.1.10",
-    "husky": "9.1.7",
-    "lint-staged": "17.3.0",
-    "prettier": "3.9.6",
-    "ultracite": "7.9.4",
-    "vitest": "^4.1.10"
-  },
   "scripts": {
-    "prepare": "husky",
-    "postinstall": "npx aio-commerce-lib-app hooks postinstall",
-    "test": "vitest run",
-    "code:report": "biome ci --formatter-enabled=true --linter-enabled=true --assist-enabled=true --no-errors-on-unmatched",
     "code:format:fix": "biome format --write --no-errors-on-unmatched",
     "code:lint:fix": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
+    "code:report": "biome ci --formatter-enabled=true --linter-enabled=true --assist-enabled=true --no-errors-on-unmatched",
     "docs:format:fix": "prettier --write --no-error-on-unmatched-pattern '**/*.md' \"!**/{CODE_OF_CONDUCT.md,COPYRIGHT,LICENSE,SECURITY.md,CONTRIBUTING.md,COPILOT-INSTRUCTIONS.md}\"",
+    "postinstall": "npx aio-commerce-lib-app hooks postinstall",
+    "prepare": "husky",
+    "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
   "lint-staged": {
@@ -54,5 +33,26 @@
     "*": [
       "biome check --no-errors-on-unmatched --files-ignore-unknown=true"
     ]
+  },
+  "dependencies": {
+    "@adobe/aio-commerce-lib-app": "^1.8.0",
+    "@adobe/aio-commerce-sdk": "^1.4.0",
+    "@adobe/aio-lib-core-logging": "^3.0.2",
+    "@adobe/aio-lib-telemetry": "^1.0.0",
+    "ajv": "^8.16.0",
+    "graphql-request": "^7.1.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.7",
+    "@vitest/coverage-istanbul": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.10",
+    "husky": "9.1.7",
+    "lint-staged": "17.3.0",
+    "prettier": "3.9.6",
+    "ultracite": "7.10.1",
+    "vitest": "^4.1.10"
+  },
+  "engines": {
+    "node": "^24.0.0"
   }
 }
