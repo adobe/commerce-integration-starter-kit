@@ -43,13 +43,13 @@
     "graphql-request": "^7.1.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.7",
+    "@biomejs/biome": "2.5.8",
     "@vitest/coverage-istanbul": "^4.1.10",
     "@vitest/coverage-v8": "^4.1.10",
     "husky": "9.1.7",
     "lint-staged": "17.3.0",
     "prettier": "3.9.6",
-    "ultracite": "7.10.1",
+    "ultracite": "7.10.4",
     "vitest": "^4.1.10"
   },
   "engines": {
