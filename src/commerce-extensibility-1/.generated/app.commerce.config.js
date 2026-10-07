@@ -3,4 +3,4 @@
 
 import appConfig from "./app.commerce.manifest.json" with { type: "json" };
 
-export default appConfig;
+export default /** @type {import("@adobe/aio-commerce-lib-app/config").CommerceAppConfig} */ (appConfig);
