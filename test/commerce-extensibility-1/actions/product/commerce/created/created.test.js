@@ -1,8 +1,7 @@
 import * as action from "#src/product/commerce/created/index";
+import { validateData } from "#src/product/commerce/created/validator";
 
 vi.mock("#src/product/commerce/created/validator");
-
-import { validateData } from "#src/product/commerce/created/validator";
 
 const NEW_RECORD = {
   created_at: "2024-01-01T00:00:00.000Z",
@@ -20,12 +19,12 @@ afterEach(() => {
 
 describe("Given product commerce created action", () => {
   describe("When method main is defined", () => {
-    test("Then is an instance of Function", () => {
+    it("Then is an instance of Function", () => {
       expect(action.main).toBeInstanceOf(Function);
     });
   });
   describe("When the record is not newly created", () => {
-    test("Then skips execution and returns success", async () => {
+    it("Then skips execution and returns success", async () => {
       const response = await action.main({ data: { value: EXISTING_RECORD } });
 
       expect(response).toEqual({
@@ -37,7 +36,7 @@ describe("Given product commerce created action", () => {
     });
   });
   describe("When invalid product created event data is received", () => {
-    test("Then returns action error response", async () => {
+    it("Then returns action error response", async () => {
       const params = {
         data: { value: NEW_RECORD },
       };

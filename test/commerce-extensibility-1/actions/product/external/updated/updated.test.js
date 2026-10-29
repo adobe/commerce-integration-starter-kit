@@ -1,9 +1,3 @@
-vi.mock("#src/product/external/updated/validator");
-
-import { validateData } from "#src/product/external/updated/validator";
-
-vi.mock("#src/product/external/updated/sender");
-
 import {
   HTTP_BAD_REQUEST,
   HTTP_INTERNAL_SERVER_ERROR,
@@ -12,15 +6,20 @@ import {
 
 import * as action from "#src/product/external/updated/index";
 import { sendData } from "#src/product/external/updated/sender";
+import { validateData } from "#src/product/external/updated/validator";
+
+vi.mock("#src/product/external/updated/validator");
+
+vi.mock("#src/product/external/updated/sender");
 
 describe("Given product external updated action", () => {
   describe("When method main is defined", () => {
-    test("Then is an instance of Function", () => {
+    it("Then is an instance of Function", () => {
       expect(action.main).toBeInstanceOf(Function);
     });
   });
   describe("When product event data is invalid", () => {
-    test("Then returns action error response", async () => {
+    it("Then returns action error response", async () => {
       const IGNORED_PARAMS = { data: {} };
       const FAILED_VALIDATION_RESPONSE = {
         message: "Data provided does not validate with the schema",
@@ -38,7 +37,7 @@ describe("Given product external updated action", () => {
     });
   });
   describe("When an exception is thrown", () => {
-    test("Then return action error response", async () => {
+    it("Then return action error response", async () => {
       const IGNORED_PARAMS = { data: {} };
       const SUCCESSFUL_VALIDATION_RESPONSE = {
         success: true,
@@ -57,7 +56,7 @@ describe("Given product external updated action", () => {
     });
   });
   describe("When product event data is valid", () => {
-    test("Then returns action success response", async () => {
+    it("Then returns action success response", async () => {
       const IGNORED_PARAMS = { data: {} };
       const SUCCESSFUL_VALIDATION_RESPONSE = {
         success: true,

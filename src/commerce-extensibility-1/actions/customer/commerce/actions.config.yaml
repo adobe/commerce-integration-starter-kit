@@ -1,6 +1,6 @@
 created:
   function: created/index.js
-  web: 'no'
+  web: "no"
   runtime: nodejs:24
   inputs:
     LOG_LEVEL: $LOG_LEVEL
@@ -9,7 +9,7 @@ created:
     final: true
 updated:
   function: updated/index.js
-  web: 'no'
+  web: "no"
   runtime: nodejs:24
   inputs:
     LOG_LEVEL: $LOG_LEVEL
@@ -17,7 +17,7 @@ updated:
     final: true
 deleted:
   function: deleted/index.js
-  web: 'no'
+  web: "no"
   runtime: nodejs:24
   inputs:
     LOG_LEVEL: $LOG_LEVEL
@@ -25,7 +25,7 @@ deleted:
     final: true
 group-updated:
   function: group-updated/index.js
-  web: 'no'
+  web: "no"
   runtime: nodejs:24
   inputs:
     LOG_LEVEL: $LOG_LEVEL
@@ -33,7 +33,7 @@ group-updated:
     final: true
 group-deleted:
   function: group-deleted/index.js
-  web: 'no'
+  web: "no"
   runtime: nodejs:24
   inputs:
     LOG_LEVEL: $LOG_LEVEL

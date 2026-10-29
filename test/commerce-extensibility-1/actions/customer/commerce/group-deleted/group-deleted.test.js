@@ -1,8 +1,7 @@
 import * as action from "#src/customer/commerce/group-deleted/index";
+import { validateData } from "#src/customer/commerce/group-deleted/validator";
 
 vi.mock("#src/customer/commerce/group-deleted/validator");
-
-import { validateData } from "#src/customer/commerce/group-deleted/validator";
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -11,12 +10,12 @@ afterEach(() => {
 
 describe("Given customer group commerce deleted action", () => {
   describe("When method main is defined", () => {
-    test("Then is an instance of Function", () => {
+    it("Then is an instance of Function", () => {
       expect(action.main).toBeInstanceOf(Function);
     });
   });
   describe("When invalid customer group deleted event data is received", () => {
-    test("Then returns action error response", async () => {
+    it("Then returns action error response", async () => {
       const params = {
         data: {},
       };

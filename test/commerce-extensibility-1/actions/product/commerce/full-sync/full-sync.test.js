@@ -1,3 +1,8 @@
+import * as action from "#src/product/commerce/full-sync/index";
+import { sendData } from "#src/product/commerce/full-sync/sender";
+import { validateData } from "#src/product/commerce/full-sync/validator";
+import { queryProducts } from "#src/product/commerce-product-graphql-client";
+
 vi.mock("graphql-request", () => ({
   GraphQLClient: vi.fn().mockImplementation(() => ({
     request: vi.fn().mockResolvedValue({
@@ -9,15 +14,9 @@ vi.mock("graphql-request", () => ({
   })),
 }));
 
-import * as action from "#src/product/commerce/full-sync/index";
-
 vi.mock("#src/product/commerce/full-sync/validator");
 vi.mock("#src/product/commerce/full-sync/sender");
 vi.mock("#src/product/commerce-product-graphql-client");
-
-import { sendData } from "#src/product/commerce/full-sync/sender";
-import { validateData } from "#src/product/commerce/full-sync/validator";
-import { queryProducts } from "#src/product/commerce-product-graphql-client";
 
 queryProducts.mockImplementation(() =>
   Promise.resolve({
@@ -35,13 +34,13 @@ afterEach(() => {
 
 describe("Given product commerce full sync action", () => {
   describe("When method main is defined", () => {
-    test("Then is an instance of Function", () => {
+    it("Then is an instance of Function", () => {
       expect(action.main).toBeInstanceOf(Function);
     });
   });
 
   describe("When invalid product data is received", () => {
-    test("Then returns action error response", async () => {
+    it("Then returns action error response", async () => {
       const params = {};
 
       const ERROR_MESSAGE = "Invalid data";
@@ -63,7 +62,7 @@ describe("Given product commerce full sync action", () => {
   });
 
   describe("When GraphQL query fails", () => {
-    test("Then returns action error response", async () => {
+    it("Then returns action error response", async () => {
       const params = {};
 
       queryProducts.mockResolvedValue({
@@ -83,7 +82,7 @@ describe("Given product commerce full sync action", () => {
   });
 
   describe("When sending data fails", () => {
-    test("Then returns action error response", async () => {
+    it("Then returns action error response", async () => {
       const params = {};
 
       validateData.mockReturnValue({ success: true });

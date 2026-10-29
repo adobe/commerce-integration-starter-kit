@@ -1,6 +1,6 @@
 updated:
   function: updated/index.js
-  web: 'no'
+  web: "no"
   runtime: nodejs:24
   inputs:
     LOG_LEVEL: $LOG_LEVEL
@@ -14,7 +14,7 @@ updated:
     final: true
 shipment-created:
   function: shipment-created/index.js
-  web: 'no'
+  web: "no"
   runtime: nodejs:24
   inputs:
     LOG_LEVEL: $LOG_LEVEL
@@ -28,7 +28,7 @@ shipment-created:
     final: true
 shipment-updated:
   function: shipment-updated/index.js
-  web: 'no'
+  web: "no"
   runtime: nodejs:24
   inputs:
     LOG_LEVEL: $LOG_LEVEL

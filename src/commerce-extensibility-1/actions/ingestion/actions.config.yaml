@@ -1,6 +1,6 @@
 webhook:
   function: ./webhook/index.js
-  web: 'yes'
+  web: "yes"
   runtime: nodejs:24
   inputs:
     LOG_LEVEL: $LOG_LEVEL
