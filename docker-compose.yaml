@@ -1,6 +1,6 @@
 services:
   otel-lgtm:
-    image: grafana/otel-lgtm:0.37.0@sha256:57b5ab1ca6619beb180174e2fccce04762470750669d043f544b4726d0582d07
+    image: grafana/otel-lgtm:0.38.1@sha256:0df9bc14142000b161344bd24caf6ddd319b7319055aedaf9b0692b125730af7
     container_name: otel-lgtm
     restart: unless-stopped
     ports:
@@ -9,15 +9,15 @@ services:
       - "4318:4318" # OTLP HTTP
     volumes:
       - "lgtm-data:/data" # Persist data across restarts
-    networks: [telemetry]
+    networks: [ telemetry ]
 
   # Cloudflare Tunnel - Exposes collector for deployed actions
   cloudflared:
-    image: cloudflare/cloudflared:2026.10.1@sha256:a15a3b50b8dabd57ac2090e9484c0247dba9dfa1f0df4d298d4317f9d69eb2d5
+    image: cloudflare/cloudflared:2026.10.5@sha256:1b1d34d0a9c0bfca9de72db8460d328db3f19edd2b96169114e3e893a97bbe53
     container_name: cloudflared
     restart: unless-stopped
-    networks: [telemetry]
-    depends_on: [otel-lgtm]
+    networks: [ telemetry ]
+    depends_on: [ otel-lgtm ]
     command:
       - "tunnel"
       - "--url"

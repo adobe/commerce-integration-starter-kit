@@ -1,28 +1,24 @@
+import { publishEvent } from "@adobe/aio-commerce-lib-app";
+import { resolveImsAuthParams } from "@adobe/aio-commerce-sdk/auth";
 import { CommerceSdkValidationError } from "@adobe/aio-commerce-sdk/core/error";
+import { createAdobeIoEventsApiClient } from "@adobe/aio-commerce-sdk/events/io-events";
+import AioLogger from "@adobe/aio-lib-core-logging";
+
+import * as action from "#src/ingestion/webhook/index";
 
 vi.mock("@adobe/aio-lib-core-logging", () => ({
   default: vi.fn(),
 }));
 
-import AioLogger from "@adobe/aio-lib-core-logging";
-
 vi.mock("@adobe/aio-commerce-lib-app", () => ({ publishEvent: vi.fn() }));
-
-import { publishEvent } from "@adobe/aio-commerce-lib-app";
 
 vi.mock("@adobe/aio-commerce-sdk/events/io-events", () => ({
   createAdobeIoEventsApiClient: vi.fn(() => ({ id: "events-client" })),
 }));
 
-import { createAdobeIoEventsApiClient } from "@adobe/aio-commerce-sdk/events/io-events";
-
 vi.mock("@adobe/aio-commerce-sdk/auth", () => ({
   resolveImsAuthParams: vi.fn(() => ({ ims: "auth" })),
 }));
-
-import { resolveImsAuthParams } from "@adobe/aio-commerce-sdk/auth";
-
-import * as action from "#src/ingestion/webhook/index";
 
 const mockLoggerInstance = {
   debug: vi.fn(),
@@ -48,13 +44,13 @@ const validData = {
 
 describe("Given external backoffice events ingestion webhook", () => {
   describe("When method main is defined", () => {
-    test("Then is an instance of Function", () => {
+    it("Then is an instance of Function", () => {
       expect(action.main).toBeInstanceOf(Function);
     });
   });
 
   describe("When received data information is valid", () => {
-    test("Then publishes the event and returns success response", async () => {
+    it("Then publishes the event and returns success response", async () => {
       publishEvent.mockResolvedValueOnce(undefined);
 
       const response = await action.main({ data: validData });
@@ -84,7 +80,7 @@ describe("Given external backoffice events ingestion webhook", () => {
   });
 
   describe("When received data information is invalid", () => {
-    test("Then returns error response", async () => {
+    it("Then returns error response", async () => {
       const response = await action.main({ data: {} });
 
       expect(publishEvent).not.toHaveBeenCalled();
@@ -101,7 +97,7 @@ describe("Given external backoffice events ingestion webhook", () => {
   });
 
   describe("When publishing the event fails", () => {
-    test("Then returns error response", async () => {
+    it("Then returns error response", async () => {
       publishEvent.mockRejectedValueOnce(new Error("fake error"));
 
       const response = await action.main({ data: validData });
@@ -115,7 +111,7 @@ describe("Given external backoffice events ingestion webhook", () => {
       });
     });
 
-    test("Then logs the details of a CommerceSdkValidationError", async () => {
+    it("Then logs the details of a CommerceSdkValidationError", async () => {
       publishEvent.mockRejectedValueOnce(
         new CommerceSdkValidationError("Invalid event data", { issues: [] }),
       );

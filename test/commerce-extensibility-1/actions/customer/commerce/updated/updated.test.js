@@ -1,8 +1,7 @@
 import * as action from "#src/customer/commerce/updated/index";
+import { validateData } from "#src/customer/commerce/updated/validator";
 
 vi.mock("#src/customer/commerce/updated/validator");
-
-import { validateData } from "#src/customer/commerce/updated/validator";
 
 const NEW_RECORD = {
   created_at: "2024-01-01T00:00:00.000Z",
@@ -20,12 +19,12 @@ afterEach(() => {
 
 describe("Given customer commerce updated action", () => {
   describe("When method main is defined", () => {
-    test("Then is an instance of Function", () => {
+    it("Then is an instance of Function", () => {
       expect(action.main).toBeInstanceOf(Function);
     });
   });
   describe("When the record was not updated", () => {
-    test("Then skips execution and returns success", async () => {
+    it("Then skips execution and returns success", async () => {
       const response = await action.main({ data: { value: NEW_RECORD } });
 
       expect(response).toEqual({
@@ -37,7 +36,7 @@ describe("Given customer commerce updated action", () => {
     });
   });
   describe("When invalid customer updated event data is received", () => {
-    test("Then returns action error response", async () => {
+    it("Then returns action error response", async () => {
       const params = {
         data: { value: EXISTING_RECORD },
       };

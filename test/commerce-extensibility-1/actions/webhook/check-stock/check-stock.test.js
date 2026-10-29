@@ -1,10 +1,9 @@
 import * as action from "#src/webhook/check-stock/index";
+import { checkAvailableStock } from "#src/webhook/check-stock/stock";
 
 vi.mock("#src/webhook/check-stock/stock", () => ({
   checkAvailableStock: vi.fn(),
 }));
-
-import { checkAvailableStock } from "#src/webhook/check-stock/stock";
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -13,12 +12,12 @@ afterEach(() => {
 
 describe("Given synchronous webhook action to check stock availability", () => {
   describe("When method main is defined", () => {
-    test("Then is an instance of Function", () => {
+    it("Then is an instance of Function", () => {
       expect(action.main).toBeInstanceOf(Function);
     });
   });
   describe("When received data is valid", () => {
-    test("Then returns webhook success response", async () => {
+    it("Then returns webhook success response", async () => {
       const params = {
         data: {
           cart_id: "CART_ID",
@@ -50,7 +49,7 @@ describe("Given synchronous webhook action to check stock availability", () => {
     });
   });
   describe("When received data is invalid", () => {
-    test("Then returns webhook error response", async () => {
+    it("Then returns webhook error response", async () => {
       const params = {};
 
       const response = await action.main(params);
@@ -66,7 +65,7 @@ describe("Given synchronous webhook action to check stock availability", () => {
     });
   });
   describe("When check-stock downstream fails", () => {
-    test("Then returns webhook error response", async () => {
+    it("Then returns webhook error response", async () => {
       const params = {
         data: {
           cart_id: "CART_ID",
