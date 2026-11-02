@@ -43,7 +43,7 @@
     "graphql-request": "^7.1.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.6.3",
+    "@biomejs/biome": "2.6.4",
     "@vitest/coverage-istanbul": "^5.0.0",
     "@vitest/coverage-v8": "^5.0.0",
     "husky": "9.1.7",
