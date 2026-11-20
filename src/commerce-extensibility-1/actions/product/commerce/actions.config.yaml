@@ -1,7 +1,7 @@
 created:
   function: created/index.js
   web: "no"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
   annotations:
@@ -9,7 +9,7 @@ created:
 updated:
   function: updated/index.js
   web: "no"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
   annotations:
@@ -17,7 +17,7 @@ updated:
 deleted:
   function: deleted/index.js
   web: "no"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
   annotations:
@@ -25,7 +25,7 @@ deleted:
 full-sync:
   function: full-sync/index.js
   web: "yes"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
   annotations:

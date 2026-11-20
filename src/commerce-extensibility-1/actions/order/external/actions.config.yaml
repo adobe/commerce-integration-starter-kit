@@ -1,7 +1,7 @@
 updated:
   function: updated/index.js
   web: "no"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
     AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
@@ -15,7 +15,7 @@ updated:
 shipment-created:
   function: shipment-created/index.js
   web: "no"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
     AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
@@ -29,7 +29,7 @@ shipment-created:
 shipment-updated:
   function: shipment-updated/index.js
   web: "no"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
     AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
