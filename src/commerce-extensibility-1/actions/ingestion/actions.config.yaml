@@ -1,7 +1,7 @@
 webhook:
   function: ./webhook/index.js
   web: "yes"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
     AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
