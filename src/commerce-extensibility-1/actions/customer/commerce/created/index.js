@@ -51,6 +51,7 @@ async function __main(params) {
   try {
     logger.debug(`Validate data: ${JSON.stringify(params.data)}`);
     const validation = validateData(params.data);
+    // biome-ignore lint/suspicious/noUnnecessaryConditions: validateData's scaffold returns success until implemented.
     if (!validation.success) {
       logger.error(`Validation failed with error: ${validation.message}`);
       return badRequest(validation.message);
