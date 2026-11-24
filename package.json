@@ -49,7 +49,7 @@
     "husky": "9.1.7",
     "lint-staged": "17.6.1",
     "prettier": "3.10.1",
-    "ultracite": "8.2.1",
+    "ultracite": "8.3.1",
     "vitest": "^5.0.0"
   },
   "engines": {
