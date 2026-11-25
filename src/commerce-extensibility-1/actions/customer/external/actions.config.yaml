@@ -1,7 +1,7 @@
 created:
   function: created/index.js
   web: "no"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
     AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
@@ -15,7 +15,7 @@ created:
 updated:
   function: updated/index.js
   web: "no"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
     AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
@@ -29,7 +29,7 @@ updated:
 deleted:
   function: deleted/index.js
   web: "no"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
     AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
@@ -43,7 +43,7 @@ deleted:
 group-created:
   function: group-created/index.js
   web: "no"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
     AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
@@ -57,7 +57,7 @@ group-created:
 group-updated:
   function: group-updated/index.js
   web: "no"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
     AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
@@ -71,7 +71,7 @@ group-updated:
 group-deleted:
   function: group-deleted/index.js
   web: "no"
-  runtime: nodejs:24
+  runtime: nodejs:26
   inputs:
     LOG_LEVEL: $LOG_LEVEL
     AIO_COMMERCE_AUTH_IMS_CLIENT_ID: $AIO_COMMERCE_AUTH_IMS_CLIENT_ID
