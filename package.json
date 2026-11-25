@@ -16,19 +16,15 @@
     "code:format:fix": "biome format --write --no-errors-on-unmatched",
     "code:lint:fix": "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true",
     "code:report": "biome ci --formatter-enabled=true --linter-enabled=true --assist-enabled=true --no-errors-on-unmatched",
-    "docs:format:fix": "prettier --write --no-error-on-unmatched-pattern '**/*.md' \"!**/{CODE_OF_CONDUCT.md,COPYRIGHT,LICENSE,SECURITY.md,CONTRIBUTING.md,COPILOT-INSTRUCTIONS.md}\"",
     "postinstall": "npx aio-commerce-lib-app hooks postinstall",
     "prepare": "husky",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
   "lint-staged": {
-    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc,md}": [
       "npm run code:lint:fix",
       "npm run code:format:fix"
-    ],
-    "*.md": [
-      "npm run docs:format:fix"
     ],
     "*": [
       "biome check --no-errors-on-unmatched --files-ignore-unknown=true"
@@ -48,7 +44,6 @@
     "@vitest/coverage-v8": "^5.0.0",
     "husky": "9.1.7",
     "lint-staged": "17.6.1",
-    "prettier": "3.10.1",
     "ultracite": "8.3.1",
     "vitest": "^5.0.0"
   },

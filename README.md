@@ -190,6 +190,7 @@ By default, the response of the `event handler` actions is the following:
   ```
 
 - failure
+
   ```javascript
   // ./src/commerce-extensibility-1/lib/responses.js#actionErrorResponse
   return {
@@ -235,6 +236,7 @@ By default, the response of the `event ingestion` actions is the following:
   ```
 
 - failure
+
   ```javascript
   // ./src/commerce-extensibility-1/lib/responses.js#errorResponse
   return {
@@ -278,6 +280,7 @@ By default, the response of the `synchronous webhook` actions is the following:
   ```
 
 - failure
+
   ```javascript
   // ./src/commerce-extensibility-1/lib/responses.js#webhookSuccessResponse
   return {
@@ -306,6 +309,7 @@ The starter kit comes with predefined events for each entity. Sometimes, you may
 > Before adding a new event, check [`EVENTS_SCHEMA.json`](./EVENTS_SCHEMA.json) to understand the schema structure and available fields for similar events. This will help you properly handle the event payload in your action handlers.
 
 - Add the event to the `eventing` section of `app.commerce.config.ts`, under the provider that receives it (`commerce` for events from Commerce, `external` for events from a back-office system). Map it directly to the handler action with `runtimeActions`. For example, to handle a new Commerce customer event:
+
   ```typescript
   {
     name: "observer.THE_NEW_CUSTOMER_EVENT",
@@ -317,6 +321,7 @@ The starter kit comes with predefined events for each entity. Sometimes, you may
   ```
 - In the `src/commerce-extensibility-1/actions/{entity}/{flow}` directory, add the action that will handle this event, e.g., `src/commerce-extensibility-1/actions/customer/commerce/new-operation/index.js`
 - Configure the newly created handler action in the `actions.config.yaml` file inside the `{entity}/{flow}` folder, e.g.:
+
   ```yaml
   new-operation:
     function: new-operation/index.js
