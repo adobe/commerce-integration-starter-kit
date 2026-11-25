@@ -4,7 +4,10 @@
 
   "files": {
     "ignoreUnknown": true,
-    "includes": ["!**/.generated"]
+    "includes": [
+      "!**/.generated",
+      "!**/{CODE_OF_CONDUCT,SECURITY,CONTRIBUTING,COPILOT-INSTRUCTIONS}.md"
+    ]
   },
 
   "json": {
